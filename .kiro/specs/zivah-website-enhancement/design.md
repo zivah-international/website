@@ -105,7 +105,6 @@ model Category {
   color       String?   @db.VarChar(7)
   sortOrder   Int       @default(0) @map("sort_order")
   products    Product[]
-
   @@map("categories")
 }
 
@@ -191,7 +190,6 @@ model SiteSetting {
   type         SettingType @default(TEXT) @map("setting_type")
   description  String?     @db.Text
   updatedAt    DateTime    @updatedAt @map("updated_at")
-
   @@map("site_settings")
 }
 
@@ -462,6 +460,7 @@ export interface ProductFilters {
   minPrice?: number;
   maxPrice?: number;
 }
+```
 
 export class ProductService {
   async getProducts(filters?: ProductFilters): Promise<Product[]>;
@@ -694,6 +693,7 @@ export const defaultLocale = 'es' as const;
     "distributionOffice": "Miami, FL, Estados Unidos"
   }
 }
+export function ProductList({ products, loading }: ProductListProps): JSX.Element
 
 // i18n/messages/en.json - English translations
 {
@@ -1276,6 +1276,10 @@ export class AppLogger {
   static error(message: string, context?: Record<string, any>): void;
   static debug(message: string, context?: Record<string, any>): void;
 }
+
+// Integration with Vercel Analytics
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 ```
 
 ### Health Checks and Monitoring
@@ -1308,7 +1312,6 @@ services:
       - DATABASE_URL=postgresql://postgres:password@db:5432/zivah_dev
     depends_on:
       - db
-
   db:
     image: postgres:15
     environment:
