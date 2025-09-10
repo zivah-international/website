@@ -239,7 +239,6 @@ enum SettingType {
 #### Existing Assets and Content Analysis
 
 The current static site contains:
-
 - **Comprehensive SEO metadata**: Meta tags, Open Graph, Twitter Cards, Schema.org structured data
 - **Brand Assets**: ZIVAH logo (SVG), favicon collection, brand colors system
 - **Content**: Spanish corporate content with detailed product descriptions
@@ -368,7 +367,6 @@ export default config;
   .text-balance {
     text-wrap: balance;
   }
-
   .text-pretty {
     text-wrap: pretty;
   }
@@ -431,12 +429,10 @@ export const EXPORT_COUNTRIES = [
 export const ASSET_MIGRATION_MAP = {
   // Existing logo and branding
   'assets/images/zivah-logo.svg': '/images/brand/zivah-logo.svg',
-
   // Favicon collection (15+ files)
   'assets/images/icons/favicon.ico': '/images/icons/favicon.ico',
   'assets/images/icons/apple-icon-*.png': '/images/icons/apple-*.png',
   'assets/images/icons/android-icon-*.png': '/images/icons/android-*.png',
-
   // Product images (to be added during migration)
   productImages: {
     shrimp: '/images/products/camaron/',
