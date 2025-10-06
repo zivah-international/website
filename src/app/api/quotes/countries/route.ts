@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
+import { query } from '@/lib/db';
 import { createApiResponse, handleApiError } from '@/lib/errors';
-import { prisma } from '@/lib/prisma';
 import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 export async function GET(request: NextRequest) {
@@ -19,25 +19,14 @@ export async function GET(request: NextRequest) {
       return createApiResponse(null, 'Demasiadas solicitudes. Intente nuevamente más tarde.', 429);
     }
 
-    const countries = await prisma.country.findMany({
-      where: {
-        isActive: true,
-      },
-      select: {
-        id: true,
-        name: true,
-        code: true,
-        icon: true,
-        currency: true,
-        callingCode: true,
-        phoneFormat: true,
-      },
-      orderBy: {
-        name: 'asc',
-      },
-    });
+    const countries = await query(`
+      SELECT id, name, code, icon, currency, calling_code, phone_format
+      FROM countries
+      WHERE is_active = true
+      ORDER BY name ASC
+    `);
 
-    return createApiResponse(countries);
+    return createApiResponse(countries.rows);
   } catch (error) {
     return handleApiError(error);
   }

@@ -2,6 +2,9 @@
 const nextConfig = {
   // Enable experimental features
   experimental: {
+     outputFileTracingIncludes: {
+      '/*': ['./node_modules/@prisma/client/**/*']
+    }
   },
 
   // Server external packages

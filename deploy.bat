@@ -18,10 +18,13 @@ echo Copying files...
 copy package.json deploy\
 copy server.js deploy\
 copy next.config.ts deploy\
+copy database-schema.sql deploy\
+copy database-seed.sql deploy\
 xcopy .next deploy\.next\ /e /i /h /y
 xcopy public deploy\public\ /e /i /h /y
 xcopy src deploy\src\ /e /i /h /y
 xcopy prisma deploy\prisma\ /e /i /h /y
+xcopy scripts deploy\scripts\ /e /i /h /y
 
 echo Creating ZIP...
 powershell "Compress-Archive -Path deploy\* -DestinationPath zivah-deploy.zip -Force"

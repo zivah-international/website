@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
-import { prisma } from '@/lib/prisma';
+import { query } from '@/lib/db';
 import { createCategorySchema } from '@/lib/validations';
 
 export async function GET(request: NextRequest) {
@@ -11,45 +11,54 @@ export async function GET(request: NextRequest) {
     const includeProducts = searchParams.get('includeProducts') === 'true';
     const isActive = searchParams.get('isActive');
 
-    const where: any = {};
+    let whereClause = '';
+    const params: any[] = [];
+
     if (isActive !== null) {
-      where.isActive = isActive === 'true';
+      whereClause = 'WHERE is_active = ?';
+      params.push(isActive === 'true');
     }
 
-    const categories = await prisma.category.findMany({
-      where,
-      include: {
-        _count: {
-          select: {
-            products: {
-              where: {
-                isActive: true,
-              },
-            },
-          },
-        },
-        ...(includeProducts && {
-          products: {
-            where: {
-              isActive: true,
-            },
-            select: {
-              id: true,
-              name: true,
-              slug: true,
+    let queryText = `
+      SELECT
+        c.*,
+        COUNT(p.id) as products_count
+      FROM categories c
+      LEFT JOIN products p ON c.id = p.category_id AND p.is_active = true
+      ${whereClause}
+      GROUP BY c.id
+      ORDER BY c.is_active DESC, c.name ASC
+    `;
 
-              isFeatured: true,
-            },
-            take: 5,
-          },
-        }),
-      },
-      orderBy: [{ isActive: 'desc' }, { name: 'asc' }],
-    });
+    if (includeProducts) {
+      queryText = `
+        SELECT
+          c.*,
+          COUNT(p.id) as products_count,
+          COALESCE(
+            JSON_ARRAYAGG(
+              JSON_OBJECT(
+                'id', p.id,
+                'name', p.name,
+                'slug', p.slug,
+                'isFeatured', p.is_featured
+              )
+            ),
+            JSON_ARRAY()
+          ) as products
+        FROM categories c
+        LEFT JOIN products p ON c.id = p.category_id AND p.is_active = true
+        ${whereClause}
+        GROUP BY c.id
+        ORDER BY c.is_active DESC, c.name ASC
+      `;
+    }
+
+    const result = await query(queryText, params);
 
     return NextResponse.json({
       error: false,
-      data: categories,
+      data: result.rows,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
@@ -81,11 +90,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if slug is unique
-    const existingCategory = await prisma.category.findUnique({
-      where: { slug: validatedData.slug },
-    });
+    const existingQuery = 'SELECT id FROM categories WHERE slug = ?';
+    const existingResult = await query(existingQuery, [validatedData.slug]);
 
-    if (existingCategory) {
+    if (existingResult.rows.length > 0) {
       return NextResponse.json(
         {
           error: true,
@@ -96,16 +104,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const category = await prisma.category.create({
-      data: validatedData as any, // Type assertion to handle the slug field
-      include: {
-        _count: {
-          select: {
-            products: true,
-          },
-        },
-      },
-    });
+    // Insert new category
+    const fields = Object.keys(validatedData);
+    const values = Object.values(validatedData);
+    const placeholders = fields.map(() => '?');
+
+    const insertQuery = `
+      INSERT INTO categories (${fields.join(', ')})
+      VALUES (${placeholders.join(', ')})
+    `;
+
+    const result = await query(insertQuery, values);
+    // For MySQL, get the inserted record
+    if (!result.insertId) {
+      throw new Error('Failed to get inserted ID');
+    }
+
+    const selectResult = await query('SELECT * FROM categories WHERE id = ?', [result.insertId]);
+    const category = (selectResult as any)[0] as any;
+
+    // Get product count for the new category
+    const countQuery =
+      'SELECT COUNT(*) as count FROM products WHERE category_id = ? AND is_active = true';
+    const countResult = await query(countQuery, [category.id]);
+    category.products_count = parseInt((countResult as any)[0].count);
 
     return NextResponse.json(
       {

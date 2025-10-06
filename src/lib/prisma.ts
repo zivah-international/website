@@ -1,45 +1,15 @@
-import { PrismaClient } from '@prisma/client';
+// Re-export database functions from db.ts
+// This file maintains backward compatibility while transitioning from Prisma to direct queries
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+import { checkDatabaseConnection, disconnectDatabase, query, withTransaction } from './db';
+
+export { checkDatabaseConnection, disconnectDatabase, query, withTransaction };
+
+// Legacy Prisma-like interface for backward compatibility
+// This can be removed once all code is updated to use direct queries
+
+export const prisma = {
+  $queryRaw: query,
+  $disconnect: disconnectDatabase,
+  $transaction: withTransaction,
 };
-
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log: ['query', 'error', 'warn'],
-    datasources: {
-      db: {
-        url: process.env.DATABASE_URL,
-      },
-    },
-  });
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
-
-// Connection health check
-export async function checkDatabaseConnection(): Promise<boolean> {
-  try {
-    await prisma.$queryRaw`SELECT 1`;
-    return true;
-  } catch (error) {
-    console.error('Database connection failed:', error);
-    return false;
-  }
-}
-
-// Graceful shutdown
-export async function disconnectDatabase(): Promise<void> {
-  await prisma.$disconnect();
-}
-
-// Transaction helper
-export async function withTransaction<T>(
-  operation: (
-    tx: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'>
-  ) => Promise<T>
-): Promise<T> {
-  return await prisma.$transaction(operation);
-}
-
-export default prisma;

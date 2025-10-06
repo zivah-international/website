@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { query } from '@/lib/db';
 import { createApiResponse, handleApiError } from '@/lib/errors';
-import { prisma } from '@/lib/prisma';
 import {
   contactFormSchema,
   formRateLimiter,
@@ -65,30 +65,49 @@ export async function POST(request: NextRequest) {
     // Validate with enhanced schema
     const validatedData = contactFormSchema.parse(sanitizedBody);
 
-    const contactSubmission = await prisma.contactSubmission.create({
-      data: validatedData,
-    });
-
-    // Track successful contact submission
-    // Note: Business tracking is handled on the client side
-    // This is just for server-side logging
+    const contactSubmission = await query(
+      `
+      INSERT INTO contact_submissions (
+        name, email, phone, company, subject, message, type, source, ip_address, user_agent
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `,
+      [
+        validatedData.name,
+        validatedData.email,
+        validatedData.phone,
+        validatedData.company,
+        validatedData.subject,
+        validatedData.message,
+        'GENERAL',
+        'website',
+        ip,
+        request.headers.get('user-agent') || 'unknown',
+      ]
+    );
 
     // Log activity
-    await prisma.activityLog.create({
-      data: {
-        action: 'CONTACT_SUBMISSION',
-        entityType: 'ContactSubmission',
-        entityId: contactSubmission.id,
-        details: JSON.stringify({
-          contactId: contactSubmission.id,
+    await query(
+      `
+      INSERT INTO activity_logs (
+        action, entity_type, entity_id, details, ip_address, user_agent
+      ) VALUES (?, ?, ?, ?, ?, ?)
+    `,
+      [
+        'CONTACT_SUBMISSION',
+        'ContactSubmission',
+        contactSubmission.insertId,
+        JSON.stringify({
+          contactId: contactSubmission.insertId,
           email: validatedData.email,
           company: validatedData.company,
         }),
-      },
-    });
+        ip,
+        request.headers.get('user-agent') || 'unknown',
+      ]
+    );
 
     return createApiResponse(
-      { id: contactSubmission.id },
+      { id: contactSubmission.insertId },
       'Mensaje enviado exitosamente. Nos pondremos en contacto contigo pronto.',
       201
     );
@@ -106,30 +125,50 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type');
     const status = searchParams.get('status');
 
-    const where: any = {};
-    if (type) where.type = type;
-    if (status) where.status = status;
+    const where: string[] = [];
+    const params: any[] = [];
+    let paramIndex = 1;
+
+    if (type) {
+      where.push(`type = $${paramIndex}`);
+      params.push(type);
+      paramIndex++;
+    }
+    if (status) {
+      where.push(`status = $${paramIndex}`);
+      params.push(status);
+      paramIndex++;
+    }
+
+    const whereClause = where.length > 0 ? `WHERE ${where.join(' AND ')}` : '';
 
     const [submissions, total] = await Promise.all([
-      prisma.contactSubmission.findMany({
-        where,
-        orderBy: {
-          createdAt: 'desc',
-        },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-      }),
-      prisma.contactSubmission.count({ where }),
+      query(
+        `
+        SELECT * FROM contact_submissions
+        ${whereClause}
+        ORDER BY created_at DESC
+        LIMIT ? OFFSET ?
+      `,
+        [...params, pageSize, (page - 1) * pageSize]
+      ),
+      query(
+        `
+        SELECT COUNT(*) as count FROM contact_submissions
+        ${whereClause}
+      `,
+        params
+      ),
     ]);
 
     return createApiResponse({
-      data: submissions,
+      data: submissions as any,
       pagination: {
         page,
         pageSize,
-        total,
-        totalPages: Math.ceil(total / pageSize),
-        hasNext: page * pageSize < total,
+        total: parseInt((total as any)[0].count),
+        totalPages: Math.ceil(parseInt((total as any)[0].count) / pageSize),
+        hasNext: page * pageSize < parseInt((total as any)[0].count),
         hasPrev: page > 1,
       },
     });

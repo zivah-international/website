@@ -7,7 +7,7 @@ Modern Next.js website for **ZIVAH International S.A.**, premium Ecuadorian prod
 **Current Version**: 1.0.0
 **Last Updated**: October 2025
 **Next.js Version**: 15.5.3
-**Database**: PostgreSQL with Prisma ORM 6.16.1
+**Database**: PostgreSQL with direct SQL queries (Prisma ORM replaced for production performance)
 
 ### 🌟 **Key Features Implemented**
 
@@ -24,7 +24,7 @@ Modern Next.js website for **ZIVAH International S.A.**, premium Ecuadorian prod
 ### 🚀 **Tech Stack**
 
 - **Framework**: Next.js 15.5.3 with App Router
-- **Database**: PostgreSQL with Prisma ORM 6.16.1
+- **Database**: PostgreSQL with direct SQL queries (Prisma ORM replaced for production performance)
 - **Authentication**: NextAuth.js 4.24.11
 - **Styling**: Tailwind CSS 4.1.13 with custom theme
 - **Language**: TypeScript 5.9.2 with strict mode
@@ -191,14 +191,8 @@ npm install
 cp .env.example .env
 # Edit .env with your database credentials and configuration
 
-# Generate Prisma client
-npm run db:generate
-
-# Run database migrations
-npm run db:migrate
-
-# Seed database with sample data
-npm run db:seed
+# Set up database (creates database, tables, and seeds data)
+npm run db:setup
 
 # Start development server
 npm run dev
@@ -229,6 +223,32 @@ SMTP_PASS="your-app-password"
 NODE_ENV="development"
 ```
 
+### Database Setup
+
+The application uses PostgreSQL with direct SQL queries for optimal production performance. The database setup script creates:
+
+- **Database**: `zivah_international`
+- **Tables**: All required tables with proper indexes and constraints
+- **Seed Data**: Currencies, countries, measures, categories, products, users, and settings
+
+#### Database Requirements
+
+- PostgreSQL 12+ with UUID extension support
+- Database user with CREATE DATABASE privileges (for setup script)
+
+#### Database Scripts
+
+```bash
+npm run db:setup     # Complete database setup (create DB, tables, seed data)
+```
+
+#### Default Admin Accounts
+
+After running `npm run db:setup`, you can log in with:
+
+- **Admin**: `admin@zivahinternational.com` / `admin123!`
+- **Manager**: `manager@zivahinternational.com` / `manager123!`
+
 ### Available Scripts
 
 ```bash
@@ -241,11 +261,7 @@ npm run format       # Format code with Prettier
 npm run format:check # Check if code is formatted correctly
 npm run type-check   # Run TypeScript type checking
 npm run db:generate  # Generate Prisma client
-npm run db:push      # Push schema changes to database
-npm run db:migrate   # Run database migrations
-npm run db:studio    # Open Prisma Studio (database GUI)
-npm run db:seed      # Seed database with sample data
-npm run db:reset     # Reset database and reseed
+npm run db:setup     # Complete database setup (create DB, tables, seed data)
 ```
 
 ## 🎯 **Code Quality & Formatting**

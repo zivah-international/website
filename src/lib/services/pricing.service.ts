@@ -1,8 +1,6 @@
 // Product Pricing Service
-// Database-driven pricing service using Prisma
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+// Database-driven pricing service using direct SQL queries
+import { query } from '@/lib/db';
 
 export interface ProductPricingService {
   getAvailableMeasuresForProduct(productId: number): Promise<any[]>;
@@ -14,37 +12,33 @@ export interface ProductPricingService {
 class DatabasePricingService implements ProductPricingService {
   async getAvailableMeasuresForProduct(productId: number): Promise<any[]> {
     try {
-      // Get product with its pricing information
-      const product = await prisma.product.findUnique({
-        where: { id: productId },
-        include: {
-          productPrices: {
-            where: { isActive: true },
-            include: { measure: true },
-          },
-          defaultMeasure: true,
-        },
-      });
+      // Get product with its default measure family
+      const productQuery = `
+        SELECT p.measure_id, m.family_id
+        FROM products p
+        LEFT JOIN measures m ON p.measure_id = m.id
+        WHERE p.id = ?
+      `;
+      const productResult = await query(productQuery, [productId]);
 
-      if (!product) {
+      if (productResult.rows.length === 0) {
         return [];
       }
 
-      // Get all measures in the same family as the product's default measure
-      const defaultFamily = product.defaultMeasure?.familyId;
+      const defaultFamily = (productResult as any)[0].family_id;
       if (!defaultFamily) {
         return [];
       }
 
-      const measures = await prisma.measure.findMany({
-        where: {
-          familyId: defaultFamily,
-          isActive: true,
-        },
-        orderBy: { sortOrder: 'asc' },
-      });
+      // Get all measures in the same family
+      const measuresQuery = `
+        SELECT * FROM measures
+        WHERE family_id = ? AND is_active = true
+        ORDER BY sort_order ASC
+      `;
+      const measuresResult = await query(measuresQuery, [defaultFamily]);
 
-      return measures;
+      return measuresResult.rows;
     } catch (error) {
       console.error('Error getting available measures:', error);
       return [];
@@ -53,49 +47,35 @@ class DatabasePricingService implements ProductPricingService {
 
   async getPriceForUnit(productId: number, measureId: number): Promise<number | null> {
     try {
-      const productPrice = await prisma.productPrice.findUnique({
-        where: {
-          productId_measureId: {
-            productId,
-            measureId,
-          },
-          isActive: true,
-        },
-      });
+      // First try to get direct price
+      const priceQuery = `
+        SELECT price FROM product_prices
+        WHERE product_id = ? AND measure_id = ? AND is_active = true
+      `;
+      const priceResult = await query(priceQuery, [productId, measureId]);
 
-      if (productPrice) {
-        return Number(productPrice.price);
+      if ((priceResult as any).length > 0) {
+        return Number((priceResult as any)[0].price);
       }
 
-      // If no direct price, try to find compatible measures and convert
-      const product = await prisma.product.findUnique({
-        where: { id: productId },
-        include: { productPrices: { include: { measure: true } } },
-      });
+      // If no direct price, get all prices for this product and try to convert
+      const allPricesQuery = `
+        SELECT pp.price, pp.measure_id, mc.conversion_factor
+        FROM product_prices pp
+        LEFT JOIN measure_compatibility mc ON mc.from_measure_id = pp.measure_id AND mc.to_measure_id = ?
+        WHERE pp.product_id = ? AND pp.is_active = true
+      `;
+      const allPricesResult = await query(allPricesQuery, [measureId, productId]);
 
-      if (!product || !product.productPrices.length) {
-        return null;
-      }
-
-      // Find a price in a compatible measure and convert
-      for (const price of product.productPrices) {
-        if (price.measureId === measureId) {
-          return Number(price.price);
+      for (const priceRow of allPricesResult.rows) {
+        const row = priceRow as any;
+        if (row.measure_id === measureId) {
+          return Number(row.price);
         }
 
-        // Check if measures are compatible
-        const compatibility = await prisma.measureCompatibility.findUnique({
-          where: {
-            fromMeasureId_toMeasureId: {
-              fromMeasureId: price.measureId,
-              toMeasureId: measureId,
-            },
-          },
-        });
-
-        if (compatibility && compatibility.conversionFactor) {
+        if (row.conversion_factor) {
           // Convert price: if converting from A to B with factor F, price_B = price_A / F
-          return Number(price.price) / Number(compatibility.conversionFactor);
+          return Number(row.price) / Number(row.conversion_factor);
         }
       }
 
@@ -120,33 +100,35 @@ class DatabasePricingService implements ProductPricingService {
 
   async areMeasuresCompatible(fromMeasureId: number, toMeasureId: number): Promise<boolean> {
     try {
-      // Same measure is always compatible
-      if (fromMeasureId === toMeasureId) {
-        return true;
-      }
-
       // Check direct compatibility
-      const compatibility = await prisma.measureCompatibility.findUnique({
-        where: {
-          fromMeasureId_toMeasureId: {
-            fromMeasureId,
-            toMeasureId,
-          },
-        },
-      });
+      const compatibilityQuery = `
+        SELECT id FROM measure_compatibility
+        WHERE (from_measure_id = ? AND to_measure_id = ?)
+           OR (from_measure_id = ? AND to_measure_id = ?)
+        LIMIT 1
+      `;
+      const compatibilityResult = await query(compatibilityQuery, [
+        fromMeasureId,
+        toMeasureId,
+        toMeasureId,
+        fromMeasureId,
+      ]);
 
-      if (compatibility) {
+      if (compatibilityResult.rows.length > 0) {
         return true;
       }
 
       // Check if they belong to the same family
-      const [fromMeasure, toMeasure] = await Promise.all([
-        prisma.measure.findUnique({ where: { id: fromMeasureId } }),
-        prisma.measure.findUnique({ where: { id: toMeasureId } }),
-      ]);
+      const familyQuery = `
+        SELECT m1.family_id, m2.family_id
+        FROM measures m1, measures m2
+        WHERE m1.id = ? AND m2.id = ?
+      `;
+      const familyResult = await query(familyQuery, [fromMeasureId, toMeasureId]);
 
-      if (fromMeasure && toMeasure && fromMeasure.familyId === toMeasure.familyId) {
-        return true;
+      if ((familyResult as any).length > 0) {
+        const row = (familyResult as any)[0] as any;
+        return row.family_id === row.family_id; // m1.family_id === m2.family_id
       }
 
       return false;

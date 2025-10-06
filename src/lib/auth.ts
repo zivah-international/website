@@ -1,14 +1,11 @@
-import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
 import type { Session } from 'next-auth';
-import type { Adapter } from 'next-auth/adapters';
 import type { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-import { prisma } from './prisma';
+import { query } from './db';
 
 export const authOptions = {
-  adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -21,14 +18,18 @@ export const authOptions = {
           return null;
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+        const userQuery = `
+          SELECT id, email, password, name, role, is_active
+          FROM users
+          WHERE email = ? AND is_active = true
+        `;
+        const userResult = await query(userQuery, [credentials.email]);
 
-        if (!user || !user.isActive) {
+        if ((userResult as any).length === 0) {
           return null;
         }
 
+        const user = (userResult as any)[0];
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isPasswordValid) {
@@ -36,13 +37,12 @@ export const authOptions = {
         }
 
         // Update last login
-        await prisma.user.update({
-          where: { id: user.id },
-          data: {
-            lastLogin: new Date(),
-            loginCount: { increment: 1 },
-          },
-        });
+        const updateQuery = `
+          UPDATE users
+          SET last_login = NOW(), login_count = login_count + 1
+          WHERE id = ?
+        `;
+        await query(updateQuery, [user.id]);
 
         return {
           id: user.id.toString(),
@@ -66,7 +66,7 @@ export const authOptions = {
     async session({ session, token }: { session: Session; token: JWT }) {
       if (token && session.user) {
         // sub is present on default JWT in NextAuth v4
-        const sub = (token as any).sub as string | undefined;
+        const { sub } = token as JWT & { sub?: string };
         if (sub) session.user.id = sub;
         if (token.role) session.user.role = token.role;
       }
