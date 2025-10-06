@@ -1,6 +1,7 @@
 {
   "name": "zivah-international-website",
   "version": "1.0.0",
+  "type": "module",
   "description": "Sitio web corporativo para ZIVAH International S.A. - Exportadores premium de productos ecuatorianos",
   "main": "src/app/page.tsx",
   "scripts": {

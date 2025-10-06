@@ -20,10 +20,23 @@ export async function GET(request: NextRequest) {
     }
 
     const countries = await query(`
-      SELECT id, name, code, icon, currency, calling_code, phone_format
-      FROM countries
-      WHERE is_active = true
-      ORDER BY name ASC
+      SELECT
+        c.id,
+        c.name,
+        c.code,
+        c.icon,
+        c.calling_code,
+        c.phone_format,
+        JSON_OBJECT(
+          'id', curr.id,
+          'code', curr.code,
+          'name', curr.name,
+          'symbol', curr.symbol
+        ) as currency
+      FROM countries c
+      LEFT JOIN currencies curr ON c.currency_id = curr.id
+      WHERE c.is_active = true
+      ORDER BY c.name ASC
     `);
 
     return createApiResponse(countries.rows);

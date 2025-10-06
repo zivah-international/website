@@ -1,14 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Enable experimental features
-  experimental: {
-     outputFileTracingIncludes: {
-      '/*': ['./node_modules/@prisma/client/**/*']
-    }
-  },
+  experimental: {},
+
+  // Output file tracing includes
+  outputFileTracingIncludes: {},
 
   // Server external packages
-  serverExternalPackages: ['@prisma/client'],
+  serverExternalPackages: [],
 
   // Image configuration
   images: {

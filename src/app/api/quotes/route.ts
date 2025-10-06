@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId');
 
     const where: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (status) {
       where.push(`q.status = ?`);
@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
       ),
     ]);
 
-    const totalCount = parseInt((total.rows[0] as any).count);
+    const totalCount = parseInt((total.rows[0] as { count: string }).count);
 
     return createApiResponse({
       data: quotes.rows,

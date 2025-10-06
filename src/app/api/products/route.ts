@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
         : undefined,
       inStock: searchParams.get('inStock') ? searchParams.get('inStock') === 'true' : undefined,
       page: searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1,
-      pageSize: searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')!) : 10,
+      pageSize: searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')!) : 100,
     };
 
     const validatedFilters = productFiltersSchema.parse(filterParams);

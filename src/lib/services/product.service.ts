@@ -15,8 +15,6 @@ export class ProductService {
       isActive,
       isFeatured,
       search,
-      minPrice,
-      maxPrice,
       origin,
       certifications,
       inStock,
@@ -25,29 +23,24 @@ export class ProductService {
     } = filters;
 
     const conditions: string[] = [];
-    const params: any[] = [];
-    let paramIndex = 1;
+    const params: unknown[] = [];
 
     // Apply filters
     if (categoryId !== undefined) {
-      conditions.push(`p.category_id = $${paramIndex}`);
+      conditions.push(`p.category_id = ?`);
       params.push(categoryId);
-      paramIndex++;
     }
     if (typeof isActive === 'boolean') {
-      conditions.push(`p.is_active = $${paramIndex}`);
+      conditions.push(`p.is_active = ?`);
       params.push(isActive);
-      paramIndex++;
     }
     if (typeof isFeatured === 'boolean') {
-      conditions.push(`p.is_featured = $${paramIndex}`);
+      conditions.push(`p.is_featured = ?`);
       params.push(isFeatured);
-      paramIndex++;
     }
     if (origin) {
       conditions.push(`p.origin LIKE ?`);
       params.push(`%${origin}%`);
-      paramIndex++;
     }
     if (inStock) {
       conditions.push(`p.stock_quantity > 0`);
@@ -76,6 +69,14 @@ export class ProductService {
         p.*,
         c.name as category_name,
         c.slug as category_slug,
+        c.id as category_id_ref,
+        c.description as category_description,
+        c.icon as category_icon,
+        c.color as category_color,
+        c.sort_order as category_sort_order,
+        c.is_active as category_is_active,
+        c.created_at as category_created_at,
+        c.updated_at as category_updated_at,
         COUNT(qi.id) as quotes_count
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
@@ -83,29 +84,63 @@ export class ProductService {
       ${whereClause}
       GROUP BY p.id, c.id
       ORDER BY p.is_featured DESC, p.created_at DESC
-      LIMIT ?, ?
+      LIMIT ${skip}, ${pageSize}
     `;
 
-    params.push(skip, pageSize);
-
-    // Get total count
+    // Get total count (use same WHERE clause but without GROUP BY and LIMIT)
     const countQuery = `
-      SELECT COUNT(*) as total
+      SELECT COUNT(DISTINCT p.id) as total
       FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
       ${whereClause}
     `;
 
     const [productsResult, countResult] = await Promise.all([
-      query(productsQuery, params.slice(0, -2)), // Remove limit and offset for count
-      query(countQuery, params.slice(0, -2)),
+      query(productsQuery, params),
+      query(countQuery, params),
     ]);
 
-    const products = productsResult as any;
-    const total = parseInt((countResult as any)[0].total);
+    const rawProducts = productsResult.rows as Record<string, unknown>[];
+    const total = parseInt((countResult.rows[0] as { total: string }).total);
     const totalPages = Math.ceil(total / pageSize);
 
+    // Transform products to include properly structured category data
+    const products = rawProducts.map(product => {
+      const {
+        category_name,
+        category_slug,
+        category_id_ref,
+        category_description,
+        category_icon,
+        category_color,
+        category_sort_order,
+        category_is_active,
+        category_created_at,
+        category_updated_at,
+        ...productData
+      } = product;
+
+      return {
+        ...productData,
+        category: category_id_ref
+          ? {
+              id: category_id_ref as number,
+              name: category_name as string,
+              slug: category_slug as string,
+              description: category_description as string,
+              icon: category_icon as string,
+              color: category_color as string,
+              sortOrder: category_sort_order as number,
+              isActive: category_is_active as boolean,
+              createdAt: category_created_at as string,
+              updatedAt: category_updated_at as string,
+            }
+          : null,
+      };
+    });
+
     return {
-      data: products as Product[],
+      data: products as unknown as Product[],
       pagination: {
         page,
         pageSize,
@@ -382,7 +417,7 @@ export class ProductService {
     const results = await Promise.all(queries.map(q => query(q)));
 
     const [totalProducts, activeProducts, featuredProducts, categoriesCount, lowStockCount] =
-      results.map(r => parseInt((r.rows[0] as any).count));
+      results.map(r => parseInt((r.rows[0] as { count: string }).count));
 
     // Get top selling products
     const topSellingQuery = `
@@ -407,12 +442,15 @@ export class ProductService {
       categoriesCount,
       totalValue: 0, // TODO: Calculate from ProductPrice table
       lowStockProducts: lowStockCount,
-      topSellingProducts: topSellingProducts.map((product: any) => ({
-        productId: product.id,
-        productName: product.name,
-        quotesCount: parseInt(product.quotes_count),
-        totalQuantity: 0, // Would need separate query for actual quantities
-      })),
+      topSellingProducts: (topSellingProducts as unknown[]).map((product: unknown) => {
+        const p = product as { id: number; name: string; quotes_count: string };
+        return {
+          productId: p.id,
+          productName: p.name,
+          quotesCount: parseInt(p.quotes_count),
+          totalQuantity: 0, // Would need separate query for actual quantities
+        };
+      }),
     };
   }
 

@@ -21,20 +21,45 @@ export interface MySQLResult {
 }
 
 export const query = async (text: string, params?: unknown[]): Promise<QueryResult> => {
-  const [rows] = await pool.execute(text, params);
+  try {
+    // Ensure params is always an array and handle edge cases
+    let queryParams: unknown[] = [];
+    if (params === undefined || params === null) {
+      queryParams = [];
+    } else if (Array.isArray(params)) {
+      queryParams = params;
+    } else {
+      queryParams = [params];
+    }
 
-  // Handle INSERT/UPDATE/DELETE results
-  if (rows && typeof rows === 'object' && 'insertId' in rows) {
-    const mysqlResult = rows as MySQLResult;
-    return {
-      rows: [],
-      insertId: mysqlResult.insertId,
-      affectedRows: mysqlResult.affectedRows,
-    };
+    // Log for debugging (remove in production)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Query:', text.replace(/\s+/g, ' ').trim());
+      console.log('Params:', queryParams);
+      console.log('Params type:', typeof queryParams, 'Array?', Array.isArray(queryParams));
+    }
+
+    // Try using query instead of execute for better compatibility
+    const [rows] = await pool.query(text, queryParams);
+
+    // Handle INSERT/UPDATE/DELETE results
+    if (rows && typeof rows === 'object' && 'insertId' in rows) {
+      const mysqlResult = rows as MySQLResult;
+      return {
+        rows: [],
+        insertId: mysqlResult.insertId,
+        affectedRows: mysqlResult.affectedRows,
+      };
+    }
+
+    // Handle SELECT results - mysql2 returns arrays directly, not wrapped in rows
+    return { rows: Array.isArray(rows) ? rows : [] };
+  } catch (error) {
+    console.error('Database query error:', error);
+    console.error('Query:', text);
+    console.error('Params:', params);
+    throw error;
   }
-
-  // Handle SELECT results - mysql2 returns arrays directly, not wrapped in rows
-  return { rows: Array.isArray(rows) ? rows : [] };
 };
 
 // Connection health check
