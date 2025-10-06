@@ -121,13 +121,13 @@ export async function POST(request: NextRequest) {
     }
 
     const selectResult = await query('SELECT * FROM categories WHERE id = ?', [result.insertId]);
-    const category = (selectResult as any)[0] as any;
+    const category = selectResult.rows[0] as any;
 
     // Get product count for the new category
     const countQuery =
       'SELECT COUNT(*) as count FROM products WHERE category_id = ? AND is_active = true';
     const countResult = await query(countQuery, [category.id]);
-    category.products_count = parseInt((countResult as any)[0].count);
+    category.products_count = parseInt((countResult.rows[0] as any).count);
 
     return NextResponse.json(
       {

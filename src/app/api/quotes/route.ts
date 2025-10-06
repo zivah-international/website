@@ -97,14 +97,16 @@ export async function GET(request: NextRequest) {
       ),
     ]);
 
+    const totalCount = parseInt((total.rows[0] as any).count);
+
     return createApiResponse({
-      data: quotes as any,
+      data: quotes.rows,
       pagination: {
         page,
         pageSize,
-        total: parseInt((total as any)[0].count),
-        totalPages: Math.ceil(parseInt((total as any)[0].count) / pageSize),
-        hasNext: page * pageSize < parseInt((total as any)[0].count),
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / pageSize),
+        hasNext: page * pageSize < totalCount,
         hasPrev: page > 1,
       },
     });
@@ -185,17 +187,17 @@ export async function POST(request: NextRequest) {
     // Validate with enhanced schema
     const validatedData = quoteFormSchema.parse(sanitizedBody);
 
-    // Generate quote number
-    const lastQuoteResult = await query(`
-      SELECT id FROM quotes ORDER BY id DESC LIMIT 1
-    `);
-    const lastQuoteId = (lastQuoteResult as any)[0]?.id || 0;
-    const quoteNumber = `Q${String(lastQuoteId + 1).padStart(6, '0')}`;
-
     // Create quote and items in transaction
     const quote = await withTransaction(async client => {
+      // Generate quote number inside transaction to avoid race conditions
+      const [lastQuoteResult] = await client.execute(`
+        SELECT id FROM quotes ORDER BY id DESC LIMIT 1
+      `);
+      const lastQuoteId = (lastQuoteResult as any[])[0]?.id || 0;
+      const quoteNumber = `Q${String(lastQuoteId + 1).padStart(6, '0')}`;
+
       // Insert quote
-      const quoteResult = await client.query(
+      const [quoteResult] = await client.execute(
         `
         INSERT INTO quotes (
           quote_number, customer_name, customer_email, customer_phone, company,
@@ -219,22 +221,29 @@ export async function POST(request: NextRequest) {
 
       // Insert quote items
       if (validatedData.items.length > 0) {
-        const itemValues = validatedData.items
-          .map(
-            (item: any) =>
-              `(${quoteId}, ${item.productId}, ${item.measureId}, ${item.quantity}, ${item.unitPrice || 0}, ${(item.unitPrice || 0) * item.quantity}, '${item.notes || ''}', '${JSON.stringify(item.specifications || {})}')`
-          )
-          .join(', ');
-
-        await client.query(`
-          INSERT INTO quote_items (
-            quote_id, product_id, measure_id, quantity, unit_price, total_price, notes, specifications
-          ) VALUES ${itemValues}
-        `);
+        for (const item of validatedData.items) {
+          await client.execute(
+            `
+            INSERT INTO quote_items (
+              quote_id, product_id, measure_id, quantity, unit_price, total_price, notes, specifications
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+          `,
+            [
+              quoteId,
+              item.productId,
+              item.measureId,
+              item.quantity,
+              item.unitPrice || 0,
+              (item.unitPrice || 0) * item.quantity,
+              item.notes || '',
+              JSON.stringify(item.specifications || {}),
+            ]
+          );
+        }
       }
 
       // Get complete quote with relations
-      const completeQuote = await client.query(
+      const [completeQuote] = await client.execute(
         `
         SELECT
           q.*,
@@ -277,7 +286,7 @@ export async function POST(request: NextRequest) {
         [quoteId]
       );
 
-      return (completeQuote as any)[0];
+      return (completeQuote as any[])[0];
     });
 
     // Send email if requested

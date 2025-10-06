@@ -170,7 +170,7 @@ export class ProductService {
     `;
 
     const result = await query(queryText, [id]);
-    return (result as any)[0] as Product | null;
+    return result.rows[0] as Product | null;
   }
 
   // Get product by slug
@@ -203,7 +203,7 @@ export class ProductService {
     `;
 
     const result = await query(queryText, [slug]);
-    return (result as any)[0] as Product | null;
+    return result.rows[0] as Product | null;
   }
 
   // Get featured products
@@ -268,7 +268,7 @@ export class ProductService {
       throw new Error('Failed to get inserted ID');
     }
     const selectResult = await query('SELECT * FROM products WHERE id = ?', [result.insertId]);
-    return (selectResult as any)[0] as Product;
+    return selectResult.rows[0] as Product;
   }
 
   // Update product
@@ -292,7 +292,7 @@ export class ProductService {
     await query(queryText, [...values, id]);
     // For MySQL, get the updated record
     const selectResult = await query('SELECT * FROM products WHERE id = ?', [id]);
-    return (selectResult as any)[0] as Product;
+    return selectResult.rows[0] as Product;
   }
 
   // Delete product (soft delete)
@@ -322,7 +322,7 @@ export class ProductService {
     await query(queryText, [quantity, id]);
     // For MySQL, get the updated record
     const selectResult = await query('SELECT * FROM products WHERE id = ?', [id]);
-    return (selectResult as any)[0] as Product;
+    return selectResult.rows[0] as Product;
   }
 
   // Get low stock products
@@ -382,7 +382,7 @@ export class ProductService {
     const results = await Promise.all(queries.map(q => query(q)));
 
     const [totalProducts, activeProducts, featuredProducts, categoriesCount, lowStockCount] =
-      results.map(r => parseInt(((r as any)[0] as any).count));
+      results.map(r => parseInt((r.rows[0] as any).count));
 
     // Get top selling products
     const topSellingQuery = `

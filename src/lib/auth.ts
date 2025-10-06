@@ -25,11 +25,11 @@ export const authOptions = {
         `;
         const userResult = await query(userQuery, [credentials.email]);
 
-        if ((userResult as any).length === 0) {
+        if (userResult.rows.length === 0) {
           return null;
         }
 
-        const user = (userResult as any)[0];
+        const user = userResult.rows[0] as any;
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isPasswordValid) {

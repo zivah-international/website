@@ -25,7 +25,7 @@ class DatabasePricingService implements ProductPricingService {
         return [];
       }
 
-      const defaultFamily = (productResult as any)[0].family_id;
+      const defaultFamily = (productResult.rows[0] as any).family_id;
       if (!defaultFamily) {
         return [];
       }
@@ -54,8 +54,8 @@ class DatabasePricingService implements ProductPricingService {
       `;
       const priceResult = await query(priceQuery, [productId, measureId]);
 
-      if ((priceResult as any).length > 0) {
-        return Number((priceResult as any)[0].price);
+      if (priceResult.rows.length > 0) {
+        return Number((priceResult.rows[0] as any).price);
       }
 
       // If no direct price, get all prices for this product and try to convert
@@ -126,8 +126,8 @@ class DatabasePricingService implements ProductPricingService {
       `;
       const familyResult = await query(familyQuery, [fromMeasureId, toMeasureId]);
 
-      if ((familyResult as any).length > 0) {
-        const row = (familyResult as any)[0] as any;
+      if (familyResult.rows.length > 0) {
+        const row = familyResult.rows[0] as any;
         return row.family_id === row.family_id; // m1.family_id === m2.family_id
       }
 

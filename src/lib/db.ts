@@ -5,6 +5,8 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  timezone: '+00:00', // Use UTC timezone
+  charset: 'utf8mb4',
 });
 
 export interface QueryResult {
@@ -31,8 +33,8 @@ export const query = async (text: string, params?: unknown[]): Promise<QueryResu
     };
   }
 
-  // Handle SELECT results
-  return { rows: rows as unknown[] };
+  // Handle SELECT results - mysql2 returns arrays directly, not wrapped in rows
+  return { rows: Array.isArray(rows) ? rows : [] };
 };
 
 // Connection health check
