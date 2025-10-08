@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -13,7 +12,7 @@ interface NavigationProps {
   onScrollToSection?: (sectionId: string) => void;
 }
 
-export default function Navigation({ onScrollToSection }: NavigationProps) {
+export default function Navigation({ onScrollToSection: _onScrollToSection }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
@@ -117,12 +116,14 @@ export default function Navigation({ onScrollToSection }: NavigationProps) {
             }}
             aria-label='Ir al inicio'
           >
-            <Image
+            {/* Using regular img tag instead of Next.js Image for SVG to avoid optimization issues */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src='/assets/images/zivah-logo.svg'
               alt='ZIVAH International S.A.'
               width={120}
               height={40}
-              priority
+              style={{ width: '120px', height: '40px' }}
             />
           </div>
 
