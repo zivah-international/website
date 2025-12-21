@@ -49,11 +49,11 @@ model Product {
   updatedAt        DateTime?        @updatedAt @map("updated_at")
   measureId        Int?             @map("measure_id")
   code             String?          @unique @db.VarChar(50)
+  productPrices    ProductPrice[]
   variants         ProductVariant[]
   category         Category?        @relation(fields: [categoryId], references: [id])
   defaultMeasure   Measure?         @relation(fields: [measureId], references: [id])
   quoteItems       QuoteItem[]
-  productPrices    ProductPrice[]
 
   @@index([categoryId])
   @@index([measureId])
@@ -64,17 +64,17 @@ model Product {
 }
 
 model ProductVariant {
-  id         Int      @id @default(autoincrement())
-  productId  Int      @map("product_id")
-  name       String   @db.VarChar(255)
-  sku        String?  @unique @db.VarChar(50)
-  price      Decimal? @db.Decimal(10, 2)
-  stockQty   Int      @default(0) @map("stock_qty")
-  isActive   Boolean  @default(true) @map("is_active")
+  id         Int       @id @default(autoincrement())
+  productId  Int       @map("product_id")
+  name       String    @db.VarChar(255)
+  sku        String?   @unique @db.VarChar(50)
+  price      Decimal?  @db.Decimal(10, 2)
+  stockQty   Int       @default(0) @map("stock_qty")
+  isActive   Boolean   @default(true) @map("is_active")
   attributes Json?
-  createdAt  DateTime @default(now()) @map("created_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime? @updatedAt @map("updated_at")
-  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([productId])
   @@map("product_variants")
@@ -89,27 +89,23 @@ model MeasureFamily {
   isActive    Boolean   @default(true) @map("is_active")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime? @updatedAt @map("updated_at")
-
-  // Relations
-  measures Measure[]
+  measures    Measure[]
 
   @@index([isActive, sortOrder])
   @@map("measure_families")
 }
 
 model Currency {
-  id          Int       @id @default(autoincrement())
-  code        String    @unique @db.VarChar(3)
-  name        String    @db.VarChar(100)
-  symbol      String?   @db.VarChar(5)
-  isActive    Boolean   @default(true) @map("is_active")
-  sortOrder   Int       @default(0) @map("sort_order")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime? @updatedAt @map("updated_at")
-
-  // Relations
-  countries   Country[]
-  quotes      Quote[]
+  id        Int       @id @default(autoincrement())
+  code      String    @unique @db.VarChar(3)
+  name      String    @db.VarChar(100)
+  symbol    String?   @db.VarChar(5)
+  isActive  Boolean   @default(true) @map("is_active")
+  sortOrder Int       @default(0) @map("sort_order")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  countries Country[]
+  quotes    Quote[]
 
   @@index([isActive, sortOrder])
   @@map("currencies")
@@ -118,25 +114,23 @@ model Currency {
 model Measure {
   id                  Int                    @id @default(autoincrement())
   name                String                 @unique @db.VarChar(100)
-  shortName           String                 @db.VarChar(20)
   symbol              String?                @db.VarChar(10)
   type                MeasureType
   familyId            Int?                   @map("family_id")
-  baseUnit            String?                @db.VarChar(20)
-  conversionFactor    Decimal?               @db.Decimal(15, 6)
   isActive            Boolean                @default(true) @map("is_active")
   sortOrder           Int                    @default(0) @map("sort_order")
   description         String?                @db.Text
   createdAt           DateTime               @default(now()) @map("created_at")
   updatedAt           DateTime?              @updatedAt @map("updated_at")
-
-  // Relations
-  family              MeasureFamily?         @relation(fields: [familyId], references: [id])
-  products            Product[]
-  quoteItems          QuoteItem[]
-  productPrices       ProductPrice[]
+  baseUnit            String?                @map("base_unit") @db.VarChar(20)
+  conversionFactor    Decimal?               @map("conversion_factor") @db.Decimal(15, 6)
+  shortName           String                 @map("short_name") @db.VarChar(20)
   fromCompatibilities MeasureCompatibility[] @relation("FromMeasure")
   toCompatibilities   MeasureCompatibility[] @relation("ToMeasure")
+  family              MeasureFamily?         @relation(fields: [familyId], references: [id])
+  productPrices       ProductPrice[]
+  products            Product[]
+  quoteItems          QuoteItem[]
 
   @@index([type])
   @@index([familyId])
@@ -180,24 +174,26 @@ model Quote {
   @@index([countryId])
   @@index([currencyId])
   @@index([emailStatus])
+  @@index([assignedToId], map: "quotes_assigned_to_id_fkey")
+  @@index([userId], map: "quotes_user_id_fkey")
   @@map("quotes")
 }
 
 model QuoteItem {
-  id             Int      @id @default(autoincrement())
-  quoteId        Int      @map("quote_id")
-  productId      Int      @map("product_id")
+  id             Int       @id @default(autoincrement())
+  quoteId        Int       @map("quote_id")
+  productId      Int       @map("product_id")
   quantity       Int
-  unitPrice      Decimal  @map("unit_price") @db.Decimal(10, 2)
-  totalPrice     Decimal  @map("total_price") @db.Decimal(12, 2)
-  notes          String?  @db.Text
+  unitPrice      Decimal   @map("unit_price") @db.Decimal(10, 2)
+  totalPrice     Decimal   @map("total_price") @db.Decimal(12, 2)
+  notes          String?   @db.Text
   specifications Json?
-  createdAt      DateTime @default(now()) @map("created_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime? @updatedAt @map("updated_at")
-  measureId      Int?     @map("measure_id")
-  measure        Measure? @relation(fields: [measureId], references: [id])
-  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  quote          Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  measureId      Int?      @map("measure_id")
+  measure        Measure?  @relation(fields: [measureId], references: [id])
+  product        Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quote          Quote     @relation(fields: [quoteId], references: [id], onDelete: Cascade)
 
   @@index([quoteId])
   @@index([productId])
@@ -220,6 +216,7 @@ model QuoteCommunication {
 
   @@index([quoteId])
   @@index([createdAt])
+  @@index([userId], map: "quote_communications_user_id_fkey")
   @@map("quote_communications")
 }
 
@@ -262,15 +259,15 @@ model Country {
   icon               String?             @db.VarChar(10)
   continent          String              @db.VarChar(50)
   currencyId         Int?                @map("currency_id")
-  callingCode        String?             @db.VarChar(10)
-  phoneFormat        String?             @db.VarChar(50)
   isActive           Boolean             @default(true) @map("is_active")
   createdAt          DateTime            @default(now()) @map("created_at")
   updatedAt          DateTime?           @updatedAt @map("updated_at")
+  callingCode        String?             @map("calling_code") @db.VarChar(10)
+  phoneFormat        String?             @map("phone_format") @db.VarChar(50)
   contactSubmissions ContactSubmission[]
+  currency           Currency?           @relation(fields: [currencyId], references: [id])
   quotes             Quote[]
   users              User[]
-  currency           Currency?           @relation(fields: [currencyId], references: [id])
 
   @@index([code])
   @@index([name])
@@ -341,25 +338,25 @@ model ActivityLog {
 }
 
 model ContactSubmission {
-  id         Int      @id @default(autoincrement())
-  name       String   @db.VarChar(255)
-  email      String   @db.VarChar(255)
-  phone      String?  @db.VarChar(50)
-  company    String?  @db.VarChar(255)
-  countryId  Int?     @map("country_id")
-  subject    String?  @db.VarChar(255)
-  message    String   @db.Text
-  type       ContactType @default(GENERAL)
-  source     String?  @db.VarChar(50)
-  status     ContactStatus @default(NEW)
+  id         Int             @id @default(autoincrement())
+  name       String          @db.VarChar(255)
+  email      String          @db.VarChar(255)
+  phone      String?         @db.VarChar(50)
+  company    String?         @db.VarChar(255)
+  countryId  Int?            @map("country_id")
+  subject    String?         @db.VarChar(255)
+  message    String          @db.Text
+  type       ContactType     @default(GENERAL)
+  source     String?         @db.VarChar(50)
+  status     ContactStatus   @default(NEW)
   priority   ContactPriority @default(NORMAL)
-  assignedTo Int?     @map("assigned_to")
-  notes      String?  @db.Text
-  ipAddress  String?  @map("ip_address") @db.VarChar(45)
-  userAgent  String?  @map("user_agent") @db.Text
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime? @updatedAt @map("updated_at")
-  country    Country? @relation(fields: [countryId], references: [id])
+  assignedTo Int?            @map("assigned_to")
+  notes      String?         @db.Text
+  ipAddress  String?         @map("ip_address") @db.VarChar(45)
+  userAgent  String?         @map("user_agent") @db.Text
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime?       @updatedAt @map("updated_at")
+  country    Country?        @relation(fields: [countryId], references: [id])
 
   @@index([email])
   @@index([status])
@@ -405,6 +402,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId], map: "accounts_user_id_fkey")
   @@map("accounts")
 }
 
@@ -415,6 +413,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId], map: "sessions_user_id_fkey")
   @@map("sessions")
 }
 
@@ -428,23 +427,21 @@ model VerificationToken {
 }
 
 model ProductPrice {
-  id            Int      @id @default(autoincrement())
-  productId     Int      @map("product_id")
-  measureId     Int      @map("measure_id")
-  price         Decimal  @db.Decimal(10, 2)
-  isActive      Boolean  @default(true) @map("is_active")
-  effectiveDate DateTime @default(now()) @map("effective_date")
-  createdAt     DateTime @default(now()) @map("created_at")
+  id            Int       @id @default(autoincrement())
+  productId     Int       @map("product_id")
+  measureId     Int       @map("measure_id")
+  price         Decimal   @db.Decimal(10, 2)
+  isActive      Boolean   @default(true) @map("is_active")
+  effectiveDate DateTime  @default(now()) @map("effective_date")
+  createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime? @updatedAt @map("updated_at")
+  measure       Measure   @relation(fields: [measureId], references: [id], onDelete: Cascade)
+  product       Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  // Relations
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  measure Measure @relation(fields: [measureId], references: [id], onDelete: Cascade)
-
-  // Constraints
   @@unique([productId, measureId])
   @@index([productId, measureId])
   @@index([isActive])
+  @@index([measureId], map: "product_prices_measure_id_fkey")
   @@map("product_prices")
 }
 
@@ -455,14 +452,12 @@ model MeasureCompatibility {
   conversionFactor Decimal? @map("conversion_factor") @db.Decimal(15, 6)
   isActive         Boolean  @default(true) @map("is_active")
   createdAt        DateTime @default(now()) @map("created_at")
+  fromMeasure      Measure  @relation("FromMeasure", fields: [fromMeasureId], references: [id], onDelete: Cascade)
+  toMeasure        Measure  @relation("ToMeasure", fields: [toMeasureId], references: [id], onDelete: Cascade)
 
-  // Relations
-  fromMeasure Measure @relation("FromMeasure", fields: [fromMeasureId], references: [id], onDelete: Cascade)
-  toMeasure   Measure @relation("ToMeasure", fields: [toMeasureId], references: [id], onDelete: Cascade)
-
-  // Constraints
   @@unique([fromMeasureId, toMeasureId])
   @@index([fromMeasureId, toMeasureId])
+  @@index([toMeasureId], map: "measure_compatibility_to_measure_id_fkey")
   @@map("measure_compatibility")
 }
 

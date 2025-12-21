@@ -109,17 +109,17 @@ CREATE TABLE `currencies` (
 CREATE TABLE `measures` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
-    `shortName` VARCHAR(20) NOT NULL,
     `symbol` VARCHAR(10) NULL,
     `type` ENUM('WEIGHT', 'VOLUME', 'LENGTH', 'AREA', 'QUANTITY', 'CONTAINER') NOT NULL,
     `family_id` INTEGER NULL,
-    `baseUnit` VARCHAR(20) NULL,
-    `conversionFactor` DECIMAL(15, 6) NULL,
     `is_active` BOOLEAN NOT NULL DEFAULT true,
     `sort_order` INTEGER NOT NULL DEFAULT 0,
     `description` TEXT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NULL,
+    `base_unit` VARCHAR(20) NULL,
+    `conversion_factor` DECIMAL(15, 6) NULL,
+    `short_name` VARCHAR(20) NOT NULL,
 
     UNIQUE INDEX `measures_name_key`(`name`),
     INDEX `measures_type_idx`(`type`),
@@ -160,6 +160,8 @@ CREATE TABLE `quotes` (
     INDEX `quotes_country_id_idx`(`country_id`),
     INDEX `quotes_currency_id_idx`(`currency_id`),
     INDEX `quotes_email_status_idx`(`email_status`),
+    INDEX `quotes_assigned_to_id_fkey`(`assigned_to_id`),
+    INDEX `quotes_user_id_fkey`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -197,6 +199,7 @@ CREATE TABLE `quote_communications` (
 
     INDEX `quote_communications_quote_id_idx`(`quote_id`),
     INDEX `quote_communications_created_at_idx`(`created_at`),
+    INDEX `quote_communications_user_id_fkey`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -236,11 +239,11 @@ CREATE TABLE `countries` (
     `icon` VARCHAR(10) NULL,
     `continent` VARCHAR(50) NOT NULL,
     `currency_id` INTEGER NULL,
-    `callingCode` VARCHAR(10) NULL,
-    `phoneFormat` VARCHAR(50) NULL,
     `is_active` BOOLEAN NOT NULL DEFAULT true,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NULL,
+    `calling_code` VARCHAR(10) NULL,
+    `phone_format` VARCHAR(50) NULL,
 
     UNIQUE INDEX `countries_name_key`(`name`),
     UNIQUE INDEX `countries_code_key`(`code`),
@@ -382,6 +385,7 @@ CREATE TABLE `accounts` (
     `id_token` TEXT NULL,
     `session_state` VARCHAR(191) NULL,
 
+    INDEX `accounts_user_id_fkey`(`user_id`),
     UNIQUE INDEX `accounts_provider_provider_account_id_key`(`provider`, `provider_account_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -394,6 +398,7 @@ CREATE TABLE `sessions` (
     `expires` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `sessions_session_token_key`(`session_token`),
+    INDEX `sessions_user_id_fkey`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -420,6 +425,7 @@ CREATE TABLE `product_prices` (
 
     INDEX `product_prices_product_id_measure_id_idx`(`product_id`, `measure_id`),
     INDEX `product_prices_is_active_idx`(`is_active`),
+    INDEX `product_prices_measure_id_fkey`(`measure_id`),
     UNIQUE INDEX `product_prices_product_id_measure_id_key`(`product_id`, `measure_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -434,6 +440,7 @@ CREATE TABLE `measure_compatibility` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     INDEX `measure_compatibility_from_measure_id_to_measure_id_idx`(`from_measure_id`, `to_measure_id`),
+    INDEX `measure_compatibility_to_measure_id_fkey`(`to_measure_id`),
     UNIQUE INDEX `measure_compatibility_from_measure_id_to_measure_id_key`(`from_measure_id`, `to_measure_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -496,10 +503,10 @@ ALTER TABLE `accounts` ADD CONSTRAINT `accounts_user_id_fkey` FOREIGN KEY (`user
 ALTER TABLE `sessions` ADD CONSTRAINT `sessions_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `product_prices` ADD CONSTRAINT `product_prices_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `product_prices` ADD CONSTRAINT `product_prices_measure_id_fkey` FOREIGN KEY (`measure_id`) REFERENCES `measures`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `product_prices` ADD CONSTRAINT `product_prices_measure_id_fkey` FOREIGN KEY (`measure_id`) REFERENCES `measures`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `product_prices` ADD CONSTRAINT `product_prices_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `measure_compatibility` ADD CONSTRAINT `measure_compatibility_from_measure_id_fkey` FOREIGN KEY (`from_measure_id`) REFERENCES `measures`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
