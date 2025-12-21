@@ -3,6 +3,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+// Note: Using react-select instead of shadcn Select for advanced features:
+// - Searchable/filterable options
+// - Custom option rendering
+// - Async data loading
+// For simple selects, prefer @/components/ui/select
 import Select from 'react-select';
 
 import { useBusinessTracking } from '@/components/BusinessIntelligence';
