@@ -66,11 +66,7 @@ export default function SEOOptimization({
         const structuredDataScript = document.querySelector('script[type="application/ld+json"]');
         if (!structuredDataScript) issues.push('Structured data missing');
 
-        if (issues.length > 0) {
-          console.warn('SEO Issues Found:', issues);
-        } else {
-          console.log('✅ SEO validation passed');
-        }
+        // SEO validation complete
       };
 
       validateSEOElements();
@@ -127,14 +123,7 @@ export default function SEOOptimization({
           const loadTime = navigation.loadEventEnd - navigation.fetchStart;
           const domContentLoaded = navigation.domContentLoadedEventEnd - navigation.fetchStart;
 
-          // Log performance metrics
-          console.log('Page Load Performance:', {
-            'Total Load Time': `${loadTime}ms`,
-            'DOM Content Loaded': `${domContentLoaded}ms`,
-            'DNS Lookup': `${navigation.domainLookupEnd - navigation.domainLookupStart}ms`,
-            'TCP Connect': `${navigation.connectEnd - navigation.connectStart}ms`,
-            'Server Response': `${navigation.responseEnd - navigation.requestStart}ms`,
-          });
+          // Performance metrics tracked
 
           // Send to analytics if available
           if ((window as any).gtag) {
@@ -158,12 +147,7 @@ export default function SEOOptimization({
 
           entries.forEach(entry => {
             if (entry.duration > 1000) {
-              // Log slow resources
-              console.warn('Slow resource:', {
-                url: entry.name,
-                duration: `${entry.duration}ms`,
-                size: entry.transferSize,
-              });
+              // Track slow resources for optimization
             }
           });
         });
@@ -280,7 +264,6 @@ export const seoOptimizationUtils = {
   // Monitor search rankings (placeholder for actual implementation)
   monitorSearchRankings: (keywords: string[], domain: string) => {
     // This would integrate with SEO tools like SEMrush, Ahrefs, etc.
-    console.log(`Monitoring rankings for ${keywords.length} keywords on ${domain}`);
     return {
       keywords,
       domain,

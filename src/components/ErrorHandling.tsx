@@ -134,9 +134,6 @@ export function LoadingSpinner({
  * ```
  */
 export function ProductSkeleton() {
-  console.warn(
-    'ProductSkeleton is deprecated. Use Skeleton from @/components/ui/skeleton instead.'
-  );
   return (
     <div className='animate-pulse rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800'>
       <div className='mb-4 h-48 w-full rounded-lg bg-gray-200 dark:bg-gray-700' />
@@ -165,9 +162,6 @@ export function ProductSkeleton() {
  * ```
  */
 export function ContentSkeleton() {
-  console.warn(
-    'ContentSkeleton is deprecated. Use Skeleton from @/components/ui/skeleton instead.'
-  );
   return (
     <div className='animate-pulse space-y-4'>
       <div className='h-8 w-3/4 rounded bg-gray-200 dark:bg-gray-700' />
@@ -222,7 +216,6 @@ export function NetworkStatus() {
  * ```
  */
 export function useToast() {
-  console.warn('useToast is deprecated. Use "import { toast } from \'sonner\'" instead.');
   return {
     toasts: [],
     addToast: () => {},

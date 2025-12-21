@@ -114,9 +114,18 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
     [productId: number]: number;
   }>({});
 
-  const formatCurrency = useCallback((currency: Country['currency']) => {
+  const formatCurrency = useCallback((currency: Country['currency'] | undefined) => {
     if (!currency) return '';
-    if (typeof currency === 'string') return currency;
+    if (typeof currency === 'string') {
+      // Try to parse as JSON in case it's a JSON string from the database
+      try {
+        const parsed = JSON.parse(currency);
+        return parsed.code || parsed.symbol || parsed.name || currency;
+      } catch {
+        // If it's not JSON, return as is (simple currency code)
+        return currency;
+      }
+    }
     return currency.code || currency.symbol || currency.name || '';
   }, []);
 
@@ -170,7 +179,6 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
       })
       .catch(error => {
         setCountriesError('Error loading countries. Please check your connection and try again.');
-        console.error('Error loading countries:', error);
       })
       .finally(() => {
         setCountriesLoading(false);
@@ -238,7 +246,6 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         setShowProductList(true); // Show empty state
       }
     } catch (error) {
-      console.error('Error searching products:', error);
       setProducts([]);
       setShowProductList(false);
     } finally {

@@ -145,8 +145,6 @@ Crawl-delay: 1`;
     const successful = results.filter(
       result => result.status === 'fulfilled' && result.value
     ).length;
-
-    console.log(`Sitemap submitted to ${successful}/${searchEngines.length} search engines`);
   },
 
   // Validate sitemap URLs
@@ -178,8 +176,7 @@ Crawl-delay: 1`;
           invalid.push(result.value.url);
         }
       } else {
-        // For rejected promises, we can't get the URL, so we'll skip
-        console.warn('Failed to validate a sitemap URL');
+        // For rejected promises, URL validation failed
       }
     });
 

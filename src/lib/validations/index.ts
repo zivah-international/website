@@ -89,6 +89,7 @@ export const addressSchema = z.object({
 
 export const quoteItemSchema = z.object({
   productId: z.number().int().positive('Debe seleccionar un producto válido'),
+  measureId: z.number().int().positive('Debe seleccionar una unidad de medida válida').optional(),
   quantity: z.number().int().positive('La cantidad debe ser mayor a 0'),
   unitPrice: z.number().positive('El precio unitario debe ser mayor a 0').optional(),
   notes: z.string().optional(),
@@ -107,7 +108,8 @@ export const createQuoteSchema = z
       .regex(/^\+?[\d\s\-\(\)]+$/, 'Debe ser un número de teléfono válido')
       .min(10, 'El teléfono debe tener al menos 10 dígitos')
       .max(20, 'El teléfono no puede exceder 20 caracteres')
-      .optional(),
+      .optional()
+      .or(z.literal('')),
     company: z.string().max(255).optional(),
     countryId: z.number().int().positive('Debe seleccionar un país válido').optional(),
     recipientEmail: z.string().email('Debe ser un email válido para envío').optional(),
@@ -117,28 +119,44 @@ export const createQuoteSchema = z
   })
   .refine(
     data => {
-      // Enhanced phone validation based on country
-      if (data.customerPhone && data.countryId) {
+      // Enhanced phone validation based on country calling code
+      if (data.customerPhone && data.customerPhone.trim() !== '') {
         const phone = data.customerPhone.replace(/\s|-|\(|\)/g, '');
 
-        // Basic validation for different calling codes
-        if (data.countryId === 1 && !phone.match(/^\+?1\d{10}$/)) {
-          // US/Canada
+        // Must start with + and have at least country code + 7 digits
+        if (!phone.match(/^\+\d{8,}$/)) {
           return false;
         }
-        if (data.countryId === 2 && !phone.match(/^\+?57\d{10}$/)) {
-          // Colombia
+
+        // Validate specific country formats
+        // Ecuador (+593): 12 digits total (+593 + 9 digits)
+        if (phone.startsWith('+593') && !phone.match(/^\+593\d{9}$/)) {
           return false;
         }
-        if (data.countryId === 3 && !phone.match(/^\+?51\d{9}$/)) {
-          // Peru
+        // USA/Canada (+1): 11 digits total (+1 + 10 digits)
+        if (phone.startsWith('+1') && !phone.match(/^\+1\d{10}$/)) {
           return false;
         }
-        if (data.countryId === 4 && !phone.match(/^\+?56\d{9}$/)) {
-          // Chile
+        // Colombia (+57): 12 digits total (+57 + 10 digits)
+        if (phone.startsWith('+57') && !phone.match(/^\+57\d{10}$/)) {
           return false;
         }
-        // Add more country-specific validations as needed
+        // Peru (+51): 11 digits total (+51 + 9 digits)
+        if (phone.startsWith('+51') && !phone.match(/^\+51\d{9}$/)) {
+          return false;
+        }
+        // Chile (+56): 11 digits total (+56 + 9 digits)
+        if (phone.startsWith('+56') && !phone.match(/^\+56\d{9}$/)) {
+          return false;
+        }
+        // Mexico (+52): 12 digits total (+52 + 10 digits)
+        if (phone.startsWith('+52') && !phone.match(/^\+52\d{10}$/)) {
+          return false;
+        }
+        // Spain (+34): 11 digits total (+34 + 9 digits)
+        if (phone.startsWith('+34') && !phone.match(/^\+34\d{9}$/)) {
+          return false;
+        }
       }
       return true;
     },

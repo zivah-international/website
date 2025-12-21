@@ -16,31 +16,27 @@ echo "📁 Preparing deployment files..."
 rm -rf deploy 2>/dev/null
 mkdir -p deploy
 
-# 3. Copy essential files only
-echo "📋 Copying essential files..."
+# 3. Copy files for Standalone Mode
+echo "📋 Copying files for Standalone Mode..."
 
-# Core files
-cp package.json deploy/
-cp server.js deploy/
-cp next.config.ts deploy/
+# Copy standalone build content (includes minimal node_modules and server.js)
+mkdir -p deploy
+cp -r .next/standalone/* deploy/
 
-# Essential files (no .next folder for cPanel)
-cp -r public deploy/
-cp -r src deploy/
-cp -r prisma deploy/
+# Copy static assets (required for standalone)
+mkdir -p deploy/.next/static
+cp -r .next/static deploy/.next/
 
-# 4. Clean unnecessary files
-echo "🧹 Cleaning unnecessary files..."
-find ./deploy -name "*.pack*" -delete 2>/dev/null || true
-find ./deploy -name "*.gz" -delete 2>/dev/null || true
-find ./deploy -name "*.map" -delete 2>/dev/null || true
-find ./deploy -name "*tsbuildinfo*" -delete 2>/dev/null || true
-find ./deploy -name "*.log" -delete 2>/dev/null || true
-find ./deploy -name "*.old" -delete 2>/dev/null || true
+mkdir -p deploy/public
+cp -r public/* deploy/public/
+
+# Environment variables are set manually on the server
+# Database scripts skipped as they do not exist locally
+echo "ℹ️  Note: Ensure .env is configured on the server manually."
 
 # Count final files
 FINAL_COUNT=$(find ./deploy -type f | wc -l)
-echo "📊 Final file count: $FINAL_COUNT (cleaned)"
+echo "📊 Final file count: $FINAL_COUNT (optimized for standalone)"
 
 # 5. Create archive
 echo "📦 Creating deployment archive..."

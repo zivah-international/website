@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
 }
 
 model Category {
@@ -17,7 +17,7 @@ model Category {
   sortOrder   Int       @default(0) @map("sort_order")
   isActive    Boolean   @default(true) @map("is_active")
   createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
   products    Product[]
 
   @@index([isActive, sortOrder])
@@ -46,7 +46,7 @@ model Product {
   seoTitle         String?          @map("seo_title") @db.VarChar(255)
   seoDescription   String?          @map("seo_description") @db.VarChar(500)
   createdAt        DateTime         @default(now()) @map("created_at")
-  updatedAt        DateTime         @updatedAt @map("updated_at")
+  updatedAt        DateTime?        @updatedAt @map("updated_at")
   measureId        Int?             @map("measure_id")
   code             String?          @unique @db.VarChar(50)
   variants         ProductVariant[]
@@ -73,7 +73,7 @@ model ProductVariant {
   isActive   Boolean  @default(true) @map("is_active")
   attributes Json?
   createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at")
   product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([productId])
@@ -88,7 +88,7 @@ model MeasureFamily {
   sortOrder   Int       @default(0) @map("sort_order")
   isActive    Boolean   @default(true) @map("is_active")
   createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
 
   // Relations
   measures Measure[]
@@ -105,7 +105,7 @@ model Currency {
   isActive    Boolean   @default(true) @map("is_active")
   sortOrder   Int       @default(0) @map("sort_order")
   createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
 
   // Relations
   countries   Country[]
@@ -128,7 +128,7 @@ model Measure {
   sortOrder           Int                    @default(0) @map("sort_order")
   description         String?                @db.Text
   createdAt           DateTime               @default(now()) @map("created_at")
-  updatedAt           DateTime               @updatedAt @map("updated_at")
+  updatedAt           DateTime?              @updatedAt @map("updated_at")
 
   // Relations
   family              MeasureFamily?         @relation(fields: [familyId], references: [id])
@@ -166,7 +166,7 @@ model Quote {
   userId          Int?                 @map("user_id")
   assignedToId    Int?                 @map("assigned_to_id")
   createdAt       DateTime             @default(now()) @map("created_at")
-  updatedAt       DateTime             @updatedAt @map("updated_at")
+  updatedAt       DateTime?            @updatedAt @map("updated_at")
   communications  QuoteCommunication[]
   items           QuoteItem[]
   assignedTo      User?                @relation("QuoteAssignee", fields: [assignedToId], references: [id])
@@ -193,7 +193,7 @@ model QuoteItem {
   notes          String?  @db.Text
   specifications Json?
   createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  updatedAt      DateTime? @updatedAt @map("updated_at")
   measureId      Int?     @map("measure_id")
   measure        Measure? @relation(fields: [measureId], references: [id])
   product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -239,7 +239,7 @@ model User {
   department     String?              @db.VarChar(100)
   company        String?              @db.VarChar(255)
   createdAt      DateTime             @default(now()) @map("created_at")
-  updatedAt      DateTime             @updatedAt @map("updated_at")
+  updatedAt      DateTime?            @updatedAt @map("updated_at")
   accounts       Account[]
   activityLogs   ActivityLog[]
   communications QuoteCommunication[]
@@ -266,7 +266,7 @@ model Country {
   phoneFormat        String?             @db.VarChar(50)
   isActive           Boolean             @default(true) @map("is_active")
   createdAt          DateTime            @default(now()) @map("created_at")
-  updatedAt          DateTime            @updatedAt @map("updated_at")
+  updatedAt          DateTime?           @updatedAt @map("updated_at")
   contactSubmissions ContactSubmission[]
   quotes             Quote[]
   users              User[]
@@ -289,7 +289,7 @@ model SiteSetting {
   isPublic        Boolean     @default(false) @map("is_public")
   validationRules Json?       @map("validation_rules")
   createdAt       DateTime    @default(now()) @map("created_at")
-  updatedAt       DateTime    @updatedAt @map("updated_at")
+  updatedAt       DateTime?   @updatedAt @map("updated_at")
   updatedBy       Int?        @map("updated_by")
 
   @@index([category])
@@ -312,7 +312,7 @@ model Page {
   featuredImage   String?   @map("featured_image") @db.VarChar(500)
   sortOrder       Int       @default(0) @map("sort_order")
   createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at")
 
   @@index([slug])
   @@index([language])
@@ -358,7 +358,7 @@ model ContactSubmission {
   ipAddress  String?  @map("ip_address") @db.VarChar(45)
   userAgent  String?  @map("user_agent") @db.Text
   createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at")
   country    Country? @relation(fields: [countryId], references: [id])
 
   @@index([email])
@@ -382,7 +382,7 @@ model Newsletter {
   ipAddress      String?   @map("ip_address") @db.VarChar(45)
   preferences    Json?
   createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime  @updatedAt @map("updated_at")
+  updatedAt      DateTime? @updatedAt @map("updated_at")
 
   @@index([isActive])
   @@index([language])
@@ -435,7 +435,7 @@ model ProductPrice {
   isActive      Boolean  @default(true) @map("is_active")
   effectiveDate DateTime @default(now()) @map("effective_date") @db.Date
   createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  updatedAt     DateTime? @updatedAt @map("updated_at")
 
   // Relations
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)

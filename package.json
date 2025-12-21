@@ -13,7 +13,10 @@
     "format:check": "npx prettier --check .",
     "type-check": "npx tsc --noEmit",
     "db:generate": "prisma generate",
-    "db:setup": "node scripts/setup-database.js",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:seed": "prisma db seed",
     "prepare": "npx --yes husky || echo 'Husky setup skipped'",
     "postinstall": "echo 'Postinstall completed'"
   },
@@ -40,9 +43,13 @@
       "prettier --write"
     ]
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@prisma/client": "^6.16.3",
+    "@prisma/adapter-mariadb": "^7.2.0",
+    "@prisma/client": "^7.2.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-avatar": "^1.1.11",
@@ -64,6 +71,7 @@
     "autoprefixer": "^10.4.23",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
+    "dotenv": "^17.2.3",
     "lucide-react": "^0.562.0",
     "mysql2": "^3.16.0",
     "next": "^16.1.0",

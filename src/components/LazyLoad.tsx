@@ -212,19 +212,13 @@ export function usePerformanceMonitor(componentName: string) {
     return () => {
       if (startTime.current) {
         const duration = performance.now() - startTime.current;
-        console.log(
-          `${componentName} render #${renderCount.current} took ${duration.toFixed(2)}ms`
-        );
       }
     };
   });
 
   useEffect(() => {
-    // Log when component mounts
-    console.log(`${componentName} mounted`);
-    return () => {
-      console.log(`${componentName} unmounted`);
-    };
+    // Component lifecycle monitoring
+    return () => {};
   }, [componentName]);
 }
 

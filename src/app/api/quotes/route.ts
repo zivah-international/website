@@ -287,11 +287,11 @@ export async function POST(request: NextRequest) {
           quoteNumber,
           validatedData.customerName,
           validatedData.customerEmail,
-          validatedData.customerPhone,
-          validatedData.company,
-          validatedData.countryId,
-          validatedData.shippingAddress,
-          validatedData.message,
+          validatedData.customerPhone ?? null,
+          validatedData.company ?? null,
+          validatedData.countryId ?? null,
+          validatedData.shippingAddress ?? null,
+          validatedData.message ?? null,
           'PENDING',
         ]
       );
@@ -301,12 +301,13 @@ export async function POST(request: NextRequest) {
 
       // Insert quote items
       if (validatedData.items.length > 0) {
+        const now = new Date();
         for (const item of validatedData.items) {
           await client.execute(
             `
             INSERT INTO quote_items (
-              quote_id, product_id, measure_id, quantity, unit_price, total_price, notes, specifications
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+              quote_id, product_id, measure_id, quantity, unit_price, total_price, notes, specifications, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
           `,
             [
               quoteId,
@@ -315,8 +316,10 @@ export async function POST(request: NextRequest) {
               item.quantity,
               item.unitPrice || 0,
               (item.unitPrice || 0) * item.quantity,
-              item.notes || '',
+              item.notes ?? null,
               JSON.stringify(item.specifications || {}),
+              now,
+              now,
             ]
           );
         }

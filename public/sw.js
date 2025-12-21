@@ -28,7 +28,6 @@ const API_ENDPOINTS = [
 
 // Install event - cache static files
 self.addEventListener('install', (event) => {
-  console.log('Service Worker: Installing...')
   event.waitUntil(
     caches.open(STATIC_CACHE).then((cache) => {
       return cache.addAll(STATIC_FILES)
@@ -39,13 +38,11 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker: Activating...')
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE && cacheName !== API_CACHE) {
-            console.log('Service Worker: Deleting old cache:', cacheName)
             return caches.delete(cacheName)
           }
         })
@@ -97,7 +94,6 @@ async function staticCacheStrategy(request) {
     }
     return networkResponse
   } catch (error) {
-    console.error('Static cache strategy error:', error)
     return new Response('Offline', { status: 503 })
   }
 }
@@ -121,8 +117,6 @@ async function apiCacheStrategy(request) {
 
     return networkResponse
   } catch (error) {
-    console.error('API cache strategy error:', error)
-
     // Try cache as fallback
     const cachedResponse = await caches.match(request)
     if (cachedResponse) {
@@ -161,8 +155,6 @@ async function dynamicCacheStrategy(request) {
     // No cache, wait for network
     return await fetchPromise
   } catch (error) {
-    console.error('Dynamic cache strategy error:', error)
-
     // Try cache as last resort
     const cachedResponse = await caches.match(request)
     if (cachedResponse) {
@@ -182,7 +174,6 @@ self.addEventListener('sync', (event) => {
 
 async function doBackgroundSync() {
   // Implement background sync logic here
-  console.log('Background sync triggered')
 }
 
 // Push notifications (if needed in the future)

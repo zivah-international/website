@@ -19,7 +19,17 @@ export async function GET(request: NextRequest) {
       return createApiResponse(null, 'Demasiadas solicitudes. Intente nuevamente más tarde.', 429);
     }
 
-    const countries = await query(`
+    interface CountryRow {
+      id: number;
+      name: string;
+      code: string;
+      icon: string | null;
+      calling_code: string;
+      phone_format: string;
+      currency: string | object;
+    }
+
+    const countries = await query<CountryRow>(`
       SELECT
         c.id,
         c.name,
@@ -39,7 +49,14 @@ export async function GET(request: NextRequest) {
       ORDER BY c.name ASC
     `);
 
-    return createApiResponse(countries.rows);
+    // Parse currency JSON string in case the driver returns it as string
+    const parsedCountries = countries.rows.map(country => ({
+      ...country,
+      currency:
+        typeof country.currency === 'string' ? JSON.parse(country.currency) : country.currency,
+    }));
+
+    return createApiResponse(parsedCountries);
   } catch (error) {
     return handleApiError(error);
   }

@@ -104,16 +104,13 @@ export default function HomePage() {
           setProducts(Array.isArray(processedProducts) ? processedProducts : []);
           setFilteredProducts(Array.isArray(processedProducts) ? processedProducts : []);
         } else {
-          console.error('API responses not ok:', {
-            categoriesRes: categoriesRes.status,
-            productsRes: productsRes.status,
-          });
+          // API responses failed
           setCategories([]);
           setProducts([]);
           setFilteredProducts([]);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        // Error fetching data
         setCategories([]);
         setProducts([]);
         setFilteredProducts([]);
@@ -705,16 +702,33 @@ export default function HomePage() {
               <div className='mb-4 text-4xl'>📧</div>
               <h4 className='text-foreground mb-2 text-lg font-semibold'>Email Comercial</h4>
               <p className='text-muted-foreground'>
-                sales@zivahinternational.com
+                <a
+                  href='mailto:sales@zivahinternational.com'
+                  className='hover:text-accent transition-colors'
+                >
+                  sales@zivahinternational.com
+                </a>
                 <br />
-                info@zivahinternational.com
+                <a
+                  href='mailto:info@zivahinternational.com'
+                  className='hover:text-accent transition-colors'
+                >
+                  info@zivahinternational.com
+                </a>
               </p>
             </div>
 
             <div className='bg-muted rounded-xl p-6 text-center'>
               <div className='mb-4 text-4xl'>📱</div>
               <h4 className='text-foreground mb-2 text-lg font-semibold'>Teléfono</h4>
-              <p className='text-muted-foreground'>+593999002893</p>
+              <p className='text-muted-foreground'>
+                <a
+                  href='tel:+593999002893'
+                  className='hover:text-accent transition-colors'
+                >
+                  +593 99 900 2893
+                </a>
+              </p>
             </div>
           </div>
 
@@ -899,11 +913,33 @@ export default function HomePage() {
           </div>
 
           <div className='border-border border-t pt-8'>
-            <div className='flex flex-col items-center justify-between md:flex-row'>
+            <div className='flex flex-col items-center justify-between gap-4 md:flex-row'>
               <p className='text-muted-foreground text-sm'>
                 &copy; 2025 ZIVAH International S.A. Todos los derechos reservados.
               </p>
-              <p className='text-muted-foreground mt-2 text-sm md:mt-0'>
+              <div className='flex items-center gap-4'>
+                <a
+                  href='https://www.facebook.com/zivahinternationalsa'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-muted-foreground hover:text-accent transition-colors'
+                  aria-label='Facebook'
+                >
+                  <svg
+                    className='h-6 w-6'
+                    fill='currentColor'
+                    viewBox='0 0 24 24'
+                    aria-hidden='true'
+                  >
+                    <path
+                      fillRule='evenodd'
+                      d='M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z'
+                      clipRule='evenodd'
+                    />
+                  </svg>
+                </a>
+              </div>
+              <p className='text-muted-foreground text-sm'>
                 Exportadores Premium de Productos Ecuatorianos
               </p>
             </div>
