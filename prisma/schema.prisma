@@ -433,7 +433,7 @@ model ProductPrice {
   measureId     Int      @map("measure_id")
   price         Decimal  @db.Decimal(10, 2)
   isActive      Boolean  @default(true) @map("is_active")
-  effectiveDate DateTime @default(now()) @map("effective_date") @db.Date
+  effectiveDate DateTime @default(now()) @map("effective_date")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime? @updatedAt @map("updated_at")
 
