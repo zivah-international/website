@@ -36,59 +36,67 @@ export async function GET(request: NextRequest) {
 
     const whereClause = where.length > 0 ? `WHERE ${where.join(' AND ')}` : '';
 
-    const [quotes, total] = await Promise.all([
-      query(
+    type QuoteRow = {
+      id: number;
+      quote_number: string;
+      customer_name: string;
+      customer_email: string;
+      customer_phone?: string | null;
+      company?: string | null;
+      country_id?: number | null;
+      shipping_address?: string | null;
+      message?: string | null;
+      status: string;
+      priority?: string | null;
+      created_at: string;
+      updated_at: string;
+      user_id?: number | null;
+      user_name?: string | null;
+      user_email?: string | null;
+      user_company?: string | null;
+    };
+
+    type QuoteItemRow = {
+      id: number;
+      quote_id: number;
+      product_id: number;
+      measure_id?: number | null;
+      quantity: number;
+      unit_price: number;
+      total_price: number;
+      notes?: string | null;
+      specifications?: string | null;
+      product_name?: string | null;
+      product_sku?: string | null;
+    };
+
+    type QuoteCommunicationRow = {
+      id: number;
+      quote_id: number;
+      type: string;
+      content: string;
+      created_at: string;
+    };
+
+    const offset = (page - 1) * pageSize;
+
+    const [quotesResult, total] = await Promise.all([
+      query<QuoteRow>(
         `
         SELECT
           q.*,
-          JSON_OBJECT(
-            'id', u.id,
-            'name', u.name,
-            'email', u.email,
-            'company', u.company
-          ) as user,
-          COALESCE(
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
-                'id', qi.id,
-                'productId', qi.product_id,
-                'measureId', qi.measure_id,
-                'quantity', qi.quantity,
-                'unitPrice', qi.unit_price,
-                'totalPrice', qi.total_price,
-                'notes', qi.notes,
-                'specifications', qi.specifications,
-                'product', JSON_OBJECT(
-                  'id', p.id,
-                  'name', p.name,
-                  'sku', p.sku
-                )
-              )
-            ), JSON_ARRAY()
-          ) as items,
-          COALESCE(
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
-                'id', qc.id,
-                'type', qc.type,
-                'content', qc.content,
-                'createdAt', qc.created_at
-              ) ORDER BY qc.created_at DESC
-            ), JSON_ARRAY()
-          ) as communications
+          u.full_name AS user_name,
+          u.email AS user_email,
+          u.company AS user_company
         FROM quotes q
         LEFT JOIN users u ON q.user_id = u.id
-        LEFT JOIN quote_items qi ON q.id = qi.quote_id
-        LEFT JOIN products p ON qi.product_id = p.id
-        LEFT JOIN quote_communications qc ON q.id = qc.quote_id
         ${whereClause}
-        GROUP BY q.id, u.id
         ORDER BY q.created_at DESC
-        LIMIT ?, ?
+        LIMIT ? OFFSET ?
       `,
-        [...params, (page - 1) * pageSize, pageSize]
+        [...params, pageSize, offset]
       ),
-      query(
+      query<{ count: string | number }>(
         `
         SELECT COUNT(*) as count FROM quotes q
         ${whereClause}
@@ -97,12 +105,76 @@ export async function GET(request: NextRequest) {
       ),
     ]);
 
-    const totalCount = parseInt((total.rows[0] as { count: string | number }).count.toString());
+    const totalCount = parseInt(total.rows[0].count.toString(), 10);
 
-    // Parse JSON fields in quotes
-    const parsedQuotes = quotes.rows.map(quote =>
-      parseJsonFields(quote, ['user', 'items', 'communications', 'shipping_address'])
-    );
+    const quoteIds = quotesResult.rows.map(q => q.id);
+    const itemsByQuote: Record<number, QuoteItemRow[]> = {};
+    const communicationsByQuote: Record<number, QuoteCommunicationRow[]> = {};
+
+    if (quoteIds.length > 0) {
+      const placeholders = quoteIds.map(() => '?').join(',');
+
+      const items = await query<QuoteItemRow>(
+        `
+        SELECT qi.*, p.name AS product_name, p.sku AS product_sku
+        FROM quote_items qi
+        LEFT JOIN products p ON qi.product_id = p.id
+        WHERE qi.quote_id IN (${placeholders})
+        ORDER BY qi.created_at DESC
+      `,
+        quoteIds
+      );
+
+      items.rows.forEach(item => {
+        if (!itemsByQuote[item.quote_id]) itemsByQuote[item.quote_id] = [];
+        itemsByQuote[item.quote_id].push(item);
+      });
+
+      const communications = await query<QuoteCommunicationRow>(
+        `
+        SELECT qc.*
+        FROM quote_communications qc
+        WHERE qc.quote_id IN (${placeholders})
+        ORDER BY qc.created_at DESC
+      `,
+        quoteIds
+      );
+
+      communications.rows.forEach(comm => {
+        if (!communicationsByQuote[comm.quote_id]) communicationsByQuote[comm.quote_id] = [];
+        communicationsByQuote[comm.quote_id].push(comm);
+      });
+    }
+
+    const parsedQuotes = quotesResult.rows.map(quote => {
+      const base = parseJsonFields(quote as Record<string, any>, ['shipping_address']);
+
+      return {
+        ...base,
+        user: quote.user_id
+          ? {
+              id: quote.user_id,
+              name: quote.user_name,
+              email: quote.user_email,
+              company: quote.user_company,
+            }
+          : null,
+        items: (itemsByQuote[quote.id] || []).map(item => ({
+          ...parseJsonFields(item as Record<string, any>, ['specifications']),
+          product: item.product_id
+            ? {
+                id: item.product_id,
+                name: item.product_name,
+                sku: item.product_sku,
+              }
+            : null,
+        })),
+        communications: (communicationsByQuote[quote.id] || []).map(({ created_at, ...comm }) => ({
+          ...comm,
+          createdAt: created_at,
+        })),
+      };
+    });
 
     return createApiResponse({
       data: parsedQuotes,
@@ -194,12 +266,13 @@ export async function POST(request: NextRequest) {
 
     // Create quote and items in transaction
     const quote = await withTransaction(async client => {
-      // Generate quote number inside transaction to avoid race conditions
-      const [lastQuoteResult] = await client.execute(`
-        SELECT id FROM quotes ORDER BY id DESC LIMIT 1
-      `);
-      const lastQuoteArray = lastQuoteResult as Array<{ id?: number }>;
-      const lastQuoteId = lastQuoteArray[0]?.id || 0;
+      type LastQuoteRow = { id: number };
+
+      // Lock the last quote row to avoid race conditions when generating the next number
+      const [lastQuoteResult] = (await client.execute(
+        `SELECT id FROM quotes ORDER BY id DESC LIMIT 1 FOR UPDATE`
+      )) as [LastQuoteRow[], unknown];
+      const lastQuoteId = lastQuoteResult[0]?.id ?? 0;
       const quoteNumber = `Q${String(lastQuoteId + 1).padStart(6, '0')}`;
 
       // Insert quote
@@ -214,11 +287,11 @@ export async function POST(request: NextRequest) {
           quoteNumber,
           validatedData.customerName,
           validatedData.customerEmail,
-          validatedData.customerPhone,
-          validatedData.company,
-          validatedData.countryId,
-          validatedData.shippingAddress,
-          validatedData.message,
+          validatedData.customerPhone ?? null,
+          validatedData.company ?? null,
+          validatedData.countryId ?? null,
+          validatedData.shippingAddress ?? null,
+          validatedData.message ?? null,
           'PENDING',
         ]
       );
@@ -228,12 +301,13 @@ export async function POST(request: NextRequest) {
 
       // Insert quote items
       if (validatedData.items.length > 0) {
+        const now = new Date();
         for (const item of validatedData.items) {
           await client.execute(
             `
             INSERT INTO quote_items (
-              quote_id, product_id, measure_id, quantity, unit_price, total_price, notes, specifications
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+              quote_id, product_id, measure_id, quantity, unit_price, total_price, notes, specifications, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
           `,
             [
               quoteId,
@@ -242,8 +316,10 @@ export async function POST(request: NextRequest) {
               item.quantity,
               item.unitPrice || 0,
               (item.unitPrice || 0) * item.quantity,
-              item.notes || '',
+              item.notes ?? null,
               JSON.stringify(item.specifications || {}),
+              now,
+              now,
             ]
           );
         }
@@ -256,7 +332,7 @@ export async function POST(request: NextRequest) {
           q.*,
           JSON_OBJECT(
             'id', u.id,
-            'name', u.name,
+            'name', u.full_name,
             'email', u.email,
             'company', u.company
           ) as user,

@@ -5,9 +5,9 @@ Modern Next.js website for **ZIVAH International S.A.**, premium Ecuadorian prod
 ## ✅ **Project Status: PRODUCTION READY**
 
 **Current Version**: 1.0.0
-**Last Updated**: October 2025
+**Last Updated**: December 2025
 **Next.js Version**: 15.5.3
-**Database**: PostgreSQL with direct SQL queries (Prisma ORM replaced for production performance)
+**Database**: MySQL 8.0+ with direct SQL queries and Prisma ORM
 
 ### 🌟 **Key Features Implemented**
 
@@ -24,7 +24,7 @@ Modern Next.js website for **ZIVAH International S.A.**, premium Ecuadorian prod
 ### 🚀 **Tech Stack**
 
 - **Framework**: Next.js 15.5.3 with App Router
-- **Database**: PostgreSQL with direct SQL queries (Prisma ORM replaced for production performance)
+- **Database**: MySQL 8.0+ with direct SQL queries and Prisma ORM
 - **Authentication**: NextAuth.js 4.24.11
 - **Styling**: Tailwind CSS 4.1.13 with custom theme
 - **Language**: TypeScript 5.9.2 with strict mode
@@ -124,7 +124,7 @@ zivah-international/
 
 ### 📱 **Dynamic Content**
 
-- PostgreSQL database with 3 categories, 30+ products
+- MySQL database with 3 categories, 30+ products
 - API-driven product catalog with filtering
 - Real-time category and product search
 - Interactive quote request system
@@ -173,7 +173,7 @@ zivah-international/
 ### Prerequisites
 
 - Node.js 18.18.0 or higher
-- PostgreSQL database
+- MySQL 8.0+ database
 - npm or yarn package manager
 - Git
 
@@ -204,7 +204,7 @@ Create a `.env` file with the following variables:
 
 ```env
 # Database
-DATABASE_URL="postgresql://username:password@localhost:5432/zivah_db"
+DATABASE_URL="mysql://username:password@localhost:3306/zivah_db"
 
 # NextAuth.js
 NEXTAUTH_SECRET="your-secret-key-here"
@@ -225,26 +225,42 @@ NODE_ENV="development"
 
 ### Database Setup
 
-The application uses PostgreSQL with direct SQL queries for optimal production performance. The database setup script creates:
-
-- **Database**: `zivah_international`
-- **Tables**: All required tables with proper indexes and constraints
-- **Seed Data**: Currencies, countries, measures, categories, products, users, and settings
+The application uses MySQL 8.0+ with Prisma ORM for type-safe database operations.
 
 #### Database Requirements
 
-- PostgreSQL 12+ with UUID extension support
-- Database user with CREATE DATABASE privileges (for setup script)
+- MySQL 8.0+ with InnoDB engine support
+- Database user with CREATE DATABASE privileges
 
 #### Database Scripts
 
 ```bash
-npm run db:setup     # Complete database setup (create DB, tables, seed data)
+# Generate Prisma Client after schema changes
+npm run db:generate
+
+# Push schema changes to database (development)
+npm run db:push
+
+# Create and apply migrations (production-ready)
+npm run db:migrate
+
+# Open Prisma Studio (visual database editor)
+npm run db:studio
+
+# Seed database with initial data (if configured)
+npm run db:seed
 ```
+
+#### Quick Start
+
+1. Ensure MySQL is running
+2. Set `DATABASE_URL` in your `.env` file
+3. Run `npm run db:push` to create tables
+4. Run `npm run db:seed` to add initial data (if configured)
 
 #### Default Admin Accounts
 
-After running `npm run db:setup`, you can log in with:
+After seeding the database, you can log in with:
 
 - **Admin**: `admin@zivahinternational.com` / `admin123!`
 - **Manager**: `manager@zivahinternational.com` / `manager123!`
@@ -261,7 +277,10 @@ npm run format       # Format code with Prettier
 npm run format:check # Check if code is formatted correctly
 npm run type-check   # Run TypeScript type checking
 npm run db:generate  # Generate Prisma client
-npm run db:setup     # Complete database setup (create DB, tables, seed data)
+npm run db:push      # Push schema to database (development)
+npm run db:migrate   # Create and apply migrations
+npm run db:studio    # Open Prisma Studio database GUI
+npm run db:seed      # Seed database with initial data
 ```
 
 ## 🎯 **Code Quality & Formatting**
@@ -453,7 +472,7 @@ The following files are excluded from formatting:
 
 ```env
 # Database
-DATABASE_URL="postgresql://user:pass@host:5432/dbname"
+DATABASE_URL="mysql://user:pass@host:3306/dbname"
 
 # NextAuth.js
 NEXTAUTH_SECRET="your-production-secret-key"
@@ -514,7 +533,7 @@ npx prisma db seed
 
 ```env
 # Database
-DATABASE_URL="postgresql://user:pass@localhost:5432/dbname"
+DATABASE_URL="mysql://user:pass@localhost:3306/dbname"
 
 # Next.js
 NEXTAUTH_SECRET="random-secret-string"
@@ -535,7 +554,7 @@ SMTP_PASS="your-app-password"
 
 #### Common Issues
 
-1. **Database Connection**: Ensure DATABASE_URL is correct and PostgreSQL is running
+1. **Database Connection**: Ensure DATABASE_URL is correct and MySQL is running
 2. **Build Errors**: Check Node.js version (18.18.0+) and run `npm install`
 3. **Environment Variables**: Copy `.env.example` to `.env` and fill required values
 4. **Prisma Issues**: Run `npm run db:generate` after schema changes
@@ -666,10 +685,10 @@ npx prisma db seed
 
 ```bash
 # Backup database
-pg_dump -h localhost -U username dbname > backup.sql
+mysqldump -h localhost -u username -p dbname > backup.sql
 
 # Restore database
-psql -h localhost -U username dbname < backup.sql
+mysql -h localhost -u username -p dbname < backup.sql
 
 # Backup application files
 tar -czf backup.tar.gz /path/to/application
@@ -721,7 +740,7 @@ tar -czf backup.tar.gz /path/to/application
 
 ### Database Configuration
 
-- **ORM**: Prisma with PostgreSQL
+- **ORM**: Prisma with MySQL 8.0+
 - **Connection**: Environment-based configuration
 - **Migrations**: Automated schema management
 - **Seeding**: Sample data for development
@@ -775,7 +794,7 @@ Unauthorized use, reproduction, or distribution is prohibited.
 ### Development Team
 
 - **Lead Developer**: ZIVAH International S.A. Development Team
-- **Tech Stack**: Next.js, TypeScript, PostgreSQL, Tailwind CSS
+- **Tech Stack**: Next.js, TypeScript, MySQL, Tailwind CSS
 - **Status**: Production Ready with Comprehensive Features
 
 ---

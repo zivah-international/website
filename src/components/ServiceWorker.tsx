@@ -13,8 +13,6 @@ export default function ServiceWorkerRegistration() {
       navigator.serviceWorker
         .register('/sw.js')
         .then(reg => {
-          console.log('Service Worker registered:', reg);
-
           setRegistration(reg);
           setIsRegistered(true);
 
@@ -41,7 +39,6 @@ export default function ServiceWorkerRegistration() {
                     setUpdateAvailable(true);
                   } else {
                     // Content is cached for the first time
-                    console.log('Content is cached for offline use.');
                   }
                 }
               });
@@ -54,7 +51,6 @@ export default function ServiceWorkerRegistration() {
 
       // Listen for controller change (when new SW takes control)
       navigator.serviceWorker.addEventListener('controllerchange', () => {
-        console.log('Service Worker controller changed');
         window.location.reload();
       });
 

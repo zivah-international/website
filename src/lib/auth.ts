@@ -4,6 +4,16 @@ import type { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { query } from './db';
+import { logger } from './logger';
+
+type AuthUserRow = {
+  id: number;
+  email: string;
+  password: string;
+  name?: string | null;
+  role?: string | null;
+  is_active: boolean;
+};
 
 export const authOptions = {
   providers: [
@@ -18,38 +28,46 @@ export const authOptions = {
           return null;
         }
 
-        const userQuery = `
-          SELECT id, email, password, name, role, is_active
-          FROM users
-          WHERE email = ? AND is_active = true
-        `;
-        const userResult = await query(userQuery, [credentials.email]);
+        try {
+          const userQuery = `
+            SELECT id, email, password, full_name AS name, role, is_active
+            FROM users
+            WHERE email = ? AND is_active = true
+          `;
+          const userResult = await query<AuthUserRow>(userQuery, [credentials.email]);
 
-        if (userResult.rows.length === 0) {
+          if (userResult.rows.length === 0) {
+            return null;
+          }
+
+          const user = userResult.rows[0];
+          const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+
+          if (!isPasswordValid) {
+            return null;
+          }
+
+          try {
+            const updateQuery = `
+              UPDATE users
+              SET last_login = NOW(), login_count = login_count + 1
+              WHERE id = ?
+            `;
+            await query(updateQuery, [user.id]);
+          } catch (updateError) {
+            logger.error('Failed to update last login', updateError);
+          }
+
+          return {
+            id: user.id.toString(),
+            email: user.email,
+            name: user.name ?? undefined,
+            role: user.role ?? 'user',
+          };
+        } catch (error) {
+          logger.error('Authentication error', error);
           return null;
         }
-
-        const user = userResult.rows[0] as any;
-        const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
-
-        if (!isPasswordValid) {
-          return null;
-        }
-
-        // Update last login
-        const updateQuery = `
-          UPDATE users
-          SET last_login = NOW(), login_count = login_count + 1
-          WHERE id = ?
-        `;
-        await query(updateQuery, [user.id]);
-
-        return {
-          id: user.id.toString(),
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        };
       },
     }),
   ],

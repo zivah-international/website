@@ -1,121 +1,137 @@
 # Database Setup Guide
 
-This guide explains how to set up the ZIVAH International database using the separated schema and seed files.
+This guide explains how to set up the ZIVAH International MySQL database using Prisma ORM.
 
 ## Overview
 
-The database setup has been separated into two distinct files for better maintainability:
+The project uses MySQL 8.0+ with Prisma ORM for type-safe database operations. Prisma provides:
 
-- **`database-schema.sql`** - Contains all database structure definitions (tables, types, indexes, constraints)
-- **`database-seed.sql`** - Contains only the initial data seeding (INSERT statements)
+- **Type-safe database client** - Full TypeScript support
+- **Migration system** - Version-controlled schema changes
+- **Prisma Studio** - Visual database editor
+- **Seeding** - Automated initial data setup
 
 ## Prerequisites
 
-- PostgreSQL database server running
+- MySQL 8.0+ database server running
 - Database user with permissions to create databases and tables
-- Node.js installed (for running the setup script)
+- Node.js 18+ installed
 
 ## Environment Variables
 
-Set the following environment variables. The script supports both `DATABASE_URL` (recommended) and individual variables:
-
-### Option 1: DATABASE_URL (Recommended)
+Set your database connection in `.env`:
 
 ```bash
-DATABASE_URL=postgresql://username:password@localhost:5432/zivah_international
+DATABASE_URL="mysql://username:password@localhost:3306/zivah_international"
 ```
 
-### Option 2: Individual Variables (Fallback)
+Example for local development:
 
 ```bash
-DB_HOST=localhost          # Database host
-DB_PORT=5432              # Database port
-DB_NAME=zivah_international  # Database name
-DB_USER=postgres          # Database user
-DB_PASSWORD=your_password # Database password
-DB_SSL=false              # SSL mode: false, true, strict (default: false)
+DATABASE_URL="mysql://root:password@localhost:3306/zivah_international"
 ```
-
-### SSL Configuration
-
-The script supports flexible SSL configuration:
-
-- **`DB_SSL=false`** or **`DB_SSL=0`**: Disable SSL (default)
-- **`DB_SSL=true`** or **`DB_SSL=1`**: Enable SSL with relaxed certificate validation
-- **`DB_SSL=strict`**: Enable SSL with strict certificate validation
-
-**SSL is disabled by default** unless explicitly enabled. For hosting providers that don't support SSL connections, no additional configuration is needed.
-
-The script will automatically use `DATABASE_URL` if available, otherwise fall back to individual variables.
 
 ## Setup Methods
 
-### Method 1: Automated Setup (Recommended)
-
-Use the provided Node.js script for automated setup:
+### Method 1: Quick Setup (Recommended for Development)
 
 ```bash
-# Install dependencies if not already installed
+# Install dependencies
 npm install
 
-# Run the database setup
-npm run db:setup
-# or
-node scripts/setup-database.js
+# Generate Prisma Client
+npm run db:generate
+
+# Push schema to database (creates tables)
+npm run db:push
+
+# Seed database with initial data (if configured)
+npm run db:seed
 ```
 
-This will:
+### Method 2: Production Setup with Migrations
 
-1. Create the database if it doesn't exist
-2. Execute the schema creation
-3. Seed the database with initial data
+```bash
+# Install dependencies
+npm install
 
-### Method 2: Manual Setup
+# Generate Prisma Client
+npm run db:generate
 
-If you prefer to run the SQL files manually:
+# Create and apply migration
+npm run db:migrate
 
-1. **Create the database:**
+# Deploy to production
+npx prisma migrate deploy
 
-   ```sql
-   CREATE DATABASE zivah_international;
-   \c zivah_international;
-   ```
+# Seed database (if needed)
+npm run db:seed
+```
 
-2. **Run the schema file:**
+## Prisma Commands Reference
 
-   ```bash
-   psql -U your_username -d zivah_international -f database-schema.sql
-   ```
+### Development
 
-3. **Run the seed file:**
-   ```bash
-   psql -U your_username -d zivah_international -f database-seed.sql
-   ```
+```bash
+# Generate Prisma Client (after schema changes)
+npm run db:generate
+# or
+npx prisma generate
 
-## File Structure
+# Push schema changes to database (no migration files)
+npm run db:push
+# or
+npx prisma db push
 
-### database-schema.sql
+# Open Prisma Studio (visual database editor)
+npm run db:studio
+# or
+npx prisma studio
+```
 
-- Database extensions (uuid-ossp)
-- Custom enum types
-- Table creation with all constraints
-- Index creation for performance
-- Foreign key relationships
+### Migrations (Production-Ready)
 
-### database-seed.sql
+```bash
+# Create a new migration
+npm run db:migrate
+# or
+npx prisma migrate dev --name description
 
-- Currency data
-- Country data
-- Measurement units and families
-- Product categories
-- Admin and manager user accounts
-- Sample products (Banano, Cacao)
-- Product pricing
-- Site settings
+# Apply pending migrations (production)
+npx prisma migrate deploy
+
+# Reset database (⚠️ deletes all data)
+npx prisma migrate reset
+
+# Check migration status
+npx prisma migrate status
+```
+
+### Seeding
+
+```bash
+# Run seed script
+npm run db:seed
+# or
+npx prisma db seed
+```
+
+## Database Schema
+
+The database schema is defined in `prisma/schema.prisma`. Key models include:
+
+- **Users** - Authentication and user management
+- **Categories** - Product categories
+- **Products** - Product catalog
+- **Quotes** - Quote requests
+- **QuoteItems** - Individual items in quotes
+- **Countries** - Shipping destinations
+- **Measures** - Measurement units
+- **Currencies** - Supported currencies
 
 ## Default Admin Credentials
 
-After setup, you can log in with these credentials:
+After seeding the database, you can log in with:
 
 **Admin Account:**
 
@@ -131,50 +147,46 @@ After setup, you can log in with these credentials:
 
 ### Connection Issues
 
-- Ensure PostgreSQL is running
-- Verify connection parameters
-- Check user permissions
+- Ensure MySQL is running: `mysql -u root -p`
+- Verify DATABASE_URL format: `mysql://user:pass@host:3306/dbname`
+- Check firewall settings allow MySQL connections
+- Test connection: `npx prisma db pull`
 
-### Script Errors
+### Schema Issues
 
-- Make sure all dependencies are installed (`npm install`)
-- Verify environment variables are set correctly
-- Check PostgreSQL logs for detailed error messages
+- If schema is out of sync: `npm run db:push`
+- If migration fails: Check Prisma Studio for conflicts
+- Reset database: `npx prisma migrate reset` (⚠️ deletes data)
 
-### Permission Issues
+### Prisma Client Issues
 
-- Ensure the database user has CREATE DATABASE privileges
-- Verify the user can create tables and indexes
-- **For shared hosting**: The script will automatically try to connect directly to your database if database creation fails due to permissions
+- If types are wrong: `npm run db:generate`
+- If client not found: Restart your IDE/terminal
+- Clear node_modules: `npm install`
 
-### Hosting Environment Notes
+## Best Practices
 
-The setup script is designed to work with various hosting environments:
+1. **Use migrations in production** - Never use `db:push` in production
+2. **Always generate client** - Run `db:generate` after schema changes
+3. **Version control migrations** - Commit all migration files
+4. **Test migrations locally** - Before deploying to production
+5. **Backup before migrating** - Always backup production data first
 
-- **Full PostgreSQL access**: Can create databases and connect to system databases
-- **Shared hosting**: Limited to specific database access - the script will connect directly to your target database
-- **Cloud providers**: Works with services like AWS RDS, Google Cloud SQL, etc.
+## Production Deployment
 
-### SSL Connection Issues
+```bash
+# 1. Ensure DATABASE_URL is set in production environment
 
-SSL is **disabled by default** in the setup script. If you encounter SSL-related errors:
+# 2. Generate Prisma Client
+npm run db:generate
 
-- For hosting providers without SSL support: No configuration needed (SSL is already disabled)
-- To explicitly enable SSL: Set `DB_SSL=true` for relaxed validation or `DB_SSL=strict` for strict validation
-- If you get certificate validation errors: Try `DB_SSL=true` instead of `DB_SSL=strict`
+# 3. Deploy migrations
+npx prisma migrate deploy
 
-## Development Notes
+# 4. Seed if needed (first deployment only)
+npx prisma db seed
 
-- The schema file can be run multiple times safely (uses `IF NOT EXISTS` and `ON CONFLICT DO NOTHING`)
-- The seed file uses `ON CONFLICT DO NOTHING` to avoid duplicate data
-- Passwords are pre-hashed using bcrypt with cost factor 12
-- All foreign key relationships are properly maintained
-
-## Migration
-
-If you need to update the database schema:
-
-1. Modify `database-schema.sql` with your changes
-2. Create a new migration file for data transformations if needed
-3. Test the changes in a development environment
-4. Update this documentation if the setup process changes
+# 5. Start application
+npm run build
+npm start
+```

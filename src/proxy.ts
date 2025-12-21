@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 import { enforceHTTPS, logSecurityEvent } from '@/lib/https';
 import { securityMiddleware } from '@/lib/security';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Enforce HTTPS in production

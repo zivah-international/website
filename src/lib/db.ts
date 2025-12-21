@@ -32,7 +32,10 @@ export interface MySQLResult {
   affectedRows: number;
 }
 
-export const query = async (text: string, params?: unknown[]): Promise<QueryResult> => {
+export const query = async <T = unknown>(
+  text: string,
+  params?: unknown[]
+): Promise<QueryResult<T>> => {
   try {
     // Ensure params is always an array and handle edge cases
     let queryParams: unknown[] = [];
@@ -60,11 +63,11 @@ export const query = async (text: string, params?: unknown[]): Promise<QueryResu
         rows: [],
         insertId: mysqlResult.insertId,
         affectedRows: mysqlResult.affectedRows,
-      };
+      } as QueryResult<T>;
     }
 
     // Handle SELECT results - mysql2 returns arrays directly, not wrapped in rows
-    return { rows: Array.isArray(rows) ? rows : [] };
+    return { rows: Array.isArray(rows) ? (rows as T[]) : [] };
   } catch (error) {
     logger.error('Database query error:', error);
     logger.error('Query:', text);
@@ -96,20 +99,21 @@ export async function queryTyped<T>(
 }
 
 // Utility to parse JSON fields from database TEXT columns
-export function parseJsonFields<T extends Record<string, any>>(row: T, jsonFields: (keyof T)[]): T {
-  const parsed = { ...row };
+export function parseJsonFields<T>(row: T, jsonFields: readonly (keyof any)[]): T {
+  const parsed: Record<string, unknown> = { ...(row as any) };
   for (const field of jsonFields) {
-    if (typeof parsed[field] === 'string' && parsed[field]) {
+    const key = field as keyof typeof parsed;
+    if (typeof parsed[key] === 'string' && parsed[key]) {
       try {
-        parsed[field] = JSON.parse(parsed[field] as string);
+        parsed[key] = JSON.parse(parsed[key] as string);
       } catch {
         // If parsing fails, leave as null or original value
         logger.warn(`Failed to parse JSON field: ${String(field)}`);
-        parsed[field] = null as any;
+        parsed[key] = null as any;
       }
     }
   }
-  return parsed;
+  return parsed as T;
 }
 
 // Connection health check

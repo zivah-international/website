@@ -41,10 +41,7 @@ function sendToAnalytics({ name, delta, value, id }: any) {
     });
   }
 
-  // Log to console in development
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`Web Vital: ${name}`, { delta, value, id });
-  }
+  // Metrics are sent to Google Analytics only
 
   // You can also send to other analytics services here
   // Example: Send to custom analytics endpoint
@@ -66,7 +63,6 @@ export const performanceUtils = {
     const start = performance.now();
     const result = fn();
     const end = performance.now();
-    console.log(`${label} took ${end - start}ms`);
     return result;
   },
 
@@ -75,7 +71,6 @@ export const performanceUtils = {
     const start = performance.now();
     const result = await fn();
     const end = performance.now();
-    console.log(`${label} took ${end - start}ms`);
     return result;
   },
 
@@ -165,16 +160,12 @@ export function usePerformanceMonitoring(componentName: string) {
     return () => {
       const endTime = performance.now();
       const duration = endTime - startTime;
-      console.log(`${componentName} render time: ${duration.toFixed(2)}ms`);
     };
   }, [componentName]);
 }
 
 // Bundle size monitoring
 export function logBundleSize() {
-  if (process.env.NODE_ENV === 'development') {
-    // This would typically be done by a webpack plugin
-    // For now, we'll just log that we're monitoring
-    console.log('Bundle size monitoring active');
-  }
+  // Bundle size monitoring handled by webpack/next.js
+  return;
 }

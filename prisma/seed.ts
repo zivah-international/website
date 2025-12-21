@@ -1,7 +1,33 @@
-import { PrismaClient } from '@prisma/client';
+import 'dotenv/config';
+
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import * as bcrypt from 'bcryptjs';
 
-const prisma = new PrismaClient();
+import { PrismaClient } from '../generated/prisma/client';
+
+function getAdapterFromDatabaseUrl(databaseUrl: string) {
+  const parsed = new URL(databaseUrl);
+  const database = parsed.pathname.replace(/^\//, '');
+
+  return new PrismaMariaDb({
+    host: parsed.hostname,
+    port: parsed.port ? Number(parsed.port) : 3306,
+    user: decodeURIComponent(parsed.username),
+    password: decodeURIComponent(parsed.password),
+    database,
+    connectionLimit: Number(process.env.DB_POOL_SIZE ?? 5),
+  });
+}
+
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  throw new Error('DATABASE_URL is not set');
+}
+
+const prisma = new PrismaClient({
+  adapter: getAdapterFromDatabaseUrl(databaseUrl),
+});
 
 async function main() {
   console.log('🌱 Starting comprehensive database seed...');

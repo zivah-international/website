@@ -217,16 +217,19 @@ export class ProductService {
     if (!result.rows[0]) return null;
 
     // Parse JSON fields including aggregated arrays
-    const product = parseJsonFields(result.rows[0], [
-      'specifications',
-      'features',
-      'certifications',
-      'image_gallery',
-      'variants',
-      'quote_items',
-    ]);
+    const product = parseJsonFields(
+      result.rows[0] as Record<string, unknown>,
+      [
+        'specifications',
+        'features',
+        'certifications',
+        'image_gallery',
+        'variants',
+        'quote_items',
+      ] as const
+    );
 
-    return product as Product;
+    return product as unknown as Product;
   }
 
   // Get product by slug

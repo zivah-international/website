@@ -14,17 +14,19 @@ echo Creating deploy folder...
 if exist deploy rmdir /s /q deploy
 mkdir deploy
 
-echo Copying files...
-copy package.json deploy\
-copy server.js deploy\
-copy next.config.ts deploy\
-copy database-schema.sql deploy\
-copy database-seed.sql deploy\
-xcopy .next deploy\.next\ /e /i /h /y
+echo Copying files for Standalone Mode...
+REM Copy standalone build content (includes minimal node_modules and server.js)
+xcopy .next\standalone\* deploy\ /e /i /h /y
+
+REM Copy static assets (required for standalone)
+mkdir deploy\.next\static
+xcopy .next\static deploy\.next\static\ /e /i /h /y
+mkdir deploy\public
 xcopy public deploy\public\ /e /i /h /y
-xcopy src deploy\src\ /e /i /h /y
-xcopy prisma deploy\prisma\ /e /i /h /y
-xcopy scripts deploy\scripts\ /e /i /h /y
+
+REM Copy helpers
+REM .env configured manually on server
+REM database scripts not present
 
 echo Creating ZIP...
 powershell "Compress-Archive -Path deploy\* -DestinationPath zivah-deploy.zip -Force"

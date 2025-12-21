@@ -3,6 +3,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+// Note: Using react-select instead of shadcn Select for advanced features:
+// - Searchable/filterable options
+// - Custom option rendering
+// - Async data loading
+// For simple selects, prefer @/components/ui/select
 import Select from 'react-select';
 
 import { useBusinessTracking } from '@/components/BusinessIntelligence';
@@ -23,12 +28,18 @@ interface QuoteProduct {
   };
 }
 
+interface CountryCurrency {
+  code?: string;
+  symbol?: string;
+  name?: string;
+}
+
 interface Country {
   id: number;
   name: string;
   code: string;
   icon?: string;
-  currency: string;
+  currency: string | CountryCurrency;
   callingCode?: string;
   phoneFormat?: string;
 }
@@ -93,6 +104,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
   const [countriesError, setCountriesError] = useState<string | null>(null);
   const [measuresLoading, _setMeasuresLoading] = useState(true);
   const [productsSearching, setProductsSearching] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   // State for price conversion
   const [conversionErrors, setConversionErrors] = useState<{
@@ -101,6 +113,32 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
   const [calculatedPrices, setCalculatedPrices] = useState<{
     [productId: number]: number;
   }>({});
+
+  const formatCurrency = useCallback((currency: Country['currency'] | undefined) => {
+    if (!currency) return '';
+    if (typeof currency === 'string') {
+      // Try to parse as JSON in case it's a JSON string from the database
+      try {
+        const parsed = JSON.parse(currency);
+        return parsed.code || parsed.symbol || parsed.name || currency;
+      } catch {
+        // If it's not JSON, return as is (simple currency code)
+        return currency;
+      }
+    }
+    return currency.code || currency.symbol || currency.name || '';
+  }, []);
+
+  // Detect dark mode
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDarkMode(document.documentElement.classList.contains('dark'));
+    };
+    checkDarkMode();
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   const {
     register,
@@ -141,7 +179,6 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
       })
       .catch(error => {
         setCountriesError('Error loading countries. Please check your connection and try again.');
-        console.error('Error loading countries:', error);
       })
       .finally(() => {
         setCountriesLoading(false);
@@ -209,7 +246,6 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         setShowProductList(true); // Show empty state
       }
     } catch (error) {
-      console.error('Error searching products:', error);
       setProducts([]);
       setShowProductList(false);
     } finally {
@@ -657,20 +693,21 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     {...field}
                     options={countries.map(country => ({
                       value: country.id,
-                      label: `${country.icon || '🌍'} ${country.name} (${country.currency})`,
+                      label: `${country.icon || '🌍'} ${country.name} (${formatCurrency(country.currency)})`,
                     }))}
                     onChange={option => field.onChange(option?.value)}
                     value={
                       countries.find(c => c.id === field.value)
                         ? {
                             value: field.value,
-                            label: `${countries.find(c => c.id === field.value)?.icon || '🌍'} ${countries.find(c => c.id === field.value)?.name} (${countries.find(c => c.id === field.value)?.currency})`,
+                            label: `${countries.find(c => c.id === field.value)?.icon || '🌍'} ${countries.find(c => c.id === field.value)?.name} (${formatCurrency(countries.find(c => c.id === field.value)?.currency)})`,
                           }
                         : null
                     }
                     className='text-foreground'
                     placeholder='Seleccione el país de destino'
                     isDisabled={countries.length === 0}
+                    menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
                     styles={{
                       control: base => ({
                         ...base,
@@ -678,23 +715,46 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                         borderColor: 'hsl(var(--border))',
                         color: 'hsl(var(--foreground))',
                         borderRadius: '0.5rem',
+                        boxShadow: 'none',
+                      }),
+                      menuPortal: base => ({
+                        ...base,
+                        zIndex: 9999,
                       }),
                       menu: base => ({
                         ...base,
-                        backgroundColor: 'hsl(var(--popover))',
-                        color: 'hsl(var(--popover-foreground))',
+                        backgroundColor: isDarkMode ? '#1f2937' : '#ffffff',
+                        border: `1px solid ${isDarkMode ? '#374151' : '#e5e7eb'}`,
                         borderRadius: '0.5rem',
+                        boxShadow: isDarkMode
+                          ? '0 10px 30px rgba(0, 0, 0, 0.5)'
+                          : '0 10px 30px rgba(0, 0, 0, 0.15)',
+                        overflow: 'hidden',
+                      }),
+                      menuList: base => ({
+                        ...base,
+                        backgroundColor: isDarkMode ? '#1f2937' : '#ffffff',
+                        borderRadius: '0.5rem',
+                        padding: '0.25rem 0',
+                        maxHeight: '300px',
                       }),
                       option: (base, state) => ({
                         ...base,
                         backgroundColor: state.isSelected
-                          ? 'hsl(var(--accent))'
+                          ? isDarkMode
+                            ? '#3b82f6'
+                            : '#2563eb'
                           : state.isFocused
-                            ? 'hsl(var(--accent) / 0.1)'
-                            : 'hsl(var(--popover))',
-                        color: state.isSelected
-                          ? 'hsl(var(--accent-foreground))'
-                          : 'hsl(var(--popover-foreground))',
+                            ? isDarkMode
+                              ? '#374151'
+                              : '#f3f4f6'
+                            : isDarkMode
+                              ? '#1f2937'
+                              : '#ffffff',
+                        color: state.isSelected ? '#ffffff' : isDarkMode ? '#f9fafb' : '#111827',
+                        cursor: 'pointer',
+                        padding: '10px 12px',
+                        transition: 'background-color 0.15s ease',
                       }),
                     }}
                   />

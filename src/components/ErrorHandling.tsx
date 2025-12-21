@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+
 interface ErrorBoundaryProps {
   children: React.ReactNode;
   fallback?: React.ComponentType<{ error: Error; reset: () => void }>;
@@ -62,18 +64,19 @@ function ErrorFallback({ error, reset }: { error: Error; reset: () => void }) {
         </p>
 
         <div className='space-y-3'>
-          <button
+          <Button
             onClick={reset}
-            className='bg-accent hover:bg-dark-accent w-full rounded-lg px-4 py-2 font-medium text-white transition-colors'
+            className='w-full'
           >
             Intentar de nuevo
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => window.location.reload()}
-            className='w-full rounded-lg bg-gray-100 px-4 py-2 font-medium text-gray-900 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600'
+            variant='secondary'
+            className='w-full'
           >
             Recargar página
-          </button>
+          </Button>
         </div>
 
         {process.env.NODE_ENV === 'development' && (
@@ -116,7 +119,20 @@ export function LoadingSpinner({
   );
 }
 
-// Loading skeleton for products
+/**
+ * @deprecated Use Skeleton from '@/components/ui/skeleton' instead.
+ *
+ * Example usage:
+ * ```tsx
+ * import { Skeleton } from '@/components/ui/skeleton';
+ *
+ * <div className="space-y-4">
+ *   <Skeleton className="h-48 w-full" />
+ *   <Skeleton className="h-4 w-full" />
+ *   <Skeleton className="h-4 w-3/4" />
+ * </div>
+ * ```
+ */
 export function ProductSkeleton() {
   return (
     <div className='animate-pulse rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800'>
@@ -131,7 +147,20 @@ export function ProductSkeleton() {
   );
 }
 
-// Loading skeleton for content
+/**
+ * @deprecated Use Skeleton from '@/components/ui/skeleton' instead.
+ *
+ * Example usage:
+ * ```tsx
+ * import { Skeleton } from '@/components/ui/skeleton';
+ *
+ * <div className="space-y-4">
+ *   <Skeleton className="h-8 w-3/4" />
+ *   <Skeleton className="h-4 w-full" />
+ *   <Skeleton className="h-4 w-5/6" />
+ * </div>
+ * ```
+ */
 export function ContentSkeleton() {
   return (
     <div className='animate-pulse space-y-4'>
@@ -172,79 +201,24 @@ export function NetworkStatus() {
   );
 }
 
-// Toast notification system
-interface ToastProps {
-  message: string;
-  type: 'success' | 'error' | 'warning' | 'info';
-  onClose: () => void;
-}
-
-export function Toast({ message, type, onClose }: ToastProps) {
-  const typeStyles = {
-    success: 'bg-accent text-white',
-    error: 'bg-red-600 text-white',
-    warning: 'bg-yellow-600 text-white',
-    info: 'bg-blue-600 text-white',
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(onClose, 5000);
-    return () => clearTimeout(timer);
-  }, [onClose]);
-
-  return (
-    <div
-      className={`fixed top-4 right-4 ${typeStyles[type]} z-50 max-w-sm rounded-lg px-4 py-3 shadow-lg`}
-    >
-      <div className='flex items-center justify-between'>
-        <span className='text-sm font-medium'>{message}</span>
-        <button
-          onClick={onClose}
-          className='ml-4 text-white transition-colors hover:text-gray-200'
-        >
-          ✕
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// Hook for managing toasts
+/**
+ * @deprecated Use `import { toast } from 'sonner'` instead.
+ * The Toaster component is already added to the layout.
+ *
+ * Example usage:
+ * ```tsx
+ * import { toast } from 'sonner';
+ *
+ * toast.success('Success message');
+ * toast.error('Error message');
+ * toast.warning('Warning message');
+ * toast.info('Info message');
+ * ```
+ */
 export function useToast() {
-  const [toasts, setToasts] = useState<
-    Array<{ id: string; message: string; type: ToastProps['type'] }>
-  >([]);
-
-  const addToast = (message: string, type: ToastProps['type'] = 'info') => {
-    const id = Date.now().toString();
-    setToasts(prev => [...prev, { id, message, type }]);
+  return {
+    toasts: [],
+    addToast: () => {},
+    removeToast: () => {},
   };
-
-  const removeToast = (id: string) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
-  };
-
-  return { toasts, addToast, removeToast };
-}
-
-// Toast container component
-export function ToastContainer({
-  toasts,
-  onRemove,
-}: {
-  toasts: Array<{ id: string; message: string; type: ToastProps['type'] }>;
-  onRemove: (id: string) => void;
-}) {
-  return (
-    <div className='fixed top-4 right-4 z-50 space-y-2'>
-      {toasts.map(toast => (
-        <Toast
-          key={toast.id}
-          message={toast.message}
-          type={toast.type}
-          onClose={() => onRemove(toast.id)}
-        />
-      ))}
-    </div>
-  );
 }
