@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
         `
         SELECT
           q.*,
-          u.name AS user_name,
+          u.full_name AS user_name,
           u.email AS user_email,
           u.company AS user_company
         FROM quotes q
@@ -332,7 +332,7 @@ export async function POST(request: NextRequest) {
           q.*,
           JSON_OBJECT(
             'id', u.id,
-            'name', u.name,
+            'name', u.full_name,
             'email', u.email,
             'company', u.company
           ) as user,
