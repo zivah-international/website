@@ -10,6 +10,9 @@ build/
 .next/
 .astro/
 
+# Next.js auto-generated files
+next-env.d.ts
+
 # Environment variables
 .env
 .env.local
