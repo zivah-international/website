@@ -18,6 +18,14 @@ const port = process.env.PORT || 3000;
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
+// Import database utilities for health monitoring
+let startHealthMonitoring, stopHealthMonitoring, disconnectDatabase;
+try {
+  ({ startHealthMonitoring, stopHealthMonitoring, disconnectDatabase } = require('./src/lib/db'));
+} catch (error) {
+  console.error('Warning: Could not load database module for health monitoring:', error.message);
+}
+
 app.prepare().then(() => {
   const server = createServer(async (req, res) => {
     try {
@@ -42,24 +50,53 @@ app.prepare().then(() => {
     console.log(`> Environment: ${process.env.NODE_ENV}`);
     // eslint-disable-next-line no-console
     console.log(`> Database: ${process.env.DATABASE_URL ? 'Connected' : 'Not configured'}`);
+
+    // Start database health monitoring (check every 30 seconds)
+    if (startHealthMonitoring && process.env.DATABASE_URL) {
+      startHealthMonitoring(30000);
+      // eslint-disable-next-line no-console
+      console.log('> Database health monitoring: Active');
+    }
   });
 
   // Graceful shutdown
-  process.on('SIGTERM', () => {
+  const gracefulShutdown = async signal => {
     // eslint-disable-next-line no-console
-    console.log('SIGTERM received, shutting down gracefully');
-    server.close(() => {
-      // eslint-disable-next-line no-console
-      console.log('Process terminated');
-    });
-  });
+    console.log(`${signal} received, shutting down gracefully`);
 
-  process.on('SIGINT', () => {
-    // eslint-disable-next-line no-console
-    console.log('SIGINT received, shutting down gracefully');
-    server.close(() => {
+    // Stop health monitoring
+    if (stopHealthMonitoring) {
+      stopHealthMonitoring();
+    }
+
+    // Close server
+    server.close(async () => {
+      // eslint-disable-next-line no-console
+      console.log('HTTP server closed');
+
+      // Disconnect database
+      if (disconnectDatabase) {
+        try {
+          await disconnectDatabase();
+          // eslint-disable-next-line no-console
+          console.log('Database connection closed');
+        } catch (error) {
+          console.error('Error closing database connection:', error);
+        }
+      }
+
       // eslint-disable-next-line no-console
       console.log('Process terminated');
+      process.exit(0);
     });
-  });
+
+    // Force shutdown after 10 seconds
+    setTimeout(() => {
+      console.error('Forced shutdown due to timeout');
+      process.exit(1);
+    }, 10000);
+  };
+
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+  process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 });

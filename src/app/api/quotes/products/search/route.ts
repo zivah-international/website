@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
+import { query } from '@/lib/db';
 import { createApiResponse, handleApiError } from '@/lib/errors';
-import { prisma } from '@/lib/prisma';
 import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 export async function GET(request: NextRequest) {
@@ -20,40 +20,29 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const query = searchParams.get('q') || '';
+    const searchQuery = searchParams.get('q') || '';
     const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50);
     const category = searchParams.get('category');
 
-    const where: any = {
-      isActive: true,
-      name: {
-        contains: query,
-        mode: 'insensitive',
-      },
-    };
+    let sql = `
+      SELECT p.id, p.name, p.description, p.sku
+      FROM products p
+      WHERE p.is_active = true
+      AND LOWER(p.name) LIKE LOWER(?)
+    `;
+    const params: any[] = [`%${searchQuery}%`];
 
     if (category) {
-      where.category = {
-        slug: category,
-      };
+      sql += ` AND p.category_id = (SELECT id FROM categories WHERE slug = ?)`;
+      params.push(category);
     }
 
-    const products = await prisma.product.findMany({
-      where,
-      select: {
-        id: true,
-        name: true,
+    sql += ` ORDER BY p.name ASC LIMIT ?`;
+    params.push(limit);
 
-        description: true,
-        sku: true,
-      },
-      orderBy: {
-        name: 'asc',
-      },
-      take: limit,
-    });
+    const products = await query(sql, params);
 
-    return createApiResponse(products);
+    return createApiResponse(products.rows);
   } catch (error) {
     return handleApiError(error);
   }

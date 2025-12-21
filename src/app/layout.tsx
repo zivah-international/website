@@ -187,6 +187,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <meta
+          name='viewport'
+          content='width=device-width, initial-scale=1'
+        />
+        <meta
           name='msapplication-TileColor'
           content='#ff6347'
         />
@@ -233,6 +237,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel='dns-prefetch'
           href='//www.google-analytics.com'
         />
+        {/* Google Analytics - Production Only */}
+        {process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
+                `,
+              }}
+            />
+          </>
+        )}
         <script
           dangerouslySetInnerHTML={{
             __html: `

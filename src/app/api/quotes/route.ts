@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { parseJsonFields, query, withTransaction } from '@/lib/db';
 import { emailService } from '@/lib/email';
 import { createApiResponse, handleApiError } from '@/lib/errors';
 import { logger } from '@/lib/logger';
-import { prisma } from '@/lib/prisma';
 import {
   formRateLimiter,
   isSQLInjection,
@@ -22,57 +22,96 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const userId = searchParams.get('userId');
 
-    const where: any = {};
-    if (status) where.status = status;
-    if (userId) where.userId = parseInt(userId);
+    const where: string[] = [];
+    const params: unknown[] = [];
+
+    if (status) {
+      where.push(`q.status = ?`);
+      params.push(status);
+    }
+    if (userId) {
+      where.push(`q.user_id = ?`);
+      params.push(parseInt(userId));
+    }
+
+    const whereClause = where.length > 0 ? `WHERE ${where.join(' AND ')}` : '';
 
     const [quotes, total] = await Promise.all([
-      prisma.quote.findMany({
-        where,
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              company: true,
-            },
-          },
-          items: {
-            include: {
-              product: {
-                select: {
-                  id: true,
-                  name: true,
-                  sku: true,
-                },
-              },
-            },
-          },
-          communications: {
-            orderBy: {
-              createdAt: 'desc',
-            },
-            take: 5,
-          },
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-      }),
-      prisma.quote.count({ where }),
+      query(
+        `
+        SELECT
+          q.*,
+          JSON_OBJECT(
+            'id', u.id,
+            'name', u.name,
+            'email', u.email,
+            'company', u.company
+          ) as user,
+          COALESCE(
+            JSON_ARRAYAGG(
+              JSON_OBJECT(
+                'id', qi.id,
+                'productId', qi.product_id,
+                'measureId', qi.measure_id,
+                'quantity', qi.quantity,
+                'unitPrice', qi.unit_price,
+                'totalPrice', qi.total_price,
+                'notes', qi.notes,
+                'specifications', qi.specifications,
+                'product', JSON_OBJECT(
+                  'id', p.id,
+                  'name', p.name,
+                  'sku', p.sku
+                )
+              )
+            ), JSON_ARRAY()
+          ) as items,
+          COALESCE(
+            JSON_ARRAYAGG(
+              JSON_OBJECT(
+                'id', qc.id,
+                'type', qc.type,
+                'content', qc.content,
+                'createdAt', qc.created_at
+              ) ORDER BY qc.created_at DESC
+            ), JSON_ARRAY()
+          ) as communications
+        FROM quotes q
+        LEFT JOIN users u ON q.user_id = u.id
+        LEFT JOIN quote_items qi ON q.id = qi.quote_id
+        LEFT JOIN products p ON qi.product_id = p.id
+        LEFT JOIN quote_communications qc ON q.id = qc.quote_id
+        ${whereClause}
+        GROUP BY q.id, u.id
+        ORDER BY q.created_at DESC
+        LIMIT ?, ?
+      `,
+        [...params, (page - 1) * pageSize, pageSize]
+      ),
+      query(
+        `
+        SELECT COUNT(*) as count FROM quotes q
+        ${whereClause}
+      `,
+        params
+      ),
     ]);
 
+    const totalCount = parseInt((total.rows[0] as { count: string | number }).count.toString());
+
+    // Parse JSON fields in quotes
+    const parsedQuotes = quotes.rows.map(quote =>
+      parseJsonFields(quote, ['user', 'items', 'communications', 'shipping_address'])
+    );
+
     return createApiResponse({
-      data: quotes,
+      data: parsedQuotes,
       pagination: {
         page,
         pageSize,
-        total,
-        totalPages: Math.ceil(total / pageSize),
-        hasNext: page * pageSize < total,
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / pageSize),
+        hasNext: page * pageSize < totalCount,
         hasPrev: page > 1,
       },
     });
@@ -145,7 +184,7 @@ export async function POST(request: NextRequest) {
 
     for (const field of textFields) {
       if (field && (isXSS(field) || isSQLInjection(field))) {
-        console.warn(`Malicious content detected in quote form from IP: ${ip}`);
+        logger.warn(`Malicious content detected in quote form from IP: ${ip}`);
         return createApiResponse(null, 'Contenido no válido detectado.', 400);
       }
     }
@@ -153,97 +192,153 @@ export async function POST(request: NextRequest) {
     // Validate with enhanced schema
     const validatedData = quoteFormSchema.parse(sanitizedBody);
 
-    // Generate quote number
-    const lastQuote = await prisma.quote.findFirst({
-      orderBy: { id: 'desc' },
-      select: { id: true },
-    });
-    const quoteNumber = `Q${String((lastQuote?.id || 0) + 1).padStart(6, '0')}`;
+    // Create quote and items in transaction
+    const quote = await withTransaction(async client => {
+      // Generate quote number inside transaction to avoid race conditions
+      const [lastQuoteResult] = await client.execute(`
+        SELECT id FROM quotes ORDER BY id DESC LIMIT 1
+      `);
+      const lastQuoteArray = lastQuoteResult as Array<{ id?: number }>;
+      const lastQuoteId = lastQuoteArray[0]?.id || 0;
+      const quoteNumber = `Q${String(lastQuoteId + 1).padStart(6, '0')}`;
 
-    const quote = await prisma.quote.create({
-      data: {
-        quoteNumber,
-        customerName: validatedData.customerName,
-        customerEmail: validatedData.customerEmail,
-        customerPhone: validatedData.customerPhone,
-        company: validatedData.company,
-        countryId: validatedData.countryId,
-        shippingAddress: validatedData.shippingAddress,
-        message: validatedData.message,
-        status: 'PENDING',
-        items: {
-          create: validatedData.items.map((item: any) => ({
-            productId: item.productId,
-            measureId: item.measureId,
-            quantity: item.quantity,
-            unitPrice: item.unitPrice || 0,
-            totalPrice: (item.unitPrice || 0) * item.quantity,
-            notes: item.notes,
-            specifications: item.specifications,
-          })),
-        },
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            company: true,
-          },
-        },
-        country: {
-          select: {
-            name: true,
-          },
-        },
-        items: {
-          include: {
-            product: {
-              select: {
-                id: true,
-                name: true,
-                sku: true,
-              },
-            },
-          },
-        },
-      },
+      // Insert quote
+      const [quoteResult] = await client.execute(
+        `
+        INSERT INTO quotes (
+          quote_number, customer_name, customer_email, customer_phone, company,
+          country_id, shipping_address, message, status, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+      `,
+        [
+          quoteNumber,
+          validatedData.customerName,
+          validatedData.customerEmail,
+          validatedData.customerPhone,
+          validatedData.company,
+          validatedData.countryId,
+          validatedData.shippingAddress,
+          validatedData.message,
+          'PENDING',
+        ]
+      );
+
+      const quoteResultWithId = quoteResult as { insertId: number };
+      const quoteId = quoteResultWithId.insertId;
+
+      // Insert quote items
+      if (validatedData.items.length > 0) {
+        for (const item of validatedData.items) {
+          await client.execute(
+            `
+            INSERT INTO quote_items (
+              quote_id, product_id, measure_id, quantity, unit_price, total_price, notes, specifications
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+          `,
+            [
+              quoteId,
+              item.productId,
+              item.measureId,
+              item.quantity,
+              item.unitPrice || 0,
+              (item.unitPrice || 0) * item.quantity,
+              item.notes || '',
+              JSON.stringify(item.specifications || {}),
+            ]
+          );
+        }
+      }
+
+      // Get complete quote with relations
+      const [completeQuote] = await client.execute(
+        `
+        SELECT
+          q.*,
+          JSON_OBJECT(
+            'id', u.id,
+            'name', u.name,
+            'email', u.email,
+            'company', u.company
+          ) as user,
+          JSON_OBJECT(
+            'name', c.name
+          ) as country,
+          COALESCE(
+            JSON_ARRAYAGG(
+              JSON_OBJECT(
+                'id', qi.id,
+                'productId', qi.product_id,
+                'measureId', qi.measure_id,
+                'quantity', qi.quantity,
+                'unitPrice', qi.unit_price,
+                'totalPrice', qi.total_price,
+                'notes', qi.notes,
+                'specifications', qi.specifications,
+                'product', JSON_OBJECT(
+                  'id', p.id,
+                  'name', p.name,
+                  'sku', p.sku
+                )
+              )
+            ), JSON_ARRAY()
+          ) as items
+        FROM quotes q
+        LEFT JOIN users u ON q.user_id = u.id
+        LEFT JOIN countries c ON q.country_id = c.id
+        LEFT JOIN quote_items qi ON q.id = qi.quote_id
+        LEFT JOIN products p ON qi.product_id = p.id
+        WHERE q.id = ?
+        GROUP BY q.id, u.id, c.id
+      `,
+        [quoteId]
+      );
+
+      const completeQuoteArray = completeQuote as Array<Record<string, unknown>>;
+      const quoteData = completeQuoteArray[0];
+
+      // Parse JSON fields
+      return parseJsonFields(quoteData, ['user', 'country', 'items', 'shipping_address']);
     });
 
     // Send email if requested
     let emailSent = false;
     if (validatedData.recipientEmail) {
       try {
+        const quoteWithRelations = quote as Record<string, any>;
         const emailData = {
-          quoteId: quote.id,
-          customerName: quote.customerName,
-          customerEmail: quote.customerEmail,
-          company: quote.company || undefined,
-          country: (quote as any).countryRef?.name,
+          quoteId: quoteWithRelations.id,
+          customerName: quoteWithRelations.customerName || quoteWithRelations.customer_name,
+          customerEmail: quoteWithRelations.customerEmail || quoteWithRelations.customer_email,
+          company: quoteWithRelations.company || undefined,
+          country: quoteWithRelations.country?.name,
           currency: 'USD', // TODO: Fetch actual currency from currencyId
-          currencyId: quote.currencyId,
-          totalAmount: quote.totalAmount ? Number(quote.totalAmount) : undefined,
-          items: (quote as any).items.map((item: any) => ({
-            productName: item.product?.name || 'Producto',
-            quantity: item.quantity,
-            unitPrice: Number(item.unitPrice),
-            totalPrice: Number(item.totalPrice),
-          })),
-          message: quote.message || undefined,
-          quoteNumber: quote.quoteNumber,
+          currencyId: quoteWithRelations.currencyId || quoteWithRelations.currency_id,
+          totalAmount: quoteWithRelations.totalAmount
+            ? Number(quoteWithRelations.totalAmount)
+            : undefined,
+          items: Array.isArray(quoteWithRelations.items)
+            ? quoteWithRelations.items.map((item: any) => ({
+                productName: item.product?.name || 'Producto',
+                quantity: item.quantity,
+                unitPrice: Number(item.unitPrice || item.unit_price),
+                totalPrice: Number(item.totalPrice || item.total_price),
+              }))
+            : [],
+          message: quoteWithRelations.message || undefined,
+          quoteNumber: quoteWithRelations.quoteNumber || quoteWithRelations.quote_number,
         };
 
         emailSent = await emailService.sendQuoteEmail(emailData, validatedData.recipientEmail);
 
         // Update email status
-        await prisma.quote.update({
-          where: { id: quote.id },
-          data: {
-            emailStatus: emailSent ? 'sent' : 'failed',
-            emailSentAt: emailSent ? new Date() : null,
-          },
-        });
+        await query(
+          `
+          UPDATE quotes
+          SET email_status = ?, email_sent_at = ?, updated_at = NOW()
+          WHERE id = ?
+        `,
+          [emailSent ? 'sent' : 'failed', emailSent ? new Date() : null, quote.id]
+        );
 
         logger.info('Quote email sent', { quoteId: quote.id, emailSent });
       } catch (emailError) {
@@ -256,20 +351,25 @@ export async function POST(request: NextRequest) {
     }
 
     // Log activity
-    await prisma.activityLog.create({
-      data: {
-        action: 'CREATE_QUOTE',
-        entityType: 'Quote',
-        entityId: quote.id,
-        details: JSON.stringify({
+    await query(
+      `
+      INSERT INTO activity_logs (
+        action, entity_type, entity_id, details, created_at
+      ) VALUES (?, ?, ?, ?, NOW())
+    `,
+      [
+        'CREATE_QUOTE',
+        'Quote',
+        quote.id,
+        JSON.stringify({
           quoteId: quote.id,
           itemsCount: validatedData.items.length,
           company: quote.company,
-          customerEmail: quote.customerEmail,
+          customerEmail: quote.customer_email,
           emailSent,
         }),
-      },
-    });
+      ]
+    );
 
     return createApiResponse(
       {

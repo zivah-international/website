@@ -11,11 +11,12 @@ declare global {
 }
 
 // Google Analytics Measurement ID
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 // Initialize Google Analytics
 export function initGA() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || process.env.NODE_ENV !== 'production' || !GA_MEASUREMENT_ID)
+    return;
 
   // Load Google Analytics script
   const script = document.createElement('script');
@@ -51,7 +52,8 @@ export function initGA() {
 
 // Track page views
 export function trackPageView(url: string) {
-  if (typeof window === 'undefined' || !window.gtag) return;
+  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
+    return;
 
   window.gtag('config', GA_MEASUREMENT_ID, {
     page_path: url,
@@ -60,7 +62,8 @@ export function trackPageView(url: string) {
 
 // Track events
 export function trackEvent(action: string, category: string, label?: string, value?: number) {
-  if (typeof window === 'undefined' || !window.gtag) return;
+  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
+    return;
 
   window.gtag('event', action, {
     event_category: category,
@@ -71,7 +74,8 @@ export function trackEvent(action: string, category: string, label?: string, val
 
 // Track conversions
 export function trackConversion(conversionId: string, value?: number, currency: string = 'USD') {
-  if (typeof window === 'undefined' || !window.gtag) return;
+  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
+    return;
 
   window.gtag('event', 'conversion', {
     send_to: conversionId,
@@ -88,7 +92,8 @@ export function trackProductView(product: {
   price?: number;
   currency?: string;
 }) {
-  if (typeof window === 'undefined' || !window.gtag) return;
+  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
+    return;
 
   window.gtag('event', 'view_item', {
     currency: product.currency || 'USD',
@@ -114,7 +119,8 @@ export function trackQuoteRequest(
   }>,
   totalValue?: number
 ) {
-  if (typeof window === 'undefined' || !window.gtag) return;
+  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
+    return;
 
   const items = products.map(product => ({
     item_id: product.id,
@@ -132,7 +138,8 @@ export function trackQuoteRequest(
 
 // Track form submissions
 export function trackFormSubmission(formType: string, success: boolean = true) {
-  if (typeof window === 'undefined' || !window.gtag) return;
+  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
+    return;
 
   window.gtag('event', success ? 'form_submit_success' : 'form_submit_error', {
     event_category: 'form',
@@ -146,7 +153,8 @@ export function updateConsent(consent: {
   marketing?: boolean;
   functional?: boolean;
 }) {
-  if (typeof window === 'undefined' || !window.gtag) return;
+  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
+    return;
 
   const consentUpdate: Record<string, string> = {};
 

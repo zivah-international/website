@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
+import { query } from '@/lib/db';
 import { createApiResponse, handleApiError } from '@/lib/errors';
-import { prisma } from '@/lib/prisma';
 import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 export async function GET(request: NextRequest) {
@@ -19,25 +19,27 @@ export async function GET(request: NextRequest) {
       return createApiResponse(null, 'Demasiadas solicitudes. Intente nuevamente más tarde.', 429);
     }
 
-    const countries = await prisma.country.findMany({
-      where: {
-        isActive: true,
-      },
-      select: {
-        id: true,
-        name: true,
-        code: true,
-        icon: true,
-        currency: true,
-        callingCode: true,
-        phoneFormat: true,
-      },
-      orderBy: {
-        name: 'asc',
-      },
-    });
+    const countries = await query(`
+      SELECT
+        c.id,
+        c.name,
+        c.code,
+        c.icon,
+        c.calling_code,
+        c.phone_format,
+        JSON_OBJECT(
+          'id', curr.id,
+          'code', curr.code,
+          'name', curr.name,
+          'symbol', curr.symbol
+        ) as currency
+      FROM countries c
+      LEFT JOIN currencies curr ON c.currency_id = curr.id
+      WHERE c.is_active = true
+      ORDER BY c.name ASC
+    `);
 
-    return createApiResponse(countries);
+    return createApiResponse(countries.rows);
   } catch (error) {
     return handleApiError(error);
   }

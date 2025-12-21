@@ -1,11 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Enable experimental features
-  experimental: {
-  },
+  experimental: {},
+
+  // Output file tracing includes
+  outputFileTracingIncludes: {},
 
   // Server external packages
-  serverExternalPackages: ['@prisma/client'],
+  serverExternalPackages: [],
 
   // Image configuration
   images: {
@@ -41,6 +43,9 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Disable optimization for SVG files to prevent processing issues
+    unoptimized: false,
+    loader: 'default',
   },
 
   // Headers for security and performance
@@ -127,22 +132,14 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
 
-  // ESLint configuration
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
-
   // Output configuration
   output: 'standalone',
 
   // Fix for multiple lockfiles warning
   outputFileTracingRoot: __dirname,
 
-  // Webpack configuration
-  webpack: (config: unknown) => {
-    // Add custom webpack configurations if needed
-    return config;
-  },
+  // Turbopack configuration (empty to silence warning)
+  turbopack: {},
 };
 
 export default nextConfig;

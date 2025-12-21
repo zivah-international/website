@@ -151,14 +151,14 @@ export default function HomePage() {
         <div className='absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,123,49,0.1),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(255,123,49,0.05),transparent_50%)]' />
         <div className='absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(13,140,73,0.1),transparent_50%)] dark:bg-[radial-gradient(circle_at_70%_80%,rgba(13,140,73,0.05),transparent_50%)]' />
 
-        <div className='relative container mx-auto px-4'>
+        <div className='relative container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='grid items-center gap-12 lg:grid-cols-2'>
             <div className='space-y-8'>
               <div className='bg-accent/15 text-accent border-accent/20 mb-6 inline-block rounded-full border px-6 py-3 text-sm font-semibold shadow-sm backdrop-blur-sm'>
                 🇪🇨 Desde Ecuador Hacia el Mundo - Samborondón, Guayas
               </div>
 
-              <h1 className='text-foreground mb-6 text-4xl leading-tight font-bold lg:text-6xl'>
+              <h1 className='text-foreground mb-6 text-3xl leading-tight font-bold sm:text-4xl lg:text-6xl'>
                 Los Mejores Productos{' '}
                 <span className='from-accent to-primary bg-gradient-to-r bg-clip-text text-transparent'>
                   Ecuatorianos
@@ -166,7 +166,7 @@ export default function HomePage() {
                 para Mercados Internacionales
               </h1>
 
-              <p className='text-muted-foreground mb-8 max-w-2xl text-xl leading-relaxed'>
+              <p className='text-muted-foreground mb-8 max-w-2xl text-lg leading-relaxed sm:text-xl'>
                 Desde Ecuador hacia el mundo, conectamos la excelencia ecuatoriana con compradores
                 globales. Con sede principal en Samborondón, Guayas y oficina de distribución en
                 Miami, somos especialistas en acuicultura, larvas de camarón, cultivo de árboles
@@ -257,7 +257,7 @@ export default function HomePage() {
         className='bg-background pt-20 pb-20'
         id='products'
       >
-        <div className='container mx-auto px-4'>
+        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Featured Categories */}
           <div className='mb-20'>
             <div className='mb-16 text-center'>
@@ -297,7 +297,7 @@ export default function HomePage() {
                 ))}
               </div>
             ) : (
-              <div className='grid gap-8 lg:grid-cols-2'>
+              <div className='grid gap-6 sm:gap-8 lg:grid-cols-2'>
                 {(categories || []).map((category, index) => {
                   const categoryProducts = (products || []).filter(
                     p => p.category?.slug === category.slug
@@ -311,38 +311,43 @@ export default function HomePage() {
                   return (
                     <div
                       key={category.id}
-                      className={`${bgColors[index % bgColors.length]} rounded-2xl border p-8`}
+                      className={`${bgColors[index % bgColors.length]} rounded-2xl border p-4 sm:p-6 lg:p-8`}
                     >
-                      <div className='mb-6 text-6xl'>{category.icon}</div>
-                      <h3 className='text-foreground mb-4 text-2xl font-bold'>{category.name}</h3>
-                      <p className='text-muted-foreground mb-6'>{category.description}</p>
-                      <ul className='mb-6 space-y-2'>
+                      <div className='mb-4 text-4xl sm:mb-6 sm:text-6xl'>{category.icon}</div>
+                      <h3 className='text-foreground mb-3 text-xl font-bold sm:mb-4 sm:text-2xl'>
+                        {category.name}
+                      </h3>
+                      <p className='text-muted-foreground mb-4 text-sm leading-relaxed sm:mb-6 sm:text-base'>
+                        {category.description}
+                      </p>
+                      <ul className='mb-4 space-y-2 sm:mb-6'>
                         {categoryProducts.slice(0, 4).map(product => (
                           <li
                             key={product.id}
-                            className='text-muted-foreground flex items-center'
+                            className='text-muted-foreground flex items-start text-sm sm:items-center sm:text-base'
                           >
-                            <span className='text-accent mr-2'>✓</span>
-                            {product.name}
+                            <span className='text-accent mt-0.5 mr-2 flex-shrink-0 sm:mt-0'>✓</span>
+                            <span className='min-w-0 flex-1'>{product.name}</span>
                             {product.basePrice && (
-                              <span className='text-accent ml-auto text-sm font-medium'>
+                              <span className='text-accent ml-2 flex-shrink-0 text-xs font-medium sm:text-sm'>
                                 ${product.basePrice.toFixed(2)}/{product.priceUnit}
                               </span>
                             )}
                           </li>
                         ))}
                         {categoryProducts.length > 4 && (
-                          <li className='text-muted-foreground flex items-center'>
-                            <span className='text-accent mr-2'>✓</span>+
-                            {categoryProducts.length - 4} productos más
+                          <li className='text-muted-foreground flex items-center text-sm sm:text-base'>
+                            <span className='text-accent mr-2 flex-shrink-0'>✓</span>
+                            <span>+{categoryProducts.length - 4} productos más</span>
                           </li>
                         )}
                       </ul>
-                      <div className='flex gap-3'>
+                      <div className='flex flex-col gap-2 sm:flex-row sm:gap-3'>
                         <Button
                           onClick={() => scrollToSection('quote')}
                           variant={index === 0 ? 'default' : index === 1 ? 'secondary' : 'accent'}
                           size='lg'
+                          className='w-full text-sm sm:w-auto sm:text-base'
                         >
                           Solicitar Cotización
                         </Button>
@@ -359,6 +364,7 @@ export default function HomePage() {
                           }}
                           variant='outline'
                           size='lg'
+                          className='w-full text-sm sm:w-auto sm:text-base'
                         >
                           Ver {categoryProducts.length} productos
                         </Button>
@@ -376,10 +382,10 @@ export default function HomePage() {
               <div className='bg-accent/10 text-accent mb-4 inline-block rounded-full px-4 py-2 text-sm font-medium'>
                 Catálogo Completo
               </div>
-              <h2 className='text-foreground mb-6 text-4xl font-bold'>
+              <h2 className='text-foreground mb-6 text-3xl font-bold sm:text-4xl'>
                 Todos Nuestros Productos Ecuatorianos
               </h2>
-              <p className='text-muted-foreground mx-auto mb-8 max-w-3xl text-xl'>
+              <p className='text-muted-foreground mx-auto mb-8 max-w-3xl text-lg sm:text-xl'>
                 {loading
                   ? 'Cargando productos...'
                   : `${(filteredProducts || []).length} variedades de productos premium ecuatorianos disponibles para exportación mundial`}
@@ -509,16 +515,16 @@ export default function HomePage() {
         className='from-secondary via-primary to-accent bg-gradient-to-br pt-20 pb-20 text-white'
         id='quote'
       >
-        <div className='container mx-auto px-4'>
+        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mx-auto max-w-4xl'>
             <div className='mb-12 text-center'>
               <div className='mb-4 inline-block rounded-full bg-white/20 px-4 py-2 text-sm font-medium'>
                 Sistema Avanzado de Cotizaciones
               </div>
-              <h2 className='mb-6 text-4xl font-bold'>
+              <h2 className='mb-6 text-3xl font-bold sm:text-4xl'>
                 Cotizaciones Interactivas y Personalizadas
               </h2>
-              <p className='mb-8 text-xl opacity-90'>
+              <p className='mb-8 text-lg opacity-90 sm:text-xl'>
                 Nuestro nuevo sistema de cotizaciones te permite seleccionar productos específicos,
                 calcular precios en tiempo real y recibir propuestas personalizadas por email
                 automáticamente.
@@ -561,7 +567,7 @@ export default function HomePage() {
         className='bg-background pt-20 pb-20'
         id='quality'
       >
-        <div className='container mx-auto px-4'>
+        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='grid items-center gap-12 lg:grid-cols-2'>
             <div>
               <h2 className='text-foreground mb-6 text-4xl font-bold'>
@@ -611,7 +617,7 @@ export default function HomePage() {
         className='bg-muted/30 pt-20 pb-20'
         id='markets'
       >
-        <div className='container mx-auto px-4'>
+        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-16 text-center'>
             <div className='bg-accent/10 text-accent mb-4 inline-block rounded-full px-4 py-2 text-sm font-medium'>
               Alcance Global
@@ -660,7 +666,7 @@ export default function HomePage() {
         className='bg-background pt-20 pb-20'
         id='contact'
       >
-        <div className='container mx-auto px-4'>
+        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-16 text-center'>
             <div className='bg-accent/10 text-accent mb-4 inline-block rounded-full px-4 py-2 text-sm font-medium'>
               Contacto
@@ -737,7 +743,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className='bg-muted/50 text-foreground py-16'>
-        <div className='container mx-auto px-4'>
+        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4'>
             <div>
               <h4 className='text-foreground mb-4 text-lg font-semibold'>

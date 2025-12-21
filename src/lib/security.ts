@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getSecurityHeaders } from './https';
+import { logger } from './logger';
 
 // Simple in-memory rate limiter (for development)
 // In production, use Redis or a proper rate limiting service
@@ -99,20 +100,20 @@ export async function securityMiddleware(request: NextRequest) {
 
   // Block known malicious IPs
   if (blockedIPs.has(ip)) {
-    console.warn(`Blocked request from malicious IP: ${ip}`);
+    logger.warn(`Blocked request from malicious IP: ${ip}`);
     return new NextResponse('Access Denied', { status: 403 });
   }
 
   // Block suspicious user agents
   if (blockedUserAgents.some(pattern => pattern.test(userAgent))) {
-    console.warn(`Blocked request from suspicious user agent: ${userAgent}`);
+    logger.warn(`Blocked request from suspicious user agent: ${userAgent}`);
     return new NextResponse('Access Denied', { status: 403 });
   }
 
   // Check for suspicious patterns in URL and query parameters
   const fullUrl = request.url;
   if (suspiciousPatterns.some(pattern => pattern.test(fullUrl))) {
-    console.warn(`Blocked request with suspicious pattern: ${fullUrl}`);
+    logger.warn(`Blocked request with suspicious pattern: ${fullUrl}`);
     return new NextResponse('Bad Request', { status: 400 });
   }
 
@@ -122,7 +123,7 @@ export async function securityMiddleware(request: NextRequest) {
       const { success } = rateLimiter.check(ip);
 
       if (!success) {
-        console.warn(`Rate limit exceeded for IP: ${ip} on ${pathname}`);
+        logger.warn(`Rate limit exceeded for IP: ${ip} on ${pathname}`);
         return new NextResponse('Too Many Requests', {
           status: 429,
           headers: {
@@ -134,7 +135,7 @@ export async function securityMiddleware(request: NextRequest) {
         });
       }
     } catch (error) {
-      console.error('Rate limiting error:', error);
+      logger.error('Rate limiting error:', error);
       // Continue without rate limiting if there's an error
     }
   }
@@ -144,7 +145,7 @@ export async function securityMiddleware(request: NextRequest) {
     const { success, remaining, reset } = rateLimiter.check(`${ip}:general`);
 
     if (!success) {
-      console.warn(`General rate limit exceeded for IP: ${ip}`);
+      logger.warn(`General rate limit exceeded for IP: ${ip}`);
       return new NextResponse('Too Many Requests', {
         status: 429,
         headers: {
@@ -156,19 +157,19 @@ export async function securityMiddleware(request: NextRequest) {
       });
     }
   } catch (error) {
-    console.error('General rate limiting error:', error);
+    logger.error('General rate limiting error:', error);
   }
 
   // Block dangerous HTTP methods
   const allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'];
   if (!allowedMethods.includes(method)) {
-    console.warn(`Blocked dangerous HTTP method: ${method} from ${ip}`);
+    logger.warn(`Blocked dangerous HTTP method: ${method} from ${ip}`);
     return new NextResponse('Method Not Allowed', { status: 405 });
   }
 
   // Log security events
   if (pathname.includes('/api/')) {
-    console.log(`API Request: ${method} ${pathname} from ${ip}`);
+    logger.debug(`API Request: ${method} ${pathname} from ${ip}`);
   }
 
   // Create response with security headers
