@@ -12,6 +12,7 @@
     "format": "npx prettier --write .",
     "format:check": "npx prettier --check .",
     "type-check": "npx tsc --noEmit",
+    "db:generate": "prisma generate",
     "db:setup": "node scripts/setup-database.js",
     "prepare": "npx --yes husky || echo 'Husky setup skipped'",
     "postinstall": "echo 'Postinstall completed'"
@@ -41,6 +42,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@prisma/client": "^6.16.3",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-avatar": "^1.1.11",
@@ -62,8 +64,6 @@
     "autoprefixer": "^10.4.23",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "critters": "^0.0.25",
     "lucide-react": "^0.562.0",
     "mysql2": "^3.16.0",
     "next": "^16.1.0",
@@ -84,10 +84,9 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
-    "@eslint/js": "^9.39.2",
     "@next/eslint-plugin-next": "^16.1.0",
     "@types/node": "^25.0.3",
-    "@types/nodemailer": "^6.4.21",
+    "@types/nodemailer": "^7.0.4",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.50.0",
@@ -105,6 +104,7 @@
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
+    "prisma": "^7.2.0",
     "tsx": "^4.21.0",
     "typescript-eslint": "^8.50.0",
     "webpack-bundle-analyzer": "^5.1.0"

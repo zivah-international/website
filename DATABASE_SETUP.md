@@ -4,14 +4,14 @@ This guide explains how to set up the ZIVAH International database using the sep
 
 ## Overview
 
-The database setup has been separated into two distinct files for better maintainability:
+The project now supports both the legacy PostgreSQL setup and a MySQL deployment path. Use PostgreSQL for existing environments and adopt MySQL only after completing the migration checklist below.
 
 - **`database-schema.sql`** - Contains all database structure definitions (tables, types, indexes, constraints)
 - **`database-seed.sql`** - Contains only the initial data seeding (INSERT statements)
 
 ## Prerequisites
 
-- PostgreSQL database server running
+- PostgreSQL **or** MySQL database server running
 - Database user with permissions to create databases and tables
 - Node.js installed (for running the setup script)
 
@@ -21,8 +21,16 @@ Set the following environment variables. The script supports both `DATABASE_URL`
 
 ### Option 1: DATABASE_URL (Recommended)
 
+PostgreSQL (legacy):
+
 ```bash
 DATABASE_URL=postgresql://username:password@localhost:5432/zivah_international
+```
+
+MySQL (only after migration planning):
+
+```bash
+DATABASE_URL=mysql://username:password@localhost:3306/zivah_international
 ```
 
 ### Option 2: Individual Variables (Fallback)
@@ -172,9 +180,16 @@ SSL is **disabled by default** in the setup script. If you encounter SSL-related
 
 ## Migration
 
-If you need to update the database schema:
+### PostgreSQL → MySQL migration (phased)
 
-1. Modify `database-schema.sql` with your changes
-2. Create a new migration file for data transformations if needed
-3. Test the changes in a development environment
-4. Update this documentation if the setup process changes
+1. **Phase 0 (plan):** Keep `DATABASE_URL` pointed at PostgreSQL in production. Stand up a MySQL instance and run `database-schema.sql` and `database-seed.sql` against it in a sandbox.
+2. **Phase 1 (dual readiness):** Run the application against MySQL in a staging environment. Verify auth, quotes API, and background jobs. Keep PostgreSQL live for production.
+3. **Phase 2 (data migration):** Export data from PostgreSQL and import into MySQL (e.g., pg_dump → CSV → LOAD DATA). Validate record counts and spot-check key tables (users, quotes, products, quote_items).
+4. **Phase 3 (cutover):** Update `DATABASE_URL` to the MySQL URI, deploy, and monitor. Keep PostgreSQL snapshot for rollback until MySQL runs cleanly for at least one release cycle.
+
+### Schema updates
+
+1. Modify `database-schema.sql` with your changes.
+2. Create a new migration file for data transformations if needed.
+3. Test the changes in a development environment (both PostgreSQL and MySQL if you support both).
+4. Update this documentation if the setup process changes.

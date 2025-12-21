@@ -5,6 +5,19 @@ import { parseJsonFields, query } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { createCategorySchema } from '@/lib/validations';
 
+type CategoryRow = {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  icon?: string | null;
+  color?: string | null;
+  sort_order?: number;
+  is_active: boolean;
+  products_count: number | string;
+  products?: string | null;
+};
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -55,12 +68,18 @@ export async function GET(request: NextRequest) {
       `;
     }
 
-    const result = await query(queryText, params);
+    const result = await query<CategoryRow>(queryText, params);
 
     // Parse JSON fields if products are included
     const categories = includeProducts
-      ? result.rows.map(row => parseJsonFields(row as Record<string, any>, ['products']))
-      : result.rows;
+      ? result.rows.map(row => {
+          const parsedRow = parseJsonFields(row as Record<string, any>, ['products']);
+          return {
+            ...parsedRow,
+            products_count: Number(row.products_count),
+          };
+        })
+      : result.rows.map(row => ({ ...row, products_count: Number(row.products_count) }));
 
     return NextResponse.json({
       error: false,

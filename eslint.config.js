@@ -1,4 +1,3 @@
-import js from '@eslint/js';
 import nextPlugin from '@next/eslint-plugin-next';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
@@ -19,6 +18,7 @@ export default [
       '.pnp.js',
       // Production builds
       '.next/',
+      'deploy/.next/',
       'out/',
       'dist/',
       'build/',
@@ -77,7 +77,6 @@ export default [
       'temp/',
     ],
   },
-  js.configs.recommended,
   {
     files: ['**/*.{js,mjs,cjs,ts,tsx}'],
     languageOptions: {

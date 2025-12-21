@@ -14,6 +14,47 @@ const fs = require('fs');
 const path = require('path');
 const mysql = require('mysql2/promise');
 
+// Basic allowlist validation to reduce risk of executing unsafe SQL if files are tampered
+function isSafeSQLStatement(statement) {
+  const normalized = statement.trim().replace(/\s+/g, ' ').toUpperCase();
+  if (!normalized) return false;
+
+  const allowedStarters = new Set([
+    'CREATE',
+    'ALTER',
+    'INSERT',
+    'UPDATE',
+    'DELETE',
+    'DROP',
+    'TRUNCATE',
+    'SET',
+    'USE',
+    'GRANT',
+    'START',
+  ]);
+
+  const firstToken = normalized.split(' ')[0];
+  if (!allowedStarters.has(firstToken)) return false;
+
+  const forbiddenPatterns = [
+    /;.*;/, // multiple statements on one line
+    /--\s+/, // inline comments
+    /\/\*/, // block comments
+    /XP_CMDSHELL/i, // common injection primitives
+  ];
+
+  return !forbiddenPatterns.some(pattern => pattern.test(normalized));
+}
+
+function splitStatements(sql) {
+  // Remove block comments to avoid executing commented content
+  const sanitized = sql.replace(/\/\*[\s\S]*?\*\//g, '');
+  return sanitized
+    .split(';')
+    .map(stmt => stmt.trim())
+    .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
+}
+
 // Parse DATABASE_URL or use individual environment variables
 function parseDatabaseConfig() {
   const databaseUrl = process.env.DATABASE_URL;
@@ -100,25 +141,22 @@ async function setupDatabase() {
     console.log('🏗️  Creating database schema...');
 
     // Split SQL into individual statements and execute them
-    const schemaStatements = schemaSQL
-      .split(';')
-      .map(stmt => stmt.trim())
-      .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
+    const schemaStatements = splitStatements(schemaSQL);
 
     for (const statement of schemaStatements) {
-      if (statement.trim()) {
-        try {
-          await pool.execute(statement);
-        } catch (error) {
-          // Ignore comments and empty statements
-          if (!statement.includes('--') && statement.trim().length > 0) {
-            console.warn(
-              '⚠️  Error executing schema statement:',
-              statement.substring(0, 100) + '...'
-            );
-            console.warn('Error:', error.message);
-          }
-        }
+      if (!isSafeSQLStatement(statement)) {
+        console.warn(
+          '⚠️  Skipping potentially unsafe schema statement:',
+          statement.substring(0, 80)
+        );
+        continue;
+      }
+
+      try {
+        await pool.execute(statement);
+      } catch (error) {
+        console.warn('⚠️  Error executing schema statement:', statement.substring(0, 100) + '...');
+        console.warn('Error:', error.message);
       }
     }
 
@@ -131,25 +169,19 @@ async function setupDatabase() {
     console.log('🌱 Seeding database with initial data...');
 
     // Split SQL into individual statements and execute them
-    const seedStatements = seedSQL
-      .split(';')
-      .map(stmt => stmt.trim())
-      .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
+    const seedStatements = splitStatements(seedSQL);
 
     for (const statement of seedStatements) {
-      if (statement.trim()) {
-        try {
-          await pool.execute(statement);
-        } catch (error) {
-          // Ignore comments and empty statements
-          if (!statement.includes('--') && statement.trim().length > 0) {
-            console.warn(
-              '⚠️  Error executing seed statement:',
-              statement.substring(0, 100) + '...'
-            );
-            console.warn('Error:', error.message);
-          }
-        }
+      if (!isSafeSQLStatement(statement)) {
+        console.warn('⚠️  Skipping potentially unsafe seed statement:', statement.substring(0, 80));
+        continue;
+      }
+
+      try {
+        await pool.execute(statement);
+      } catch (error) {
+        console.warn('⚠️  Error executing seed statement:', statement.substring(0, 100) + '...');
+        console.warn('Error:', error.message);
       }
     }
 
