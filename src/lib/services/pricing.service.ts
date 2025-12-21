@@ -1,6 +1,7 @@
 // Product Pricing Service
 // Database-driven pricing service using direct SQL queries
 import { query } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export interface ProductPricingService {
   getAvailableMeasuresForProduct(productId: number): Promise<any[]>;
@@ -25,7 +26,8 @@ class DatabasePricingService implements ProductPricingService {
         return [];
       }
 
-      const defaultFamily = (productResult.rows[0] as any).family_id;
+      const firstRow = productResult.rows[0] as { family_id?: number };
+      const defaultFamily = firstRow.family_id;
       if (!defaultFamily) {
         return [];
       }
@@ -40,7 +42,7 @@ class DatabasePricingService implements ProductPricingService {
 
       return measuresResult.rows;
     } catch (error) {
-      console.error('Error getting available measures:', error);
+      logger.error('Error getting available measures:', error);
       return [];
     }
   }
@@ -55,7 +57,8 @@ class DatabasePricingService implements ProductPricingService {
       const priceResult = await query(priceQuery, [productId, measureId]);
 
       if (priceResult.rows.length > 0) {
-        return Number((priceResult.rows[0] as any).price);
+        const priceRow = priceResult.rows[0] as { price: number | string };
+        return Number(priceRow.price);
       }
 
       // If no direct price, get all prices for this product and try to convert
@@ -68,7 +71,11 @@ class DatabasePricingService implements ProductPricingService {
       const allPricesResult = await query(allPricesQuery, [measureId, productId]);
 
       for (const priceRow of allPricesResult.rows) {
-        const row = priceRow as any;
+        const row = priceRow as {
+          measure_id: number;
+          price: number | string;
+          conversion_factor?: number | string;
+        };
         if (row.measure_id === measureId) {
           return Number(row.price);
         }
@@ -81,7 +88,7 @@ class DatabasePricingService implements ProductPricingService {
 
       return null;
     } catch (error) {
-      console.error('Error getting price for unit:', error);
+      logger.error('Error getting price for unit:', error);
       return null;
     }
   }
@@ -127,13 +134,13 @@ class DatabasePricingService implements ProductPricingService {
       const familyResult = await query(familyQuery, [fromMeasureId, toMeasureId]);
 
       if (familyResult.rows.length > 0) {
-        const row = familyResult.rows[0] as any;
-        return row.family_id === row.family_id; // m1.family_id === m2.family_id
+        const row = familyResult.rows[0] as { family_id: number };
+        return row.family_id !== null && row.family_id !== undefined;
       }
 
       return false;
     } catch (error) {
-      console.error('Error checking measure compatibility:', error);
+      logger.error('Error checking measure compatibility:', error);
       return false;
     }
   }

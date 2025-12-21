@@ -132,22 +132,14 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
 
-  // ESLint configuration
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
-
   // Output configuration
   output: 'standalone',
 
   // Fix for multiple lockfiles warning
   outputFileTracingRoot: __dirname,
 
-  // Webpack configuration
-  webpack: (config: unknown) => {
-    // Add custom webpack configurations if needed
-    return config;
-  },
+  // Turbopack configuration (empty to silence warning)
+  turbopack: {},
 };
 
 export default nextConfig;

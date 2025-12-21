@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
-import { query } from '@/lib/db';
+import { parseJsonFields, query } from '@/lib/db';
+import { logger } from '@/lib/logger';
 import { createCategorySchema } from '@/lib/validations';
 
 export async function GET(request: NextRequest) {
@@ -56,13 +57,18 @@ export async function GET(request: NextRequest) {
 
     const result = await query(queryText, params);
 
+    // Parse JSON fields if products are included
+    const categories = includeProducts
+      ? result.rows.map(row => parseJsonFields(row as Record<string, any>, ['products']))
+      : result.rows;
+
     return NextResponse.json({
       error: false,
-      data: result.rows,
+      data: categories,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    logger.error('Error fetching categories:', error);
 
     return NextResponse.json(
       {
@@ -121,13 +127,14 @@ export async function POST(request: NextRequest) {
     }
 
     const selectResult = await query('SELECT * FROM categories WHERE id = ?', [result.insertId]);
-    const category = selectResult.rows[0] as any;
+    const category = selectResult.rows[0] as Record<string, unknown>;
 
     // Get product count for the new category
     const countQuery =
       'SELECT COUNT(*) as count FROM products WHERE category_id = ? AND is_active = true';
     const countResult = await query(countQuery, [category.id]);
-    category.products_count = parseInt((countResult.rows[0] as any).count);
+    const countRow = countResult.rows[0] as { count: string | number };
+    category.products_count = parseInt(countRow.count.toString());
 
     return NextResponse.json(
       {
@@ -139,7 +146,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error creating category:', error);
+    logger.error('Error creating category:', error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(

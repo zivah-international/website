@@ -1,4 +1,5 @@
-import { query } from '@/lib/db';
+import { parseJsonFields, query } from '@/lib/db';
+import { logger } from '@/lib/logger';
 import {
   CreateProductInput,
   PaginatedResponse,
@@ -104,8 +105,16 @@ export class ProductService {
     const total = parseInt((countResult.rows[0] as { total: string }).total);
     const totalPages = Math.ceil(total / pageSize);
 
-    // Transform products to include properly structured category data
+    // Transform products to include properly structured category data with JSON parsing
     const products = rawProducts.map(product => {
+      // Parse JSON fields
+      const parsedProduct = parseJsonFields(product, [
+        'specifications',
+        'features',
+        'certifications',
+        'image_gallery',
+      ]);
+
       const {
         category_name,
         category_slug,
@@ -118,7 +127,7 @@ export class ProductService {
         category_created_at,
         category_updated_at,
         ...productData
-      } = product;
+      } = parsedProduct;
 
       return {
         ...productData,
@@ -205,7 +214,19 @@ export class ProductService {
     `;
 
     const result = await query(queryText, [id]);
-    return result.rows[0] as Product | null;
+    if (!result.rows[0]) return null;
+
+    // Parse JSON fields including aggregated arrays
+    const product = parseJsonFields(result.rows[0], [
+      'specifications',
+      'features',
+      'certifications',
+      'image_gallery',
+      'variants',
+      'quote_items',
+    ]);
+
+    return product as Product;
   }
 
   // Get product by slug
@@ -238,7 +259,18 @@ export class ProductService {
     `;
 
     const result = await query(queryText, [slug]);
-    return result.rows[0] as Product | null;
+    if (!result.rows[0]) return null;
+
+    // Parse JSON fields including aggregated arrays
+    const product = parseJsonFields(result.rows[0], [
+      'specifications',
+      'features',
+      'certifications',
+      'image_gallery',
+      'variants',
+    ]);
+
+    return product as Product;
   }
 
   // Get featured products
@@ -256,7 +288,10 @@ export class ProductService {
     `;
 
     const result = await query(queryText, [limit]);
-    return result.rows as Product[];
+    // Parse JSON fields for each product
+    return result.rows.map(row =>
+      parseJsonFields(row, ['specifications', 'features', 'certifications', 'image_gallery'])
+    ) as Product[];
   }
 
   // Get products by category
@@ -275,7 +310,10 @@ export class ProductService {
 
     const params = limit ? [categorySlug, limit] : [categorySlug];
     const result = await query(queryText, params);
-    return result.rows as Product[];
+    // Parse JSON fields for each product
+    return result.rows.map(row =>
+      parseJsonFields(row, ['specifications', 'features', 'certifications', 'image_gallery'])
+    ) as Product[];
   }
 
   // Create new product
@@ -341,7 +379,7 @@ export class ProductService {
       await query(queryText, [id]);
       return true;
     } catch (error) {
-      console.error('Error deleting product:', error);
+      logger.error('Error deleting product:', error);
       return false;
     }
   }
@@ -374,7 +412,10 @@ export class ProductService {
     `;
 
     const result = await query(queryText, [threshold]);
-    return result.rows as Product[];
+    // Parse JSON fields for each product
+    return result.rows.map(row =>
+      parseJsonFields(row, ['specifications', 'features', 'certifications', 'image_gallery'])
+    ) as Product[];
   }
 
   // Search products with full-text search
@@ -401,7 +442,10 @@ export class ProductService {
       `%${searchQuery}%`,
       limit,
     ]);
-    return result.rows as Product[];
+    // Parse JSON fields for each product
+    return result.rows.map(row =>
+      parseJsonFields(row, ['specifications', 'features', 'certifications', 'image_gallery'])
+    ) as Product[];
   }
 
   // Get product statistics

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
+import { logger } from '@/lib/logger';
 import { ProductService } from '@/lib/services/product.service';
 import { createProductSchema, productFiltersSchema } from '@/lib/validations';
 
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Error fetching products:', error);
+    logger.error('Error fetching products:', error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error creating product:', error);
+    logger.error('Error creating product:', error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(

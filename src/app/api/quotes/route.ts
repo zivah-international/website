@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { query, withTransaction } from '@/lib/db';
+import { parseJsonFields, query, withTransaction } from '@/lib/db';
 import { emailService } from '@/lib/email';
 import { createApiResponse, handleApiError } from '@/lib/errors';
 import { logger } from '@/lib/logger';
@@ -97,10 +97,15 @@ export async function GET(request: NextRequest) {
       ),
     ]);
 
-    const totalCount = parseInt((total.rows[0] as { count: string }).count);
+    const totalCount = parseInt((total.rows[0] as { count: string | number }).count.toString());
+
+    // Parse JSON fields in quotes
+    const parsedQuotes = quotes.rows.map(quote =>
+      parseJsonFields(quote, ['user', 'items', 'communications', 'shipping_address'])
+    );
 
     return createApiResponse({
-      data: quotes.rows,
+      data: parsedQuotes,
       pagination: {
         page,
         pageSize,
@@ -179,7 +184,7 @@ export async function POST(request: NextRequest) {
 
     for (const field of textFields) {
       if (field && (isXSS(field) || isSQLInjection(field))) {
-        console.warn(`Malicious content detected in quote form from IP: ${ip}`);
+        logger.warn(`Malicious content detected in quote form from IP: ${ip}`);
         return createApiResponse(null, 'Contenido no válido detectado.', 400);
       }
     }
@@ -193,7 +198,8 @@ export async function POST(request: NextRequest) {
       const [lastQuoteResult] = await client.execute(`
         SELECT id FROM quotes ORDER BY id DESC LIMIT 1
       `);
-      const lastQuoteId = (lastQuoteResult as any[])[0]?.id || 0;
+      const lastQuoteArray = lastQuoteResult as Array<{ id?: number }>;
+      const lastQuoteId = lastQuoteArray[0]?.id || 0;
       const quoteNumber = `Q${String(lastQuoteId + 1).padStart(6, '0')}`;
 
       // Insert quote
@@ -217,7 +223,8 @@ export async function POST(request: NextRequest) {
         ]
       );
 
-      const quoteId = (quoteResult as any).insertId;
+      const quoteResultWithId = quoteResult as { insertId: number };
+      const quoteId = quoteResultWithId.insertId;
 
       // Insert quote items
       if (validatedData.items.length > 0) {
@@ -286,30 +293,39 @@ export async function POST(request: NextRequest) {
         [quoteId]
       );
 
-      return (completeQuote as any[])[0];
+      const completeQuoteArray = completeQuote as Array<Record<string, unknown>>;
+      const quoteData = completeQuoteArray[0];
+
+      // Parse JSON fields
+      return parseJsonFields(quoteData, ['user', 'country', 'items', 'shipping_address']);
     });
 
     // Send email if requested
     let emailSent = false;
     if (validatedData.recipientEmail) {
       try {
+        const quoteWithRelations = quote as Record<string, any>;
         const emailData = {
-          quoteId: quote.id,
-          customerName: quote.customerName,
-          customerEmail: quote.customerEmail,
-          company: quote.company || undefined,
-          country: (quote as any).countryRef?.name,
+          quoteId: quoteWithRelations.id,
+          customerName: quoteWithRelations.customerName || quoteWithRelations.customer_name,
+          customerEmail: quoteWithRelations.customerEmail || quoteWithRelations.customer_email,
+          company: quoteWithRelations.company || undefined,
+          country: quoteWithRelations.country?.name,
           currency: 'USD', // TODO: Fetch actual currency from currencyId
-          currencyId: quote.currencyId,
-          totalAmount: quote.totalAmount ? Number(quote.totalAmount) : undefined,
-          items: (quote as any).items.map((item: any) => ({
-            productName: item.product?.name || 'Producto',
-            quantity: item.quantity,
-            unitPrice: Number(item.unitPrice),
-            totalPrice: Number(item.totalPrice),
-          })),
-          message: quote.message || undefined,
-          quoteNumber: quote.quoteNumber,
+          currencyId: quoteWithRelations.currencyId || quoteWithRelations.currency_id,
+          totalAmount: quoteWithRelations.totalAmount
+            ? Number(quoteWithRelations.totalAmount)
+            : undefined,
+          items: Array.isArray(quoteWithRelations.items)
+            ? quoteWithRelations.items.map((item: any) => ({
+                productName: item.product?.name || 'Producto',
+                quantity: item.quantity,
+                unitPrice: Number(item.unitPrice || item.unit_price),
+                totalPrice: Number(item.totalPrice || item.total_price),
+              }))
+            : [],
+          message: quoteWithRelations.message || undefined,
+          quoteNumber: quoteWithRelations.quoteNumber || quoteWithRelations.quote_number,
         };
 
         emailSent = await emailService.sendQuoteEmail(emailData, validatedData.recipientEmail);

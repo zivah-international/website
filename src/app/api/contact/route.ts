@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { query } from '@/lib/db';
 import { createApiResponse, handleApiError } from '@/lib/errors';
+import { logger } from '@/lib/logger';
 import {
   contactFormSchema,
   formRateLimiter,
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
 
     for (const field of textFields) {
       if (isXSS(field) || isSQLInjection(field)) {
-        console.warn(`Malicious content detected in contact form from IP: ${ip}`);
+        logger.warn(`Malicious content detected in contact form from IP: ${ip}`);
         return createApiResponse(null, 'Contenido no válido detectado.', 400);
       }
     }
@@ -161,14 +162,17 @@ export async function GET(request: NextRequest) {
       ),
     ]);
 
+    const totalRow = total.rows[0] as { count: string | number };
+    const totalCount = parseInt(totalRow.count.toString());
+
     return createApiResponse({
-      data: submissions as any,
+      data: submissions.rows,
       pagination: {
         page,
         pageSize,
-        total: parseInt((total as any)[0].count),
-        totalPages: Math.ceil(parseInt((total as any)[0].count) / pageSize),
-        hasNext: page * pageSize < parseInt((total as any)[0].count),
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / pageSize),
+        hasNext: page * pageSize < totalCount,
         hasPrev: page > 1,
       },
     });
