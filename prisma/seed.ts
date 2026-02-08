@@ -1,7 +1,6 @@
 import 'dotenv/config';
 
 import { PrismaPg } from '@prisma/adapter-pg';
-import * as bcrypt from 'bcryptjs';
 import { Pool } from 'pg';
 
 import { PrismaClient } from '../generated/prisma/client';
@@ -827,44 +826,6 @@ async function main() {
       isActive: true,
       sortOrder: 41,
       description: 'Imperial feet unit',
-    },
-  });
-
-  console.log('👤 Creating admin users...');
-  // Create admin users with full details
-  console.log('👤 Creating admin users...');
-  const adminPassword = await bcrypt.hash('admin123!', 12);
-  const managerPassword = await bcrypt.hash('manager123!', 12);
-
-  const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@zivahinternational.com' },
-    update: {},
-    create: {
-      username: 'admin',
-      email: 'admin@zivahinternational.com',
-      password: adminPassword,
-      name: 'Administrador ZIVAH',
-      role: 'ADMIN',
-      isActive: true,
-      department: 'Administración',
-      phone: '+593-4-234-5678',
-      company: 'ZIVAH International',
-    },
-  });
-
-  const managerUser = await prisma.user.upsert({
-    where: { email: 'manager@zivahinternational.com' },
-    update: {},
-    create: {
-      username: 'manager',
-      email: 'manager@zivahinternational.com',
-      password: managerPassword,
-      name: 'Gerente de Ventas',
-      role: 'SALES_MANAGER',
-      isActive: true,
-      department: 'Ventas',
-      phone: '+593-4-234-5679',
-      company: 'ZIVAH International',
     },
   });
 

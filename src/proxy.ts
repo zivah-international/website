@@ -2,8 +2,9 @@ import { NextRequest } from 'next/server';
 
 import { enforceHTTPS, logSecurityEvent } from '@/lib/https';
 import { securityMiddleware } from '@/lib/security';
+import { updateSession } from '@/utils/supabase/middleware';
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Enforce HTTPS in production
@@ -39,23 +40,19 @@ export function proxy(request: NextRequest) {
     );
   }
 
-  return securityResponse;
+  // Handle Supabase session updates and auth redirects
+  return await updateSession(request);
 }
 
 export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public folder
+     * - public folder files (robots.txt, sitemap.xml, etc.)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
-    /*
-     * Match API routes
-     */
-    '/api/:path*',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
   ],
 };
