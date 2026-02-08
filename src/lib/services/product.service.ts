@@ -25,23 +25,28 @@ export class ProductService {
 
     const conditions: string[] = [];
     const params: unknown[] = [];
+    let paramIndex = 1;
 
     // Apply filters
     if (categoryId !== undefined) {
-      conditions.push(`p.category_id = ?`);
+      conditions.push(`p.category_id = $${paramIndex}`);
       params.push(categoryId);
+      paramIndex++;
     }
     if (typeof isActive === 'boolean') {
-      conditions.push(`p.is_active = ?`);
+      conditions.push(`p.is_active = $${paramIndex}`);
       params.push(isActive);
+      paramIndex++;
     }
     if (typeof isFeatured === 'boolean') {
-      conditions.push(`p.is_featured = ?`);
+      conditions.push(`p.is_featured = $${paramIndex}`);
       params.push(isFeatured);
+      paramIndex++;
     }
     if (origin) {
-      conditions.push(`p.origin LIKE ?`);
+      conditions.push(`p.origin LIKE $${paramIndex}`);
       params.push(`%${origin}%`);
+      paramIndex++;
     }
     if (inStock) {
       conditions.push(`p.stock_quantity > 0`);
@@ -49,20 +54,25 @@ export class ProductService {
 
     // Search functionality
     if (search) {
-      conditions.push(`(p.name LIKE ? OR p.description LIKE ? OR p.short_description LIKE ?)`);
+      conditions.push(
+        `(p.name LIKE $${paramIndex} OR p.description LIKE $${paramIndex + 1} OR p.short_description LIKE $${paramIndex + 2})`
+      );
       params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+      paramIndex += 3;
     }
 
-    // Certifications filter (JSON array contains)
+    // Certifications filter (JSON array contains) - PostgreSQL jsonb
     if (certifications && certifications.length > 0) {
-      // MySQL JSON search
-      conditions.push(`JSON_SEARCH(p.certifications, 'one', ?) IS NOT NULL`);
-      params.push(`%${certifications.join('%')}%`);
+      conditions.push(`p.certifications::jsonb @> $${paramIndex}::jsonb`);
+      params.push(JSON.stringify(certifications));
+      paramIndex++;
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
     const skip = (page - 1) * pageSize;
+    const limitParamIndex = paramIndex;
+    const offsetParamIndex = paramIndex + 1;
 
     // Get products with category and quote count
     const productsQuery = `
@@ -85,7 +95,7 @@ export class ProductService {
       ${whereClause}
       GROUP BY p.id, c.id
       ORDER BY p.is_featured DESC, p.created_at DESC
-      LIMIT ${skip}, ${pageSize}
+      LIMIT $${limitParamIndex} OFFSET $${offsetParamIndex}
     `;
 
     // Get total count (use same WHERE clause but without GROUP BY and LIMIT)
@@ -97,7 +107,7 @@ export class ProductService {
     `;
 
     const [productsResult, countResult] = await Promise.all([
-      query(productsQuery, params),
+      query(productsQuery, [...params, pageSize, skip]),
       query(countQuery, params),
     ]);
 
@@ -170,8 +180,8 @@ export class ProductService {
         c.slug as category_slug,
         CASE
           WHEN COUNT(pv.id) > 0 THEN
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
+            json_agg(
+              DISTINCT jsonb_build_object(
                 'id', pv.id,
                 'name', pv.name,
                 'sku', pv.sku,
@@ -181,12 +191,12 @@ export class ProductService {
                 'attributes', pv.attributes
               )
             )
-          ELSE JSON_ARRAY()
+          ELSE '[]'::json
         END as variants,
         CASE
           WHEN COUNT(qi.id) > 0 THEN
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
+            json_agg(
+              DISTINCT jsonb_build_object(
                 'id', qi.id,
                 'quoteId', qi.quote_id,
                 'quantity', qi.quantity,
@@ -194,7 +204,7 @@ export class ProductService {
                 'totalPrice', qi.total_price,
                 'notes', qi.notes,
                 'specifications', qi.specifications,
-                'quote', JSON_OBJECT(
+                'quote', jsonb_build_object(
                   'id', q.id,
                   'quoteNumber', q.quote_number,
                   'customerName', q.customer_name,
@@ -202,14 +212,14 @@ export class ProductService {
                 )
               )
             )
-          ELSE JSON_ARRAY()
+          ELSE '[]'::json
         END as quote_items
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
       LEFT JOIN product_variants pv ON p.id = pv.product_id AND pv.is_active = true
       LEFT JOIN quote_items qi ON p.id = qi.product_id
       LEFT JOIN quotes q ON qi.quote_id = q.id
-      WHERE p.id = ?
+      WHERE p.id = $1
       GROUP BY p.id, c.id
     `;
 
@@ -241,8 +251,8 @@ export class ProductService {
         c.slug as category_slug,
         CASE
           WHEN COUNT(pv.id) > 0 THEN
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
+            json_agg(
+              DISTINCT jsonb_build_object(
                 'id', pv.id,
                 'name', pv.name,
                 'sku', pv.sku,
@@ -252,12 +262,12 @@ export class ProductService {
                 'attributes', pv.attributes
               )
             )
-          ELSE JSON_ARRAY()
+          ELSE '[]'::json
         END as variants
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
       LEFT JOIN product_variants pv ON p.id = pv.product_id AND pv.is_active = true
-      WHERE p.slug = ?
+      WHERE p.slug = $1
       GROUP BY p.id, c.id
     `;
 
@@ -287,7 +297,7 @@ export class ProductService {
       LEFT JOIN categories c ON p.category_id = c.id
       WHERE p.is_active = true AND p.is_featured = true
       ORDER BY p.created_at DESC
-      LIMIT ?
+      LIMIT $1
     `;
 
     const result = await query(queryText, [limit]);
@@ -306,9 +316,9 @@ export class ProductService {
         c.slug as category_slug
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
-      WHERE p.is_active = true AND c.slug = ? AND c.is_active = true
+      WHERE p.is_active = true AND c.slug = $1 AND c.is_active = true
       ORDER BY p.is_featured DESC, p.created_at DESC
-      ${limit ? 'LIMIT ?' : ''}
+      ${limit ? 'LIMIT $2' : ''}
     `;
 
     const params = limit ? [categorySlug, limit] : [categorySlug];
@@ -331,20 +341,16 @@ export class ProductService {
 
     const fields = Object.keys(data);
     const values = Object.values(data);
-    const placeholders = fields.map(() => '?');
+    const placeholders = fields.map((_, i) => `$${i + 1}`);
 
     const queryText = `
       INSERT INTO products (${fields.join(', ')})
       VALUES (${placeholders.join(', ')})
+      RETURNING *
     `;
 
     const result = await query(queryText, values);
-    // For MySQL, get the inserted record
-    if (!result.insertId) {
-      throw new Error('Failed to get inserted ID');
-    }
-    const selectResult = await query('SELECT * FROM products WHERE id = ?', [result.insertId]);
-    return selectResult.rows[0] as Product;
+    return result.rows[0] as Product;
   }
 
   // Update product
@@ -357,18 +363,17 @@ export class ProductService {
 
     const fields = Object.keys(data);
     const values = Object.values(data);
-    const setClause = fields.map(field => `${field} = ?`).join(', ');
+    const setClause = fields.map((field, i) => `${field} = $${i + 1}`).join(', ');
 
     const queryText = `
       UPDATE products
       SET ${setClause}, updated_at = NOW()
-      WHERE id = ?
+      WHERE id = $${fields.length + 1}
+      RETURNING *
     `;
 
-    await query(queryText, [...values, id]);
-    // For MySQL, get the updated record
-    const selectResult = await query('SELECT * FROM products WHERE id = ?', [id]);
-    return selectResult.rows[0] as Product;
+    const result = await query(queryText, [...values, id]);
+    return result.rows[0] as Product;
   }
 
   // Delete product (soft delete)
@@ -377,7 +382,7 @@ export class ProductService {
       const queryText = `
         UPDATE products
         SET is_active = false, updated_at = NOW()
-        WHERE id = ?
+        WHERE id = $1
       `;
       await query(queryText, [id]);
       return true;
@@ -391,14 +396,13 @@ export class ProductService {
   static async updateStock(id: number, quantity: number): Promise<Product> {
     const queryText = `
       UPDATE products
-      SET stock_quantity = ?, updated_at = NOW()
-      WHERE id = ?
+      SET stock_quantity = $1, updated_at = NOW()
+      WHERE id = $2
+      RETURNING *
     `;
 
-    await query(queryText, [quantity, id]);
-    // For MySQL, get the updated record
-    const selectResult = await query('SELECT * FROM products WHERE id = ?', [id]);
-    return selectResult.rows[0] as Product;
+    const result = await query(queryText, [quantity, id]);
+    return result.rows[0] as Product;
   }
 
   // Get low stock products
@@ -410,7 +414,7 @@ export class ProductService {
         c.slug as category_slug
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
-      WHERE p.is_active = true AND p.stock_quantity <= ? AND p.stock_quantity > 0
+      WHERE p.is_active = true AND p.stock_quantity <= $1 AND p.stock_quantity > 0
       ORDER BY p.stock_quantity ASC
     `;
 
@@ -431,12 +435,12 @@ export class ProductService {
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
       WHERE p.is_active = true AND (
-        p.name LIKE ? OR
-        p.description LIKE ? OR
-        p.short_description LIKE ?
+        p.name LIKE $1 OR
+        p.description LIKE $2 OR
+        p.short_description LIKE $3
       )
       ORDER BY p.is_featured DESC, p.name ASC
-      LIMIT ?
+      LIMIT $4
     `;
 
     const result = await query(queryText, [
@@ -515,11 +519,9 @@ export class ProductService {
     let counter = 1;
 
     while (true) {
-      const queryText = `
-        SELECT id FROM products
-        WHERE slug = ? ${excludeId ? 'AND id != ?' : ''}
-        LIMIT 1
-      `;
+      const queryText = excludeId
+        ? `SELECT id FROM products WHERE slug = $1 AND id != $2 LIMIT 1`
+        : `SELECT id FROM products WHERE slug = $1 LIMIT 1`;
       const params = excludeId ? [uniqueSlug, excludeId] : [uniqueSlug];
       const result = await query(queryText, params);
 

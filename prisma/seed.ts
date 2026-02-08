@@ -1,25 +1,20 @@
 import 'dotenv/config';
 
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaPg } from '@prisma/adapter-pg';
 import * as bcrypt from 'bcryptjs';
+import { Pool } from 'pg';
 
 import { PrismaClient } from '../generated/prisma/client';
 
 function getAdapterFromDatabaseUrl(databaseUrl: string) {
-  const parsed = new URL(databaseUrl);
-  const database = parsed.pathname.replace(/^\//, '');
-
-  return new PrismaMariaDb({
-    host: parsed.hostname,
-    port: parsed.port ? Number(parsed.port) : 3306,
-    user: decodeURIComponent(parsed.username),
-    password: decodeURIComponent(parsed.password),
-    database,
-    connectionLimit: Number(process.env.DB_POOL_SIZE ?? 5),
+  const pool = new Pool({
+    connectionString: databaseUrl,
   });
+
+  return new PrismaPg(pool);
 }
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = process.env.DIRECT_URL || process.env.DATABASE_URL;
 
 if (!databaseUrl) {
   throw new Error('DATABASE_URL is not set');

@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
         c.icon,
         c.calling_code,
         c.phone_format,
-        JSON_OBJECT(
+        json_build_object(
           'id', curr.id,
           'code', curr.code,
           'name', curr.name,

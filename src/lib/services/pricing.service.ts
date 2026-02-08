@@ -18,7 +18,7 @@ class DatabasePricingService implements ProductPricingService {
         SELECT p.measure_id, m.family_id
         FROM products p
         LEFT JOIN measures m ON p.measure_id = m.id
-        WHERE p.id = ?
+        WHERE p.id = $1
       `;
       const productResult = await query(productQuery, [productId]);
 
@@ -35,7 +35,7 @@ class DatabasePricingService implements ProductPricingService {
       // Get all measures in the same family
       const measuresQuery = `
         SELECT * FROM measures
-        WHERE family_id = ? AND is_active = true
+        WHERE family_id = $1 AND is_active = true
         ORDER BY sort_order ASC
       `;
       const measuresResult = await query(measuresQuery, [defaultFamily]);
@@ -52,7 +52,7 @@ class DatabasePricingService implements ProductPricingService {
       // First try to get direct price
       const priceQuery = `
         SELECT price FROM product_prices
-        WHERE product_id = ? AND measure_id = ? AND is_active = true
+        WHERE product_id = $1 AND measure_id = $2 AND is_active = true
       `;
       const priceResult = await query(priceQuery, [productId, measureId]);
 
@@ -65,8 +65,8 @@ class DatabasePricingService implements ProductPricingService {
       const allPricesQuery = `
         SELECT pp.price, pp.measure_id, mc.conversion_factor
         FROM product_prices pp
-        LEFT JOIN measure_compatibility mc ON mc.from_measure_id = pp.measure_id AND mc.to_measure_id = ?
-        WHERE pp.product_id = ? AND pp.is_active = true
+        LEFT JOIN measure_compatibility mc ON mc.from_measure_id = pp.measure_id AND mc.to_measure_id = $1
+        WHERE pp.product_id = $2 AND pp.is_active = true
       `;
       const allPricesResult = await query(allPricesQuery, [measureId, productId]);
 
@@ -110,8 +110,8 @@ class DatabasePricingService implements ProductPricingService {
       // Check direct compatibility
       const compatibilityQuery = `
         SELECT id FROM measure_compatibility
-        WHERE (from_measure_id = ? AND to_measure_id = ?)
-           OR (from_measure_id = ? AND to_measure_id = ?)
+        WHERE (from_measure_id = $1 AND to_measure_id = $2)
+           OR (from_measure_id = $3 AND to_measure_id = $4)
         LIMIT 1
       `;
       const compatibilityResult = await query(compatibilityQuery, [
@@ -129,7 +129,7 @@ class DatabasePricingService implements ProductPricingService {
       const familyQuery = `
         SELECT m1.family_id, m2.family_id
         FROM measures m1, measures m2
-        WHERE m1.id = ? AND m2.id = ?
+        WHERE m1.id = $1 AND m2.id = $2
       `;
       const familyResult = await query(familyQuery, [fromMeasureId, toMeasureId]);
 

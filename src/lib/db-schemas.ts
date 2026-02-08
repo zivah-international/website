@@ -1,7 +1,7 @@
 /**
  * Database Schema Validators
  * Zod schemas for runtime validation of database query results
- * These ensure type safety between MySQL and TypeScript
+ * These ensure type safety between PostgreSQL and TypeScript
  */
 
 import { z } from 'zod';

@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     const params: any[] = [];
 
     if (isActive !== null) {
-      whereClause = 'WHERE is_active = ?';
+      whereClause = 'WHERE is_active = $1';
       params.push(isActive === 'true');
     }
 
@@ -50,15 +50,15 @@ export async function GET(request: NextRequest) {
           c.*,
           COUNT(p.id) as products_count,
           COALESCE(
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
+            json_agg(
+              json_build_object(
                 'id', p.id,
                 'name', p.name,
                 'slug', p.slug,
                 'isFeatured', p.is_featured
               )
-            ),
-            JSON_ARRAY()
+            ) FILTER (WHERE p.id IS NOT NULL),
+            '[]'::json
           ) as products
         FROM categories c
         LEFT JOIN products p ON c.id = p.category_id AND p.is_active = true
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if slug is unique
-    const existingQuery = 'SELECT id FROM categories WHERE slug = ?';
+    const existingQuery = 'SELECT id FROM categories WHERE slug = $1';
     const existingResult = await query(existingQuery, [validatedData.slug]);
 
     if (existingResult.rows.length > 0) {
@@ -132,25 +132,20 @@ export async function POST(request: NextRequest) {
     // Insert new category
     const fields = Object.keys(validatedData);
     const values = Object.values(validatedData);
-    const placeholders = fields.map(() => '?');
+    const placeholders = fields.map((_, i) => `$${i + 1}`);
 
     const insertQuery = `
       INSERT INTO categories (${fields.join(', ')})
       VALUES (${placeholders.join(', ')})
+      RETURNING *
     `;
 
     const result = await query(insertQuery, values);
-    // For MySQL, get the inserted record
-    if (!result.insertId) {
-      throw new Error('Failed to get inserted ID');
-    }
-
-    const selectResult = await query('SELECT * FROM categories WHERE id = ?', [result.insertId]);
-    const category = selectResult.rows[0] as Record<string, unknown>;
+    const category = result.rows[0] as Record<string, unknown>;
 
     // Get product count for the new category
     const countQuery =
-      'SELECT COUNT(*) as count FROM products WHERE category_id = ? AND is_active = true';
+      'SELECT COUNT(*) as count FROM products WHERE category_id = $1 AND is_active = true';
     const countResult = await query(countQuery, [category.id]);
     const countRow = countResult.rows[0] as { count: string | number };
     category.products_count = parseInt(countRow.count.toString());

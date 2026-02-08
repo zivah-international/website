@@ -24,20 +24,23 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50);
     const category = searchParams.get('category');
 
+    let paramIndex = 1;
     let sql = `
       SELECT p.id, p.name, p.description, p.sku
       FROM products p
       WHERE p.is_active = true
-      AND LOWER(p.name) LIKE LOWER(?)
+      AND LOWER(p.name) LIKE LOWER($${paramIndex})
     `;
     const params: any[] = [`%${searchQuery}%`];
+    paramIndex++;
 
     if (category) {
-      sql += ` AND p.category_id = (SELECT id FROM categories WHERE slug = ?)`;
+      sql += ` AND p.category_id = (SELECT id FROM categories WHERE slug = $${paramIndex})`;
       params.push(category);
+      paramIndex++;
     }
 
-    sql += ` ORDER BY p.name ASC LIMIT ?`;
+    sql += ` ORDER BY p.name ASC LIMIT $${paramIndex}`;
     params.push(limit);
 
     const products = await query(sql, params);

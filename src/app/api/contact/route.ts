@@ -70,7 +70,8 @@ export async function POST(request: NextRequest) {
       `
       INSERT INTO contact_submissions (
         name, email, phone, company, subject, message, type, source, ip_address, user_agent
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      RETURNING id
     `,
       [
         validatedData.name,
@@ -91,7 +92,7 @@ export async function POST(request: NextRequest) {
       `
       INSERT INTO activity_logs (
         action, entity_type, entity_id, details, ip_address, user_agent
-      ) VALUES (?, ?, ?, ?, ?, ?)
+      ) VALUES ($1, $2, $3, $4, $5, $6)
     `,
       [
         'CONTACT_SUBMISSION',
@@ -143,22 +144,26 @@ export async function GET(request: NextRequest) {
 
     const whereClause = where.length > 0 ? `WHERE ${where.join(' AND ')}` : '';
 
+    // Add pagination params
+    const paginationParamStart = params.length + 1;
+    params.push(pageSize, (page - 1) * pageSize);
+
     const [submissions, total] = await Promise.all([
       query(
         `
         SELECT * FROM contact_submissions
         ${whereClause}
         ORDER BY created_at DESC
-        LIMIT ? OFFSET ?
+        LIMIT $${paginationParamStart} OFFSET $${paginationParamStart + 1}
       `,
-        [...params, pageSize, (page - 1) * pageSize]
+        params
       ),
       query(
         `
         SELECT COUNT(*) as count FROM contact_submissions
         ${whereClause}
       `,
-        params
+        params.slice(0, -2)
       ),
     ]);
 

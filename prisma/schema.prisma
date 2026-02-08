@@ -4,7 +4,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Category {
@@ -298,7 +300,7 @@ model Page {
   id              Int       @id @default(autoincrement())
   title           String    @db.VarChar(255)
   slug            String    @unique @db.VarChar(255)
-  content         String    @db.LongText
+  content         String    @db.Text
   excerpt         String?   @db.VarChar(500)
   metaTitle       String?   @map("meta_title") @db.VarChar(255)
   metaDescription String?   @map("meta_description") @db.VarChar(500)

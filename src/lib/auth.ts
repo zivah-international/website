@@ -32,7 +32,7 @@ export const authOptions = {
           const userQuery = `
             SELECT id, email, password, full_name AS name, role, is_active
             FROM users
-            WHERE email = ? AND is_active = true
+            WHERE email = $1 AND is_active = true
           `;
           const userResult = await query<AuthUserRow>(userQuery, [credentials.email]);
 
@@ -51,7 +51,7 @@ export const authOptions = {
             const updateQuery = `
               UPDATE users
               SET last_login = NOW(), login_count = login_count + 1
-              WHERE id = ?
+              WHERE id = $1
             `;
             await query(updateQuery, [user.id]);
           } catch (updateError) {

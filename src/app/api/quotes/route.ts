@@ -24,14 +24,17 @@ export async function GET(request: NextRequest) {
 
     const where: string[] = [];
     const params: unknown[] = [];
+    let paramIndex = 1;
 
     if (status) {
-      where.push(`q.status = ?`);
+      where.push(`q.status = $${paramIndex}`);
       params.push(status);
+      paramIndex++;
     }
     if (userId) {
-      where.push(`q.user_id = ?`);
+      where.push(`q.user_id = $${paramIndex}`);
       params.push(parseInt(userId));
+      paramIndex++;
     }
 
     const whereClause = where.length > 0 ? `WHERE ${where.join(' AND ')}` : '';
@@ -79,6 +82,8 @@ export async function GET(request: NextRequest) {
     };
 
     const offset = (page - 1) * pageSize;
+    const limitParamIndex = paramIndex;
+    const offsetParamIndex = paramIndex + 1;
 
     const [quotesResult, total] = await Promise.all([
       query<QuoteRow>(
@@ -92,7 +97,7 @@ export async function GET(request: NextRequest) {
         LEFT JOIN users u ON q.user_id = u.id
         ${whereClause}
         ORDER BY q.created_at DESC
-        LIMIT ? OFFSET ?
+        LIMIT $${limitParamIndex} OFFSET $${offsetParamIndex}
       `,
         [...params, pageSize, offset]
       ),
@@ -112,7 +117,7 @@ export async function GET(request: NextRequest) {
     const communicationsByQuote: Record<number, QuoteCommunicationRow[]> = {};
 
     if (quoteIds.length > 0) {
-      const placeholders = quoteIds.map(() => '?').join(',');
+      const placeholders = quoteIds.map((_, i) => `$${i + 1}`).join(',');
 
       const items = await query<QuoteItemRow>(
         `
@@ -269,19 +274,20 @@ export async function POST(request: NextRequest) {
       type LastQuoteRow = { id: number };
 
       // Lock the last quote row to avoid race conditions when generating the next number
-      const [lastQuoteResult] = (await client.execute(
+      const lastQuoteResult = await client.query<LastQuoteRow>(
         `SELECT id FROM quotes ORDER BY id DESC LIMIT 1 FOR UPDATE`
-      )) as [LastQuoteRow[], unknown];
-      const lastQuoteId = lastQuoteResult[0]?.id ?? 0;
+      );
+      const lastQuoteId = lastQuoteResult.rows[0]?.id ?? 0;
       const quoteNumber = `Q${String(lastQuoteId + 1).padStart(6, '0')}`;
 
       // Insert quote
-      const [quoteResult] = await client.execute(
+      const quoteResult = await client.query(
         `
         INSERT INTO quotes (
           quote_number, customer_name, customer_email, customer_phone, company,
           country_id, shipping_address, message, status, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
+        RETURNING id
       `,
         [
           quoteNumber,
@@ -296,18 +302,17 @@ export async function POST(request: NextRequest) {
         ]
       );
 
-      const quoteResultWithId = quoteResult as { insertId: number };
-      const quoteId = quoteResultWithId.insertId;
+      const quoteId = quoteResult.rows[0].id;
 
       // Insert quote items
       if (validatedData.items.length > 0) {
         const now = new Date();
         for (const item of validatedData.items) {
-          await client.execute(
+          await client.query(
             `
             INSERT INTO quote_items (
               quote_id, product_id, measure_id, quantity, unit_price, total_price, notes, specifications, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
           `,
             [
               quoteId,
@@ -326,22 +331,22 @@ export async function POST(request: NextRequest) {
       }
 
       // Get complete quote with relations
-      const [completeQuote] = await client.execute(
+      const completeQuote = await client.query(
         `
         SELECT
           q.*,
-          JSON_OBJECT(
+          json_build_object(
             'id', u.id,
             'name', u.full_name,
             'email', u.email,
             'company', u.company
           ) as user,
-          JSON_OBJECT(
+          json_build_object(
             'name', c.name
           ) as country,
           COALESCE(
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
+            json_agg(
+              json_build_object(
                 'id', qi.id,
                 'productId', qi.product_id,
                 'measureId', qi.measure_id,
@@ -350,27 +355,26 @@ export async function POST(request: NextRequest) {
                 'totalPrice', qi.total_price,
                 'notes', qi.notes,
                 'specifications', qi.specifications,
-                'product', JSON_OBJECT(
+                'product', json_build_object(
                   'id', p.id,
                   'name', p.name,
                   'sku', p.sku
                 )
               )
-            ), JSON_ARRAY()
+            ) FILTER (WHERE qi.id IS NOT NULL), '[]'::json
           ) as items
         FROM quotes q
         LEFT JOIN users u ON q.user_id = u.id
         LEFT JOIN countries c ON q.country_id = c.id
         LEFT JOIN quote_items qi ON q.id = qi.quote_id
         LEFT JOIN products p ON qi.product_id = p.id
-        WHERE q.id = ?
+        WHERE q.id = $1
         GROUP BY q.id, u.id, c.id
       `,
         [quoteId]
       );
 
-      const completeQuoteArray = completeQuote as Array<Record<string, unknown>>;
-      const quoteData = completeQuoteArray[0];
+      const quoteData = completeQuote.rows[0];
 
       // Parse JSON fields
       return parseJsonFields(quoteData, ['user', 'country', 'items', 'shipping_address']);
@@ -410,8 +414,8 @@ export async function POST(request: NextRequest) {
         await query(
           `
           UPDATE quotes
-          SET email_status = ?, email_sent_at = ?, updated_at = NOW()
-          WHERE id = ?
+          SET email_status = $1, email_sent_at = $2, updated_at = NOW()
+          WHERE id = $3
         `,
           [emailSent ? 'sent' : 'failed', emailSent ? new Date() : null, quote.id]
         );
@@ -431,7 +435,7 @@ export async function POST(request: NextRequest) {
       `
       INSERT INTO activity_logs (
         action, entity_type, entity_id, details, created_at
-      ) VALUES (?, ?, ?, ?, NOW())
+      ) VALUES ($1, $2, $3, $4, NOW())
     `,
       [
         'CREATE_QUOTE',
