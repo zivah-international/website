@@ -1,6 +1,7 @@
 'use client';
 
 import Head from 'next/head';
+import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
 interface SEOProps {
@@ -21,17 +22,9 @@ interface SEOProps {
 }
 
 export default function SEO({
-  title = 'ZIVAH International S.A. - Exportadores de Productos Ecuatorianos Premium',
-  description = 'ZIVAH International S.A. - Exportadores líderes de productos ecuatorianos premium desde Ecuador hacia el mundo. Con sede principal en Samborondón, Guayas y oficina de distribución en Miami.',
-  keywords = [
-    'exportación ecuador',
-    'frutas tropicales',
-    'camarón ecuatoriano',
-    'larvas acuicultura',
-    'cafe arabica',
-    'productos marinos',
-    'miami exportadores',
-  ],
+  title,
+  description,
+  keywords,
   image = 'https://zivahinternational.com/assets/images/zivah-og-image.jpg',
   url = 'https://zivahinternational.com/',
   type = 'website',
@@ -44,16 +37,24 @@ export default function SEO({
   noindex = false,
   structuredData,
 }: SEOProps) {
+  const t = useTranslations('metadata');
+  const tSeo = useTranslations('seo');
+
+  // Use props or fallback to translations
+  const seoTitle = title ?? t('title');
+  const seoDescription = description ?? t('description');
+  const seoKeywords = keywords ?? t('keywords').split(', ');
+
   useEffect(() => {
     // Update meta tags dynamically
     const updateMetaTags = () => {
       // Update title
       if (typeof document !== 'undefined') {
-        document.title = title;
+        document.title = seoTitle;
 
         // Update or create meta tags
-        updateMetaTag('description', description);
-        updateMetaTag('keywords', keywords.join(', '));
+        updateMetaTag('description', seoDescription);
+        updateMetaTag('keywords', seoKeywords.join(', '));
         updateMetaTag('author', author);
         updateMetaTag(
           'robots',
@@ -63,8 +64,8 @@ export default function SEO({
         );
 
         // Open Graph
-        updateMetaTag('og:title', title, 'property');
-        updateMetaTag('og:description', description, 'property');
+        updateMetaTag('og:title', seoTitle, 'property');
+        updateMetaTag('og:description', seoDescription, 'property');
         updateMetaTag('og:image', image, 'property');
         updateMetaTag('og:url', url, 'property');
         updateMetaTag('og:type', type, 'property');
@@ -72,8 +73,8 @@ export default function SEO({
 
         // Twitter Card
         updateMetaTag('twitter:card', 'summary_large_image');
-        updateMetaTag('twitter:title', title);
-        updateMetaTag('twitter:description', description);
+        updateMetaTag('twitter:title', seoTitle);
+        updateMetaTag('twitter:description', seoDescription);
         updateMetaTag('twitter:image', image);
         updateMetaTag('twitter:site', '@ZivahIntl');
         updateMetaTag('twitter:creator', '@ZivahIntl');
@@ -94,9 +95,9 @@ export default function SEO({
 
     updateMetaTags();
   }, [
-    title,
-    description,
-    keywords,
+    seoTitle,
+    seoDescription,
+    seoKeywords,
     image,
     url,
     type,
@@ -145,9 +146,9 @@ export default function SEO({
       name: 'ZIVAH International S.A.',
       url: 'https://zivahinternational.com',
       logo: 'https://zivahinternational.com/assets/images/zivah-logo.svg',
-      description,
+      description: seoDescription,
       foundingDate: '2020',
-      industry: 'Exportación de productos ecuatorianos',
+      industry: tSeo('industry'),
       address: {
         '@type': 'PostalAddress',
         streetAddress: 'Casa Matriz Mz 10 S L 31',
@@ -171,38 +172,38 @@ export default function SEO({
       ],
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
-        name: 'Productos Ecuatorianos Premium',
+        name: tSeo('catalogName'),
         itemListElement: [
           {
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Product',
-              name: 'Frutas Tropicales',
-              description: 'Mango, piña, banano, papaya y frutas exóticas ecuatorianas',
+              name: tSeo('tropicalFruits'),
+              description: tSeo('tropicalFruitsDesc'),
             },
           },
           {
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Product',
-              name: 'Camarón',
-              description: 'Camarón vannamei premium con certificación internacional',
+              name: tSeo('shrimp'),
+              description: tSeo('shrimpDesc'),
             },
           },
           {
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Product',
-              name: 'Café',
-              description: 'Café arábica de altura ecuatoriano premium',
+              name: tSeo('coffee'),
+              description: tSeo('coffeeDesc'),
             },
           },
           {
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Product',
-              name: 'Larvas de Acuicultura',
-              description: 'Larvas de alta calidad para proyectos acuícolas',
+              name: tSeo('aquacultureLarvae'),
+              description: tSeo('aquacultureLarvaeDesc'),
             },
           },
         ],
@@ -214,7 +215,7 @@ export default function SEO({
       return {
         ...baseData,
         '@type': 'Article',
-        headline: title,
+        headline: seoTitle,
         image,
         author: {
           '@type': 'Organization',
@@ -242,9 +243,9 @@ export default function SEO({
       return {
         ...baseData,
         '@type': 'Product',
-        name: title,
+        name: seoTitle,
         image,
-        description,
+        description: seoDescription,
         brand: {
           '@type': 'Brand',
           name: 'ZIVAH International S.A.',
@@ -266,14 +267,14 @@ export default function SEO({
 
   return (
     <Head>
-      <title>{title}</title>
+      <title>{seoTitle}</title>
       <meta
         name='description'
-        content={description}
+        content={seoDescription}
       />
       <meta
         name='keywords'
-        content={keywords.join(', ')}
+        content={seoKeywords.join(', ')}
       />
       <meta
         name='author'
@@ -291,11 +292,11 @@ export default function SEO({
       {/* Open Graph */}
       <meta
         property='og:title'
-        content={title}
+        content={seoTitle}
       />
       <meta
         property='og:description'
-        content={description}
+        content={seoDescription}
       />
       <meta
         property='og:image'
@@ -321,11 +322,11 @@ export default function SEO({
       />
       <meta
         name='twitter:title'
-        content={title}
+        content={seoTitle}
       />
       <meta
         name='twitter:description'
-        content={description}
+        content={seoDescription}
       />
       <meta
         name='twitter:image'

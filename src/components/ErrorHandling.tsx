@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -54,35 +55,37 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
 // Default error fallback component
 function ErrorFallback({ error, reset }: { error: Error; reset: () => void }) {
+  const t = useTranslations('common');
+
   return (
     <div className='flex min-h-screen items-center justify-center bg-gray-50 p-4 dark:bg-gray-900'>
       <div className='w-full max-w-md rounded-lg bg-white p-8 text-center shadow-lg dark:bg-gray-800'>
         <div className='mb-4 text-6xl'>⚠️</div>
-        <h2 className='mb-4 text-2xl font-bold text-gray-900 dark:text-white'>Algo salió mal</h2>
-        <p className='mb-6 text-gray-600 dark:text-gray-400'>
-          Ha ocurrido un error inesperado. Por favor, intenta recargar la página.
-        </p>
+        <h2 className='mb-4 text-2xl font-bold text-gray-900 dark:text-white'>
+          {t('somethingWentWrong')}
+        </h2>
+        <p className='mb-6 text-gray-600 dark:text-gray-400'>{t('unexpectedError')}</p>
 
         <div className='space-y-3'>
           <Button
             onClick={reset}
             className='w-full'
           >
-            Intentar de nuevo
+            {t('tryAgain')}
           </Button>
           <Button
             onClick={() => window.location.reload()}
             variant='secondary'
             className='w-full'
           >
-            Recargar página
+            {t('reloadPage')}
           </Button>
         </div>
 
         {process.env.NODE_ENV === 'development' && (
           <details className='mt-6 text-left'>
             <summary className='cursor-pointer text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'>
-              Detalles técnicos
+              {t('technicalDetails')}
             </summary>
             <pre className='mt-2 overflow-auto rounded bg-gray-100 p-3 text-xs dark:bg-gray-700'>
               {error.message}
@@ -98,11 +101,14 @@ function ErrorFallback({ error, reset }: { error: Error; reset: () => void }) {
 // Loading spinner component
 export function LoadingSpinner({
   size = 'md',
-  message = 'Cargando...',
+  message,
 }: {
   size?: 'sm' | 'md' | 'lg';
   message?: string;
 }) {
+  const t = useTranslations('common');
+  const displayMessage = message ?? t('loading');
+
   const sizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-8 h-8',
@@ -114,7 +120,9 @@ export function LoadingSpinner({
       <div
         className={`${sizeClasses[size]} border-accent/20 border-t-accent mb-4 animate-spin rounded-full border-4`}
       />
-      {message && <p className='text-sm text-gray-600 dark:text-gray-400'>{message}</p>}
+      {displayMessage && (
+        <p className='text-sm text-gray-600 dark:text-gray-400'>{displayMessage}</p>
+      )}
     </div>
   );
 }
@@ -174,6 +182,7 @@ export function ContentSkeleton() {
 
 // Network status indicator
 export function NetworkStatus() {
+  const t = useTranslations('common');
   const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
@@ -195,7 +204,7 @@ export function NetworkStatus() {
     <div className='fixed right-4 bottom-4 z-50 rounded-lg bg-red-600 px-4 py-2 text-white shadow-lg'>
       <div className='flex items-center space-x-2'>
         <div className='h-2 w-2 animate-pulse rounded-full bg-white' />
-        <span className='text-sm font-medium'>Sin conexión</span>
+        <span className='text-sm font-medium'>{t('offline')}</span>
       </div>
     </div>
   );

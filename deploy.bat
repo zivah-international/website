@@ -15,14 +15,34 @@ if exist deploy rmdir /s /q deploy
 mkdir deploy
 
 echo Copying files for Standalone Mode...
-REM Copy standalone build content (includes minimal node_modules and server.js)
-xcopy .next\standalone\* deploy\ /e /i /h /y
+REM Copy standalone build content EXCLUDING node_modules (CloudLinux manages node_modules via symlink)
+REM First create exclusion file
+echo node_modules> deploy_exclude.txt
+xcopy .next\standalone\* deploy\ /e /i /h /y /exclude:deploy_exclude.txt
+del deploy_exclude.txt
+
+REM Remove node_modules if it was copied (belt and suspenders)
+if exist deploy\node_modules rmdir /s /q deploy\node_modules
 
 REM Copy static assets (required for standalone)
 mkdir deploy\.next\static
 xcopy .next\static deploy\.next\static\ /e /i /h /y
 mkdir deploy\public
 xcopy public deploy\public\ /e /i /h /y
+
+REM Copy package.json for CloudLinux NodeJS Selector compatibility
+copy package.json deploy\package.json /y
+copy package-lock.json deploy\package-lock.json /y 2>nul
+
+REM Copy prisma schema (needed for Prisma client)
+mkdir deploy\prisma
+copy prisma\schema.prisma deploy\prisma\schema.prisma /y
+
+REM Copy generated prisma client
+if exist generated\prisma (
+    mkdir deploy\generated\prisma
+    xcopy generated\prisma deploy\generated\prisma\ /e /i /h /y
+)
 
 REM Copy helpers
 REM .env configured manually on server

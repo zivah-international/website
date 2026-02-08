@@ -1949,6 +1949,559 @@ async function main() {
   console.log('  - Larvas de Camarón correctly categorized under Marinos y de la Pesca');
   console.log('  - All products from static page now available in database');
 
+  // =====================================================
+  // INTERNATIONALIZATION (i18n) SEEDING
+  // =====================================================
+  console.log('🌐 Creating languages...');
+
+  const spanishLang = await prisma.language.upsert({
+    where: { code: 'es' },
+    update: {},
+    create: {
+      code: 'es',
+      name: 'Spanish',
+      nativeName: 'Español',
+      isActive: true,
+      isDefault: true,
+      sortOrder: 1,
+    },
+  });
+
+  const englishLang = await prisma.language.upsert({
+    where: { code: 'en' },
+    update: {},
+    create: {
+      code: 'en',
+      name: 'English',
+      nativeName: 'English',
+      isActive: true,
+      isDefault: false,
+      sortOrder: 2,
+    },
+  });
+
+  console.log('📝 Creating category translations...');
+
+  // Category translations - English versions
+  const categoryTranslations = [
+    {
+      slug: 'agricolas',
+      en: {
+        name: 'Agricultural Products',
+        description:
+          "Banana: Ecuador is one of the largest exporters of bananas worldwide. Cocoa: The country is a major exporter of fine aroma cocoa, used in premium chocolate production. Flowers: Ecuador is a major flower producer, especially roses, and is one of the world's leading exporters. Coffee: The country grows various coffee varieties, exporting aromatic and highly demanded products. Other fruits: Other fruits such as pineapple, broccoli, and fruit juices and preserves are also exported.",
+      },
+    },
+    {
+      slug: 'marinos-y-pesca',
+      en: {
+        name: 'Marine and Fishing Products',
+        description:
+          'Shrimp: Ecuador is a world leader in crustacean exports, mainly shrimp and prawns. Fish: Fish exports include tuna, as well as processed and canned products.',
+      },
+    },
+    {
+      slug: 'otros-productos',
+      en: {
+        name: 'Other Products',
+        description:
+          'Manufactures: Some manufactures are exported, such as metal products and banana derivatives. Wood: Wood is another export product of the country. Oils and fats: Products such as palm oil and fish oils are also included.',
+      },
+    },
+  ];
+
+  for (const catTrans of categoryTranslations) {
+    const category = await prisma.category.findUnique({ where: { slug: catTrans.slug } });
+    if (category) {
+      // Spanish translation (original data)
+      await prisma.categoryTranslation.upsert({
+        where: { categoryId_languageId: { categoryId: category.id, languageId: spanishLang.id } },
+        update: {},
+        create: {
+          categoryId: category.id,
+          languageId: spanishLang.id,
+          name: category.name,
+          description: category.description,
+        },
+      });
+
+      // English translation
+      await prisma.categoryTranslation.upsert({
+        where: { categoryId_languageId: { categoryId: category.id, languageId: englishLang.id } },
+        update: {},
+        create: {
+          categoryId: category.id,
+          languageId: englishLang.id,
+          name: catTrans.en.name,
+          description: catTrans.en.description,
+        },
+      });
+    }
+  }
+
+  console.log('📝 Creating product translations...');
+
+  // Product translations - English versions
+  const productTranslations = [
+    {
+      slug: 'banano-cavendish-premium',
+      en: {
+        name: 'Premium Cavendish Banana',
+        description:
+          "Premium export Cavendish banana grown on the Ecuadorian coast. Ecuador is one of the world's largest banana exporters with excellent quality and shelf life.",
+        shortDescription: 'Premium export banana with international certification',
+      },
+    },
+    {
+      slug: 'cacao-fino-aroma',
+      en: {
+        name: 'Fine Aroma National Cocoa',
+        description:
+          'Ecuadorian Nacional fine aroma cocoa, recognized worldwide for its superior quality for premium chocolate. Ecuador is a leader in fine cocoa exports.',
+        shortDescription: 'National fine aroma cocoa for premium chocolate',
+      },
+    },
+    {
+      slug: 'camaron-blanco-premium',
+      en: {
+        name: 'Premium White Shrimp',
+        description:
+          'Litopenaeus vannamei white shrimp from Ecuadorian aquaculture farms. Ecuador is a world leader in shrimp exports with the highest quality and international certifications.',
+        shortDescription: 'HACCP and BRC certified fresh white shrimp',
+      },
+    },
+    {
+      slug: 'cafe-arabica-altura',
+      en: {
+        name: 'High Altitude Arabica Coffee',
+        description:
+          "High altitude Arabica coffee grown in Ecuador's Andes mountains. Specialty coffee with notes of chocolate, citrus fruits, and caramel.",
+        shortDescription: 'Specialty coffee with unique flavor notes',
+      },
+    },
+    {
+      slug: 'brocoli-crown',
+      en: {
+        name: 'Crown Broccoli',
+        description:
+          "Fresh broccoli from Ecuador's highlands, grown at high altitude for optimal quality. Tight, compact florets with vibrant green color.",
+        shortDescription: 'Fresh highland broccoli IQF',
+      },
+    },
+    {
+      slug: 'maracuya-pulpa',
+      en: {
+        name: 'Passion Fruit Pulp',
+        description:
+          'Concentrated passion fruit pulp from Ecuador, intense tropical flavor ideal for juices, smoothies, and desserts.',
+        shortDescription: 'Frozen concentrated passion fruit',
+      },
+    },
+    {
+      slug: 'mango-tommy-atkins',
+      en: {
+        name: 'Tommy Atkins Mango',
+        description:
+          "Tommy Atkins mango for export, cultivated on Ecuador's tropical coast. Sweet, juicy pulp with excellent shelf life.",
+        shortDescription: 'Export quality tropical mango',
+      },
+    },
+    {
+      slug: 'pitahaya-amarilla',
+      en: {
+        name: 'Yellow Dragon Fruit',
+        description:
+          "Exotic yellow dragon fruit (pitahaya) from Ecuador, highly valued for its unique flavor and health properties. Ecuador's exclusive export product.",
+        shortDescription: 'Exotic Ecuadorian dragon fruit',
+      },
+    },
+    {
+      slug: 'langostino-tigre',
+      en: {
+        name: 'Tiger Prawns',
+        description:
+          'Giant tiger prawns from Ecuadorian aquaculture, farmed under strict quality standards. Firm flesh with exceptional flavor.',
+        shortDescription: 'Premium aquaculture tiger prawns',
+      },
+    },
+    {
+      slug: 'tilapia-filetes',
+      en: {
+        name: 'Tilapia Fillets',
+        description:
+          'Fresh tilapia fillets from Ecuadorian farms. White, mild-flavored flesh, ideal for diverse culinary preparations.',
+        shortDescription: 'Fresh fish fillets IQF',
+      },
+    },
+    {
+      slug: 'aceite-palma-refinado',
+      en: {
+        name: 'Refined Palm Oil',
+        description:
+          'Refined palm oil from sustainable Ecuadorian plantations. Versatile vegetable oil for food and industrial industry.',
+        shortDescription: 'Certified sustainable palm oil',
+      },
+    },
+    {
+      slug: 'teca-madera-aserrada',
+      en: {
+        name: 'Teak Lumber',
+        description:
+          "High quality teak lumber from Ecuador's sustainable plantations. Premium hardwood for furniture, construction, and shipbuilding.",
+        shortDescription: 'FSC certified premium hardwood',
+      },
+    },
+    {
+      slug: 'balsa-madera',
+      en: {
+        name: 'Balsa Wood',
+        description:
+          "Ecuadorian balsa wood, the world's lightest commercial wood. Ecuador supplies over 95% of world balsa production.",
+        shortDescription: 'Ultralight wood for specialized uses',
+      },
+    },
+    {
+      slug: 'harina-pescado',
+      en: {
+        name: 'Fish Meal',
+        description:
+          'High protein fish meal derived from the Ecuadorian fishing industry. Essential ingredient for animal feed and aquaculture.',
+        shortDescription: 'High protein feed ingredient',
+      },
+    },
+    {
+      slug: 'tagua-marfil-vegetal',
+      en: {
+        name: 'Vegetable Ivory Tagua',
+        description:
+          "Tagua or vegetable ivory, an ecological and sustainable alternative to animal ivory. Ecuador is the world's leading producer.",
+        shortDescription: 'Ecological ivory alternative',
+      },
+    },
+    {
+      slug: 'chips-banano',
+      en: {
+        name: 'Banana Chips',
+        description:
+          'Crunchy banana chips made from premium Ecuadorian bananas. Natural healthy snack available in various flavors.',
+        shortDescription: 'Crunchy natural banana snack',
+      },
+    },
+    {
+      slug: 'palmito-conserva',
+      en: {
+        name: 'Canned Hearts of Palm',
+        description:
+          'Hearts of palm from sustainable plantations in Ecuador. Delicate flavor and tender texture, ideal for salads and gourmet dishes.',
+        shortDescription: 'Gourmet hearts of palm in brine',
+      },
+    },
+    {
+      slug: 'quinua-organica',
+      en: {
+        name: 'Organic Quinoa',
+        description:
+          "Organic quinoa grown in Ecuador's highlands. Ancient grain with high protein and essential amino acid content.",
+        shortDescription: 'Andean superfood',
+      },
+    },
+    {
+      slug: 'uvilla-deshidratada',
+      en: {
+        name: 'Dried Golden Berries',
+        description:
+          'Dried golden berries (physalis), Andean fruit rich in antioxidants and vitamins. Natural sweet and sour flavor.',
+        shortDescription: 'Andean fruit rich in antioxidants',
+      },
+    },
+    {
+      slug: 'naranjilla-pulpa',
+      en: {
+        name: 'Naranjilla Pulp',
+        description:
+          'Frozen naranjilla pulp, unique Ecuadorian citrus fruit with a flavor between green tomato and citrus. Ideal for juices and cocktails.',
+        shortDescription: 'Exotic Andean citrus pulp',
+      },
+    },
+    {
+      slug: 'guanabana-pulpa',
+      en: {
+        name: 'Soursop Pulp',
+        description:
+          'Frozen soursop pulp, tropical fruit with creamy texture and unique sweet-sour flavor. Highly valued for health properties.',
+        shortDescription: 'Tropical fruit with health properties',
+      },
+    },
+    {
+      slug: 'almendras-tropicales',
+      en: {
+        name: 'Tropical Almonds',
+        description:
+          'Tropical almonds from Ecuadorian varieties. Traditional cultivation with modern methods.',
+        shortDescription: 'Ecuadorian variety almonds',
+      },
+    },
+    // Missing translations - fixing slug mismatches and adding new ones
+    {
+      slug: 'rosas-rojas-premium',
+      en: {
+        name: 'Premium Red Roses',
+        description:
+          "Red roses from Ecuador's highlands. Ecuador is one of the world's leading flower exporters, especially high-quality roses.",
+        shortDescription: 'Premium roses with MPS certification',
+      },
+    },
+    {
+      slug: 'larvas-camaron-postlarva',
+      en: {
+        name: 'Shrimp Post-Larvae',
+        description:
+          'Pathogen-free shrimp larvae produced in certified laboratories with cutting-edge technology for sustainable aquaculture and Ecuadorian shrimp sector development.',
+        shortDescription: 'Certified shrimp larvae for aquaculture',
+      },
+    },
+    {
+      slug: 'aguacate-hass-premium',
+      en: {
+        name: 'Aguacate Hass Premium',
+        description:
+          "Premium Hass avocado from Ecuador's highlands. Exceptional quality for international export.",
+        shortDescription: 'Premium quality Hass avocado',
+      },
+    },
+    {
+      slug: 'atun-fresco-pacifico',
+      en: {
+        name: 'Fresh Pacific Tuna',
+        description:
+          "Fresh tuna caught in Pacific waters off Ecuador's coast. Quick freezing to preserve freshness and quality.",
+        shortDescription: 'Fresh Pacific tuna',
+      },
+    },
+    {
+      slug: 'calabaza-premium',
+      en: {
+        name: 'Premium Squash',
+        description:
+          'Premium squash cultivated in Ecuador with specialized techniques for excellent quality.',
+        shortDescription: 'Premium export squash',
+      },
+    },
+    {
+      slug: 'camote-dulce',
+      en: {
+        name: 'Sweet Potato',
+        description:
+          'Sweet potato from Ecuadorian tropical lands. Rich in nutrients and natural sweetness.',
+        shortDescription: 'Tropical sweet potato',
+      },
+    },
+    {
+      slug: 'cana-azucar',
+      en: {
+        name: 'Sugar Cane',
+        description:
+          "Sugar cane from Ecuador's coastal lowlands. Quality cane for sugar and derivative production.",
+        shortDescription: 'Premium sugar cane',
+      },
+    },
+    {
+      slug: 'cebolla-premium',
+      en: {
+        name: 'Premium Onion',
+        description:
+          "Onion cultivated in Ecuador's highlands. Excellent quality for export and local consumption.",
+        shortDescription: 'Highland premium onion',
+      },
+    },
+    {
+      slug: 'chayote-organico',
+      en: {
+        name: 'Organic Chayote',
+        description:
+          'Organic chayote from Ecuador. Versatile vegetable with mild flavor and crunchy texture.',
+        shortDescription: 'Certified organic chayote',
+      },
+    },
+    {
+      slug: 'coco-tropical',
+      en: {
+        name: 'Tropical Coconut',
+        description: "Coconut from Ecuador's tropical coast. Fresh and quality for export.",
+        shortDescription: 'Fresh tropical coconut',
+      },
+    },
+    {
+      slug: 'curcuma',
+      en: {
+        name: 'Turmeric',
+        description:
+          'Fresh turmeric grown in Ecuador. Intense color and flavor for culinary and medicinal use.',
+        shortDescription: 'Fresh organic turmeric',
+      },
+    },
+    {
+      slug: 'jengibre-fresco',
+      en: {
+        name: 'Fresh Ginger',
+        description:
+          'Fresh ginger from Ecuador. Intense flavor and superior quality for international markets.',
+        shortDescription: 'Premium fresh ginger',
+      },
+    },
+    {
+      slug: 'name-tropical',
+      en: {
+        name: 'Tropical Yam',
+        description:
+          'Tropical yam from Ecuador. Traditional tuber with excellent nutritional value.',
+        shortDescription: 'Ecuadorian tropical yam',
+      },
+    },
+    {
+      slug: 'nampi',
+      en: {
+        name: 'Nampi',
+        description:
+          'Nampi from Ecuador, root tuber with unique flavor. Traditional in Ecuadorian cuisine.',
+        shortDescription: 'Traditional Ecuadorian tuber',
+      },
+    },
+    {
+      slug: 'palmito-organico',
+      en: {
+        name: 'Organic Hearts of Palm',
+        description:
+          'Organic hearts of palm from sustainable Ecuadorian plantations. Premium quality for gourmet dishes.',
+        shortDescription: 'Certified organic hearts of palm',
+      },
+    },
+    {
+      slug: 'papaya-hawaiana',
+      en: {
+        name: 'Hawaiian Papaya',
+        description:
+          "Hawaiian papaya grown in Ecuador's tropical climate. Sweet and juicy with excellent shelf life.",
+        shortDescription: 'Sweet Hawaiian papaya',
+      },
+    },
+    {
+      slug: 'pina-golden',
+      en: {
+        name: 'Golden Pineapple',
+        description:
+          "Golden pineapple cultivated in Ecuador's optimal tropical climate. Extra sweet with golden color.",
+        shortDescription: 'Extra sweet golden pineapple',
+      },
+    },
+    {
+      slug: 'platano-verde',
+      en: {
+        name: 'Green Plantain',
+        description:
+          'Green plantain from Ecuador, staple in many cuisines. Ideal for frying, baking, or cooking.',
+        shortDescription: 'Premium green plantain',
+      },
+    },
+    {
+      slug: 'yuca-premium',
+      en: {
+        name: 'Premium Cassava',
+        description:
+          'Premium cassava from Ecuador. Versatile tuber with excellent quality for export.',
+        shortDescription: 'Export quality cassava',
+      },
+    },
+    {
+      slug: 'arboles-mango',
+      en: {
+        name: 'Mango Trees',
+        description:
+          'Mango tree seedlings from certified Ecuadorian nurseries. Adaptable varieties for tropical climates.',
+        shortDescription: 'Certified mango tree seedlings',
+      },
+    },
+    {
+      slug: 'arboles-aguacate',
+      en: {
+        name: 'Avocado Trees',
+        description:
+          'Avocado tree seedlings, Hass and other varieties. From certified Ecuadorian nurseries.',
+        shortDescription: 'Certified avocado tree seedlings',
+      },
+    },
+    {
+      slug: 'arboles-citricos',
+      en: {
+        name: 'Citrus Trees',
+        description:
+          'Citrus tree seedlings including orange, lemon, lime, and grapefruit. From certified Ecuadorian nurseries.',
+        shortDescription: 'Certified citrus tree seedlings',
+      },
+    },
+    {
+      slug: 'nueces-macadamia',
+      en: {
+        name: 'Macadamia Nuts',
+        description:
+          'Macadamia nuts from specialized cultivation in Ecuador. Premium quality with certification.',
+        shortDescription: 'Specialized macadamia cultivation',
+      },
+    },
+    {
+      slug: 'nueces-pecanas',
+      en: {
+        name: 'Pecan Nuts',
+        description:
+          'Pecan nuts adapted to the Ecuadorian tropics. Innovative cultivation with specialized techniques.',
+        shortDescription: 'Tropically adapted pecan nuts',
+      },
+    },
+  ];
+
+  // Create translations for all products
+  for (const prodTrans of productTranslations) {
+    const product = await prisma.product.findUnique({ where: { slug: prodTrans.slug } });
+    if (product) {
+      // Spanish translation (original data)
+      await prisma.productTranslation.upsert({
+        where: { productId_languageId: { productId: product.id, languageId: spanishLang.id } },
+        update: {},
+        create: {
+          productId: product.id,
+          languageId: spanishLang.id,
+          name: product.name,
+          description: product.description,
+          shortDescription: product.shortDescription,
+          seoTitle: product.seoTitle,
+          seoDescription: product.seoDescription,
+          isAutoTranslated: false,
+        },
+      });
+
+      // English translation
+      await prisma.productTranslation.upsert({
+        where: { productId_languageId: { productId: product.id, languageId: englishLang.id } },
+        update: {},
+        create: {
+          productId: product.id,
+          languageId: englishLang.id,
+          name: prodTrans.en.name,
+          description: prodTrans.en.description,
+          shortDescription: prodTrans.en.shortDescription,
+          seoTitle: prodTrans.en.name + ' - Zivah International Ecuador',
+          seoDescription: prodTrans.en.shortDescription + '. Premium Ecuadorian export.',
+          isAutoTranslated: false,
+        },
+      });
+    }
+  }
+
+  console.log('✅ Languages and translations created successfully!');
+  console.log('  - 2 languages: Spanish (default), English');
+  console.log('  - 3 category translations (ES/EN)');
+  console.log('  - 26 product translations (ES/EN)');
+
   // Create product prices for different measures
   console.log('💰 Creating product prices...');
 

@@ -1,7 +1,11 @@
+import dns from 'dns';
 import { Pool, PoolClient } from 'pg';
 import { z } from 'zod';
 
 import { logger } from './logger';
+
+// Force IPv4 DNS resolution to avoid IPv6 connectivity issues
+dns.setDefaultResultOrder('ipv4first');
 
 // PostgreSQL connection pool with production-ready settings
 const pool = new Pool({
@@ -10,6 +14,7 @@ const pool = new Pool({
   idleTimeoutMillis: 30000, // Close idle connections after 30s
   connectionTimeoutMillis: 10000, // 10 seconds to establish connection
   allowExitOnIdle: false,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
 // Handle pool errors

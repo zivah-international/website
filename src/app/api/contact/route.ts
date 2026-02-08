@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: true,
-          message: rateLimitCheck.reason || 'Demasiadas solicitudes. Intente nuevamente más tarde.',
+          message: rateLimitCheck.reason || 'Too many requests. Please try again later.',
           timestamp: new Date().toISOString(),
         },
         {
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
 
     return createApiResponse(
       { id: contactSubmission.insertId },
-      'Mensaje enviado exitosamente. Nos pondremos en contacto contigo pronto.',
+      'Message sent successfully. We will contact you soon.',
       201
     );
   } catch (error) {
