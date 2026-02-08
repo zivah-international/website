@@ -1,10 +1,12 @@
 'use client';
 
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { Link } from '@/i18n/routing';
 import { useMounted } from '@/lib/hooks/use-mounted';
 
+import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
 import { Button } from './ui/button';
 
@@ -17,6 +19,7 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const mounted = useMounted();
+  const t = useTranslations('nav');
 
   // Handle scroll effect
   useEffect(() => {
@@ -77,12 +80,12 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
   };
 
   const navigationItems = [
-    { id: 'home', label: 'Inicio', icon: '🏠' },
-    { id: 'products', label: 'Productos', icon: '📦' },
-    { id: 'quote', label: 'Cotizar', icon: '💰' },
-    { id: 'quality', label: 'Calidad', icon: '⭐' },
-    { id: 'markets', label: 'Mercados', icon: '🌍' },
-    { id: 'contact', label: 'Contacto', icon: '📞' },
+    { id: 'home', label: t('home'), icon: '🏠' },
+    { id: 'products', label: t('products'), icon: '📦' },
+    { id: 'quote', label: t('quote'), icon: '💰' },
+    { id: 'quality', label: t('quality'), icon: '⭐' },
+    { id: 'markets', label: t('markets'), icon: '🌍' },
+    { id: 'contact', label: t('contact'), icon: '📞' },
   ];
 
   // Use consistent className order to prevent hydration mismatch
@@ -152,10 +155,7 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
           <div className='flex items-center space-x-3'>
             {/* Language Selector */}
             <div className='hidden md:block'>
-              <select className='rounded-lg border border-gray-300 bg-white px-3 py-1 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100'>
-                <option value='es'>🇪🇨 ES</option>
-                <option value='en'>🇺🇸 EN</option>
-              </select>
+              <LanguageSwitcher />
             </div>
 
             {/* Theme Toggle */}
@@ -169,7 +169,7 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
               className='hidden items-center shadow-md hover:shadow-lg md:inline-flex'
             >
               <span className='mr-2'>💬</span>
-              Cotizar
+              {t('quote')}
             </Button>
 
             {/* Mobile Menu Button */}
@@ -230,22 +230,19 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
             <div className='mt-6 border-t border-gray-200 pt-4 dark:border-gray-700'>
               <div className='mb-4 flex items-center justify-between'>
                 <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                  Idioma:
+                  {t('language')}
                 </span>
-                <select className='rounded-lg border border-gray-300 bg-white px-3 py-1 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100'>
-                  <option value='es'>🇪🇨 Español</option>
-                  <option value='en'>🇺🇸 English</option>
-                </select>
+                <LanguageSwitcher />
               </div>
 
               <Button
-                onClick={() => scrollToSection('cotizar')}
+                onClick={() => scrollToSection('quote')}
                 variant='accent'
                 size='lg'
                 className='w-full shadow-md'
               >
                 <span className='mr-2'>💬</span>
-                Solicitar Cotización
+                {t('quote')}
               </Button>
             </div>
 
@@ -256,25 +253,25 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
                   href='/legal/privacy-policy'
                   className='text-sm text-gray-600 transition-colors hover:text-green-600 dark:text-gray-400'
                 >
-                  Privacidad
+                  {t('privacy')}
                 </Link>
                 <Link
                   href='/legal/terms-of-service'
                   className='text-sm text-gray-600 transition-colors hover:text-green-600 dark:text-gray-400'
                 >
-                  Términos
+                  {t('terms')}
                 </Link>
                 <Link
                   href='/legal/cookie-policy'
                   className='text-sm text-gray-600 transition-colors hover:text-green-600 dark:text-gray-400'
                 >
-                  Cookies
+                  {t('cookies')}
                 </Link>
                 <Link
                   href='/legal/data-protection'
                   className='text-sm text-gray-600 transition-colors hover:text-green-600 dark:text-gray-400'
                 >
-                  Protección Datos
+                  {t('dataProtection')}
                 </Link>
               </div>
             </div>

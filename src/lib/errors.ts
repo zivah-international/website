@@ -111,11 +111,40 @@ export function handleApiError(error: unknown): NextResponse {
     }
   }
 
-  // Generic server error
+  // Database connection errors (pg driver)
+  if (error && typeof error === 'object' && 'code' in error) {
+    const dbError = error as any;
+    // Common PostgreSQL error codes
+    if (
+      dbError.code === 'ECONNREFUSED' ||
+      dbError.code === '28P01' ||
+      dbError.code === '3D000' ||
+      dbError.code === 'ENOTFOUND'
+    ) {
+      return NextResponse.json(
+        {
+          error: true,
+          message: 'Error de conexión a base de datos',
+          details: dbError.message,
+          code: dbError.code,
+          timestamp: new Date().toISOString(),
+        },
+        { status: 503 }
+      );
+    }
+  }
+
+  // Generic server error - include details for debugging
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  const errorCode =
+    error && typeof error === 'object' && 'code' in error ? (error as any).code : undefined;
+
   return NextResponse.json(
     {
       error: true,
       message: 'Error interno del servidor',
+      details: errorMessage,
+      code: errorCode,
       timestamp: new Date().toISOString(),
     },
     { status: 500 }

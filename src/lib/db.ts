@@ -1,35 +1,31 @@
-import mysql from 'mysql2/promise';
+import dns from 'dns';
+import { Pool, PoolClient } from 'pg';
 import { z } from 'zod';
 
 import { logger } from './logger';
 
-// Enhanced connection pool with production-ready settings
-const pool = mysql.createPool({
-  uri: process.env.DATABASE_URL,
-  waitForConnections: true,
-  connectionLimit: parseInt(process.env.DB_POOL_SIZE || '50'), // Increased for production
-  queueLimit: 0,
-  timezone: '+00:00', // Use UTC timezone
-  charset: 'utf8mb4',
-  // Connection keep-alive and health
-  enableKeepAlive: true,
-  keepAliveInitialDelay: 10000, // 10 seconds
-  // Idle connection management
-  idleTimeout: 60000, // Close idle connections after 60s
-  maxIdle: 10, // Maximum idle connections
-  // Timeouts
-  connectTimeout: 10000, // 10 seconds to establish connection
+// Force IPv4 DNS resolution to avoid IPv6 connectivity issues
+dns.setDefaultResultOrder('ipv4first');
+
+// PostgreSQL connection pool with production-ready settings
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: parseInt(process.env.DB_POOL_SIZE || '20'), // Supabase pooler recommended
+  idleTimeoutMillis: 30000, // Close idle connections after 30s
+  connectionTimeoutMillis: 10000, // 10 seconds to establish connection
+  allowExitOnIdle: false,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+});
+
+// Handle pool errors
+pool.on('error', err => {
+  logger.error('Unexpected pool error:', err);
 });
 
 export interface QueryResult<T = unknown> {
   rows: T[];
   insertId?: number;
   affectedRows?: number;
-}
-
-export interface MySQLResult {
-  insertId: number;
-  affectedRows: number;
 }
 
 export const query = async <T = unknown>(
@@ -54,20 +50,28 @@ export const query = async <T = unknown>(
     }
 
     // Execute query with parameterized values
-    const [rows] = await pool.query(text, queryParams);
+    const result = await pool.query(text, queryParams);
 
-    // Handle INSERT/UPDATE/DELETE results
-    if (rows && typeof rows === 'object' && 'insertId' in rows) {
-      const mysqlResult = rows as MySQLResult;
+    // For INSERT/UPDATE/DELETE, check for RETURNING clause results
+    // PostgreSQL uses RETURNING instead of insertId
+    if (result.command === 'INSERT' && result.rows.length > 0 && result.rows[0]?.id) {
       return {
-        rows: [],
-        insertId: mysqlResult.insertId,
-        affectedRows: mysqlResult.affectedRows,
+        rows: result.rows as T[],
+        insertId: result.rows[0].id,
+        affectedRows: result.rowCount ?? 0,
       } as QueryResult<T>;
     }
 
-    // Handle SELECT results - mysql2 returns arrays directly, not wrapped in rows
-    return { rows: Array.isArray(rows) ? (rows as T[]) : [] };
+    // Handle UPDATE/DELETE results
+    if (result.command === 'UPDATE' || result.command === 'DELETE') {
+      return {
+        rows: result.rows as T[],
+        affectedRows: result.rowCount ?? 0,
+      } as QueryResult<T>;
+    }
+
+    // Handle SELECT results
+    return { rows: result.rows as T[] };
   } catch (error) {
     logger.error('Database query error:', error);
     logger.error('Query:', text);
@@ -140,20 +144,20 @@ export async function disconnectDatabase(): Promise<void> {
 
 // Transaction helper
 export async function withTransaction<T>(
-  operation: (connection: mysql.PoolConnection) => Promise<T>
+  operation: (client: PoolClient) => Promise<T>
 ): Promise<T> {
-  const connection = await pool.getConnection();
+  const client = await pool.connect();
   try {
-    await connection.beginTransaction();
-    const result = await operation(connection);
-    await connection.commit();
+    await client.query('BEGIN');
+    const result = await operation(client);
+    await client.query('COMMIT');
     return result;
   } catch (error) {
-    await connection.rollback();
+    await client.query('ROLLBACK');
     logger.error('Transaction rolled back due to error:', error);
     throw error;
   } finally {
-    connection.release();
+    client.release();
   }
 }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { updateConsent } from './Analytics';
@@ -14,6 +15,7 @@ interface CookiePreferences {
 }
 
 export default function CookieConsent() {
+  const t = useTranslations('cookies');
   const [showBanner, setShowBanner] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -133,17 +135,16 @@ export default function CookieConsent() {
               <div className='mb-3 flex items-center gap-3'>
                 <div className='text-2xl'>🍪</div>
                 <h3 className='text-lg font-semibold text-gray-900 dark:text-white'>
-                  Cookies en ZIVAH International
+                  {t('title')}
                 </h3>
               </div>
               <p className='text-sm leading-relaxed text-gray-700 dark:text-gray-300'>
-                Utilizamos cookies para mejorar su experiencia, analizar el tráfico y personalizar
-                el contenido. Al continuar navegando, acepta nuestro uso de cookies según nuestra{' '}
+                {t('description')}{' '}
                 <Link
                   href='/legal/cookie-policy'
                   className='text-accent dark:text-accent hover:underline'
                 >
-                  Política de Cookies
+                  {t('cookiePolicy')}
                 </Link>
                 .
               </p>
@@ -155,21 +156,21 @@ export default function CookieConsent() {
                 variant='secondary'
                 size='sm'
               >
-                Gestionar Preferencias
+                {t('managePreferences')}
               </Button>
               <Button
                 onClick={acceptNecessaryOnly}
                 variant='outline'
                 size='sm'
               >
-                Solo Necesarias
+                {t('onlyNecessary')}
               </Button>
               <Button
                 onClick={acceptAllCookies}
                 variant='accent'
                 size='sm'
               >
-                Aceptar Todas
+                {t('acceptAll')}
               </Button>
             </div>
           </div>
@@ -183,7 +184,7 @@ export default function CookieConsent() {
             <div className='p-6'>
               <div className='mb-6 flex items-center justify-between'>
                 <h3 className='text-xl font-semibold text-gray-900 dark:text-white'>
-                  Preferencias de Cookies
+                  {t('preferencesTitle')}
                 </h3>
                 <button
                   onClick={() => setShowPreferences(false)}
@@ -198,15 +199,14 @@ export default function CookieConsent() {
                 <div className='rounded-lg border border-gray-200 p-4 dark:border-gray-700'>
                   <div className='mb-3 flex items-center justify-between'>
                     <h4 className='font-semibold text-gray-900 dark:text-white'>
-                      Cookies Necesarias
+                      {t('necessaryCookies')}
                     </h4>
                     <span className='bg-accent/10 dark:bg-accent/20 dark:text-accent rounded px-2 py-1 text-xs text-gray-800'>
-                      Siempre activas
+                      {t('alwaysActive')}
                     </span>
                   </div>
                   <p className='mb-3 text-sm text-gray-600 dark:text-gray-400'>
-                    Estas cookies son esenciales para el funcionamiento del sitio web y no pueden
-                    ser desactivadas.
+                    {t('necessaryDescription')}
                   </p>
                   <div className='flex items-center'>
                     <input
@@ -215,7 +215,9 @@ export default function CookieConsent() {
                       disabled
                       className='mr-3'
                     />
-                    <span className='text-sm text-gray-700 dark:text-gray-300'>Necesarias</span>
+                    <span className='text-sm text-gray-700 dark:text-gray-300'>
+                      {t('necessary')}
+                    </span>
                   </div>
                 </div>
 
@@ -223,10 +225,10 @@ export default function CookieConsent() {
                 <div className='rounded-lg border border-gray-200 p-4 dark:border-gray-700'>
                   <div className='mb-3 flex items-center justify-between'>
                     <h4 className='font-semibold text-gray-900 dark:text-white'>
-                      Cookies de Análisis
+                      {t('analyticsCookies')}
                     </h4>
                     <label className='relative inline-flex cursor-pointer items-center'>
-                      <span className='sr-only'>Habilitar cookies de análisis</span>
+                      <span className='sr-only'>{t('enableAnalytics')}</span>
                       <input
                         type='checkbox'
                         checked={preferences.analytics}
@@ -237,8 +239,7 @@ export default function CookieConsent() {
                     </label>
                   </div>
                   <p className='text-sm text-gray-600 dark:text-gray-400'>
-                    Nos ayudan a entender cómo los visitantes interactúan con nuestro sitio web
-                    mediante la recopilación de información de forma anónima.
+                    {t('analyticsDescription')}
                   </p>
                 </div>
 
@@ -246,10 +247,10 @@ export default function CookieConsent() {
                 <div className='rounded-lg border border-gray-200 p-4 dark:border-gray-700'>
                   <div className='mb-3 flex items-center justify-between'>
                     <h4 className='font-semibold text-gray-900 dark:text-white'>
-                      Cookies Funcionales
+                      {t('functionalCookies')}
                     </h4>
                     <label className='relative inline-flex cursor-pointer items-center'>
-                      <span className='sr-only'>Habilitar cookies funcionales</span>
+                      <span className='sr-only'>{t('enableFunctional')}</span>
                       <input
                         type='checkbox'
                         checked={preferences.functional}
@@ -260,8 +261,7 @@ export default function CookieConsent() {
                     </label>
                   </div>
                   <p className='text-sm text-gray-600 dark:text-gray-400'>
-                    Permiten recordar sus preferencias y configuraciones para mejorar su experiencia
-                    de navegación.
+                    {t('functionalDescription')}
                   </p>
                 </div>
 
@@ -269,10 +269,10 @@ export default function CookieConsent() {
                 <div className='rounded-lg border border-gray-200 p-4 dark:border-gray-700'>
                   <div className='mb-3 flex items-center justify-between'>
                     <h4 className='font-semibold text-gray-900 dark:text-white'>
-                      Cookies de Marketing
+                      {t('marketingCookies')}
                     </h4>
                     <label className='relative inline-flex cursor-pointer items-center'>
-                      <span className='sr-only'>Habilitar cookies de marketing</span>
+                      <span className='sr-only'>{t('enableMarketing')}</span>
                       <input
                         type='checkbox'
                         checked={preferences.marketing}
@@ -283,8 +283,7 @@ export default function CookieConsent() {
                     </label>
                   </div>
                   <p className='text-sm text-gray-600 dark:text-gray-400'>
-                    Se utilizan para mostrar anuncios relevantes y medir la efectividad de nuestras
-                    campañas publicitarias.
+                    {t('marketingDescription')}
                   </p>
                 </div>
               </div>
@@ -296,7 +295,7 @@ export default function CookieConsent() {
                   size='default'
                   className='flex-1'
                 >
-                  Solo Necesarias
+                  {t('onlyNecessary')}
                 </Button>
                 <Button
                   onClick={saveCustomPreferences}
@@ -304,17 +303,17 @@ export default function CookieConsent() {
                   size='default'
                   className='flex-1'
                 >
-                  Guardar Preferencias
+                  {t('savePreferences')}
                 </Button>
               </div>
 
               <p className='mt-4 text-center text-xs text-gray-500 dark:text-gray-400'>
-                Para más información, consulte nuestra{' '}
+                {t('moreInfo')}{' '}
                 <Link
                   href='/legal/cookie-policy'
                   className='text-accent dark:text-accent hover:underline'
                 >
-                  Política de Cookies
+                  {t('cookiePolicy')}
                 </Link>
               </p>
             </div>

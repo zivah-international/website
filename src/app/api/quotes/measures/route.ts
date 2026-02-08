@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 
-import { query } from '@/lib/db';
 import { createApiResponse, handleApiError } from '@/lib/errors';
 import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { createClient } from '@/utils/supabase/server';
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,17 +16,23 @@ export async function GET(request: NextRequest) {
     );
 
     if (!rateLimit.success) {
-      return createApiResponse(null, 'Demasiadas solicitudes. Intente nuevamente más tarde.', 429);
+      return createApiResponse(null, 'Too many requests. Please try again later.', 429);
     }
 
-    const measures = await query(`
-      SELECT id, name, short_name, symbol, type, base_unit, conversion_factor, description
-      FROM measures
-      WHERE is_active = true
-      ORDER BY type ASC, sort_order ASC
-    `);
+    const supabase = await createClient();
 
-    return createApiResponse(measures.rows);
+    const { data: measures, error } = await supabase
+      .from('measures')
+      .select('id, name, short_name, symbol, type, base_unit, conversion_factor, description')
+      .eq('is_active', true)
+      .order('type', { ascending: true })
+      .order('sort_order', { ascending: true });
+
+    if (error) {
+      throw error;
+    }
+
+    return createApiResponse(measures);
   } catch (error) {
     return handleApiError(error);
   }

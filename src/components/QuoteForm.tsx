@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 // Note: Using react-select instead of shadcn Select for advanced features:
@@ -89,6 +90,8 @@ interface QuoteFormProps {
 }
 
 export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
+  const t = useTranslations('quoteForm');
+  const locale = useLocale();
   const [products, setProducts] = useState<QuoteProduct[]>(initialProducts || []);
   const [countries, setCountries] = useState<Country[]>([]);
   const [measures, setMeasures] = useState<Measure[]>([]);
@@ -174,16 +177,16 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         if (!data.error && data.data?.length > 0) {
           setCountries(data.data);
         } else {
-          setCountriesError('No countries available. Please contact support.');
+          setCountriesError(t('noCountriesAvailable'));
         }
       })
-      .catch(error => {
-        setCountriesError('Error loading countries. Please check your connection and try again.');
+      .catch(() => {
+        setCountriesError(t('countriesLoadError'));
       })
       .finally(() => {
         setCountriesLoading(false);
       });
-  }, []);
+  }, [t]);
 
   // Load measures from API
   useEffect(() => {
@@ -234,7 +237,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
 
     try {
       const res = await fetch(
-        `/api/quotes/products/search?q=${encodeURIComponent(query)}&limit=10`
+        `/api/quotes/products/search?q=${encodeURIComponent(query)}&limit=10&locale=${locale}`
       );
       const data = await res.json();
 
@@ -346,17 +349,17 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
           newCalculatedPrices[item.productId] = totalPrice;
         } else {
           const measure = measures.find(m => m.id === item.measureId);
-          newErrors[item.productId] =
-            `Conversion not available from ${product.priceUnit || 'unit'} to ${
-              measure?.shortName || measure?.name || 'unknown unit'
-            }`;
+          newErrors[item.productId] = t('conversionNotAvailable', {
+            from: product.priceUnit || 'unit',
+            to: measure?.shortName || measure?.name || 'unknown unit',
+          });
         }
       }
     });
 
     setCalculatedPrices(newCalculatedPrices);
     setConversionErrors(newErrors);
-  }, [selectedProducts, measures, watchedItems, convertPrice]);
+  }, [selectedProducts, measures, watchedItems, convertPrice, t]);
 
   // Add product to quote with multiple selection support
   const addProduct = (product: QuoteProduct) => {
@@ -445,7 +448,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
       currentItems.map(item => (item.productId === productId ? { ...item, quantity } : item))
     );
 
-    // Recalcular el subtotal con la nueva cantidad
+    // Recalculate subtotal with new quantity
     if (currentItem?.unitPrice) {
       const newTotalPrice = currentItem.unitPrice * quantity;
       setCalculatedPrices(prev => ({
@@ -498,7 +501,10 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
     if (unitPrice === null) {
       setConversionErrors(prev => ({
         ...prev,
-        [productId]: `Cannot convert from ${product.priceUnit || 'unit'} to ${newMeasure.shortName || newMeasure.name}`,
+        [productId]: t('cannotConvert', {
+          from: product.priceUnit || 'unit',
+          to: newMeasure.shortName || newMeasure.name,
+        }),
       }));
     } else {
       setConversionErrors(prev => {
@@ -531,16 +537,16 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
 
     // Check if phone starts with country code
     if (!cleanPhone.startsWith('+') && !cleanPhone.startsWith(callingCode)) {
-      return `El teléfono debe incluir el código ${selectedCountry.callingCode}`;
+      return t('phoneRequiresCode', { code: selectedCountry.callingCode });
     }
 
     // Basic length validation
     if (cleanPhone.length < 10) {
-      return 'El teléfono debe tener al menos 10 dígitos';
+      return t('phoneMinDigits');
     }
 
     if (cleanPhone.length > 20) {
-      return 'El teléfono no puede exceder 20 caracteres';
+      return t('phoneMaxChars');
     }
 
     return null;
@@ -550,7 +556,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
   const calculateTotal = () => {
     const items = watch('items') || [];
     return items.reduce((total, item) => {
-      // Usar precio calculado si existe, sino usar unitPrice
+      // Use calculated price if exists, otherwise use unitPrice
       const price = calculatedPrices[item.productId] || item.unitPrice || 0;
       return total + price;
     }, 0);
@@ -577,7 +583,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
       if (result.success) {
         setSubmitMessage({
           type: 'success',
-          text: `Cotización creada exitosamente. Email enviado a ${data.customerEmail}.`,
+          text: t('quoteCreatedSuccess', { email: data.customerEmail }),
         });
 
         // Track successful quote submission
@@ -612,13 +618,13 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
       } else {
         setSubmitMessage({
           type: 'error',
-          text: result.message || 'Error al crear la cotización',
+          text: result.message || t('errorMessage'),
         });
       }
     } catch (_error) {
       setSubmitMessage({
         type: 'error',
-        text: 'Error de conexión. Intente nuevamente.',
+        text: t('errorMessage'),
       });
     } finally {
       setIsSubmitting(false);
@@ -638,14 +644,14 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               htmlFor='customerName'
               className='text-foreground mb-2 block text-sm font-medium'
             >
-              Nombre Completo *
+              {t('fullName')} *
             </label>
             <input
               {...register('customerName')}
               id='customerName'
               type='text'
               className='bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none'
-              placeholder='Tu nombre completo'
+              placeholder={t('fullNamePlaceholder')}
             />
             {errors.customerName && (
               <p className='text-destructive mt-1 text-sm'>{errors.customerName.message}</p>
@@ -656,14 +662,14 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               htmlFor='customerEmail'
               className='text-foreground mb-2 block text-sm font-medium'
             >
-              Email *
+              {t('email')} *
             </label>
             <input
               {...register('customerEmail')}
               id='customerEmail'
               type='email'
               className='bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none'
-              placeholder='email@empresa.com'
+              placeholder={t('emailPlaceholder')}
             />
             {errors.customerEmail && (
               <p className='text-destructive mt-1 text-sm'>{errors.customerEmail.message}</p>
@@ -674,11 +680,11 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               htmlFor='countryId'
               className='text-foreground mb-2 block text-sm font-medium'
             >
-              País de Destino *
+              {t('destinationCountry')} *
             </label>
             {countriesLoading ? (
               <div className='bg-muted text-muted-foreground border-border w-full rounded-lg border px-4 py-3 backdrop-blur-sm'>
-                Cargando países...
+                {t('loadingCountries')}
               </div>
             ) : countriesError ? (
               <div className='bg-destructive/10 text-destructive border-destructive/30 w-full rounded-lg border px-4 py-3 text-sm'>
@@ -705,7 +711,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                         : null
                     }
                     className='text-foreground'
-                    placeholder='Seleccione el país de destino'
+                    placeholder={t('selectCountry')}
                     isDisabled={countries.length === 0}
                     menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
                     styles={{
@@ -761,16 +767,14 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                 )}
               />
             )}
-            {errors.countryId && (
-              <p className='text-destructive mt-1 text-sm'>Seleccione un país</p>
-            )}
+            {errors.countryId && <p className='text-destructive mt-1 text-sm'>{t('required')}</p>}
           </div>
           <div>
             <label
               htmlFor='customerPhone'
               className='text-foreground mb-2 block text-sm font-medium'
             >
-              Teléfono
+              {t('phone')}
             </label>
             <div className='relative'>
               {watch('countryId') && countries.find(c => c.id === watch('countryId')) && (
@@ -809,13 +813,13 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               htmlFor='company'
               className='text-foreground mb-2 block text-sm font-medium'
             >
-              Empresa
+              {t('company')}
             </label>
             <input
               {...register('company')}
               type='text'
               className='bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none'
-              placeholder='Nombre de tu empresa'
+              placeholder={t('companyPlaceholder')}
             />
           </div>
         </div>
@@ -826,13 +830,13 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
             htmlFor='productSearch'
             className='text-foreground mb-2 block text-sm font-medium'
           >
-            Buscar y Seleccionar Productos *
+            {t('searchProducts')} *
           </label>
           <input
             id='productSearch'
             type='text'
             value={searchQuery}
-            placeholder='Escriba para buscar productos... (ej: rosas, claveles, girasoles)'
+            placeholder={t('searchPlaceholder')}
             onChange={e => searchProducts(e.target.value)}
             onFocus={() => searchQuery.length >= 2 && setShowProductList(true)}
             className='bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none'
@@ -861,7 +865,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                   />
                 </svg>
-                Buscando productos...
+                {t('searchingProducts')}
               </div>
             </div>
           )}
@@ -871,9 +875,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               {products.length > 0 ? (
                 <>
                   <div className='border-border bg-muted/50 border-b p-2'>
-                    <small className='text-muted-foreground'>
-                      Haga clic en los productos para agregar a la cotización
-                    </small>
+                    <small className='text-muted-foreground'>{t('clickToAdd')}</small>
                   </div>
                   {products.map(product => {
                     const isSelected = selectedProducts.find(p => p.id === product.id);
@@ -889,12 +891,12 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                             <div className='flex items-center font-medium'>
                               {product.name}
                               {isSelected && (
-                                <span className='text-accent ml-2 text-sm'>✓ Agregado</span>
+                                <span className='text-accent ml-2 text-sm'>{t('added')}</span>
                               )}
                             </div>
                             <div className='text-muted-foreground text-sm'>
-                              ${product.basePrice || 0} por unidad -{' '}
-                              {product.description || 'Sin descripción'}
+                              ${product.basePrice || 0} {t('perUnitPrice')} -{' '}
+                              {product.description || t('noDescription')}
                             </div>
                             <div className='text-muted-foreground text-xs'>
                               SKU: {product.sku || 'N/A'}
@@ -908,11 +910,9 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               ) : (
                 <div className='text-muted-foreground p-4 text-center'>
                   <div className='text-sm'>
-                    No se encontraron productos para &quot;{searchQuery}&quot;
+                    {t('noProductsFound')} &quot;{searchQuery}&quot;
                   </div>
-                  <div className='text-muted-foreground mt-1 text-xs'>
-                    Intente con otros términos de búsqueda
-                  </div>
+                  <div className='text-muted-foreground mt-1 text-xs'>{t('tryOtherTerms')}</div>
                 </div>
               )}
               <div className='border-border bg-muted/50 border-t p-2'>
@@ -921,7 +921,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                   onClick={() => setShowProductList(false)}
                   className='text-secondary hover:text-secondary/80 text-sm'
                 >
-                  Cerrar lista
+                  {t('closeList')}
                 </button>
               </div>
             </div>
@@ -933,7 +933,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
           <div className='space-y-4'>
             <div className='flex items-center justify-between'>
               <h3 className='text-foreground font-medium'>
-                Productos Seleccionados ({selectedProducts.length})
+                {t('selectedProducts')} ({selectedProducts.length})
               </h3>
               <button
                 type='button'
@@ -943,28 +943,27 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                 }}
                 className='text-destructive hover:text-destructive/80 text-sm'
               >
-                Limpiar todo
+                {t('clearAll')}
               </button>
             </div>
 
             {selectedProducts.length > 0 && (
               <div className='bg-muted/50 border-border rounded-lg border p-3 text-sm'>
                 <p className='text-muted-foreground mb-2'>
-                  💡 <strong>Unidades de medida:</strong>
+                  💡 <strong>{t('measureUnitsHelp')}</strong>
                 </p>
                 <ul className='text-muted-foreground space-y-1 text-xs'>
                   <li>
-                    • <strong>Peso:</strong> kg (kilogramos), MT (toneladas métricas), lb (libras)
+                    • <strong>{t('weightUnits')}</strong>
                   </li>
                   <li>
-                    • <strong>Volumen:</strong> L (litros), m³ (metros cúbicos), gal (galones)
+                    • <strong>{t('volumeUnits')}</strong>
                   </li>
                   <li>
-                    • <strong>Contenedores:</strong> 20ft, 40ft, 40HC (high cube)
+                    • <strong>{t('containerUnits')}</strong>
                   </li>
                   <li>
-                    • <strong>Cantidad:</strong> pcs (piezas), dz (docenas), ctn (cajas), plt
-                    (pallets)
+                    • <strong>{t('quantityUnits')}</strong>
                   </li>
                 </ul>
               </div>
@@ -981,7 +980,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     <div className='text-foreground flex-1'>
                       <div className='font-medium'>{product.name}</div>
                       <div className='text-muted-foreground text-sm'>
-                        {product.description || 'Sin descripción'}
+                        {product.description || t('noDescription')}
                       </div>
                       <div className='text-muted-foreground text-xs'>
                         SKU: {product.sku || 'N/A'}
@@ -1002,7 +1001,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                         htmlFor={`quantity-${product.id}`}
                         className='text-muted-foreground mb-1 block text-xs'
                       >
-                        Cantidad
+                        {t('quantity')}
                       </label>
                       <input
                         id={`quantity-${product.id}`}
@@ -1019,7 +1018,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                         htmlFor={`measure-${product.id}`}
                         className='text-muted-foreground mb-1 block text-xs'
                       >
-                        Unit of Measure
+                        {t('measureUnit')}
                       </label>
                       <select
                         id={`measure-${product.id}`}
@@ -1029,10 +1028,10 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                         title={
                           item?.measureId
                             ? measures.find(m => m.id === item.measureId)?.description
-                            : 'Select a unit of measure'
+                            : t('select')
                         }
                       >
-                        <option value=''>Select unit...</option>
+                        <option value=''>{t('select')}...</option>
                         {(() => {
                           // Get available measures for this product (same family only)
                           const availableMeasures = getAvailableMeasuresForProduct(product);
@@ -1051,20 +1050,13 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                           return Object.entries(measuresByType).map(([type, typeMeasures]) => {
                             if (typeMeasures.length === 0) return null;
 
-                            const typeNames = {
-                              WEIGHT: 'Weight',
-                              VOLUME: 'Volume',
-                              CONTAINER: 'Containers',
-                              QUANTITY: 'Quantity',
-                              LENGTH: 'Length',
-                              COUNT: 'Count',
-                              AREA: 'Area',
-                            };
+                            // Get translated type name
+                            const typeLabel = t(`measureTypes.${type}`) || type;
 
                             return (
                               <optgroup
                                 key={type}
-                                label={typeNames[type as keyof typeof typeNames] || type}
+                                label={typeLabel}
                                 className='text-foreground'
                               >
                                 {typeMeasures.map(measure => {
@@ -1081,7 +1073,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                                       {measure.name} ({measure.shortName})
                                       {measure.symbol && ` - ${measure.symbol}`}
                                       {isAvailable && ` - $${unitPrice.toFixed(2)}`}
-                                      {!isAvailable && ' - Not available'}
+                                      {!isAvailable && ` - ${t('notAvailable')}`}
                                     </option>
                                   );
                                 })}
@@ -1094,10 +1086,14 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
 
                     <div>
                       <label className='text-muted-foreground mb-1 block text-xs'>
-                        Precio Unitario
+                        {t('unitPrice')}
                         {item?.measureId && (
                           <span className='ml-1'>
-                            (por {measures.find(m => m.id === item.measureId)?.shortName})
+                            (
+                            {t('perUnit', {
+                              unit: measures.find(m => m.id === item.measureId)?.shortName || '',
+                            })}
+                            )
                           </span>
                         )}
                       </label>
@@ -1107,7 +1103,9 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     </div>
 
                     <div>
-                      <span className='text-muted-foreground mb-1 block text-xs'>Subtotal</span>
+                      <span className='text-muted-foreground mb-1 block text-xs'>
+                        {t('subtotal')}
+                      </span>
                       <div className='bg-muted text-foreground rounded-md px-3 py-2 text-center font-medium'>
                         $
                         {(
@@ -1123,11 +1121,11 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                       htmlFor={`notes-${product.id}`}
                       className='text-muted-foreground mb-1 block text-xs'
                     >
-                      Notas especiales (opcional)
+                      {t('specialNotes')}
                     </label>
                     <textarea
                       id={`notes-${product.id}`}
-                      placeholder='Especificaciones, colores, tamaños, etc.'
+                      placeholder={t('specialNotesPlaceholder')}
                       value={item?.notes || ''}
                       onChange={e => updateNotes(product.id, e.target.value)}
                       className='bg-background border-border text-foreground placeholder:text-muted-foreground w-full rounded-md border px-3 py-2 text-sm'
@@ -1146,11 +1144,9 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
 
             <div className='text-right'>
               <div className='bg-accent/10 text-accent inline-block rounded-lg px-4 py-2 text-xl font-bold'>
-                Total Estimado: ${calculateTotal().toFixed(2)} USD
+                {t('estimatedTotal')}: ${calculateTotal().toFixed(2)} USD
               </div>
-              <div className='text-muted-foreground mt-1 text-xs'>
-                * Precio final puede variar según especificaciones y términos de envío
-              </div>
+              <div className='text-muted-foreground mt-1 text-xs'>{t('priceDisclaimer')}</div>
             </div>
           </div>
         )}
@@ -1161,14 +1157,14 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
             htmlFor='message'
             className='text-foreground mb-2 block text-sm font-medium'
           >
-            Mensaje Adicional
+            {t('additionalMessage')}
           </label>
           <textarea
             {...register('message')}
             id='message'
             rows={4}
             className='bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none'
-            placeholder='Comentarios adicionales, requerimientos especiales, fechas de entrega, etc.'
+            placeholder={t('additionalMessagePlaceholder')}
           />
         </div>
 
@@ -1180,16 +1176,15 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
             className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-8 py-3 font-bold transition-colors disabled:opacity-50'
           >
             {isSubmitting
-              ? 'Enviando...'
-              : `Solicitar Cotización${selectedProducts.length > 0 ? ` (${selectedProducts.length} productos)` : ''}`}
+              ? t('submitting')
+              : selectedProducts.length > 0
+                ? t('submitButtonWithCount', { count: selectedProducts.length })
+                : t('submitButton')}
           </Button>
         </div>
 
         {/* Info Message */}
-        <div className='text-muted-foreground text-center text-sm'>
-          La cotización será enviada automáticamente por email con precios actualizados y términos
-          de envío.
-        </div>
+        <div className='text-muted-foreground text-center text-sm'>{t('autoEmailMessage')}</div>
 
         {/* Submit Message */}
         {submitMessage && (

@@ -155,12 +155,12 @@ export default function PrivacyPolicyPage() {
             <p className='mb-4 leading-relaxed text-gray-700 dark:text-gray-300'>
               Utilizamos cookies y tecnologías similares para mejorar su experiencia en nuestro
               sitio web. Para más información sobre cómo utilizamos las cookies, consulte nuestra{' '}
-              <a
+              <Link
                 href='/legal/cookie-policy'
                 className='text-accent hover:underline'
               >
                 Política de Cookies
-              </a>
+              </Link>
               .
             </p>
           </section>

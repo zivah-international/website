@@ -1,5 +1,9 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next';
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
+const nextConfig: NextConfig = {
   // Enable experimental features
   experimental: {},
 
@@ -45,7 +49,6 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     // Disable optimization for SVG files to prevent processing issues
     unoptimized: false,
-    loader: 'default',
   },
 
   // Headers for security and performance
@@ -136,10 +139,10 @@ const nextConfig = {
   output: 'standalone',
 
   // Fix for multiple lockfiles warning
-  outputFileTracingRoot: __dirname,
+  outputFileTracingRoot: process.cwd(),
 
   // Turbopack configuration (empty to silence warning)
   turbopack: {},
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);
