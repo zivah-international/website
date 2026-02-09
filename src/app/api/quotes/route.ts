@@ -406,6 +406,7 @@ export async function POST(request: NextRequest) {
             : [],
           message: quoteWithRelations.message || undefined,
           quoteNumber: quoteWithRelations.quoteNumber || quoteWithRelations.quote_number,
+          locale: validatedData.locale || 'es',
         };
 
         emailSent = await emailService.sendQuoteEmail(emailData, validatedData.recipientEmail);

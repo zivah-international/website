@@ -574,7 +574,8 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         },
         body: JSON.stringify({
           ...data,
-          sendEmail: true, // Always send email
+          recipientEmail: data.customerEmail, // Send quote email to customer
+          locale, // For multi-language email
         }),
       });
 

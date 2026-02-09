@@ -82,6 +82,8 @@ export const quoteFormSchema = z.object({
       'Message is too long or contains invalid content'
     ),
 
+  locale: z.enum(['es', 'en']).optional().default('es'),
+
   items: z
     .array(
       z.object({

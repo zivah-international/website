@@ -204,12 +204,14 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
 
         {/* Mobile Menu */}
         <div
-          className={`overflow-hidden transition-all duration-300 lg:hidden ${
-            mounted && isMobileMenuOpen ? 'mt-4 max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          className={`transition-all duration-300 lg:hidden ${
+            mounted && isMobileMenuOpen
+              ? 'mt-4 max-h-[80vh] opacity-100'
+              : 'max-h-0 overflow-hidden opacity-0'
           }`}
           suppressHydrationWarning
         >
-          <div className='rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800'>
+          <div className='max-h-[70vh] overflow-y-auto rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800'>
             {/* Mobile Navigation Items */}
             <div className='space-y-2'>
               {navigationItems.map(item => (

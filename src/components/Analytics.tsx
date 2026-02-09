@@ -12,11 +12,34 @@ declare global {
 
 // Google Analytics Measurement ID
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const isProduction = process.env.NODE_ENV === 'production';
 
 // Initialize Google Analytics
 export function initGA() {
-  if (typeof window === 'undefined' || process.env.NODE_ENV !== 'production' || !GA_MEASUREMENT_ID)
-    return;
+  if (typeof window === 'undefined' || !GA_MEASUREMENT_ID || !isProduction) return;
+
+  // Skip if already initialized (check if gtag has been called)
+  if (window.dataLayer && window.dataLayer.length > 0) return;
+
+  // Initialize dataLayer and gtag BEFORE loading script
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function (...args: unknown[]) {
+    window.dataLayer.push(args);
+  };
+
+  // Set consent BEFORE any tracking (GDPR compliance)
+  // Default: allow basic analytics, deny ads/personalization
+  window.gtag('consent', 'default', {
+    analytics_storage: 'granted', // Allow basic page view tracking
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    functionality_storage: 'denied',
+    personalization_storage: 'denied',
+    security_storage: 'granted',
+  });
+
+  window.gtag('js', new Date());
 
   // Load Google Analytics script
   const script = document.createElement('script');
@@ -24,46 +47,28 @@ export function initGA() {
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
   document.head.appendChild(script);
 
-  // Initialize gtag
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function (...args: unknown[]) {
-    window.dataLayer.push(args);
-  };
-
-  window.gtag('js', new Date());
+  // Configure GA4
   window.gtag('config', GA_MEASUREMENT_ID, {
     page_title: document.title,
     page_location: window.location.href,
-    send_page_view: false, // We'll handle page views manually
-    allow_google_signals: false,
-    allow_ad_personalization_signals: false,
-    allow_ad_features: false,
-  });
-
-  // Set default consent to denied
-  window.gtag('consent', 'default', {
-    analytics_storage: 'denied',
-    ad_storage: 'denied',
-    functionality_storage: 'denied',
-    personalization_storage: 'denied',
-    security_storage: 'granted',
+    send_page_view: true, // Send initial page view
+    anonymize_ip: true, // Privacy: anonymize IP addresses
   });
 }
 
 // Track page views
 export function trackPageView(url: string) {
-  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
-    return;
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID || !isProduction) return;
 
-  window.gtag('config', GA_MEASUREMENT_ID, {
+  window.gtag('event', 'page_view', {
     page_path: url,
+    page_location: window.location.origin + url,
   });
 }
 
 // Track events
 export function trackEvent(action: string, category: string, label?: string, value?: number) {
-  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
-    return;
+  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
 
   window.gtag('event', action, {
     event_category: category,
@@ -74,8 +79,7 @@ export function trackEvent(action: string, category: string, label?: string, val
 
 // Track conversions
 export function trackConversion(conversionId: string, value?: number, currency: string = 'USD') {
-  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
-    return;
+  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
 
   window.gtag('event', 'conversion', {
     send_to: conversionId,
@@ -92,8 +96,7 @@ export function trackProductView(product: {
   price?: number;
   currency?: string;
 }) {
-  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
-    return;
+  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
 
   window.gtag('event', 'view_item', {
     currency: product.currency || 'USD',
@@ -119,8 +122,7 @@ export function trackQuoteRequest(
   }>,
   totalValue?: number
 ) {
-  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
-    return;
+  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
 
   const items = products.map(product => ({
     item_id: product.id,
@@ -138,8 +140,7 @@ export function trackQuoteRequest(
 
 // Track form submissions
 export function trackFormSubmission(formType: string, success: boolean = true) {
-  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
-    return;
+  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
 
   window.gtag('event', success ? 'form_submit_success' : 'form_submit_error', {
     event_category: 'form',
@@ -153,8 +154,7 @@ export function updateConsent(consent: {
   marketing?: boolean;
   functional?: boolean;
 }) {
-  if (typeof window === 'undefined' || !window.gtag || process.env.NODE_ENV !== 'production')
-    return;
+  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
 
   const consentUpdate: Record<string, string> = {};
 

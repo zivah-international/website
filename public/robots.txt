@@ -1,54 +1,158 @@
 # Robots.txt for ZIVAH International S.A.
+# Optimized for Maximum Global SEO - All Markets
 # https://zivahinternational.com/robots.txt
 
+# Default rules for all crawlers
 User-agent: *
 Allow: /
+
+# Allow all language versions
+Allow: /en/
 
 # Disallow admin and private areas
 Disallow: /admin/
 Disallow: /private/
+Disallow: /api/
+Disallow: /_next/static/
+Disallow: /_next/image/
 Disallow: /.git/
 Disallow: /.kiro/
 Disallow: /node_modules/
 
-# Allow important files
+# Allow essential resources for rendering
 Allow: /css/
 Allow: /js/
 Allow: /assets/
 Allow: /favicon.ico
 Allow: /sitemap.xml
+Allow: /_next/static/css/
+Allow: /_next/static/chunks/
 
-# Sitemap location
+# Sitemap locations (multiple for redundancy)
 Sitemap: https://zivahinternational.com/sitemap.xml
 
-# Crawl delay (optional - be respectful to search engines)
-Crawl-delay: 1
-
-# Specific rules for major search engines
+# ===========================================
+# GOOGLE (Primary Search Engine - Global)
+# ===========================================
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 0
 
+User-agent: Googlebot-Image
+Allow: /assets/images/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.webp$
+Allow: /*.svg$
+
+User-agent: Googlebot-Video
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Storebot-Google
+Allow: /products/
+
+# ===========================================
+# BING / MICROSOFT (USA, Europe)
+# ===========================================
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 1
 
+User-agent: msnbot
+Allow: /
+
+User-agent: BingPreview
+Allow: /
+
+# ===========================================
+# YAHOO / VERIZON MEDIA
+# ===========================================
 User-agent: Slurp
 Allow: /
 Crawl-delay: 1
 
-# Block common bad bots
-User-agent: AhrefsBot
-Disallow: /
+# ===========================================
+# BAIDU (China - Major Market)
+# ===========================================
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 1
 
-User-agent: MJ12bot
-Disallow: /
+User-agent: Baiduspider-image
+Allow: /assets/images/
 
-User-agent: DotBot
-Disallow: /
+User-agent: Baiduspider-video
+Allow: /
 
-# Social media crawlers
+User-agent: Baiduspider-news
+Allow: /
+
+# ===========================================
+# YANDEX (Russia, CIS Countries)
+# ===========================================
+User-agent: Yandex
+Allow: /
+Crawl-delay: 2
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: YandexImages
+Allow: /assets/images/
+
+User-agent: YandexMedia
+Allow: /
+
+# ===========================================
+# SOGOU (China - Second Largest)
+# ===========================================
+User-agent: Sogou
+Allow: /
+Crawl-delay: 2
+
+User-agent: Sogou web spider
+Allow: /
+
+# ===========================================
+# NAVER (South Korea)
+# ===========================================
+User-agent: Yeti
+Allow: /
+Crawl-delay: 2
+
+# ===========================================
+# SEZNAM (Czech Republic)
+# ===========================================
+User-agent: SeznamBot
+Allow: /
+
+# ===========================================
+# QWANT (France, Europe)
+# ===========================================
+User-agent: Qwantify
+Allow: /
+
+# ===========================================
+# DUCKDUCKGO
+# ===========================================
+User-agent: DuckDuckBot
+Allow: /
+
+# ===========================================
+# SOCIAL MEDIA CRAWLERS (Important for Sharing)
+# ===========================================
 User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
 Allow: /
 
 User-agent: Twitterbot
@@ -57,9 +161,133 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-# Archive crawlers
+User-agent: Pinterest
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+User-agent: vkShare
+Allow: /
+
+User-agent: WeiboBot
+Allow: /
+
+# ===========================================
+# E-COMMERCE / PRODUCT SEARCH
+# ===========================================
+User-agent: Amazonbot
+Allow: /products/
+
+User-agent: PetalBot
+Allow: /
+
+# ===========================================
+# ARCHIVE CRAWLERS
+# ===========================================
 User-agent: ia_archiver
 Allow: /
 
 User-agent: Wayback
 Allow: /
+
+User-agent: archive.org_bot
+Allow: /
+
+# ===========================================
+# SEO TOOLS (Allow for analysis)
+# ===========================================
+User-agent: SemrushBot
+Allow: /
+Crawl-delay: 5
+
+User-agent: AhrefsBot
+Allow: /
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Allow: /
+Crawl-delay: 10
+
+User-agent: DotBot
+Allow: /
+Crawl-delay: 10
+
+User-agent: Screaming Frog SEO Spider
+Allow: /
+
+User-agent: rogerbot
+Allow: /
+
+# ===========================================
+# AI CRAWLERS (Modern SEO consideration)
+# ===========================================
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+# ===========================================
+# BLOCK AGGRESSIVE/UNWANTED BOTS
+# ===========================================
+User-agent: MegaIndex.ru
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: SiteExplorer
+Disallow: /
+
+User-agent: ltx71
+Disallow: /
+
+User-agent: Riddler
+Disallow: /
+
+User-agent: Linguee
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: serpstatbot
+Disallow: /
+
+# ===========================================
+# HOST DIRECTIVE (For multi-domain sites)
+# ===========================================
+Host: https://zivahinternational.com
+
+# ===========================================
+# CLEAN-PARAM (For dynamic URL parameters)
+# ===========================================
+Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term
+Clean-param: ref&source&fbclid&gclid&msclkid
+Clean-param: _ga&_gl&_hsenc&_hsmi
+
+# End of robots.txt
+# Last updated: 2026-02-08
+# Contact: seo@zivahinternational.com

@@ -1,85 +1,104 @@
 import { MetadataRoute } from 'next';
 
-// Generate sitemap for the website
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://zivahinternational.com';
+import { defaultLocale, localeFullCodes, locales } from '@/i18n/config';
 
-  // Static pages
-  const staticPages = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/legal/privacy-policy`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/legal/terms-of-service`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/legal/cookie-policy`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/legal/data-protection`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/products`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/quotes`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
+// Base URL for the website
+const BASE_URL = 'https://zivahinternational.com';
+
+// Generate international sitemap for the website
+// Includes all locales with proper alternates for hreflang
+export default function sitemap(): MetadataRoute.Sitemap {
+  // Static pages that exist for all locales
+  const staticPaths = [
+    { path: '', changeFreq: 'weekly' as const, priority: 1.0 },
+    { path: '/contact', changeFreq: 'monthly' as const, priority: 0.8 },
+    { path: '/products', changeFreq: 'weekly' as const, priority: 0.9 },
+    { path: '/quote', changeFreq: 'monthly' as const, priority: 0.8 },
+    { path: '/quality', changeFreq: 'monthly' as const, priority: 0.7 },
+    { path: '/markets', changeFreq: 'monthly' as const, priority: 0.7 },
+    { path: '/legal/privacy-policy', changeFreq: 'yearly' as const, priority: 0.3 },
+    { path: '/legal/terms-of-service', changeFreq: 'yearly' as const, priority: 0.3 },
+    { path: '/legal/cookie-policy', changeFreq: 'yearly' as const, priority: 0.3 },
+    { path: '/legal/data-protection', changeFreq: 'yearly' as const, priority: 0.3 },
   ];
 
   // Product pages (these would typically come from your database)
-  const productPages = [
+  const productSlugs = [
     'tropical-fruits',
     'shrimp',
     'coffee',
     'aquaculture-larvae',
     'nuts',
     'marine-products',
-  ].map(slug => ({
-    url: `${baseUrl}/products/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
+    'mango',
+    'pineapple',
+    'banana',
+    'papaya',
+    'vannamei-shrimp',
+    'arabica-coffee',
+    'shrimp-larvae',
+  ];
 
   // Category pages
-  const categoryPages = ['fruits', 'seafood', 'coffee-beans', 'aquaculture'].map(slug => ({
-    url: `${baseUrl}/categories/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }));
+  const categorySlugs = [
+    'fruits',
+    'seafood',
+    'coffee-beans',
+    'aquaculture',
+    'tropical-fruits',
+    'premium-seafood',
+  ];
 
-  return [...staticPages, ...productPages, ...categoryPages];
+  // Generate URLs for all locales
+  const generateLocalizedUrls = (
+    path: string,
+    changeFreq: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never',
+    priority: number
+  ): MetadataRoute.Sitemap => {
+    return locales.map(locale => {
+      const localePath = locale === defaultLocale ? '' : `/${locale}`;
+      const url = `${BASE_URL}${localePath}${path}`;
+
+      // Generate alternates for all locales (hreflang)
+      const languages: Record<string, string> = {};
+      locales.forEach(l => {
+        const lPath = l === defaultLocale ? '' : `/${l}`;
+        languages[localeFullCodes[l]] = `${BASE_URL}${lPath}${path}`;
+      });
+      // Add x-default pointing to default locale
+      languages['x-default'] = `${BASE_URL}${path}`;
+
+      return {
+        url,
+        lastModified: new Date(),
+        changeFrequency: changeFreq,
+        priority,
+        alternates: {
+          languages,
+        },
+      };
+    });
+  };
+
+  // Generate all sitemap entries
+  const sitemapEntries: MetadataRoute.Sitemap = [];
+
+  // Add static pages for all locales
+  staticPaths.forEach(({ path, changeFreq, priority }) => {
+    sitemapEntries.push(...generateLocalizedUrls(path, changeFreq, priority));
+  });
+
+  // Add product pages for all locales
+  productSlugs.forEach(slug => {
+    sitemapEntries.push(...generateLocalizedUrls(`/products/${slug}`, 'weekly', 0.8));
+  });
+
+  // Add category pages for all locales
+  categorySlugs.forEach(slug => {
+    sitemapEntries.push(...generateLocalizedUrls(`/categories/${slug}`, 'weekly', 0.7));
+  });
+
+  return sitemapEntries;
 }
 
 // Utility functions for sitemap management

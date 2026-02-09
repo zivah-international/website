@@ -1,6 +1,6 @@
 import '../globals.css';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
@@ -13,23 +13,40 @@ import ClientThemeProvider from '@/components/ClientThemeProvider';
 import CookieConsent from '@/components/CookieConsent';
 import { ErrorBoundary, NetworkStatus } from '@/components/ErrorHandling';
 import ServiceWorkerRegistration from '@/components/ServiceWorker';
+import StructuredData from '@/components/StructuredData';
 import WebVitals from '@/components/WebVitals';
-import { type Locale, locales, ogLocales } from '@/i18n/config';
+import { type Locale, localeFullCodes, locales, localeVariants, ogLocales } from '@/i18n/config';
 import { routing } from '@/i18n/routing';
 
 const inter = Inter({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-inter',
+  display: 'swap',
+  preload: true,
 });
 
 const montserrat = Montserrat({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-montserrat',
+  display: 'swap',
+  preload: true,
 });
 
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
+};
+
+// Viewport configuration for mobile optimization
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f1419' },
+  ],
 };
 
 export function generateStaticParams() {
@@ -39,78 +56,126 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = locale as Locale;
+  const baseUrl = 'https://zivahinternational.com';
+  const localePath = validLocale === 'es' ? '' : `/${validLocale}`;
 
-  const isSpanish = validLocale === 'es';
+  // Localized content
+  const content: Record<Locale, { title: string; description: string; keywords: string }> = {
+    es: {
+      title:
+        'ZIVAH International S.A. - Exportadores de Productos Ecuatorianos Premium | Ecuador hacia el Mundo',
+      description:
+        'ZIVAH International S.A. - Exportadores líderes de productos ecuatorianos premium desde Ecuador hacia el mundo. Frutas tropicales, camarón, café arábica y larvas de acuicultura. Sede en Samborondón, Guayas con oficina en Miami.',
+      keywords:
+        'exportación ecuador, frutas tropicales, camarón ecuatoriano, larvas acuicultura, cafe arabica, productos marinos, miami exportadores, exportar desde ecuador, comercio internacional ecuador',
+    },
+    en: {
+      title:
+        'ZIVAH International S.A. - Premium Ecuadorian Products Exporters | Ecuador to the World',
+      description:
+        'ZIVAH International S.A. - Leading exporters of premium Ecuadorian products from Ecuador to the world. Tropical fruits, shrimp, arabica coffee and aquaculture larvae. Headquartered in Samborondón, Guayas with Miami office.',
+      keywords:
+        'ecuador export, tropical fruits, ecuadorian shrimp, aquaculture larvae, arabica coffee, seafood products, miami exporters, ecuador trade, international commerce',
+    },
+  };
+
+  const { title, description, keywords } = content[validLocale] || content.es;
+
+  // Generate all hreflang alternates
+  const alternateLanguages: Record<string, string> = {
+    'x-default': baseUrl,
+  };
+
+  // Add primary locale URLs
+  locales.forEach(l => {
+    const lPath = l === 'es' ? '' : `/${l}`;
+    alternateLanguages[localeFullCodes[l]] = `${baseUrl}${lPath}`;
+
+    // Add variant locales
+    localeVariants[l].forEach(variant => {
+      alternateLanguages[variant] = `${baseUrl}${lPath}`;
+    });
+  });
 
   return {
-    title: isSpanish
-      ? 'ZIVAH International S.A. - Exportadores de Productos Ecuatorianos Premium | Ecuador hacia el Mundo'
-      : 'ZIVAH International S.A. - Premium Ecuadorian Products Exporters | Ecuador to the World',
-    description: isSpanish
-      ? 'ZIVAH International S.A. - Exportadores líderes de productos ecuatorianos premium desde Ecuador hacia el mundo. Con sede principal en Samborondón, Guayas y oficina de distribución en Miami.'
-      : 'ZIVAH International S.A. - Leading exporters of premium Ecuadorian products from Ecuador to the world. Headquartered in Samborondón, Guayas with distribution office in Miami.',
-    keywords: isSpanish
-      ? 'exportación ecuador, frutas tropicales, camarón ecuatoriano, larvas acuicultura, cafe arabica, productos marinos, miami exportadores'
-      : 'ecuador export, tropical fruits, ecuadorian shrimp, aquaculture larvae, arabica coffee, seafood products, miami exporters',
-    authors: [{ name: 'ZIVAH International S.A.' }],
+    title,
+    description,
+    keywords,
+    authors: [{ name: 'ZIVAH International S.A.', url: baseUrl }],
+    creator: 'ZIVAH International S.A.',
+    publisher: 'ZIVAH International S.A.',
     robots: {
       index: true,
       follow: true,
+      nocache: false,
       googleBot: {
         index: true,
         follow: true,
+        noimageindex: false,
         'max-video-preview': -1,
         'max-image-preview': 'large',
         'max-snippet': -1,
       },
     },
     alternates: {
-      canonical: `https://zivahinternational.com${validLocale === 'es' ? '' : '/en'}`,
-      languages: {
-        'es-ES': 'https://zivahinternational.com/',
-        'en-US': 'https://zivahinternational.com/en',
-      },
+      canonical: `${baseUrl}${localePath}`,
+      languages: alternateLanguages,
     },
     openGraph: {
       type: 'website',
       locale: ogLocales[validLocale],
       alternateLocale: locales.filter(l => l !== validLocale).map(l => ogLocales[l]),
-      url: `https://zivahinternational.com${validLocale === 'es' ? '' : '/en'}`,
+      url: `${baseUrl}${localePath}`,
       siteName: 'ZIVAH International S.A.',
-      title: isSpanish
-        ? 'ZIVAH International S.A. - Exportadores de Productos Ecuatorianos Premium'
-        : 'ZIVAH International S.A. - Premium Ecuadorian Products Exporters',
-      description: isSpanish
-        ? 'Exportadores líderes de productos ecuatorianos premium desde Ecuador hacia el mundo.'
-        : 'Leading exporters of premium Ecuadorian products from Ecuador to the world.',
+      title,
+      description,
       images: [
         {
-          url: 'https://zivahinternational.com/assets/images/zivah-og-image.jpg',
+          url: `${baseUrl}/assets/images/zivah-og-image.jpg`,
           width: 1200,
           height: 630,
-          alt: isSpanish
-            ? 'ZIVAH International - Productos Ecuatorianos Premium'
-            : 'ZIVAH International - Premium Ecuadorian Products',
+          alt: 'ZIVAH International - Premium Ecuadorian Products',
+          type: 'image/jpeg',
+        },
+        {
+          url: `${baseUrl}/assets/images/zivah-og-square.jpg`,
+          width: 600,
+          height: 600,
+          alt: 'ZIVAH International Logo',
+          type: 'image/jpeg',
         },
       ],
+      countryName: 'Ecuador',
     },
     twitter: {
       card: 'summary_large_image',
       site: '@ZivahIntl',
       creator: '@ZivahIntl',
-      title: isSpanish
-        ? 'ZIVAH International S.A. - Exportadores de Productos Ecuatorianos Premium'
-        : 'ZIVAH International S.A. - Premium Ecuadorian Products Exporters',
-      description: isSpanish
-        ? 'Exportadores líderes de productos ecuatorianos premium desde Ecuador hacia el mundo.'
-        : 'Leading exporters of premium Ecuadorian products from Ecuador to the world.',
-      images: ['https://zivahinternational.com/assets/images/zivah-twitter-image.jpg'],
+      title,
+      description,
+      images: {
+        url: `${baseUrl}/assets/images/zivah-twitter-image.jpg`,
+        alt: 'ZIVAH International - Premium Ecuadorian Products',
+      },
     },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+      yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || '',
+      other: {
+        'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION || '',
+        'baidu-site-verification': process.env.NEXT_PUBLIC_BAIDU_VERIFICATION || '',
+        'p:domain_verify': process.env.NEXT_PUBLIC_PINTEREST_VERIFICATION || '',
+      },
+    },
+    category: 'business',
+    classification: 'Export, Food & Beverage, Agriculture, B2B',
     other: {
+      // Geo-targeting for local SEO
       'geo.region': 'EC-G',
       'geo.placename': 'Samborondón, Guayas, Ecuador',
       'geo.position': '-2.1057;-79.8890',
       ICBM: '-2.1057, -79.8890',
+      // Business information
       'business:contact_data:street_address': 'Casa Matriz Mz 10 S L 31, Samborondón',
       'business:contact_data:locality': 'Samborondón',
       'business:contact_data:region': 'Guayas',
@@ -118,9 +183,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       'business:contact_data:country_name': 'Ecuador',
       'business:contact_data:email': 'info@zivahinternational.com',
       'business:contact_data:phone_number': '+593999002893',
-      'business:contact_data:website': 'https://zivahinternational.com',
+      'business:contact_data:website': baseUrl,
+      // Additional SEO tags
+      'og:email': 'info@zivahinternational.com',
+      'og:phone_number': '+593999002893',
+      'og:fax_number': '+593999002893',
+      'og:latitude': '-2.1057',
+      'og:longitude': '-79.8890',
+      'og:street-address': 'Casa Matriz Mz 10 S L 31',
+      'og:locality': 'Samborondón',
+      'og:region': 'Guayas',
+      'og:postal-code': '092301',
+      'og:country-name': 'Ecuador',
+      // Industry-specific
+      'product:brand': 'ZIVAH International',
+      'product:availability': 'in stock',
+      'product:condition': 'new',
+      // Dublin Core metadata
+      'DC.title': title,
+      'DC.creator': 'ZIVAH International S.A.',
+      'DC.subject': keywords,
+      'DC.description': description,
+      'DC.publisher': 'ZIVAH International S.A.',
+      'DC.contributor': 'ZIVAH International S.A.',
+      'DC.date': new Date().toISOString(),
+      'DC.type': 'Text',
+      'DC.format': 'text/html',
+      'DC.identifier': `${baseUrl}${localePath}`,
+      'DC.language': validLocale,
+      'DC.coverage': 'Global',
+      'DC.rights': '© 2024 ZIVAH International S.A. All rights reserved.',
     },
-    metadataBase: new URL('https://zivahinternational.com'),
+    metadataBase: new URL(baseUrl),
     formatDetection: {
       email: false,
       address: false,
@@ -238,25 +332,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           rel='dns-prefetch'
           href='//www.google-analytics.com'
         />
-        {/* Google Analytics - Production Only */}
-        {process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
-                `,
-              }}
-            />
-          </>
-        )}
+        {/* Google Analytics loaded via Analytics component */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -273,7 +349,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           `,
           }}
         />
-        {/* Alternate language links for SEO */}
+        {/* Alternate language links for SEO - All supported locales */}
         <link
           rel='alternate'
           hrefLang='es'
@@ -281,7 +357,62 @@ export default async function LocaleLayout({ children, params }: Props) {
         />
         <link
           rel='alternate'
+          hrefLang='es-EC'
+          href='https://zivahinternational.com/'
+        />
+        <link
+          rel='alternate'
+          hrefLang='es-ES'
+          href='https://zivahinternational.com/'
+        />
+        <link
+          rel='alternate'
+          hrefLang='es-MX'
+          href='https://zivahinternational.com/'
+        />
+        <link
+          rel='alternate'
+          hrefLang='es-AR'
+          href='https://zivahinternational.com/'
+        />
+        <link
+          rel='alternate'
+          hrefLang='es-CO'
+          href='https://zivahinternational.com/'
+        />
+        <link
+          rel='alternate'
+          hrefLang='es-PE'
+          href='https://zivahinternational.com/'
+        />
+        <link
+          rel='alternate'
+          hrefLang='es-CL'
+          href='https://zivahinternational.com/'
+        />
+        <link
+          rel='alternate'
           hrefLang='en'
+          href='https://zivahinternational.com/en'
+        />
+        <link
+          rel='alternate'
+          hrefLang='en-US'
+          href='https://zivahinternational.com/en'
+        />
+        <link
+          rel='alternate'
+          hrefLang='en-GB'
+          href='https://zivahinternational.com/en'
+        />
+        <link
+          rel='alternate'
+          hrefLang='en-CA'
+          href='https://zivahinternational.com/en'
+        />
+        <link
+          rel='alternate'
+          hrefLang='en-AU'
           href='https://zivahinternational.com/en'
         />
         <link
@@ -297,6 +428,8 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider messages={messages}>
           <ErrorBoundary>
             <ClientThemeProvider>
+              {/* Structured Data for SEO */}
+              <StructuredData locale={locale} />
               <Suspense fallback={null}>
                 <Analytics />
               </Suspense>
