@@ -1,29 +1,50 @@
 import { NextRequest } from 'next/server';
 
-import { query } from '@/lib/db';
 import { createApiResponse, handleApiError } from '@/lib/errors';
 import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { createClient } from '@/utils/supabase/server';
 
 // Helper function to apply product translations
-async function applyProductTranslations(products: any[], locale: string) {
+async function applyProductTranslations(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  products: any[],
+  locale: string
+) {
   if (!products.length || locale === 'es') return products;
 
-  const productIds = products.map(p => p.id);
-  const placeholders = productIds.map((_, i) => `$${i + 2}`).join(',');
+  // Get language ID for the locale
+  const { data: langData } = await supabase
+    .from('languages')
+    .select('id')
+    .eq('code', locale)
+    .single();
 
-  const translationsResult = await query(
-    `SELECT product_id, name, description
-     FROM product_translations
-     WHERE product_id IN (${placeholders}) AND language_code = $1`,
-    [locale, ...productIds]
-  );
+  if (!langData) {
+    return products;
+  }
 
-  const translationsMap = new Map();
-  translationsResult.rows.forEach((t: any) => {
-    translationsMap.set(t.product_id, t);
-  });
+  const languageId = langData.id;
+  const productIds = products.map((p: any) => p.id);
 
-  return products.map(product => {
+  // Get translations for all products
+  const { data: translations } = await supabase
+    .from('product_translations')
+    .select('product_id, name, description')
+    .in('product_id', productIds)
+    .eq('language_id', languageId);
+
+  if (!translations) {
+    return products;
+  }
+
+  // Create a map of translations
+  const translationsMap = new Map<number, any>();
+  for (const row of translations) {
+    translationsMap.set(row.product_id, row);
+  }
+
+  // Apply translations to products
+  return products.map((product: any) => {
     const translation = translationsMap.get(product.id);
     if (translation) {
       return {
@@ -41,58 +62,61 @@ export async function GET(request: NextRequest) {
     // Rate limiting: 50 requests per minute
     const ip =
       request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-    const rateLimit = await checkRateLimit(
-      `api:${ip}`,
-      RATE_LIMITS.API_GENERAL.limit,
-      RATE_LIMITS.API_GENERAL.windowMs
-    );
+
+    let rateLimit;
+    try {
+      rateLimit = await checkRateLimit(
+        `api:${ip}`,
+        RATE_LIMITS.API_GENERAL.limit,
+        RATE_LIMITS.API_GENERAL.windowMs
+      );
+    } catch {
+      // Continue without rate limiting if it fails
+      rateLimit = { success: true };
+    }
 
     if (!rateLimit.success) {
       return createApiResponse(null, 'Too many requests. Please try again later.', 429);
     }
 
+    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     const searchQuery = searchParams.get('q') || '';
     const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50);
     const category = searchParams.get('category');
     const locale = searchParams.get('locale') || 'es';
 
-    let paramIndex = 1;
-    let sql = `
-      SELECT p.id, p.name, p.description, p.sku
-      FROM products p
-      WHERE p.is_active = true
-      AND LOWER(p.name) LIKE LOWER($${paramIndex})
-    `;
-    const params: any[] = [`%${searchQuery}%`];
-    paramIndex++;
+    // Build query using Supabase client
+    let query = supabase
+      .from('products')
+      .select('id, name, description, sku')
+      .eq('is_active', true)
+      .ilike('name', `%${searchQuery}%`)
+      .order('name', { ascending: true })
+      .limit(limit);
 
-    // Also search in translations if not Spanish
-    if (locale !== 'es') {
-      sql = `
-        SELECT DISTINCT p.id, p.name, p.description, p.sku
-        FROM products p
-        LEFT JOIN product_translations pt ON p.id = pt.product_id AND pt.language_code = $${paramIndex}
-        WHERE p.is_active = true
-        AND (LOWER(p.name) LIKE LOWER($1) OR LOWER(pt.name) LIKE LOWER($1))
-      `;
-      params.push(locale);
-      paramIndex++;
-    }
-
+    // Add category filter if provided
     if (category) {
-      sql += ` AND p.category_id = (SELECT id FROM categories WHERE slug = $${paramIndex})`;
-      params.push(category);
-      paramIndex++;
+      // Get category ID from slug
+      const { data: categoryData } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('slug', category)
+        .single();
+
+      if (categoryData) {
+        query = query.eq('category_id', categoryData.id);
+      }
     }
 
-    sql += ` ORDER BY p.name ASC LIMIT $${paramIndex}`;
-    params.push(limit);
+    const { data: products, error } = await query;
 
-    const products = await query(sql, params);
+    if (error) {
+      throw error;
+    }
 
     // Apply translations
-    const translatedProducts = await applyProductTranslations(products.rows, locale);
+    const translatedProducts = await applyProductTranslations(supabase, products || [], locale);
 
     return createApiResponse(translatedProducts);
   } catch (error) {
