@@ -12,6 +12,7 @@ import {
   sanitizeEmail,
   sanitizeString,
 } from '@/lib/validation';
+import { createClient } from '@/utils/supabase/server';
 
 export async function GET(request: NextRequest) {
   try {
@@ -89,12 +90,9 @@ export async function GET(request: NextRequest) {
       query<QuoteRow>(
         `
         SELECT
-          q.*,
-          u.full_name AS user_name,
-          u.email AS user_email,
-          u.company AS user_company
+          q.*
         FROM quotes q
-        LEFT JOIN users u ON q.user_id = u.id
+
         ${whereClause}
         ORDER BY q.created_at DESC
         LIMIT $${limitParamIndex} OFFSET $${offsetParamIndex}
@@ -335,15 +333,6 @@ export async function POST(request: NextRequest) {
         `
         SELECT
           q.*,
-          json_build_object(
-            'id', u.id,
-            'name', u.full_name,
-            'email', u.email,
-            'company', u.company
-          ) as user,
-          json_build_object(
-            'name', c.name
-          ) as country,
           COALESCE(
             json_agg(
               json_build_object(
@@ -354,22 +343,14 @@ export async function POST(request: NextRequest) {
                 'unitPrice', qi.unit_price,
                 'totalPrice', qi.total_price,
                 'notes', qi.notes,
-                'specifications', qi.specifications,
-                'product', json_build_object(
-                  'id', p.id,
-                  'name', p.name,
-                  'sku', p.sku
-                )
+                'specifications', qi.specifications
               )
             ) FILTER (WHERE qi.id IS NOT NULL), '[]'::json
           ) as items
         FROM quotes q
-        LEFT JOIN users u ON q.user_id = u.id
-        LEFT JOIN countries c ON q.country_id = c.id
         LEFT JOIN quote_items qi ON q.id = qi.quote_id
-        LEFT JOIN products p ON qi.product_id = p.id
         WHERE q.id = $1
-        GROUP BY q.id, u.id, c.id
+        GROUP BY q.id
       `,
         [quoteId]
       );
@@ -377,8 +358,44 @@ export async function POST(request: NextRequest) {
       const quoteData = completeQuote.rows[0];
 
       // Parse JSON fields
-      return parseJsonFields(quoteData, ['user', 'country', 'items', 'shipping_address']);
+      return parseJsonFields(quoteData, ['items', 'shipping_address']);
     });
+
+    // Fetch country and product details using Supabase client (respects RLS)
+    const supabase = await createClient();
+
+    // Fetch country if countryId exists
+    if (quote.country_id) {
+      const { data: country } = await supabase
+        .from('countries')
+        .select('id, name, code')
+        .eq('id', quote.country_id)
+        .single();
+
+      if (country) {
+        (quote as any).country = country;
+      }
+    }
+
+    // Fetch product details for items
+    if (Array.isArray((quote as any).items) && (quote as any).items.length > 0) {
+      const productIds = (quote as any).items.map((item: any) => item.productId).filter(Boolean);
+
+      if (productIds.length > 0) {
+        const { data: products } = await supabase
+          .from('products')
+          .select('id, name, sku')
+          .in('id', productIds);
+
+        if (products) {
+          const productsMap = new Map(products.map(p => [p.id, p]));
+          (quote as any).items = (quote as any).items.map((item: any) => ({
+            ...item,
+            product: productsMap.get(item.productId) || null,
+          }));
+        }
+      }
+    }
 
     // Send email if requested
     let emailSent = false;
