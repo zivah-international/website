@@ -16,54 +16,57 @@ const intlMiddleware = createIntlMiddleware({
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip i18n for API routes, static files, and special paths
+  // Skip i18n for API routes, static files, auth routes, and special paths
   const shouldSkipI18n =
     pathname.startsWith('/api/') ||
-    pathname.startsWith('/admin/') ||
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/sign-in') ||
+    pathname.startsWith('/sign-up') ||
     pathname.startsWith('/_next/') ||
     pathname.startsWith('/assets/') ||
     pathname.includes('.');
 
+  // For routes that skip i18n, handle them directly
+  if (shouldSkipI18n) {
+    // Enforce HTTPS in production
+    const httpsRedirect = enforceHTTPS(request);
+    if (httpsRedirect) {
+      logSecurityEvent(
+        'https_redirect',
+        {
+          from: request.url,
+          to: httpsRedirect.headers.get('location'),
+        },
+        request
+      );
+      return httpsRedirect;
+    }
+
+    // Apply security middleware
+    const securityResponse = securityMiddleware(request);
+    if (securityResponse) {
+      return securityResponse;
+    }
+
+    // For API routes, add additional security checks
+    if (pathname.startsWith('/api/')) {
+      // Log API access
+      logSecurityEvent(
+        'api_access',
+        {
+          pathname,
+          method: request.method,
+        },
+        request
+      );
+    }
+
+    // Handle Supabase session updates and auth redirects
+    return await updateSession(request);
+  }
+
   // Handle i18n routing using next-intl middleware
-  if (!shouldSkipI18n) {
-    return intlMiddleware(request);
-  }
-
-  // Enforce HTTPS in production
-  const httpsRedirect = enforceHTTPS(request);
-  if (httpsRedirect) {
-    logSecurityEvent(
-      'https_redirect',
-      {
-        from: request.url,
-        to: httpsRedirect.headers.get('location'),
-      },
-      request
-    );
-    return httpsRedirect;
-  }
-
-  // Apply security middleware
-  const securityResponse = securityMiddleware(request);
-  if (securityResponse) {
-    return securityResponse;
-  }
-
-  // For API routes, add additional security checks
-  if (pathname.startsWith('/api/')) {
-    // Log API access
-    logSecurityEvent(
-      'api_access',
-      {
-        pathname,
-        method: request.method,
-      },
-      request
-    );
-  }
-
-  // Handle Supabase session updates and auth redirects
-  return await updateSession(request);
+  return intlMiddleware(request);
 }
 
 export const config = {
