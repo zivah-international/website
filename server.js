@@ -57,6 +57,28 @@ app.prepare().then(() => {
       // eslint-disable-next-line no-console
       console.log('> Database health monitoring: Active');
     }
+
+    // Supabase keep-alive: ping every 6 hours to prevent connection pooler idle timeout
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      const KEEP_ALIVE_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours in ms
+      const keepAliveUrl = `http://${hostname}:${port}/api/cron/keep-alive`;
+
+      const runKeepAlive = () => {
+        const http = require('http');
+        http
+          .get(keepAliveUrl, res => {
+            // eslint-disable-next-line no-console
+            console.log(`> Supabase keep-alive: HTTP ${res.statusCode}`);
+          })
+          .on('error', err => {
+            console.error('> Supabase keep-alive failed:', err.message);
+          });
+      };
+
+      setInterval(runKeepAlive, KEEP_ALIVE_INTERVAL);
+      // eslint-disable-next-line no-console
+      console.log('> Supabase keep-alive: Active (every 6 hours)');
+    }
   });
 
   // Graceful shutdown
