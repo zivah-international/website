@@ -2,9 +2,12 @@
 echo ZIVAH International Deployment
 echo ==============================
 
+echo Cleaning local build cache...
+if exist .next rmdir /s /q .next
+
 echo Building in production mode...
 call npm run build
-if %errorlevel% gtr 1 (
+if %errorlevel% neq 0 (
     echo Build failed with error level %errorlevel%
     pause
     exit /b %errorlevel%
@@ -15,20 +18,17 @@ if exist deploy rmdir /s /q deploy
 mkdir deploy
 
 echo Copying files for Standalone Mode...
-REM Copy standalone build content EXCLUDING node_modules (CloudLinux manages node_modules via symlink)
-REM First create exclusion file
-echo node_modules> deploy_exclude.txt
-xcopy .next\standalone\* deploy\ /e /i /h /y /exclude:deploy_exclude.txt
-del deploy_exclude.txt
+REM Standalone app goes to root of deploy, but .next/static and public must be nested
+xcopy .next\standalone\* deploy\ /e /i /h /y
 
-REM Remove node_modules if it was copied (belt and suspenders)
-if exist deploy\node_modules rmdir /s /q deploy\node_modules
-
-REM Copy static assets (required for standalone)
+REM The critical part: Standalone needs static and public folders INSIDE the standalone directory
 mkdir deploy\.next\static
-xcopy .next\static deploy\.next\static\ /e /i /h /y
+xcopy .next\static\* deploy\.next\static\ /e /i /h /y
+REM Include full server chunks to avoid missing SSR runtime chunks in Turbopack builds
+mkdir deploy\.next\server\chunks
+xcopy .next\server\chunks\* deploy\.next\server\chunks\ /e /i /h /y
 mkdir deploy\public
-xcopy public deploy\public\ /e /i /h /y
+xcopy public\* deploy\public\ /e /i /h /y
 
 REM Create a clean package.json for production deployment
 node -e "const fs = require('fs'); const pkg = require('./package.json'); delete pkg.devDependencies; delete pkg['lint-staged']; pkg.scripts = { start: 'node server.js' }; fs.writeFileSync('deploy/package.json', JSON.stringify(pkg, null, 2));"
