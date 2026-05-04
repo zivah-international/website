@@ -1,9 +1,9 @@
 name: Deploy to Production
 
 on:
-  pull_request:
-    types: [closed]
-    branches: [main]
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       run_npm_install:
@@ -12,11 +12,14 @@ on:
         type: boolean
         default: false
 
+# Prevent concurrent deployments
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    # Only runs when a PR is actually merged, not just closed
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
 
     steps:
       # -------------------------------------------------------
