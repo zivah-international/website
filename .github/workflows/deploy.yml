@@ -1,0 +1,174 @@
+name: Deploy to Production
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      run_npm_install:
+        description: 'Force npm install on server (run when package.json changed)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    # Only runs when a PR is actually merged, not just closed
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+
+    steps:
+      # -------------------------------------------------------
+      # 1. Checkout
+      # -------------------------------------------------------
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # needed to detect which files changed
+
+      # -------------------------------------------------------
+      # 2. Setup Node.js (match version in cPanel – 24.x)
+      # -------------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24' # Match cPanel Node.js Selector version
+          cache: 'npm'
+
+      # -------------------------------------------------------
+      # 3. Install dependencies
+      # -------------------------------------------------------
+      - name: Install dependencies
+        run: npm ci
+
+      # -------------------------------------------------------
+      # 4. Build Next.js (standalone output)
+      # -------------------------------------------------------
+      - name: Build
+        run: npm run build
+        env:
+          NODE_ENV: production
+          # Public vars – match cPanel Node.js Selector panel exactly
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY }}
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
+          # Server-side secrets – required by Prisma at build time
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+
+      # -------------------------------------------------------
+      # 5. Detect if package.json changed (auto npm install)
+      # -------------------------------------------------------
+      - name: Check if dependencies changed
+        id: deps-changed
+        run: |
+          if git diff --name-only HEAD~1 HEAD 2>/dev/null | grep -qE '^package(-lock)?\.json$'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "package.json changed – npm install will run on server"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "package.json unchanged – skipping npm install"
+          fi
+
+      # -------------------------------------------------------
+      # 6. Package deploy files (mirrors deploy.bat logic)
+      # -------------------------------------------------------
+      - name: Prepare deploy package
+        run: |
+          # Create directory structure
+          mkdir -p deploy/.next/static
+          mkdir -p deploy/public
+          mkdir -p deploy/prisma
+
+          # Copy standalone build output – node_modules excluded
+          # (CloudLinux manages node_modules via symlink on the server)
+          rsync -a --exclude='node_modules' .next/standalone/. deploy/
+
+          # Static assets (required for standalone mode)
+          cp -r .next/static/. deploy/.next/static/
+
+          # Public folder
+          cp -r public/. deploy/public/
+
+          # Dependency manifests (needed by cPanel "Run NPM Install" button)
+          cp package.json deploy/package.json
+          cp package-lock.json deploy/package-lock.json
+
+          # Prisma schema
+          cp prisma/schema.prisma deploy/prisma/schema.prisma
+
+          # Generated Prisma client
+          if [ -d generated/prisma ]; then
+            mkdir -p deploy/generated/prisma
+            cp -r generated/prisma/. deploy/generated/prisma/
+          fi
+
+      # -------------------------------------------------------
+      # 7. Upload to cPanel via FTP
+      #    Uploads only changed files (state tracked by the action)
+      # -------------------------------------------------------
+      - name: Upload via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy/
+          server-dir: ${{ secrets.FTP_PATH }}/
+          exclude: |
+            **/.git*/**
+            **/node_modules/**
+            **/.next/cache/**
+            **/*.map
+            **/.DS_Store
+            **/Thumbs.db
+            **/*.log
+            **/.env*
+
+      # -------------------------------------------------------
+      # 8. Run npm install on server via cPanel UAPI
+      #    Runs when: package.json changed OR manually forced
+      # -------------------------------------------------------
+      - name: Run npm install on server
+        if: ${{ steps.deps-changed.outputs.changed == 'true' || github.event.inputs.run_npm_install == 'true' }}
+        run: |
+          echo "Triggering npm install via cPanel UAPI..."
+          RESPONSE=$(curl -s \
+            -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
+            "https://${{ secrets.CPANEL_HOST }}:2083/execute/NodeJS/npm_install?app_name=${{ secrets.CPANEL_APP_NAME }}")
+          echo "$RESPONSE"
+          # Fail if cPanel returned an error status
+          echo "$RESPONSE" | python3 -c "
+          import sys, json
+          try:
+            d = json.load(sys.stdin)
+            if d.get('status') == 0:
+              print('ERROR:', d.get('errors'))
+              sys.exit(1)
+          except Exception as e:
+            print('Could not parse response:', e)
+          "
+
+      # -------------------------------------------------------
+      # 9. Restart the Node.js app via cPanel UAPI
+      # -------------------------------------------------------
+      - name: Restart Node.js app
+        run: |
+          echo "Restarting app via cPanel UAPI..."
+          RESPONSE=$(curl -s \
+            -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
+            "https://${{ secrets.CPANEL_HOST }}:2083/execute/NodeJS/restart_app?app_name=${{ secrets.CPANEL_APP_NAME }}")
+          echo "$RESPONSE"
+          echo "$RESPONSE" | python3 -c "
+          import sys, json
+          try:
+            d = json.load(sys.stdin)
+            if d.get('status') == 0:
+              print('ERROR:', d.get('errors'))
+              sys.exit(1)
+            else:
+              print('App restarted successfully')
+          except Exception as e:
+            print('Could not parse response:', e)
+          "
