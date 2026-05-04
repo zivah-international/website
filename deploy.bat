@@ -33,6 +33,7 @@ xcopy public deploy\public\ /e /i /h /y
 REM Copy package.json for CloudLinux NodeJS Selector compatibility
 copy package.json deploy\package.json /y
 copy package-lock.json deploy\package-lock.json /y 2>nul
+copy .npmrc deploy\.npmrc /y 2>nul
 
 REM Copy prisma schema (needed for Prisma client)
 mkdir deploy\prisma
