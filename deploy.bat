@@ -30,8 +30,8 @@ xcopy .next\static deploy\.next\static\ /e /i /h /y
 mkdir deploy\public
 xcopy public deploy\public\ /e /i /h /y
 
-REM Copy package.json for CloudLinux NodeJS Selector compatibility
-copy package.json deploy\package.json /y
+REM Create a clean package.json for production deployment
+node -e "const fs = require('fs'); const pkg = require('./package.json'); delete pkg.devDependencies; delete pkg['lint-staged']; pkg.scripts = { start: 'node server.js' }; fs.writeFileSync('deploy/package.json', JSON.stringify(pkg, null, 2));"
 copy package-lock.json deploy\package-lock.json /y 2>nul
 copy .npmrc deploy\.npmrc /y 2>nul
 

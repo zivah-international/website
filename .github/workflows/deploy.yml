@@ -95,8 +95,10 @@ jobs:
           cp -r public/. deploy/public/
 
           # Dependency manifests (needed by cPanel "Run NPM Install" button)
-          cp package.json deploy/package.json
+          # We use node to create a clean production-only package.json
+          node -e "const fs = require('fs'); const pkg = require('./package.json'); delete pkg.devDependencies; delete pkg['lint-staged']; pkg.scripts = { start: 'node server.js' }; fs.writeFileSync('deploy/package.json', JSON.stringify(pkg, null, 2));"
           cp package-lock.json deploy/package-lock.json
+          cp .npmrc deploy/.npmrc 2>/dev/null || :
 
           # Prisma schema
           cp prisma/schema.prisma deploy/prisma/schema.prisma
