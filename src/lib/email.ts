@@ -4,6 +4,12 @@ import { logger } from './logger';
 
 type Locale = 'es' | 'en';
 
+interface SubscriptionEmailData {
+  email: string;
+  name?: string;
+  locale?: Locale;
+}
+
 // Multi-language translations for email templates
 const emailTranslations = {
   es: {
@@ -41,6 +47,36 @@ const emailTranslations = {
     contactInfo: 'Contact Information',
     validityNote: 'This quote is valid for 30 days from the date of issue.',
     copyright: 'All rights reserved.',
+  },
+};
+
+// Subscription email translations
+const subscriptionTranslations = {
+  es: {
+    tagline: 'Productos Premium de Ecuador',
+    subject: '¡Bienvenido a ZIVAH International!',
+    welcomeTitle: '¡Gracias por suscribirte!',
+    welcomeMessage:
+      '{name}Estimado cliente, tu suscripción ha sido confirmada. A partir de ahora recibirás nuestras últimas novedades, ofertas exclusivas y contenido exclusivo sobre nuestros productos premium de Ecuador.',
+    benefitsTitle: '¿Qué recibirás?',
+    benefit1: 'Actualizaciones sobre nuevos productos y cosechas',
+    benefit2: 'Ofertas exclusivas para suscriptores',
+    benefit3: 'Contenido educativo sobre nuestros productos',
+    footerNote: 'Si no realizaste esta suscripción, por favor ignora este correo.',
+    contactLabel: '¿Tienes preguntas? Contáctanos en',
+  },
+  en: {
+    tagline: 'Premium Products from Ecuador',
+    subject: 'Welcome to ZIVAH International!',
+    welcomeTitle: 'Thank you for subscribing!',
+    welcomeMessage:
+      '{name}Dear customer, your subscription has been confirmed. From now on you will receive our latest news, exclusive offers and exclusive content about our premium products from Ecuador.',
+    benefitsTitle: 'What will you receive?',
+    benefit1: 'Updates on new products and harvests',
+    benefit2: 'Exclusive offers for subscribers',
+    benefit3: 'Educational content about our products',
+    footerNote: 'If you did not make this subscription, please ignore this email.',
+    contactLabel: 'Have questions? Contact us at',
   },
 };
 
@@ -235,6 +271,84 @@ class EmailService {
             <div style="background: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
               <p style="margin: 0 0 5px 0; color: #6b7280; font-size: 12px;">${t.validityNote}</p>
               <p style="margin: 0; color: #9ca3af; font-size: 11px;">© ${new Date().getFullYear()} ZIVAH International S.A. - ${t.copyright}</p>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+  }
+
+  async sendSubscriptionEmail(data: SubscriptionEmailData): Promise<boolean> {
+    try {
+      const locale = data.locale || 'es';
+      const t = subscriptionTranslations[locale];
+      const htmlContent = this.generateSubscriptionHTML(data, t);
+
+      const mailOptions = {
+        from: `"ZIVAH International" <${process.env.EMAIL_FROM}>`,
+        to: data.email,
+        subject: t.subject,
+        html: htmlContent,
+      };
+
+      const info = await this.transporter.sendMail(mailOptions);
+      logger.info('Subscription email sent', {
+        email: data.email,
+        messageId: info.messageId,
+      });
+      return true;
+    } catch (error) {
+      logger.error('Failed to send subscription email', {
+        error: error instanceof Error ? error.message : String(error),
+        email: data.email,
+      });
+      return false;
+    }
+  }
+
+  private generateSubscriptionHTML(data: SubscriptionEmailData, t: any): string {
+    const locale = data.locale || 'es';
+
+    return `
+      <!DOCTYPE html>
+      <html lang="${locale}">
+      <head>
+        <meta charset="utf-8">
+        <title>${t.subject}</title>
+      </head>
+      <body style="font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; background-color: #f3f4f6;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+          <div style="background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
+
+            <!-- Header -->
+            <div style="background: linear-gradient(135deg, #0891b2 0%, #00b2e9 100%); padding: 40px; text-align: center;">
+              <h1 style="color: white; margin: 0; font-size: 32px; font-weight: 700;">ZIVAH International</h1>
+              <p style="color: #e0f2fe; margin: 8px 0 0 0; font-size: 16px;">${t.tagline}</p>
+            </div>
+
+            <!-- Content -->
+            <div style="padding: 40px;">
+              <h2 style="color: #001c2d; margin: 0 0 20px 0; font-size: 24px;">${t.welcomeTitle}</h2>
+              <p style="color: #4b5563; font-size: 16px; margin-bottom: 20px;">${t.welcomeMessage.replace('{name}', data.name || '')}</p>
+
+              <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #00b2e9;">
+                <p style="margin: 0; color: #0c4a6e; font-size: 15px;">${t.benefitsTitle}</p>
+                <ul style="margin: 15px 0 0 0; padding-left: 20px; color: #0c4a6e;">
+                  <li style="margin-bottom: 8px;">${t.benefit1}</li>
+                  <li style="margin-bottom: 8px;">${t.benefit2}</li>
+                  <li>${t.benefit3}</li>
+                </ul>
+              </div>
+
+              <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">${t.footerNote}</p>
+            </div>
+
+            <!-- Footer -->
+            <div style="background: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+              <p style="margin: 0 0 5px 0; color: #6b7280; font-size: 12px;">${t.contactLabel}</p>
+              <p style="margin: 0; color: #00b2e9; font-size: 14px;">export@zivahinternational.com</p>
+              <p style="margin: 10px 0 0 0; color: #9ca3af; font-size: 11px;">© ${new Date().getFullYear()} ZIVAH International</p>
             </div>
           </div>
         </div>

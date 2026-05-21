@@ -1,5 +1,3 @@
-import '../globals.css';
-
 import type { Metadata, Viewport } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
 import { notFound } from 'next/navigation';
@@ -12,9 +10,11 @@ import BusinessIntelligence from '@/components/BusinessIntelligence';
 import ClientThemeProvider from '@/components/ClientThemeProvider';
 import CookieConsent from '@/components/CookieConsent';
 import { ErrorBoundary, NetworkStatus } from '@/components/ErrorHandling';
+import Footer from '@/components/Footer';
 import ServiceWorkerRegistration from '@/components/ServiceWorker';
 import StructuredData from '@/components/StructuredData';
 import WebVitals from '@/components/WebVitals';
+import WhatsAppButton from '@/components/WhatsAppButton';
 import { type Locale, localeFullCodes, locales, localeVariants, ogLocales } from '@/i18n/config';
 import { routing } from '@/i18n/routing';
 
@@ -275,156 +275,47 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages();
 
   return (
-    <html
-      lang={locale}
-      className={`${inter.variable} ${montserrat.variable}`}
-      suppressHydrationWarning
-    >
-      <head>
-        <meta
-          name='viewport'
-          content='width=device-width, initial-scale=1'
-        />
-        <meta
-          name='msapplication-TileColor'
-          content='#ff6347'
-        />
-        <meta
-          name='msapplication-TileImage'
-          content='/assets/images/icons/ms-icon-144x144.png'
-        />
-        <meta
-          name='msapplication-config'
-          content='/assets/images/icons/browserconfig.xml'
-        />
-        <meta
-          name='theme-color'
-          content='#ffffff'
-          media='(prefers-color-scheme: light)'
-        />
-        <meta
-          name='theme-color'
-          content='#0f1419'
-          media='(prefers-color-scheme: dark)'
-        />
-        <link
-          rel='preconnect'
-          href='https://fonts.googleapis.com'
-        />
-        <link
-          rel='preconnect'
-          href='https://fonts.gstatic.com'
-          crossOrigin='anonymous'
-        />
-        <link
-          rel='preconnect'
-          href='https://www.google-analytics.com'
-        />
-        <link
-          rel='preconnect'
-          href='https://www.googletagmanager.com'
-        />
-        <link
-          rel='dns-prefetch'
-          href='//fonts.googleapis.com'
-        />
-        <link
-          rel='dns-prefetch'
-          href='//www.google-analytics.com'
-        />
-        {/* Google Analytics loaded via Analytics component */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            (function() {
-              try {
-                const savedTheme = localStorage.getItem('theme');
-                const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                const initialTheme = savedTheme || systemTheme;
-                if (initialTheme === 'dark') {
-                  document.documentElement.classList.add('dark');
-                }
-              } catch (e) {}
-            })();
-          `,
-          }}
-        />
-        {/* Alternate language links for SEO - All supported locales */}
-        <link
-          rel='alternate'
-          hrefLang='es'
-          href='https://zivahinternational.com/'
-        />
-        <link
-          rel='alternate'
-          hrefLang='es-EC'
-          href='https://zivahinternational.com/'
-        />
-        <link
-          rel='alternate'
-          hrefLang='es-ES'
-          href='https://zivahinternational.com/'
-        />
-        <link
-          rel='alternate'
-          hrefLang='es-MX'
-          href='https://zivahinternational.com/'
-        />
-        <link
-          rel='alternate'
-          hrefLang='es-AR'
-          href='https://zivahinternational.com/'
-        />
-        <link
-          rel='alternate'
-          hrefLang='es-CO'
-          href='https://zivahinternational.com/'
-        />
-        <link
-          rel='alternate'
-          hrefLang='es-PE'
-          href='https://zivahinternational.com/'
-        />
-        <link
-          rel='alternate'
-          hrefLang='es-CL'
-          href='https://zivahinternational.com/'
-        />
-        <link
-          rel='alternate'
-          hrefLang='en'
-          href='https://zivahinternational.com/en'
-        />
-        <link
-          rel='alternate'
-          hrefLang='en-US'
-          href='https://zivahinternational.com/en'
-        />
-        <link
-          rel='alternate'
-          hrefLang='en-GB'
-          href='https://zivahinternational.com/en'
-        />
-        <link
-          rel='alternate'
-          hrefLang='en-CA'
-          href='https://zivahinternational.com/en'
-        />
-        <link
-          rel='alternate'
-          hrefLang='en-AU'
-          href='https://zivahinternational.com/en'
-        />
-        <link
-          rel='alternate'
-          hrefLang='x-default'
-          href='https://zivahinternational.com/'
-        />
-      </head>
-      <body
-        className='bg-background text-foreground min-h-screen font-sans antialiased transition-colors duration-300'
-        suppressHydrationWarning
-      >
+    <>
+      {/* Resource hints — React 19 hoists <link>/<meta> to <head> */}
+      <link
+        rel='preconnect'
+        href='https://fonts.googleapis.com'
+      />
+      <link
+        rel='preconnect'
+        href='https://fonts.gstatic.com'
+        crossOrigin='anonymous'
+      />
+      <link
+        rel='preconnect'
+        href='https://www.google-analytics.com'
+      />
+      <link
+        rel='preconnect'
+        href='https://www.googletagmanager.com'
+      />
+      <link
+        rel='dns-prefetch'
+        href='//fonts.googleapis.com'
+      />
+      <link
+        rel='dns-prefetch'
+        href='//www.google-analytics.com'
+      />
+      {/* MS Application tile meta (not covered by generateMetadata) */}
+      <meta
+        name='msapplication-TileColor'
+        content='#ff6347'
+      />
+      <meta
+        name='msapplication-TileImage'
+        content='/assets/images/icons/ms-icon-144x144.png'
+      />
+      <meta
+        name='msapplication-config'
+        content='/assets/images/icons/browserconfig.xml'
+      />
+      <div className={`${inter.variable} ${montserrat.variable}`}>
         <NextIntlClientProvider messages={messages}>
           <ErrorBoundary>
             <ClientThemeProvider>
@@ -437,12 +328,14 @@ export default async function LocaleLayout({ children, params }: Props) {
               <ServiceWorkerRegistration />
               <WebVitals />
               {children}
+              <Footer />
+              <WhatsAppButton />
             </ClientThemeProvider>
           </ErrorBoundary>
           <CookieConsent />
           <NetworkStatus />
         </NextIntlClientProvider>
-      </body>
-    </html>
+      </div>
+    </>
   );
 }

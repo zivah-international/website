@@ -11,6 +11,11 @@ on:
         required: false
         type: boolean
         default: false
+      run_pnpm_install:
+        description: 'Force pnpm install on server (alternative to npm install)'
+        required: false
+        type: boolean
+        default: false
 
 # Prevent concurrent deployments
 concurrency:
@@ -37,19 +42,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24' # Match cPanel Node.js Selector version
-          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
 
       # -------------------------------------------------------
       # 3. Install dependencies
       # -------------------------------------------------------
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       # -------------------------------------------------------
       # 4. Build Next.js (standalone output)
       # -------------------------------------------------------
       - name: Build
-        run: npm run build
+        run: pnpm build
         env:
           NODE_ENV: production
           # Public vars – match cPanel Node.js Selector panel exactly
@@ -66,12 +75,12 @@ jobs:
       - name: Check if dependencies changed
         id: deps-changed
         run: |
-          if git diff --name-only HEAD~1 HEAD 2>/dev/null | grep -qE '^package(-lock)?\.json$'; then
+          if git diff --name-only HEAD~1 HEAD 2>/dev/null | grep -qE '^(package\.json|pnpm-lock\.yaml)$'; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
-            echo "package.json changed – npm install will run on server"
+            echo "package.json or pnpm-lock.yaml changed – npm install will run on server"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "package.json unchanged – skipping npm install"
+            echo "Dependencies unchanged – skipping npm install"
           fi
 
       # -------------------------------------------------------
@@ -97,8 +106,9 @@ jobs:
           # Dependency manifests (needed by cPanel "Run NPM Install" button)
           # We use node to create a clean production-only package.json
           node -e "const fs = require('fs'); const pkg = require('./package.json'); delete pkg.devDependencies; delete pkg['lint-staged']; pkg.scripts = { start: 'node server.js' }; fs.writeFileSync('deploy/package.json', JSON.stringify(pkg, null, 2));"
-          cp package-lock.json deploy/package-lock.json
+          cp pnpm-lock.yaml deploy/pnpm-lock.yaml 2>/dev/null || :
           cp .npmrc deploy/.npmrc 2>/dev/null || :
+          cp pnpm-workspace.yaml deploy/pnpm-workspace.yaml 2>/dev/null || :
 
           # Prisma schema
           cp prisma/schema.prisma deploy/prisma/schema.prisma

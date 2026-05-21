@@ -9,7 +9,6 @@ interface ClientThemeProviderProps {
 export default function ClientThemeProvider({ children }: ClientThemeProviderProps) {
   return (
     <ThemeProvider
-      attribute='class'
       defaultTheme='system'
       enableSystem
     >

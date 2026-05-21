@@ -6,7 +6,7 @@ echo Cleaning local build cache...
 if exist .next rmdir /s /q .next
 
 echo Building in production mode...
-call npm run build
+call pnpm run build
 if %errorlevel% neq 0 (
     echo Build failed with error level %errorlevel%
     pause
@@ -32,7 +32,7 @@ xcopy public\* deploy\public\ /e /i /h /y
 
 REM Create a clean package.json for production deployment
 node -e "const fs = require('fs'); const pkg = require('./package.json'); delete pkg.devDependencies; delete pkg['lint-staged']; pkg.scripts = { start: 'node server.js' }; fs.writeFileSync('deploy/package.json', JSON.stringify(pkg, null, 2));"
-copy package-lock.json deploy\package-lock.json /y 2>nul
+copy pnpm-lock.yaml deploy\pnpm-lock.yaml /y 2>nul
 copy .npmrc deploy\.npmrc /y 2>nul
 
 REM Copy prisma schema (needed for Prisma client)

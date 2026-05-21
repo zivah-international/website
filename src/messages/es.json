@@ -31,41 +31,48 @@
     "language": "Idioma:"
   },
   "hero": {
-    "badge": "🇪🇨 Desde Ecuador Hacia el Mundo - Samborondón, Guayas",
-    "title": "Los Mejores Productos",
-    "titleHighlight": "Ecuatorianos",
-    "titleEnd": "para Mercados Internacionales",
-    "description": "Desde Ecuador hacia el mundo, conectamos la excelencia ecuatoriana con compradores globales. Con sede principal en Samborondón, Guayas y oficina de distribución en Miami, somos especialistas en acuicultura, larvas de camarón, cultivo de árboles frutales y productos premium ecuatorianos.",
-    "exploreProducts": "Explorar Productos",
+    "badge": "🇪🇨 Desde Ecuador Hacia el Mundo · Samborondón, Guayas · Miami, Florida",
+    "title": "Productos Ecuatorianos",
+    "titleHighlight": "Premium",
+    "titleEnd": "con Trazabilidad y Certificación Internacional",
+    "description": "Exportamos camarón vannamei, larvas de acuicultura, frutas tropicales y café arábica directamente desde Ecuador. Certificaciones BAP, HACCP, BRC y GlobalGAP. Documentación lista. Respuesta en 24h.",
+    "exploreProducts": "Ver Catálogo",
     "requestQuote": "Solicitar Cotización",
     "stats": {
-      "countriesServed": "Países Atendidos",
-      "containersYear": "Contenedores/Año",
-      "yearsExperience": "Años de Experiencia",
-      "qualityGuaranteed": "Calidad Garantizada"
+      "countriesServed": "Países Exportados",
+      "containersYear": "Respuesta Garantizada",
+      "yearsExperience": "Años en el Mercado",
+      "qualityGuaranteed": "Satisfacción Cliente"
     },
-    "premiumProducts": "Productos Ecuatorianos Premium",
+    "statValues": {
+      "countriesServed": "5+",
+      "containersYear": "24h",
+      "yearsExperience": "4+",
+      "qualityGuaranteed": "100%"
+    },
+    "premiumProducts": "Lo que exportamos",
     "productTypes": {
-      "tropicalFruits": "Frutas Tropicales",
-      "premiumSeafood": "Mariscos Premium",
-      "highlandCoffee": "Café de Altura",
-      "aquaculture": "Acuicultura"
+      "tropicalFruits": "Frutas Tropicales · Mango, Piña, Banano",
+      "premiumSeafood": "Camarón Vannamei Certificado",
+      "highlandCoffee": "Café Arábica de Altura",
+      "aquaculture": "Larvas y Nauplios de Acuicultura"
     }
   },
   "products": {
-    "badge": "Nuestros Productos Principales",
-    "title": "Excelencia Ecuatoriana en Cada Envío",
+    "badge": "Catálogo de Exportación",
+    "title": "Productos Certificados para Mercados Exigentes",
     "loading": "Cargando productos...",
-    "description": "Desde frutas tropicales hasta productos marinos premium y larvas de acuicultura, llevamos lo mejor de Ecuador a mesas de todo el mundo con la más alta calidad y trazabilidad.",
-    "requestQuote": "Solicitar Cotización",
+    "description": "Desde camarón vannamei hasta frutas tropicales y larvas de acuicultura: cada producto cuenta con certificación internacional, trazabilidad completa y documentación de exportación lista.",
+    "requestQuote": "Cotizar este producto",
     "viewProducts": "Ver {count} productos",
-    "moreProducts": "+{count} productos más",
+    "viewDetail": "Ver ficha técnica",
+    "moreProducts": "+{count} más disponibles",
     "catalog": {
       "badge": "Catálogo Completo",
-      "title": "Todos Nuestros Productos Ecuatorianos",
-      "description": "{count} variedades de productos premium ecuatorianos disponibles para exportación mundial",
+      "title": "Todos Nuestros Productos con Ficha Técnica",
+      "description": "{count} productos disponibles para exportación · Con certificación, origen y precio base referencial",
       "all": "Todos",
-      "premiumQuality": "Premium quality",
+      "premiumQuality": "Calidad premium",
       "noProducts": {
         "title": "No se encontraron productos",
         "description": "Intenta seleccionar una categoría diferente"
@@ -73,9 +80,9 @@
     }
   },
   "quote": {
-    "badge": "Sistema Avanzado de Cotizaciones",
-    "title": "Cotizaciones Interactivas y Personalizadas",
-    "description": "Nuestro nuevo sistema de cotizaciones te permite seleccionar productos específicos, calcular precios en tiempo real y recibir propuestas personalizadas por email automáticamente.",
+    "badge": "Solicitud de Cotización",
+    "title": "Recibe una Propuesta Comercial en 24 horas",
+    "description": "Selecciona los productos de tu interés, indica volumen y destino, y recibirás una cotización detallada con precio FOB, certificaciones y documentación de exportación incluida.",
     "features": {
       "smartSearch": {
         "title": "Búsqueda Inteligente",
@@ -92,36 +99,44 @@
     }
   },
   "quality": {
-    "title": "Calidad Mundial, Origen Ecuatoriano",
-    "description": "Nuestros productos cumplen con los más altos estándares internacionales de calidad y seguridad alimentaria. Cada envío está respaldado por certificaciones reconocidas mundialmente y procesos de trazabilidad completos desde la finca hasta el destino final.",
+    "title": "Certificaciones que Abren Mercados",
+    "description": "Cada producto que exportamos cumple estándares internacionales de inocuidad y trazabilidad. Trabajamos con compradores en EE. UU., Europa y Asia que exigen documentación rigurosa, y la tenemos lista para cada embarque.",
     "certifications": {
-      "haccp": "Análisis de Peligros",
-      "brc": "Seguridad Alimentaria",
+      "haccp": "Control de Puntos Críticos",
+      "brc": "Estándar Retail Global",
       "bap": "Acuicultura Responsable",
-      "globalGap": "Buenas Prácticas"
+      "globalGap": "Buenas Prácticas Agrícolas"
     },
     "awards": {
-      "title": "Reconocimientos Internacionales",
-      "description": "Premiados por la excelencia en exportación y compromiso con la calidad en múltiples mercados internacionales. Más de 4 años de experiencia."
+      "title": "Reconocimiento Internacional",
+      "description": "Exportadores activos hacia EE. UU. y en expansión a nuevos mercados. Más de 4 años de trayectoria con procesos auditados y relaciones de largo plazo con nuestros clientes."
     }
   },
   "markets": {
     "badge": "Alcance Global",
-    "title": "Desde Ecuador Hacia el Mundo",
-    "description": "Desde Ecuador hacia el mundo, nuestra red logística con oficina de distribución en Miami nos permite llegar a los principales mercados mundiales con la eficiencia y calidad que nuestros clientes demandan",
+    "title": "Desde Guayas y Miami al Mundo",
+    "description": "Nuestra doble presencia en Samborondón (Ecuador) y Miami (EE. UU.) nos permite cerrar negocios ágilmente, coordinar logística internacional y ofrecer soporte comercial en tu zona horaria.",
     "stats": {
-      "countriesServed": "Países Atendidos",
-      "containersYear": "Contenedores por Año",
+      "countriesServed": "Países con Exportaciones Activas",
+      "containersYear": "Capacidad de Despacho",
       "yearsExperience": "Años de Experiencia",
-      "certifiedProducts": "Productos Certificados",
+      "certifiedProducts": "Productos con Certificación",
       "customerSatisfaction": "Satisfacción del Cliente",
-      "specializedSupport": "Soporte Especializado"
+      "specializedSupport": "Soporte Comercial"
+    },
+    "statValues": {
+      "countriesServed": "5+",
+      "containersYear": "Escalable",
+      "yearsExperience": "4+",
+      "certifiedProducts": "100%",
+      "customerSatisfaction": "100%",
+      "specializedSupport": "24/7"
     }
   },
   "contact": {
-    "badge": "Contacto",
-    "title": "Conecta con Nuestro Equipo",
-    "description": "Estamos aquí para ayudarte con todas tus necesidades de importación de productos ecuatorianos",
+    "badge": "Contacto Comercial",
+    "title": "Hablemos de tu Próximo Pedido",
+    "description": "Nuestro equipo comercial responde en menos de 24 horas. Ya sea que necesites una cotización urgente, información técnica o documentación de exportación, estamos listos para ayudarte.",
     "mainOffice": "Oficina Principal",
     "distributionOffice": "Oficina de Distribución",
     "commercialEmail": "Email Comercial",
@@ -130,10 +145,25 @@
     "mainHQ": "Sede Principal (Ecuador):",
     "miamiOffice": "Oficina Miami:",
     "weekdays": "Lunes - Viernes",
-    "unitedStates": "Estados Unidos"
+    "unitedStates": "Estados Unidos",
+    "contactChannels": "Canales de Contacto",
+    "sendMessage": "Envíanos un Mensaje",
+    "name": "Nombre",
+    "company": "Empresa",
+    "email": "Email",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "send": "Enviar Mensaje"
+  },
+  "newsletter": {
+    "title": "Novedades de Exportación Directo a tu Correo",
+    "description": "Actualizaciones de disponibilidad, temporadas de cosecha, precios FOB y nuevas certificaciones. Solo para importadores y distribuidores.",
+    "placeholder": "tu@empresa.com",
+    "cta": "Suscribirme",
+    "privacy": "Sin spam. Puedes cancelar en cualquier momento."
   },
   "footer": {
-    "companyDescription": "Exportadores premium de productos ecuatorianos con más de 4 años conectando Ecuador con el mundo desde nuestra sede principal en Samborondón, Guayas.",
+    "companyDescription": "Exportadores de productos ecuatorianos premium con 4+ años de trayectoria. Certificaciones HACCP, BRC, BAP y GlobalGAP. Sede en Samborondón y oficina comercial en Miami.",
     "specialists": "Especialistas en:",
     "specialistsList": "Acuicultura, Larvas de Camarón, Frutas Tropicales, Productos del Mar y Café de Altura.",
     "mainProducts": "Productos Principales",
@@ -156,6 +186,65 @@
     "dataProtection": "Protección de Datos",
     "copyright": "© {year} ZIVAH International S.A. Todos los derechos reservados.",
     "tagline": "Exportadores Premium de Productos Ecuatorianos"
+  },
+  "process": {
+    "badge": "¿Cómo Funciona?",
+    "title": "De tu Solicitud al Embarque en 4 Pasos",
+    "description": "Un proceso comercial claro, ágil y con soporte técnico en cada etapa.",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Solicita tu Cotización",
+        "description": "Selecciona los productos, indica el volumen y el país de destino. Recibirás respuesta en menos de 24 horas.",
+        "icon": "📋"
+      },
+      {
+        "number": "02",
+        "title": "Validación Técnica y Comercial",
+        "description": "Nuestro equipo valida disponibilidad, certificaciones requeridas y términos Incoterms según tu mercado.",
+        "icon": "🔍"
+      },
+      {
+        "number": "03",
+        "title": "Propuesta Formal",
+        "description": "Recibes una propuesta con precio FOB, especificaciones técnicas, certificaciones y documentación de exportación.",
+        "icon": "📄"
+      },
+      {
+        "number": "04",
+        "title": "Despacho y Seguimiento",
+        "description": "Coordinamos el embarque, la logística internacional y el seguimiento hasta que el producto llegue a destino.",
+        "icon": "🚢"
+      }
+    ]
+  },
+  "testimonials": {
+    "badge": "Lo que dicen nuestros clientes",
+    "title": "Resultados que Respaldan Nuestra Propuesta",
+    "description": "Importadores y distribuidores que confían en ZIVAH para sus operaciones de compra.",
+    "items": [
+      {
+        "quote": "El camarón vannamei de ZIVAH cumple todos los requisitos de nuestro mercado europeo. Documentación impecable, trazabilidad completa y precio competitivo. Trabajamos juntos desde el primer embarque.",
+        "author": "Importador de Mariscos",
+        "role": "Distribuidor Mayorista",
+        "country": "España",
+        "flag": "🇪🇸"
+      },
+      {
+        "quote": "Buscábamos un proveedor de larvas con genética comprobada y capacidad de despacho regular. ZIVAH nos ofrece exactamente eso, con soporte técnico en cada ciclo de producción.",
+        "author": "Gerente de Acuicultura",
+        "role": "Operador de Camaronera",
+        "country": "México",
+        "flag": "🇲🇽"
+      },
+      {
+        "quote": "La respuesta comercial es rápida, los precios son competitivos y la calidad del producto es consistente. Es la base de cualquier relación de exportación de largo plazo.",
+        "author": "Director de Compras",
+        "role": "Cadena de Distribución",
+        "country": "Estados Unidos",
+        "flag": "🇺🇸"
+      }
+    ]
   },
   "quoteForm": {
     "title": "Solicitar Cotización",
