@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { AuthUser } from '@/lib/auth';
+import type { AuthUser } from '@/lib/auth';
 import { createClient } from '@/utils/supabase/client';
 
 interface AdminHeaderProps {

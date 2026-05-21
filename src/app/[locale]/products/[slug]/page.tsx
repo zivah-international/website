@@ -94,7 +94,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
       {/* Sticky CTA bar for mobile */}
       <div className='fixed right-0 bottom-0 left-0 z-40 border-t border-gray-200 bg-white p-3 shadow-lg sm:hidden dark:border-gray-700 dark:bg-gray-800'>
-        <Link href={quoteUrl}>
+        <Link
+          href={quoteUrl}
+          data-track='begin_checkout'
+          data-track-label='solicitar_cotizacion_mobile'
+          data-track-category='cta'
+        >
           <Button
             variant='accent'
             size='full'
@@ -261,6 +266,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <Link
                   href={quoteUrl}
                   className='flex-1'
+                  data-track='begin_checkout'
+                  data-track-label='solicitar_cotizacion_product'
+                  data-track-category='cta'
                 >
                   <Button
                     variant='accent'
@@ -270,7 +278,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     📋 Solicitar Cotización
                   </Button>
                 </Link>
-                <Link href={`/${locale ?? 'es'}/#contact`}>
+                <Link
+                  href={`/${locale ?? 'es'}/#contact`}
+                  data-track='cta_click'
+                  data-track-label='contactar_product'
+                  data-track-category='cta'
+                >
                   <Button
                     variant='outline'
                     size='lg'
@@ -395,7 +408,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 Recibe una cotización FOB con especificaciones técnicas y documentación de
                 exportación en menos de 24 horas.
               </p>
-              <Link href={quoteUrl}>
+              <Link
+                href={quoteUrl}
+                data-track='begin_checkout'
+                data-track-label='solicitar_cotizacion_sidebar'
+                data-track-category='cta'
+              >
                 <Button
                   variant='accent'
                   size='full'
@@ -404,7 +422,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   📋 Solicitar Cotización Ahora
                 </Button>
               </Link>
-              <Link href={`/${locale ?? 'es'}/#contact`}>
+              <Link
+                href={`/${locale ?? 'es'}/#contact`}
+                data-track='cta_click'
+                data-track-label='hablar_asesor_sidebar'
+                data-track-category='cta'
+              >
                 <Button
                   variant='outline'
                   size='full'
@@ -422,6 +445,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <a
                   href='mailto:sales@zivahinternational.com'
                   className='text-muted-foreground hover:text-accent flex items-center gap-2 transition-colors'
+                  data-track='generate_lead'
+                  data-track-source='email_product'
+                  data-track-currency='USD'
+                  data-track-value='0'
                 >
                   <span>📧</span>
                   <span>sales@zivahinternational.com</span>

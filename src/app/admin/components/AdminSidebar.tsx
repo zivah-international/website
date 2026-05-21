@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { AuthUser, hasRole } from '@/lib/auth-shared';
+import { type AuthUser, hasRole } from '@/lib/auth-shared';
 
 interface SidebarItem {
   name: string;

@@ -254,6 +254,9 @@ export default async function QualityPage({ params }: Props) {
             <Link
               href='/quote'
               className='text-primary inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold shadow-md transition-all hover:bg-white/90'
+              data-track='begin_checkout'
+              data-track-label='solicitar_cotizacion_quality'
+              data-track-category='cta'
             >
               Solicitar Cotización
             </Link>
@@ -262,6 +265,10 @@ export default async function QualityPage({ params }: Props) {
               target='_blank'
               rel='noopener noreferrer'
               className='inline-flex items-center gap-2 rounded-xl border-2 border-white/40 px-6 py-3 font-semibold text-white transition-all hover:border-white hover:bg-white/10'
+              data-track='generate_lead'
+              data-track-source='whatsapp_quality'
+              data-track-currency='USD'
+              data-track-value='0'
             >
               Consultar por WhatsApp
             </a>

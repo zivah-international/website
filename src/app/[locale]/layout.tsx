@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
 import { notFound } from 'next/navigation';
+import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
@@ -274,6 +275,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   // Providing all messages to the client side
   const messages = await getMessages();
 
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
   return (
     <>
       {/* Resource hints — React 19 hoists <link>/<meta> to <head> */}
@@ -315,6 +318,51 @@ export default async function LocaleLayout({ children, params }: Props) {
         name='msapplication-config'
         content='/assets/images/icons/browserconfig.xml'
       />
+      {/* Google Analytics 4 — same pattern as Kjaia: init inline first, then async loader */}
+      {gaId && (
+        <>
+          <Script
+            id='google-analytics-init'
+            strategy='afterInteractive'
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('consent', 'default', {
+                  analytics_storage: 'granted',
+                  ad_storage: 'denied',
+                  ad_user_data: 'denied',
+                  ad_personalization: 'denied',
+                  functionality_storage: 'denied',
+                  personalization_storage: 'denied',
+                  security_storage: 'granted'
+                });
+                gtag('js', new Date());
+                gtag('config', '${gaId}', { anonymize_ip: true, send_page_view: true });
+
+                // Global [data-track] CTA handler (GA4 recommended events)
+                document.addEventListener('click', function(e) {
+                  var el = e.target.closest('[data-track]');
+                  if (!el) return;
+                  var event = el.dataset.track;
+                  var params = {
+                    event_category: el.dataset.trackCategory || 'cta',
+                    event_label: el.dataset.trackLabel || (el.innerText || '').trim().substring(0, 100),
+                  };
+                  if (el.dataset.trackSource) params.lead_source = el.dataset.trackSource;
+                  if (el.dataset.trackCurrency) params.currency = el.dataset.trackCurrency;
+                  if (el.dataset.trackValue) params.value = parseFloat(el.dataset.trackValue);
+                  gtag('event', event, params);
+                });
+              `,
+            }}
+          />
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            strategy='afterInteractive'
+          />
+        </>
+      )}
       <div className={`${inter.variable} ${montserrat.variable}`}>
         <NextIntlClientProvider messages={messages}>
           <ErrorBoundary>

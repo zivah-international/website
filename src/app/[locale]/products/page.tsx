@@ -129,6 +129,9 @@ export default function ProductsPage() {
               <Link
                 href={`/${locale}/quote`}
                 className='bg-accent hover:bg-accent/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:-translate-y-0.5'
+                data-track='begin_checkout'
+                data-track-label='solicitar_cotizacion_products_header'
+                data-track-category='cta'
               >
                 {t('products.requestQuote')}
               </Link>
@@ -277,6 +280,9 @@ export default function ProductsPage() {
                         <Link
                           href={`/${locale}/quote?product=${product.slug}`}
                           className='bg-accent hover:bg-accent/90 flex-1 rounded-lg py-2 text-center text-sm font-semibold text-white transition-colors'
+                          data-track='begin_checkout'
+                          data-track-label='solicitar_cotizacion_card'
+                          data-track-category='cta'
                         >
                           {t('products.requestQuote')}
                         </Link>
@@ -309,6 +315,10 @@ export default function ProductsPage() {
               target='_blank'
               rel='noopener noreferrer'
               className='inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 font-semibold text-white shadow-md transition-all hover:bg-[#20bd5c] hover:shadow-lg'
+              data-track='generate_lead'
+              data-track-source='whatsapp_products'
+              data-track-currency='USD'
+              data-track-value='0'
             >
               Consultar por WhatsApp
             </a>

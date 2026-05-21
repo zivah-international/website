@@ -111,6 +111,10 @@ export default async function QuotePage({ params }: Props) {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 font-semibold text-white shadow-md transition-all hover:bg-[#20bd5c]'
+                data-track='generate_lead'
+                data-track-source='whatsapp_quote'
+                data-track-currency='USD'
+                data-track-value='0'
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -124,6 +128,10 @@ export default async function QuotePage({ params }: Props) {
               <a
                 href='mailto:sales@zivahinternational.com?subject=Solicitud%20de%20Cotización'
                 className='text-foreground border-border inline-flex items-center gap-2 rounded-xl border-2 px-6 py-3 font-semibold transition-all hover:border-current/60'
+                data-track='generate_lead'
+                data-track-source='email_quote'
+                data-track-currency='USD'
+                data-track-value='0'
               >
                 sales@zivahinternational.com
               </a>

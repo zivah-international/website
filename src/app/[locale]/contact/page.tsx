@@ -78,6 +78,10 @@ export default async function ContactPage({ params }: Props) {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-border bg-card flex items-center gap-4 rounded-2xl border p-5 shadow-sm transition-all hover:border-[#25D366]/40 hover:shadow-md'
+                data-track='generate_lead'
+                data-track-source='whatsapp_contact'
+                data-track-currency='USD'
+                data-track-value='0'
               >
                 <div className='flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#25D366]/10'>
                   <svg
@@ -113,6 +117,10 @@ export default async function ContactPage({ params }: Props) {
               <a
                 href='mailto:sales@zivahinternational.com'
                 className='border-border bg-card hover:border-primary/30 flex items-center gap-4 rounded-2xl border p-5 shadow-sm transition-all hover:shadow-md'
+                data-track='generate_lead'
+                data-track-source='email_contact'
+                data-track-currency='USD'
+                data-track-value='0'
               >
                 <div className='bg-primary/10 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl'>
                   <svg

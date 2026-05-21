@@ -239,12 +239,18 @@ export default async function MarketsPage({ params }: Props) {
             <Link
               href='/quote'
               className='text-primary inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold shadow-md transition-all hover:bg-white/90'
+              data-track='begin_checkout'
+              data-track-label='solicitar_cotizacion_markets'
+              data-track-category='cta'
             >
               Solicitar Cotización
             </Link>
             <Link
               href='/contact'
               className='inline-flex items-center gap-2 rounded-xl border-2 border-white/40 px-6 py-3 font-semibold text-white transition-all hover:border-white hover:bg-white/10'
+              data-track='cta_click'
+              data-track-label='contactar_asesor_markets'
+              data-track-category='cta'
             >
               Contactar asesor
             </Link>

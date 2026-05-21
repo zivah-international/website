@@ -23,6 +23,15 @@ export default function WhatsAppButton() {
       target='_blank'
       rel='noopener noreferrer'
       aria-label='Contactar por WhatsApp'
+      onClick={() => {
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'generate_lead', {
+            currency: 'USD',
+            value: 0,
+            lead_source: 'whatsapp_float',
+          });
+        }
+      }}
       className={`fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition-all duration-500 hover:scale-110 hover:bg-[#20bd5c] hover:shadow-xl focus:ring-4 focus:ring-[#25D366]/40 focus:outline-none ${
         visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
       }`}
