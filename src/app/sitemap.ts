@@ -1,4 +1,4 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 
 import { defaultLocale, localeFullCodes, locales } from '@/i18n/config';
 

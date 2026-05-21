@@ -9,7 +9,7 @@ echo "==========================================="
 
 # 1. Build the application in production mode
 echo "📦 Building application in production..."
-npm run build
+pnpm run build
 
 # 2. Create deployment directory
 echo "📁 Preparing deployment files..."

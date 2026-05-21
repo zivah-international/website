@@ -10,55 +10,12 @@ declare global {
   }
 }
 
-// Google Analytics Measurement ID
+// Google Analytics Measurement ID — script loading is handled by next/script in the layout
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
-const isProduction = process.env.NODE_ENV === 'production';
-
-// Initialize Google Analytics
-export function initGA() {
-  if (typeof window === 'undefined' || !GA_MEASUREMENT_ID || !isProduction) return;
-
-  // Skip if already initialized (check if gtag has been called)
-  if (window.dataLayer && window.dataLayer.length > 0) return;
-
-  // Initialize dataLayer and gtag BEFORE loading script
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function (...args: unknown[]) {
-    window.dataLayer.push(args);
-  };
-
-  // Set consent BEFORE any tracking (GDPR compliance)
-  // Default: allow basic analytics, deny ads/personalization
-  window.gtag('consent', 'default', {
-    analytics_storage: 'granted', // Allow basic page view tracking
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied',
-    functionality_storage: 'denied',
-    personalization_storage: 'denied',
-    security_storage: 'granted',
-  });
-
-  window.gtag('js', new Date());
-
-  // Load Google Analytics script
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(script);
-
-  // Configure GA4
-  window.gtag('config', GA_MEASUREMENT_ID, {
-    page_title: document.title,
-    page_location: window.location.href,
-    send_page_view: true, // Send initial page view
-    anonymize_ip: true, // Privacy: anonymize IP addresses
-  });
-}
 
 // Track page views
 export function trackPageView(url: string) {
-  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID || !isProduction) return;
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
 
   window.gtag('event', 'page_view', {
     page_path: url,
@@ -68,7 +25,7 @@ export function trackPageView(url: string) {
 
 // Track events
 export function trackEvent(action: string, category: string, label?: string, value?: number) {
-  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
 
   window.gtag('event', action, {
     event_category: category,
@@ -79,7 +36,7 @@ export function trackEvent(action: string, category: string, label?: string, val
 
 // Track conversions
 export function trackConversion(conversionId: string, value?: number, currency: string = 'USD') {
-  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
 
   window.gtag('event', 'conversion', {
     send_to: conversionId,
@@ -96,7 +53,7 @@ export function trackProductView(product: {
   price?: number;
   currency?: string;
 }) {
-  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
 
   window.gtag('event', 'view_item', {
     currency: product.currency || 'USD',
@@ -122,7 +79,7 @@ export function trackQuoteRequest(
   }>,
   totalValue?: number
 ) {
-  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
 
   const items = products.map(product => ({
     item_id: product.id,
@@ -140,11 +97,26 @@ export function trackQuoteRequest(
 
 // Track form submissions
 export function trackFormSubmission(formType: string, success: boolean = true) {
-  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
 
   window.gtag('event', success ? 'form_submit_success' : 'form_submit_error', {
     event_category: 'form',
     event_label: formType,
+  });
+}
+
+// GA4 recommended — Lead generation event (quote form, WhatsApp, email CTAs)
+export function trackGenerateLead(params: {
+  lead_source: string;
+  currency?: string;
+  value?: number;
+}) {
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
+
+  window.gtag('event', 'generate_lead', {
+    currency: params.currency ?? 'USD',
+    value: params.value,
+    lead_source: params.lead_source,
   });
 }
 
@@ -154,7 +126,7 @@ export function updateConsent(consent: {
   marketing?: boolean;
   functional?: boolean;
 }) {
-  if (typeof window === 'undefined' || !window.gtag || !isProduction) return;
+  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
 
   const consentUpdate: Record<string, string> = {};
 
@@ -173,18 +145,14 @@ export function updateConsent(consent: {
   window.gtag('consent', 'update', consentUpdate);
 }
 
-// Analytics component
+// Analytics component — tracks SPA page view changes (gtag is initialized via next/script in layout)
 export default function Analytics() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    // Initialize GA on first load
-    if (!window.gtag) {
-      initGA();
-    }
+    if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
 
-    // Track page view
     const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
     trackPageView(url);
   }, [pathname, searchParams]);
@@ -200,6 +168,7 @@ export function useAnalytics() {
     trackProductView,
     trackQuoteRequest,
     trackFormSubmission,
+    trackGenerateLead,
     updateConsent,
   };
 }

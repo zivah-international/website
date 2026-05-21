@@ -225,15 +225,6 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
     }
 
     setProductsSearching(true);
-    setSearchQuery(query);
-
-    if (query.length < 2) {
-      setProducts([]);
-      setShowProductList(false);
-      return;
-    }
-
-    setProductsSearching(true);
 
     try {
       const res = await fetch(

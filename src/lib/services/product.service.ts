@@ -1,6 +1,6 @@
 import { parseJsonFields, query } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import {
+import type {
   CreateProductInput,
   PaginatedResponse,
   Product,

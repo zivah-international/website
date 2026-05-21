@@ -1,9 +1,10 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { AuthUser } from '@/lib/auth';
+import type { AuthUser } from '@/lib/auth';
 import { createClient } from '@/utils/supabase/client';
 
 interface AdminHeaderProps {
@@ -148,12 +149,12 @@ export function AdminHeader({ user }: AdminHeaderProps) {
                   </p>
                   <p className='truncate text-xs text-gray-500 dark:text-gray-400'>{user.email}</p>
                 </div>
-                <a
+                <Link
                   href='/admin/profile'
                   className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
                 >
                   Profile Settings
-                </a>
+                </Link>
                 <button
                   onClick={handleSignOut}
                   className='block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-700'

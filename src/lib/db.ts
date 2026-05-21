@@ -1,5 +1,5 @@
 import dns from 'dns';
-import { Pool, PoolClient } from 'pg';
+import { Pool, type PoolClient } from 'pg';
 import { z } from 'zod';
 
 import { logger } from './logger';

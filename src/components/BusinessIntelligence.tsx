@@ -6,8 +6,14 @@ import { useAnalytics } from './Analytics';
 
 // Business Intelligence tracking for ZIVAH International
 export function useBusinessTracking() {
-  const { trackEvent, trackConversion, trackProductView, trackQuoteRequest, trackFormSubmission } =
-    useAnalytics();
+  const {
+    trackEvent,
+    trackConversion,
+    trackProductView,
+    trackQuoteRequest,
+    trackFormSubmission,
+    trackGenerateLead,
+  } = useAnalytics();
 
   // Track business-specific events
   const trackBusinessEvent = (eventName: string, properties?: Record<string, any>) => {
@@ -61,6 +67,12 @@ export function useBusinessTracking() {
         quantity: p.quantity,
       }))
     );
+
+    // GA4 recommended: generate_lead fires on successful quote submission
+    trackGenerateLead({
+      lead_source: 'quote_form',
+      currency: 'USD',
+    });
 
     trackBusinessEvent('quote_request_complete', {
       product_count: quoteData.products.length,

@@ -31,39 +31,46 @@
     "language": "Language:"
   },
   "hero": {
-    "badge": "🇪🇨 From Ecuador to the World - Samborondón, Guayas",
-    "title": "The Best",
-    "titleHighlight": "Ecuadorian",
-    "titleEnd": "Products for International Markets",
-    "description": "From Ecuador to the world, we connect Ecuadorian excellence with global buyers. Headquartered in Samborondón, Guayas with distribution office in Miami, we specialize in aquaculture, shrimp larvae, fruit tree cultivation, and premium Ecuadorian products.",
-    "exploreProducts": "Explore Products",
+    "badge": "🇪🇨 From Ecuador to the World · Samborondón, Guayas · Miami, Florida",
+    "title": "Premium Ecuadorian Products",
+    "titleHighlight": "Certified",
+    "titleEnd": "for International Markets",
+    "description": "We export vannamei shrimp, aquaculture larvae, tropical fruits and arabica coffee directly from Ecuador. BAP, HACCP, BRC and GlobalGAP certified. Documentation ready. Response within 24h.",
+    "exploreProducts": "View Catalog",
     "requestQuote": "Request Quote",
     "stats": {
-      "countriesServed": "Countries Served",
-      "containersYear": "Containers/Year",
-      "yearsExperience": "Years of Experience",
-      "qualityGuaranteed": "Quality Guaranteed"
+      "countriesServed": "Export Markets",
+      "containersYear": "Guaranteed Response",
+      "yearsExperience": "Years in Market",
+      "qualityGuaranteed": "Client Satisfaction"
     },
-    "premiumProducts": "Premium Ecuadorian Products",
+    "statValues": {
+      "countriesServed": "5+",
+      "containersYear": "24h",
+      "yearsExperience": "4+",
+      "qualityGuaranteed": "100%"
+    },
+    "premiumProducts": "What We Export",
     "productTypes": {
-      "tropicalFruits": "Tropical Fruits",
-      "premiumSeafood": "Premium Seafood",
-      "highlandCoffee": "Highland Coffee",
-      "aquaculture": "Aquaculture"
+      "tropicalFruits": "Tropical Fruits · Mango, Pineapple, Banana",
+      "premiumSeafood": "Certified Vannamei Shrimp",
+      "highlandCoffee": "High-Altitude Arabica Coffee",
+      "aquaculture": "Aquaculture Larvae & Nauplii"
     }
   },
   "products": {
-    "badge": "Our Main Products",
-    "title": "Ecuadorian Excellence in Every Shipment",
+    "badge": "Export Catalog",
+    "title": "Certified Products for Demanding Markets",
     "loading": "Loading products...",
-    "description": "From tropical fruits to premium seafood and aquaculture larvae, we bring the best of Ecuador to tables worldwide with the highest quality and traceability.",
-    "requestQuote": "Request Quote",
+    "description": "From vannamei shrimp to tropical fruits and aquaculture larvae: every product carries international certification, full traceability and export documentation ready for shipment.",
+    "requestQuote": "Quote this product",
     "viewProducts": "View {count} products",
-    "moreProducts": "+{count} more products",
+    "viewDetail": "View technical sheet",
+    "moreProducts": "+{count} more available",
     "catalog": {
       "badge": "Complete Catalog",
-      "title": "All Our Ecuadorian Products",
-      "description": "{count} varieties of premium Ecuadorian products available for worldwide export",
+      "title": "All Our Products with Technical Sheet",
+      "description": "{count} products available for export · With certification, origin and reference base price",
       "all": "All",
       "premiumQuality": "Premium quality",
       "noProducts": {
@@ -73,9 +80,9 @@
     }
   },
   "quote": {
-    "badge": "Advanced Quote System",
-    "title": "Interactive and Personalized Quotes",
-    "description": "Our new quote system allows you to select specific products, calculate prices in real-time, and receive personalized proposals automatically by email.",
+    "badge": "Request a Quote",
+    "title": "Receive a Commercial Proposal within 24 Hours",
+    "description": "Select the products you need, specify volume and destination, and receive a detailed quote with FOB price, certifications and export documentation included.",
     "features": {
       "smartSearch": {
         "title": "Smart Search",
@@ -92,36 +99,44 @@
     }
   },
   "quality": {
-    "title": "World-Class Quality, Ecuadorian Origin",
-    "description": "Our products meet the highest international quality and food safety standards. Every shipment is backed by globally recognized certifications and complete traceability processes from farm to final destination.",
+    "title": "Certifications That Open Markets",
+    "description": "Every product we export meets international food safety and traceability standards. We work with buyers in the US, Europe and Asia who demand rigorous documentation—and we have it ready for every shipment.",
     "certifications": {
-      "haccp": "Hazard Analysis",
-      "brc": "Food Safety",
+      "haccp": "Critical Control Points",
+      "brc": "Global Retail Standard",
       "bap": "Responsible Aquaculture",
-      "globalGap": "Good Practices"
+      "globalGap": "Good Agricultural Practices"
     },
     "awards": {
-      "title": "International Recognition",
-      "description": "Awarded for excellence in exports and commitment to quality in multiple international markets. Over 4 years of experience."
+      "title": "International Track Record",
+      "description": "Active exporters to the US and expanding to new markets. Over 4 years of experience with audited processes and long-term client relationships."
     }
   },
   "markets": {
     "badge": "Global Reach",
-    "title": "From Ecuador to the World",
-    "description": "From Ecuador to the world, our logistics network with distribution office in Miami allows us to reach the main global markets with the efficiency and quality our customers demand",
+    "title": "From Guayas and Miami to the World",
+    "description": "Our dual presence in Samborondón (Ecuador) and Miami (USA) allows us to close deals quickly, coordinate international logistics and offer commercial support in your time zone.",
     "stats": {
-      "countriesServed": "Countries Served",
-      "containersYear": "Containers per Year",
+      "countriesServed": "Countries with Active Exports",
+      "containersYear": "Dispatch Capacity",
       "yearsExperience": "Years of Experience",
       "certifiedProducts": "Certified Products",
       "customerSatisfaction": "Customer Satisfaction",
-      "specializedSupport": "Specialized Support"
+      "specializedSupport": "Commercial Support"
+    },
+    "statValues": {
+      "countriesServed": "5+",
+      "containersYear": "Scalable",
+      "yearsExperience": "4+",
+      "certifiedProducts": "100%",
+      "customerSatisfaction": "100%",
+      "specializedSupport": "24/7"
     }
   },
   "contact": {
-    "badge": "Contact",
-    "title": "Connect with Our Team",
-    "description": "We're here to help with all your Ecuadorian product import needs",
+    "badge": "Commercial Contact",
+    "title": "Let's Talk About Your Next Order",
+    "description": "Our commercial team responds within 24 hours. Whether you need an urgent quote, technical information or export documentation, we are ready to help.",
     "mainOffice": "Main Office",
     "distributionOffice": "Distribution Office",
     "commercialEmail": "Commercial Email",
@@ -130,10 +145,25 @@
     "mainHQ": "Main Headquarters (Ecuador):",
     "miamiOffice": "Miami Office:",
     "weekdays": "Monday - Friday",
-    "unitedStates": "United States"
+    "unitedStates": "United States",
+    "contactChannels": "Contact Channels",
+    "sendMessage": "Send Us a Message",
+    "name": "Name",
+    "company": "Company",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send Message"
+  },
+  "newsletter": {
+    "title": "Export Updates Straight to Your Inbox",
+    "description": "Availability updates, harvest seasons, FOB prices and new certifications. For importers and distributors only.",
+    "placeholder": "you@company.com",
+    "cta": "Subscribe",
+    "privacy": "No spam. You can unsubscribe at any time."
   },
   "footer": {
-    "companyDescription": "Premium exporters of Ecuadorian products with over 4 years connecting Ecuador with the world from our headquarters in Samborondón, Guayas.",
+    "companyDescription": "Premium Ecuadorian product exporters with 4+ years of experience. HACCP, BRC, BAP and GlobalGAP certifications. HQ in Samborondón and commercial office in Miami.",
     "specialists": "Specialists in:",
     "specialistsList": "Aquaculture, Shrimp Larvae, Tropical Fruits, Seafood, and Highland Coffee.",
     "mainProducts": "Main Products",
@@ -156,6 +186,65 @@
     "dataProtection": "Data Protection",
     "copyright": "© {year} ZIVAH International S.A. All rights reserved.",
     "tagline": "Premium Ecuadorian Products Exporters"
+  },
+  "process": {
+    "badge": "How It Works",
+    "title": "From Your Request to Shipment in 4 Steps",
+    "description": "A clear, agile commercial process with technical support at every stage.",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Request Your Quote",
+        "description": "Select the products, indicate volume and destination country. You will receive a response within 24 hours.",
+        "icon": "📋"
+      },
+      {
+        "number": "02",
+        "title": "Technical & Commercial Validation",
+        "description": "Our team validates availability, required certifications and Incoterms according to your market.",
+        "icon": "🔍"
+      },
+      {
+        "number": "03",
+        "title": "Formal Proposal",
+        "description": "You receive a proposal with FOB price, technical specifications, certifications and export documentation.",
+        "icon": "📄"
+      },
+      {
+        "number": "04",
+        "title": "Dispatch & Tracking",
+        "description": "We coordinate the shipment, international logistics and follow up until the product reaches its destination.",
+        "icon": "🚢"
+      }
+    ]
+  },
+  "testimonials": {
+    "badge": "What Our Clients Say",
+    "title": "Results That Back Our Proposition",
+    "description": "Importers and distributors who trust ZIVAH for their sourcing operations.",
+    "items": [
+      {
+        "quote": "ZIVAH's vannamei shrimp meets all the requirements of our European market. Impeccable documentation, complete traceability and competitive pricing. We have been working together since the first shipment.",
+        "author": "Seafood Importer",
+        "role": "Wholesale Distributor",
+        "country": "Spain",
+        "flag": "🇪🇸"
+      },
+      {
+        "quote": "We were looking for a larvae supplier with proven genetics and regular dispatch capacity. ZIVAH offers exactly that, with technical support in every production cycle.",
+        "author": "Aquaculture Manager",
+        "role": "Shrimp Farm Operator",
+        "country": "Mexico",
+        "flag": "🇲🇽"
+      },
+      {
+        "quote": "The commercial response is fast, prices are competitive and product quality is consistent. That is the foundation of any long-term export relationship.",
+        "author": "Purchasing Director",
+        "role": "Distribution Chain",
+        "country": "United States",
+        "flag": "🇺🇸"
+      }
+    ]
   },
   "quoteForm": {
     "title": "Request Quote",

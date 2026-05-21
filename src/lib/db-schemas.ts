@@ -195,3 +195,18 @@ export const CurrencyDBSchema = z.object({
 });
 
 export type CurrencyDB = z.infer<typeof CurrencyDBSchema>;
+
+// Subscription Schema (Newsletter)
+export const SubscriptionDBSchema = BaseEntitySchema.extend({
+  email: z.string().email(),
+  name: z.string().nullable(),
+  locale: z.enum(['es', 'en']).default('es'),
+  source: z.string().nullable(),
+  is_active: z.boolean().or(z.number().transform(val => val === 1)),
+  confirmed_at: z
+    .date()
+    .or(z.string().transform(val => new Date(val)))
+    .nullable(),
+});
+
+export type SubscriptionDB = z.infer<typeof SubscriptionDBSchema>;

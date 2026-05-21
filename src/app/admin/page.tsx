@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Suspense } from 'react';
 
 import { canManage, getAuthUser, isAdmin } from '@/lib/auth';
@@ -231,7 +232,7 @@ export default async function AdminDashboardPage() {
       {/* Quick Actions */}
       {isManager && (
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-          <a
+          <Link
             href='/admin/quotes/new'
             className='flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800'
           >
@@ -240,8 +241,8 @@ export default async function AdminDashboardPage() {
               <p className='font-medium text-gray-900 dark:text-white'>New Quote</p>
               <p className='text-xs text-gray-500'>Create a quote manually</p>
             </div>
-          </a>
-          <a
+          </Link>
+          <Link
             href='/admin/products/new'
             className='flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800'
           >
@@ -250,10 +251,10 @@ export default async function AdminDashboardPage() {
               <p className='font-medium text-gray-900 dark:text-white'>Add Product</p>
               <p className='text-xs text-gray-500'>Add a new product</p>
             </div>
-          </a>
+          </Link>
           {isAdminUser && (
             <>
-              <a
+              <Link
                 href='/admin/users'
                 className='flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800'
               >
@@ -262,8 +263,8 @@ export default async function AdminDashboardPage() {
                   <p className='font-medium text-gray-900 dark:text-white'>Manage Users</p>
                   <p className='text-xs text-gray-500'>Add or edit team members</p>
                 </div>
-              </a>
-              <a
+              </Link>
+              <Link
                 href='/admin/settings'
                 className='flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800'
               >
@@ -272,7 +273,7 @@ export default async function AdminDashboardPage() {
                   <p className='font-medium text-gray-900 dark:text-white'>Settings</p>
                   <p className='text-xs text-gray-500'>Configure site settings</p>
                 </div>
-              </a>
+              </Link>
             </>
           )}
         </div>
@@ -282,12 +283,12 @@ export default async function AdminDashboardPage() {
       <div className='rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800'>
         <div className='mb-4 flex items-center justify-between'>
           <h2 className='text-lg font-semibold text-gray-900 dark:text-white'>Recent Quotes</h2>
-          <a
+          <Link
             href='/admin/quotes'
             className='text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300'
           >
             View all →
-          </a>
+          </Link>
         </div>
         <Suspense
           fallback={

@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
@@ -17,9 +18,20 @@ interface NavigationProps {
 export default function Navigation({ onScrollToSection: _onScrollToSection }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
   const mounted = useMounted();
   const t = useTranslations('nav');
+  const pathname = usePathname();
+
+  // Derive active section from current pathname
+  const getActiveSection = () => {
+    if (pathname.match(/\/products/)) return 'products';
+    if (pathname.match(/\/quote/)) return 'quote';
+    if (pathname.match(/\/quality/)) return 'quality';
+    if (pathname.match(/\/markets/)) return 'markets';
+    if (pathname.match(/\/contact/)) return 'contact';
+    return 'home';
+  };
+  const activeSection = getActiveSection();
 
   // Handle scroll effect
   useEffect(() => {
@@ -36,56 +48,112 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
     return () => window.removeEventListener('scroll', handleScroll);
   }, [mounted]);
 
-  // Handle section detection
-  useEffect(() => {
-    if (!mounted) return;
-
-    const handleScroll = () => {
-      const sections = ['home', 'products', 'quote', 'quality', 'markets', 'contact'];
-      const scrollPosition = window.scrollY + 100;
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    };
-
-    // Set initial active section
-    handleScroll();
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [mounted]);
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offsetTop = element.offsetTop - 80; // Account for fixed navigation height
-      window.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth',
-      });
-    }
-    setIsMobileMenuOpen(false);
-  };
-
-  const handleLogoClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const NavIcons = {
+    home: (
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        className='h-4 w-4'
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
+        />
+      </svg>
+    ),
+    products: (
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        className='h-4 w-4'
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'
+        />
+      </svg>
+    ),
+    quote: (
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        className='h-4 w-4'
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+        />
+      </svg>
+    ),
+    quality: (
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        className='h-4 w-4'
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'
+        />
+      </svg>
+    ),
+    markets: (
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        className='h-4 w-4'
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 004 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+        />
+      </svg>
+    ),
+    contact: (
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        className='h-4 w-4'
+        fill='none'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
+        />
+      </svg>
+    ),
   };
 
   const navigationItems = [
-    { id: 'home', label: t('home'), icon: '🏠' },
-    { id: 'products', label: t('products'), icon: '📦' },
-    { id: 'quote', label: t('quote'), icon: '💰' },
-    { id: 'quality', label: t('quality'), icon: '⭐' },
-    { id: 'markets', label: t('markets'), icon: '🌍' },
-    { id: 'contact', label: t('contact'), icon: '📞' },
+    { id: 'home', href: '/', label: t('home'), icon: NavIcons.home },
+    { id: 'products', href: '/products', label: t('products'), icon: NavIcons.products },
+    { id: 'quote', href: '/quote', label: t('quote'), icon: NavIcons.quote },
+    { id: 'quality', href: '/quality', label: t('quality'), icon: NavIcons.quality },
+    { id: 'markets', href: '/markets', label: t('markets'), icon: NavIcons.markets },
+    { id: 'contact', href: '/contact', label: t('contact'), icon: NavIcons.contact },
   ];
 
   // Use consistent className order to prevent hydration mismatch
@@ -105,21 +173,12 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
         suppressHydrationWarning
       >
         <div className='flex items-center justify-between'>
-          {/* Logo - Using div to ensure consistent SSR/hydration */}
-          <div
-            className='flex cursor-pointer items-center space-x-2 transition-transform hover:scale-105'
-            onClick={handleLogoClick}
-            role='button'
-            tabIndex={0}
-            onKeyDown={e => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handleLogoClick();
-              }
-            }}
+          {/* Logo */}
+          <Link
+            href='/'
+            className='flex items-center space-x-2 transition-transform hover:scale-105'
             aria-label='Ir al inicio'
           >
-            {/* Using regular img tag instead of Next.js Image for SVG to avoid optimization issues */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src='/assets/images/zivah-logo.svg'
@@ -128,25 +187,27 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
               height={40}
               style={{ width: '120px', height: '40px' }}
             />
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className='hidden items-center space-x-1 lg:flex'>
             {navigationItems.map(item => (
               <Button
                 key={item.id}
-                variant={mounted && activeSection === item.id ? 'nav-active' : 'nav'}
+                asChild
+                variant={activeSection === item.id ? 'nav-active' : 'nav'}
                 size='nav'
-                onClick={() => scrollToSection(item.id)}
                 className='relative font-medium'
               >
-                <span className='mr-2'>{item.icon}</span>
-                {item.label}
-                <div
-                  className={`absolute bottom-0 left-1/2 h-1 w-1 -translate-x-1/2 transform rounded-full ${
-                    mounted && activeSection === item.id ? 'bg-accent' : 'bg-transparent'
-                  }`}
-                />
+                <Link href={item.href}>
+                  <span className='mr-1.5 opacity-70'>{item.icon}</span>
+                  {item.label}
+                  <div
+                    className={`absolute bottom-0 left-1/2 h-0.5 w-4/5 -translate-x-1/2 transform rounded-full transition-all duration-300 ${
+                      activeSection === item.id ? 'bg-accent' : 'bg-transparent'
+                    }`}
+                  />
+                </Link>
               </Button>
             ))}
           </div>
@@ -163,13 +224,28 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
 
             {/* CTA Button */}
             <Button
-              onClick={() => scrollToSection('quote')}
+              asChild
               variant='accent'
               size='default'
-              className='hidden items-center shadow-md hover:shadow-lg md:inline-flex'
+              className='hidden items-center gap-2 shadow-md hover:shadow-lg md:inline-flex'
             >
-              <span className='mr-2'>💬</span>
-              {t('quote')}
+              <Link href='/quote'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  className='h-4 w-4'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  stroke='currentColor'
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+                  />
+                </svg>
+                {t('quote')}
+              </Link>
             </Button>
 
             {/* Mobile Menu Button */}
@@ -217,13 +293,18 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
               {navigationItems.map(item => (
                 <Button
                   key={item.id}
-                  variant={mounted && activeSection === item.id ? 'nav-active' : 'nav-mobile'}
+                  asChild
+                  variant={activeSection === item.id ? 'nav-active' : 'nav-mobile'}
                   size='nav-mobile'
-                  onClick={() => scrollToSection(item.id)}
                   className='font-medium'
                 >
-                  <span className='mr-3'>{item.icon}</span>
-                  {item.label}
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <span className='mr-3 opacity-70'>{item.icon}</span>
+                    {item.label}
+                  </Link>
                 </Button>
               ))}
             </div>
@@ -238,13 +319,17 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
               </div>
 
               <Button
-                onClick={() => scrollToSection('quote')}
+                asChild
                 variant='accent'
                 size='lg'
                 className='w-full shadow-md'
               >
-                <span className='mr-2'>💬</span>
-                {t('quote')}
+                <Link
+                  href='/quote'
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {t('quote')}
+                </Link>
               </Button>
             </div>
 
