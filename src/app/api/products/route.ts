@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
     }
     if (filterParams.search) {
       query = query.or(
-        `name.ilike.%${filterParams.search}%,description.ilike.%${filterParams.search}%`
+        `name.ilike.%${filterParams.search}%,description.ilike.%${filterParams.search}%,slug.ilike.%${filterParams.search}%`
       );
     }
 
