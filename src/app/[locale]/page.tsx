@@ -238,19 +238,12 @@ export default function HomePage() {
 
           <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
             {(['📋', '🔍', '📄', '🚢'] as const).map((icon, i) => {
-              const borderColors = [
-                'border-primary/30 hover:border-primary/60',
-                'border-secondary/30 hover:border-secondary/60',
-                'border-accent/30 hover:border-accent/60',
-                'border-primary/30 hover:border-primary/60',
-              ];
-              const numColors = ['text-primary', 'text-secondary', 'text-accent', 'text-primary'];
               return (
                 <div
                   key={i}
-                  className={`bg-card relative rounded-2xl border-2 p-6 shadow-sm transition-all duration-300 hover:shadow-md ${borderColors[i]}`}
+                  className='bg-card border-accent/25 hover:border-accent/55 relative rounded-2xl border-2 p-6 shadow-sm transition-all duration-300 hover:shadow-md'
                 >
-                  <div className={`mb-2 text-5xl font-black opacity-15 ${numColors[i]}`}>
+                  <div className='text-accent mb-2 text-5xl font-black opacity-15'>
                     {String(i + 1).padStart(2, '0')}
                   </div>
                   <div className='mb-3 text-3xl'>{icon}</div>
@@ -309,14 +302,14 @@ export default function HomePage() {
             {[0, 1, 2].map(i => (
               <div
                 key={i}
-                className='bg-card border-border/50 hover:border-accent/30 flex flex-col rounded-2xl border p-7 shadow-sm transition-all duration-300 hover:shadow-md'
+                className='bg-card border-border/40 from-accent/5 to-card border-l-accent/50 flex flex-col rounded-2xl border border-l-4 bg-linear-to-br p-7 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md'
               >
                 <div className='text-accent mb-4 text-4xl leading-none'>&ldquo;</div>
                 <p className='text-muted-foreground mb-6 flex-1 text-sm leading-relaxed italic'>
                   {t(`testimonials.items.${i}.quote`)}
                 </p>
                 <div className='border-border/40 flex items-center gap-3 border-t pt-5'>
-                  <div className='bg-muted flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg'>
+                  <div className='bg-accent/10 text-accent flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg'>
                     {t(`testimonials.items.${i}.flag`)}
                   </div>
                   <div>
