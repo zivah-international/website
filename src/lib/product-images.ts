@@ -45,9 +45,11 @@ const PRODUCT_IMAGES: Record<string, string> = {
   curcuma: `${BASE}1615485500704-8e990f9900f7${Q}`,
 
   // ── Specialty crops ───────────────────────────────────────────────────────
-  'cacao-fino-aroma': `${BASE}1599598425947-5202edd56bdb${Q}`,
+  'cacao-fino-aroma':
+    'https://images.pexels.com/photos/7450070/pexels-photo-7450070.jpeg?auto=compress&cs=tinysrgb&w=600',
   'cafe-arabica-altura': `${BASE}1447933601403-0c6688de566e${Q}`,
-  'rosas-rojas-premium': `${BASE}1518709911915-712d5fd04677${Q}`,
+  'rosas-rojas-premium':
+    'https://images.pexels.com/photos/22604232/pexels-photo-22604232.jpeg?auto=compress&cs=tinysrgb&w=600',
 
   // ── Nuts ─────────────────────────────────────────────────────────────────
   'nueces-macadamia': `${BASE}1537202108838-e7072bad1927${Q}`,

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
@@ -16,24 +17,26 @@ interface Category {
   isActive: boolean;
 }
 
-// ─── Slides (swap Unsplash for real product photos when available) ───────────
+// ─── Slides ──────────────────────────────────────────────────────────────────
 const SLIDES = [
   {
+    // Bright fresh shrimp / seafood market
     image:
-      'https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=1920&q=80',
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1920&q=85',
     badge: '🦐 Acuicultura Premium · Ecuador',
     title: 'Camarón Vannamei',
     titleHighlight: 'Certificado',
     subtitle: 'BAP · HACCP · GlobalGAP · Exportación directa desde Guayas',
     cta: 'Ver Camarón',
-    ctaHref: '/products?category=camaron',
+    ctaHref: '/products?category=marinos-y-pesca',
     ctaSecondary: 'Solicitar Cotización',
     ctaSecondaryHref: '/quote',
   },
   {
+    // Colorful tropical mango / fruit
     image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1920&q=80',
-    badge: '🍍 Frutas Tropicales · Origen Ecuador',
+      'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=1920&q=85',
+    badge: '🥭 Frutas Tropicales · Origen Ecuador',
     title: 'Mango · Piña',
     titleHighlight: 'Premium',
     subtitle: 'Certificado GlobalGAP · Trazabilidad completa · 24h respuesta',
@@ -43,17 +46,65 @@ const SLIDES = [
     ctaSecondaryHref: '/quote',
   },
   {
+    // Warm cacao / coffee harvest daylight
     image:
-      'https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?auto=format&fit=crop&w=1920&q=80',
-    badge: '🚢 Logística Internacional · Miami & Guayaquil',
-    title: 'Exportamos a',
-    titleHighlight: '5+ Países',
-    subtitle: 'Documentación lista · FOB Ecuador · Respuesta en 24h',
+      'https://images.pexels.com/photos/37516666/pexels-photo-37516666.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+    badge: '🌿 Especialidades · Cacao · Café · Flores',
+    title: 'Cacao Fino',
+    titleHighlight: 'de Aroma',
+    subtitle: 'Rainforest Alliance · UTZ · Comercio Justo · +30 productos',
     cta: 'Ver Catálogo',
     ctaHref: '/products',
     ctaSecondary: 'Hablar con un asesor',
     ctaSecondaryHref: '/contact',
   },
+];
+
+// ─── Featured products for photo grid ────────────────────────────────────────
+const FEATURED_PRODUCTS = [
+  {
+    slug: 'camaron-blanco-premium',
+    name: 'Camarón Vannamei',
+    img: '1544551763-46a013bb70d5',
+    href: '/products',
+  },
+  {
+    slug: 'cacao-fino-aroma',
+    name: 'Cacao Fino de Aroma',
+    img: 'https://images.pexels.com/photos/7450070/pexels-photo-7450070.jpeg?auto=compress&cs=tinysrgb&w=500',
+    href: '/products',
+  },
+  {
+    slug: 'rosas-rojas-premium',
+    name: 'Rosas Premium',
+    img: 'https://images.pexels.com/photos/22604232/pexels-photo-22604232.jpeg?auto=compress&cs=tinysrgb&w=500',
+    href: '/products',
+  },
+  {
+    slug: 'mango-tommy-atkins',
+    name: 'Mango Tommy Atkins',
+    img: '1553279768-865429fa0078',
+    href: '/products',
+  },
+  {
+    slug: 'aguacate-hass-premium',
+    name: 'Aguacate Hass',
+    img: '1523049673857-eb18f1d7b578',
+    href: '/products',
+  },
+  {
+    slug: 'cafe-arabica-altura',
+    name: 'Café Arábica',
+    img: '1447933601403-0c6688de566e',
+    href: '/products',
+  },
+  {
+    slug: 'banano-cavendish-premium',
+    name: 'Banano Premium',
+    img: '1571771894821-ce9b6c11b08e',
+    href: '/products',
+  },
+  { slug: 'pina-golden', name: 'Piña Golden', img: '1550258987-190a2d41a8ba', href: '/products' },
 ];
 
 // ─── Category card accent colors ─────────────────────────────────────────────
@@ -105,23 +156,76 @@ export default function HomePage() {
       />
 
       {/* ── Stats trust strip ────────────────────────────────────────────── */}
-      <section className='bg-card border-border/40 border-y'>
+      <section className='bg-primary text-white'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='divide-border/30 grid grid-cols-2 divide-x md:grid-cols-4'>
+          <div className='grid grid-cols-2 divide-white/20 md:grid-cols-4 md:divide-x'>
             {[
-              { value: '5+', label: t('hero.stats.countriesServed') },
-              { value: '24h', label: t('hero.stats.containersYear') },
-              { value: '4+', label: t('hero.stats.yearsExperience') },
-              { value: '100%', label: t('hero.stats.qualityGuaranteed') },
+              { value: '5+', label: t('hero.stats.countriesServed'), icon: '🌎' },
+              { value: '24h', label: t('hero.stats.containersYear'), icon: '⚡' },
+              { value: '4+', label: t('hero.stats.yearsExperience'), icon: '🏆' },
+              { value: '100%', label: t('hero.stats.qualityGuaranteed'), icon: '✅' },
             ].map((stat, i) => (
               <div
                 key={i}
-                className='py-6 text-center'
+                className='flex flex-col items-center gap-1 py-7 text-center'
               >
-                <div className='text-accent text-3xl font-black'>{stat.value}</div>
-                <div className='text-muted-foreground mt-1 text-xs font-medium'>{stat.label}</div>
+                <span className='text-2xl'>{stat.icon}</span>
+                <div className='text-3xl font-black'>{stat.value}</div>
+                <div className='text-xs font-medium text-white/80'>{stat.label}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Product photo gallery ─────────────────────────────────────────── */}
+      <section className='bg-background py-16'>
+        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='mb-10 text-center'>
+            <p className='text-primary mb-2 text-sm font-bold tracking-widest uppercase'>
+              Productos Destacados
+            </p>
+            <h2 className='text-foreground text-3xl font-bold sm:text-4xl'>
+              Del campo ecuatoriano al mundo
+            </h2>
+            <p className='text-muted-foreground mx-auto mt-3 max-w-xl text-base'>
+              +30 productos frescos certificados · Exportación FOB directa
+            </p>
+          </div>
+
+          <div className='grid grid-cols-2 gap-3 sm:grid-cols-4'>
+            {FEATURED_PRODUCTS.map(product => (
+              <Link
+                key={product.slug}
+                href={`/${locale}${product.href}`}
+                className='group relative aspect-square overflow-hidden rounded-2xl shadow-sm'
+              >
+                <Image
+                  src={
+                    product.img.startsWith('http')
+                      ? product.img
+                      : `https://images.unsplash.com/photo-${product.img}?auto=format&fit=crop&w=500&q=80`
+                  }
+                  alt={product.name}
+                  fill
+                  className='object-cover transition-transform duration-500 group-hover:scale-105'
+                  sizes='(max-width: 640px) 50vw, 25vw'
+                />
+                <div className='absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent' />
+                <div className='absolute right-0 bottom-0 left-0 p-3'>
+                  <p className='text-sm font-semibold text-white drop-shadow'>{product.name}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className='mt-8 text-center'>
+            <Link
+              href={`/${locale}/products`}
+              className='border-primary text-primary hover:bg-primary inline-flex items-center gap-2 rounded-xl border-2 px-7 py-3 font-semibold transition-all hover:text-white'
+            >
+              Ver los 30+ productos →
+            </Link>
           </div>
         </div>
       </section>
