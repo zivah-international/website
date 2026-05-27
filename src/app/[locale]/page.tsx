@@ -17,94 +17,51 @@ interface Category {
   isActive: boolean;
 }
 
-// ─── Slides ──────────────────────────────────────────────────────────────────
-const SLIDES = [
-  {
-    // Bright fresh shrimp / seafood market
-    image:
-      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1920&q=85',
-    badge: '🦐 Acuicultura Premium · Ecuador',
-    title: 'Camarón Vannamei',
-    titleHighlight: 'Certificado',
-    subtitle: 'BAP · HACCP · GlobalGAP · Exportación directa desde Guayas',
-    cta: 'Ver Camarón',
-    ctaHref: '/products?category=marinos-y-pesca',
-    ctaSecondary: 'Solicitar Cotización',
-    ctaSecondaryHref: '/quote',
-  },
-  {
-    // Colorful tropical mango / fruit
-    image:
-      'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=1920&q=85',
-    badge: '🥭 Frutas Tropicales · Origen Ecuador',
-    title: 'Mango · Piña',
-    titleHighlight: 'Premium',
-    subtitle: 'Certificado GlobalGAP · Trazabilidad completa · 24h respuesta',
-    cta: 'Ver Frutas',
-    ctaHref: '/products?category=frutas-tropicales',
-    ctaSecondary: 'Solicitar Cotización',
-    ctaSecondaryHref: '/quote',
-  },
-  {
-    // Warm cacao / coffee harvest daylight
-    image:
-      'https://images.pexels.com/photos/37516666/pexels-photo-37516666.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
-    badge: '🌿 Especialidades · Cacao · Café · Flores',
-    title: 'Cacao Fino',
-    titleHighlight: 'de Aroma',
-    subtitle: 'Rainforest Alliance · UTZ · Comercio Justo · +30 productos',
-    cta: 'Ver Catálogo',
-    ctaHref: '/products',
-    ctaSecondary: 'Hablar con un asesor',
-    ctaSecondaryHref: '/contact',
-  },
-];
-
-// ─── Featured products for photo grid ────────────────────────────────────────
+// ─── Featured products for photo grid (images only — names come from t()) ─────
 const FEATURED_PRODUCTS = [
   {
     slug: 'camaron-blanco-premium',
-    name: 'Camarón Vannamei',
+    nameKey: 'shrimp',
     img: '1544551763-46a013bb70d5',
     href: '/products',
   },
   {
     slug: 'cacao-fino-aroma',
-    name: 'Cacao Fino de Aroma',
+    nameKey: 'cacao',
     img: 'https://images.pexels.com/photos/7450070/pexels-photo-7450070.jpeg?auto=compress&cs=tinysrgb&w=500',
     href: '/products',
   },
   {
     slug: 'rosas-rojas-premium',
-    name: 'Rosas Premium',
+    nameKey: 'roses',
     img: 'https://images.pexels.com/photos/22604232/pexels-photo-22604232.jpeg?auto=compress&cs=tinysrgb&w=500',
     href: '/products',
   },
   {
     slug: 'mango-tommy-atkins',
-    name: 'Mango Tommy Atkins',
+    nameKey: 'mango',
     img: '1553279768-865429fa0078',
     href: '/products',
   },
   {
     slug: 'aguacate-hass-premium',
-    name: 'Aguacate Hass',
+    nameKey: 'avocado',
     img: '1523049673857-eb18f1d7b578',
     href: '/products',
   },
   {
     slug: 'cafe-arabica-altura',
-    name: 'Café Arábica',
+    nameKey: 'coffee',
     img: '1447933601403-0c6688de566e',
     href: '/products',
   },
   {
     slug: 'banano-cavendish-premium',
-    name: 'Banano Premium',
+    nameKey: 'banana',
     img: '1571771894821-ce9b6c11b08e',
     href: '/products',
   },
-  { slug: 'pina-golden', name: 'Piña Golden', img: '1550258987-190a2d41a8ba', href: '/products' },
+  { slug: 'pina-golden', nameKey: 'pineapple', img: '1550258987-190a2d41a8ba', href: '/products' },
 ];
 
 // ─── Category card accent colors ─────────────────────────────────────────────
@@ -136,6 +93,46 @@ export default function HomePage() {
   const locale = useLocale();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // ─── Slides (inside component so t() is in scope) ───────────────────────
+  const SLIDES = [
+    {
+      image:
+        'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1920&q=85',
+      badge: t('hero.slides.shrimp.badge'),
+      title: t('hero.slides.shrimp.title'),
+      titleHighlight: t('hero.slides.shrimp.titleHighlight'),
+      subtitle: t('hero.slides.shrimp.subtitle'),
+      cta: t('hero.slides.shrimp.cta'),
+      ctaHref: '/products?category=marinos-y-pesca',
+      ctaSecondary: t('hero.slides.shrimp.ctaSecondary'),
+      ctaSecondaryHref: '/quote',
+    },
+    {
+      image:
+        'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=1920&q=85',
+      badge: t('hero.slides.fruits.badge'),
+      title: t('hero.slides.fruits.title'),
+      titleHighlight: t('hero.slides.fruits.titleHighlight'),
+      subtitle: t('hero.slides.fruits.subtitle'),
+      cta: t('hero.slides.fruits.cta'),
+      ctaHref: '/products?category=frutas-tropicales',
+      ctaSecondary: t('hero.slides.fruits.ctaSecondary'),
+      ctaSecondaryHref: '/quote',
+    },
+    {
+      image:
+        'https://images.pexels.com/photos/37516666/pexels-photo-37516666.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+      badge: t('hero.slides.specialties.badge'),
+      title: t('hero.slides.specialties.title'),
+      titleHighlight: t('hero.slides.specialties.titleHighlight'),
+      subtitle: t('hero.slides.specialties.subtitle'),
+      cta: t('hero.slides.specialties.cta'),
+      ctaHref: '/products',
+      ctaSecondary: t('hero.slides.specialties.ctaSecondary'),
+      ctaSecondaryHref: '/contact',
+    },
+  ];
 
   useEffect(() => {
     fetch(`/api/categories?locale=${locale}`)
@@ -183,13 +180,13 @@ export default function HomePage() {
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-10 text-center'>
             <p className='text-primary mb-2 text-sm font-bold tracking-widest uppercase'>
-              Productos Destacados
+              {t('hero.gallery.badge')}
             </p>
             <h2 className='text-foreground text-3xl font-bold sm:text-4xl'>
-              Del campo ecuatoriano al mundo
+              {t('hero.gallery.title')}
             </h2>
             <p className='text-muted-foreground mx-auto mt-3 max-w-xl text-base'>
-              +30 productos frescos certificados · Exportación FOB directa
+              {t('hero.gallery.subtitle')}
             </p>
           </div>
 
@@ -206,14 +203,16 @@ export default function HomePage() {
                       ? product.img
                       : `https://images.unsplash.com/photo-${product.img}?auto=format&fit=crop&w=500&q=80`
                   }
-                  alt={product.name}
+                  alt={t(`hero.gallery.products.${product.nameKey}`)}
                   fill
                   className='object-cover transition-transform duration-500 group-hover:scale-105'
                   sizes='(max-width: 640px) 50vw, 25vw'
                 />
                 <div className='absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent' />
                 <div className='absolute right-0 bottom-0 left-0 p-3'>
-                  <p className='text-sm font-semibold text-white drop-shadow'>{product.name}</p>
+                  <p className='text-sm font-semibold text-white drop-shadow'>
+                    {t(`hero.gallery.products.${product.nameKey}`)}
+                  </p>
                 </div>
               </Link>
             ))}
@@ -224,7 +223,7 @@ export default function HomePage() {
               href={`/${locale}/products`}
               className='border-primary text-primary hover:bg-primary inline-flex items-center gap-2 rounded-xl border-2 px-7 py-3 font-semibold transition-all hover:text-white'
             >
-              Ver los 30+ productos →
+              {t('hero.gallery.viewAll')}
             </Link>
           </div>
         </div>
