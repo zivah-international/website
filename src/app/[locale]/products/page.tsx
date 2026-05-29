@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
 import Navigation from '@/components/Navigation';
+import { getProductImage } from '@/lib/product-images';
 
 interface Category {
   id: number;
@@ -209,19 +210,17 @@ export default function ProductsPage() {
                   >
                     {/* Image */}
                     <div className='bg-muted relative h-48 overflow-hidden'>
-                      {product.imageUrl ? (
-                        <Image
-                          src={product.imageUrl}
-                          alt={product.name}
-                          fill
-                          className='object-cover transition-transform duration-500 group-hover:scale-105'
-                          sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
-                        />
-                      ) : (
-                        <div className='flex h-full items-center justify-center text-5xl'>
-                          {product.category?.icon || '📦'}
-                        </div>
-                      )}
+                      <Image
+                        src={getProductImage(
+                          product.slug,
+                          product.category?.slug,
+                          product.imageUrl
+                        )}
+                        alt={product.name}
+                        fill
+                        className='object-cover transition-transform duration-500 group-hover:scale-105'
+                        sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+                      />
                       {product.isFeatured && (
                         <div className='absolute top-3 left-3 rounded-full bg-amber-500 px-2.5 py-1 text-xs font-bold text-white shadow'>
                           ⭐ Destacado

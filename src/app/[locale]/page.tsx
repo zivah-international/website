@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
@@ -16,44 +17,51 @@ interface Category {
   isActive: boolean;
 }
 
-// ─── Slides (swap Unsplash for real product photos when available) ───────────
-const SLIDES = [
+// ─── Featured products for photo grid (images only — names come from t()) ─────
+const FEATURED_PRODUCTS = [
   {
-    image:
-      'https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=1920&q=80',
-    badge: '🦐 Acuicultura Premium · Ecuador',
-    title: 'Camarón Vannamei',
-    titleHighlight: 'Certificado',
-    subtitle: 'BAP · HACCP · GlobalGAP · Exportación directa desde Guayas',
-    cta: 'Ver Camarón',
-    ctaHref: '/products?category=camaron',
-    ctaSecondary: 'Solicitar Cotización',
-    ctaSecondaryHref: '/quote',
+    slug: 'camaron-blanco-premium',
+    nameKey: 'shrimp',
+    img: '1544551763-46a013bb70d5',
+    href: '/products',
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1920&q=80',
-    badge: '🍍 Frutas Tropicales · Origen Ecuador',
-    title: 'Mango · Piña',
-    titleHighlight: 'Premium',
-    subtitle: 'Certificado GlobalGAP · Trazabilidad completa · 24h respuesta',
-    cta: 'Ver Frutas',
-    ctaHref: '/products?category=frutas-tropicales',
-    ctaSecondary: 'Solicitar Cotización',
-    ctaSecondaryHref: '/quote',
+    slug: 'cacao-fino-aroma',
+    nameKey: 'cacao',
+    img: 'https://images.pexels.com/photos/7450070/pexels-photo-7450070.jpeg?auto=compress&cs=tinysrgb&w=500',
+    href: '/products',
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?auto=format&fit=crop&w=1920&q=80',
-    badge: '🚢 Logística Internacional · Miami & Guayaquil',
-    title: 'Exportamos a',
-    titleHighlight: '5+ Países',
-    subtitle: 'Documentación lista · FOB Ecuador · Respuesta en 24h',
-    cta: 'Ver Catálogo',
-    ctaHref: '/products',
-    ctaSecondary: 'Hablar con un asesor',
-    ctaSecondaryHref: '/contact',
+    slug: 'rosas-rojas-premium',
+    nameKey: 'roses',
+    img: 'https://images.pexels.com/photos/22604232/pexels-photo-22604232.jpeg?auto=compress&cs=tinysrgb&w=500',
+    href: '/products',
   },
+  {
+    slug: 'mango-tommy-atkins',
+    nameKey: 'mango',
+    img: '1553279768-865429fa0078',
+    href: '/products',
+  },
+  {
+    slug: 'aguacate-hass-premium',
+    nameKey: 'avocado',
+    img: '1523049673857-eb18f1d7b578',
+    href: '/products',
+  },
+  {
+    slug: 'cafe-arabica-altura',
+    nameKey: 'coffee',
+    img: '1447933601403-0c6688de566e',
+    href: '/products',
+  },
+  {
+    slug: 'banano-cavendish-premium',
+    nameKey: 'banana',
+    img: '1571771894821-ce9b6c11b08e',
+    href: '/products',
+  },
+  { slug: 'pina-golden', nameKey: 'pineapple', img: '1550258987-190a2d41a8ba', href: '/products' },
 ];
 
 // ─── Category card accent colors ─────────────────────────────────────────────
@@ -86,6 +94,46 @@ export default function HomePage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // ─── Slides (inside component so t() is in scope) ───────────────────────
+  const SLIDES = [
+    {
+      image:
+        'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1920&q=85',
+      badge: t('hero.slides.shrimp.badge'),
+      title: t('hero.slides.shrimp.title'),
+      titleHighlight: t('hero.slides.shrimp.titleHighlight'),
+      subtitle: t('hero.slides.shrimp.subtitle'),
+      cta: t('hero.slides.shrimp.cta'),
+      ctaHref: '/products?category=marinos-y-pesca',
+      ctaSecondary: t('hero.slides.shrimp.ctaSecondary'),
+      ctaSecondaryHref: '/quote',
+    },
+    {
+      image:
+        'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=1920&q=85',
+      badge: t('hero.slides.fruits.badge'),
+      title: t('hero.slides.fruits.title'),
+      titleHighlight: t('hero.slides.fruits.titleHighlight'),
+      subtitle: t('hero.slides.fruits.subtitle'),
+      cta: t('hero.slides.fruits.cta'),
+      ctaHref: '/products?category=frutas-tropicales',
+      ctaSecondary: t('hero.slides.fruits.ctaSecondary'),
+      ctaSecondaryHref: '/quote',
+    },
+    {
+      image:
+        'https://images.pexels.com/photos/37516666/pexels-photo-37516666.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+      badge: t('hero.slides.specialties.badge'),
+      title: t('hero.slides.specialties.title'),
+      titleHighlight: t('hero.slides.specialties.titleHighlight'),
+      subtitle: t('hero.slides.specialties.subtitle'),
+      cta: t('hero.slides.specialties.cta'),
+      ctaHref: '/products',
+      ctaSecondary: t('hero.slides.specialties.ctaSecondary'),
+      ctaSecondaryHref: '/contact',
+    },
+  ];
+
   useEffect(() => {
     fetch(`/api/categories?locale=${locale}`)
       .then(r => (r.ok ? r.json() : { data: [] }))
@@ -105,23 +153,78 @@ export default function HomePage() {
       />
 
       {/* ── Stats trust strip ────────────────────────────────────────────── */}
-      <section className='bg-card border-border/40 border-y'>
+      <section className='bg-primary text-white'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='divide-border/30 grid grid-cols-2 divide-x md:grid-cols-4'>
+          <div className='grid grid-cols-2 divide-white/20 md:grid-cols-4 md:divide-x'>
             {[
-              { value: '5+', label: t('hero.stats.countriesServed') },
-              { value: '24h', label: t('hero.stats.containersYear') },
-              { value: '4+', label: t('hero.stats.yearsExperience') },
-              { value: '100%', label: t('hero.stats.qualityGuaranteed') },
+              { value: '5+', label: t('hero.stats.countriesServed'), icon: '🌎' },
+              { value: '24h', label: t('hero.stats.containersYear'), icon: '⚡' },
+              { value: '4+', label: t('hero.stats.yearsExperience'), icon: '🏆' },
+              { value: '100%', label: t('hero.stats.qualityGuaranteed'), icon: '✅' },
             ].map((stat, i) => (
               <div
                 key={i}
-                className='py-6 text-center'
+                className='flex flex-col items-center gap-1 py-7 text-center'
               >
-                <div className='text-accent text-3xl font-black'>{stat.value}</div>
-                <div className='text-muted-foreground mt-1 text-xs font-medium'>{stat.label}</div>
+                <span className='text-2xl'>{stat.icon}</span>
+                <div className='text-3xl font-black'>{stat.value}</div>
+                <div className='text-xs font-medium text-white/80'>{stat.label}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Product photo gallery ─────────────────────────────────────────── */}
+      <section className='bg-background py-16'>
+        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='mb-10 text-center'>
+            <p className='text-primary mb-2 text-sm font-bold tracking-widest uppercase'>
+              {t('hero.gallery.badge')}
+            </p>
+            <h2 className='text-foreground text-3xl font-bold sm:text-4xl'>
+              {t('hero.gallery.title')}
+            </h2>
+            <p className='text-muted-foreground mx-auto mt-3 max-w-xl text-base'>
+              {t('hero.gallery.subtitle')}
+            </p>
+          </div>
+
+          <div className='grid grid-cols-2 gap-3 sm:grid-cols-4'>
+            {FEATURED_PRODUCTS.map(product => (
+              <Link
+                key={product.slug}
+                href={`/${locale}${product.href}`}
+                className='group relative aspect-square overflow-hidden rounded-2xl shadow-sm'
+              >
+                <Image
+                  src={
+                    product.img.startsWith('http')
+                      ? product.img
+                      : `https://images.unsplash.com/photo-${product.img}?auto=format&fit=crop&w=500&q=80`
+                  }
+                  alt={t(`hero.gallery.products.${product.nameKey}`)}
+                  fill
+                  className='object-cover transition-transform duration-500 group-hover:scale-105'
+                  sizes='(max-width: 640px) 50vw, 25vw'
+                />
+                <div className='absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent' />
+                <div className='absolute right-0 bottom-0 left-0 p-3'>
+                  <p className='text-sm font-semibold text-white drop-shadow'>
+                    {t(`hero.gallery.products.${product.nameKey}`)}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className='mt-8 text-center'>
+            <Link
+              href={`/${locale}/products`}
+              className='border-primary text-primary hover:bg-primary inline-flex items-center gap-2 rounded-xl border-2 px-7 py-3 font-semibold transition-all hover:text-white'
+            >
+              {t('hero.gallery.viewAll')}
+            </Link>
           </div>
         </div>
       </section>
@@ -238,19 +341,12 @@ export default function HomePage() {
 
           <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
             {(['📋', '🔍', '📄', '🚢'] as const).map((icon, i) => {
-              const borderColors = [
-                'border-primary/30 hover:border-primary/60',
-                'border-secondary/30 hover:border-secondary/60',
-                'border-accent/30 hover:border-accent/60',
-                'border-primary/30 hover:border-primary/60',
-              ];
-              const numColors = ['text-primary', 'text-secondary', 'text-accent', 'text-primary'];
               return (
                 <div
                   key={i}
-                  className={`bg-card relative rounded-2xl border-2 p-6 shadow-sm transition-all duration-300 hover:shadow-md ${borderColors[i]}`}
+                  className='bg-card border-accent/25 hover:border-accent/55 relative rounded-2xl border-2 p-6 shadow-sm transition-all duration-300 hover:shadow-md'
                 >
-                  <div className={`mb-2 text-5xl font-black opacity-15 ${numColors[i]}`}>
+                  <div className='text-accent mb-2 text-5xl font-black opacity-15'>
                     {String(i + 1).padStart(2, '0')}
                   </div>
                   <div className='mb-3 text-3xl'>{icon}</div>
@@ -309,14 +405,14 @@ export default function HomePage() {
             {[0, 1, 2].map(i => (
               <div
                 key={i}
-                className='bg-card border-border/50 hover:border-accent/30 flex flex-col rounded-2xl border p-7 shadow-sm transition-all duration-300 hover:shadow-md'
+                className='bg-card border-border/40 from-accent/5 to-card border-l-accent/50 flex flex-col rounded-2xl border border-l-4 bg-linear-to-br p-7 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md'
               >
                 <div className='text-accent mb-4 text-4xl leading-none'>&ldquo;</div>
                 <p className='text-muted-foreground mb-6 flex-1 text-sm leading-relaxed italic'>
                   {t(`testimonials.items.${i}.quote`)}
                 </p>
                 <div className='border-border/40 flex items-center gap-3 border-t pt-5'>
-                  <div className='bg-muted flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg'>
+                  <div className='bg-accent/10 text-accent flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg'>
                     {t(`testimonials.items.${i}.flag`)}
                   </div>
                   <div>

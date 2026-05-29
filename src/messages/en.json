@@ -50,6 +50,48 @@
       "yearsExperience": "4+",
       "qualityGuaranteed": "100%"
     },
+    "slides": {
+      "shrimp": {
+        "badge": "🦐 Premium Aquaculture · Ecuador",
+        "title": "Vannamei Shrimp",
+        "titleHighlight": "Certified",
+        "subtitle": "BAP · HACCP · GlobalGAP · Direct export from Guayas",
+        "cta": "View Shrimp",
+        "ctaSecondary": "Request Quote"
+      },
+      "fruits": {
+        "badge": "🥭 Tropical Fruits · Origin Ecuador",
+        "title": "Mango · Pineapple",
+        "titleHighlight": "Premium",
+        "subtitle": "GlobalGAP certified · Full traceability · 24h response",
+        "cta": "View Fruits",
+        "ctaSecondary": "Request Quote"
+      },
+      "specialties": {
+        "badge": "🌿 Specialties · Cacao · Coffee · Flowers",
+        "title": "Fine Cacao",
+        "titleHighlight": "of Aroma",
+        "subtitle": "Rainforest Alliance · UTZ · Fair Trade · +30 products",
+        "cta": "View Catalog",
+        "ctaSecondary": "Talk to an advisor"
+      }
+    },
+    "gallery": {
+      "badge": "Featured Products",
+      "title": "From Ecuadorian fields to the world",
+      "subtitle": "+30 certified fresh products · Direct FOB export",
+      "viewAll": "View all 30+ products →",
+      "products": {
+        "shrimp": "Vannamei Shrimp",
+        "cacao": "Fine Cacao of Aroma",
+        "roses": "Premium Roses",
+        "mango": "Tommy Atkins Mango",
+        "avocado": "Hass Avocado",
+        "coffee": "Arabica Coffee",
+        "banana": "Premium Banana",
+        "pineapple": "Golden Pineapple"
+      }
+    },
     "premiumProducts": "What We Export",
     "productTypes": {
       "tropicalFruits": "Tropical Fruits · Mango, Pineapple, Banana",

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
+import { getFichaTecnica } from '@/lib/product-specs';
 
 interface Product {
   id: number;
@@ -78,6 +79,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (!product) {
     notFound();
   }
+
+  const ficha = getFichaTecnica(product.slug);
 
   const certBadgeColors: Record<string, string> = {
     HACCP: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
@@ -294,6 +297,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </Link>
               </div>
 
+              {/* Ficha Técnica link */}
+              {ficha && (
+                <Link
+                  href={`/${locale ?? 'es'}/products/${product.slug}/ficha-tecnica`}
+                  className='text-primary hidden items-center gap-2 text-sm font-medium hover:underline sm:flex'
+                  target='_blank'
+                  rel='noopener'
+                >
+                  📄 Ver Ficha Técnica de Exportación →
+                </Link>
+              )}
+
               <p className='text-xs text-gray-400 dark:text-gray-500'>
                 * Precio referencial FOB Ecuador. El precio final puede variar según Incoterms,
                 volumen y destino.
@@ -436,6 +451,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   💬 Hablar con un Asesor
                 </Button>
               </Link>
+              {ficha && (
+                <Link
+                  href={`/${locale ?? 'es'}/products/${product.slug}/ficha-tecnica`}
+                  target='_blank'
+                  rel='noopener'
+                  className='text-primary mt-3 flex items-center justify-center gap-2 text-sm font-medium hover:underline'
+                >
+                  📄 Ver Ficha Técnica de Exportación
+                </Link>
+              )}
             </div>
 
             {/* Quick Contact */}

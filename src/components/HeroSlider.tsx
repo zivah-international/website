@@ -74,9 +74,9 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
         </div>
       ))}
 
-      {/* Gradient overlay — dark at bottom, semi-dark everywhere */}
-      <div className='absolute inset-0 bg-linear-to-b from-black/60 via-black/40 to-black/75' />
-      <div className='absolute inset-0 bg-linear-to-r from-black/40 to-transparent' />
+      {/* Gradient overlay — lighter for a daylight feel */}
+      <div className='absolute inset-0 bg-linear-to-b from-black/45 via-black/25 to-black/55' />
+      <div className='absolute inset-0 bg-linear-to-r from-black/35 to-transparent' />
 
       {/* Content */}
       <div className='relative flex h-full items-center'>

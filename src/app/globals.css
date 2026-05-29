@@ -149,3 +149,13 @@ body {
     'rlig' 1,
     'calt' 1;
 }
+
+/* Ficha técnica print support */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+  }
+}

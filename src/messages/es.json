@@ -50,6 +50,48 @@
       "yearsExperience": "4+",
       "qualityGuaranteed": "100%"
     },
+    "slides": {
+      "shrimp": {
+        "badge": "🦐 Acuicultura Premium · Ecuador",
+        "title": "Camarón Vannamei",
+        "titleHighlight": "Certificado",
+        "subtitle": "BAP · HACCP · GlobalGAP · Exportación directa desde Guayas",
+        "cta": "Ver Camarón",
+        "ctaSecondary": "Solicitar Cotización"
+      },
+      "fruits": {
+        "badge": "🥭 Frutas Tropicales · Origen Ecuador",
+        "title": "Mango · Piña",
+        "titleHighlight": "Premium",
+        "subtitle": "Certificado GlobalGAP · Trazabilidad completa · 24h respuesta",
+        "cta": "Ver Frutas",
+        "ctaSecondary": "Solicitar Cotización"
+      },
+      "specialties": {
+        "badge": "🌿 Especialidades · Cacao · Café · Flores",
+        "title": "Cacao Fino",
+        "titleHighlight": "de Aroma",
+        "subtitle": "Rainforest Alliance · UTZ · Comercio Justo · +30 productos",
+        "cta": "Ver Catálogo",
+        "ctaSecondary": "Hablar con un asesor"
+      }
+    },
+    "gallery": {
+      "badge": "Productos Destacados",
+      "title": "Del campo ecuatoriano al mundo",
+      "subtitle": "+30 productos frescos certificados · Exportación FOB directa",
+      "viewAll": "Ver los 30+ productos →",
+      "products": {
+        "shrimp": "Camarón Vannamei",
+        "cacao": "Cacao Fino de Aroma",
+        "roses": "Rosas Premium",
+        "mango": "Mango Tommy Atkins",
+        "avocado": "Aguacate Hass",
+        "coffee": "Café Arábica",
+        "banana": "Banano Premium",
+        "pineapple": "Piña Golden"
+      }
+    },
     "premiumProducts": "Lo que exportamos",
     "productTypes": {
       "tropicalFruits": "Frutas Tropicales · Mango, Piña, Banano",
