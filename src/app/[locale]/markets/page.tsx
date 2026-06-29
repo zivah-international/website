@@ -93,7 +93,7 @@ export default async function MarketsPage({ params }: Props) {
       <Navigation />
 
       {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='from-background to-muted/30 bg-linear-to-b pt-28 pb-12'>
+      <section className='from-background to-muted/40 bg-linear-to-b pt-28 pb-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <nav
             className='text-muted-foreground mb-6 flex items-center gap-2 text-sm'
@@ -109,10 +109,10 @@ export default async function MarketsPage({ params }: Props) {
             <span className='text-foreground font-medium'>Mercados</span>
           </nav>
 
-          <div className='flex items-center gap-3'>
-            <div className='bg-secondary/10 text-secondary rounded-full p-3'>
+          <div className='border-secondary/30 flex items-center gap-4 border-l-4 pl-5'>
+            <div className='bg-secondary/10 text-secondary hidden shrink-0 rounded-xl p-3 sm:block'>
               <svg
-                className='h-6 w-6'
+                className='h-7 w-7'
                 fill='none'
                 viewBox='0 0 24 24'
                 stroke='currentColor'
@@ -126,9 +126,9 @@ export default async function MarketsPage({ params }: Props) {
               </svg>
             </div>
             <div>
-              <div className='bg-secondary/10 text-secondary mb-1 inline-block rounded-full px-3 py-0.5 text-xs font-semibold'>
+              <p className='text-secondary mb-1 text-xs font-semibold tracking-widest uppercase'>
                 {t('badge')}
-              </div>
+              </p>
               <h1 className='text-foreground text-3xl font-bold sm:text-4xl'>{t('title')}</h1>
               <p className='text-muted-foreground mt-1 max-w-2xl text-base'>{t('description')}</p>
             </div>

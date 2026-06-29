@@ -26,7 +26,7 @@ export default async function QuotePage({ params }: Props) {
       <Navigation />
 
       {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='from-background to-muted/30 bg-linear-to-b pt-28 pb-12'>
+      <section className='from-background to-muted/40 bg-linear-to-b pt-28 pb-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Breadcrumb */}
           <nav
@@ -43,10 +43,10 @@ export default async function QuotePage({ params }: Props) {
             <span className='text-foreground font-medium'>{t('title')}</span>
           </nav>
 
-          <div className='mb-2 flex items-center gap-3'>
-            <div className='bg-accent/10 text-accent rounded-full p-3'>
+          <div className='border-accent/30 flex items-center gap-4 border-l-4 pl-5'>
+            <div className='bg-accent/10 text-accent hidden shrink-0 rounded-xl p-3 sm:block'>
               <svg
-                className='h-6 w-6'
+                className='h-7 w-7'
                 fill='none'
                 viewBox='0 0 24 24'
                 stroke='currentColor'
@@ -60,6 +60,9 @@ export default async function QuotePage({ params }: Props) {
               </svg>
             </div>
             <div>
+              <p className='text-accent mb-1 text-xs font-semibold tracking-widest uppercase'>
+                Cotización B2B
+              </p>
               <h1 className='text-foreground text-3xl font-bold sm:text-4xl'>{t('title')}</h1>
               <p className='text-muted-foreground mt-1 text-base'>{t('description')}</p>
             </div>

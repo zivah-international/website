@@ -115,10 +115,10 @@ export default function ProductsPage() {
           </nav>
 
           <div className='flex flex-col gap-6 md:flex-row md:items-end md:justify-between'>
-            <div>
-              <div className='bg-secondary/10 text-secondary mb-3 inline-block rounded-full px-4 py-1.5 text-sm font-semibold'>
+            <div className='border-primary/30 border-l-4 pl-5'>
+              <p className='text-primary mb-1 text-xs font-semibold tracking-widest uppercase'>
                 {t('products.badge')}
-              </div>
+              </p>
               <h1 className='text-foreground text-3xl font-bold sm:text-4xl'>
                 {t('products.title')}
               </h1>

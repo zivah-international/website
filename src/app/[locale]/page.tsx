@@ -155,20 +155,94 @@ export default function HomePage() {
       {/* ── Stats trust strip ────────────────────────────────────────────── */}
       <section className='bg-primary text-white'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='grid grid-cols-2 divide-white/20 md:grid-cols-4 md:divide-x'>
+          <div className='grid grid-cols-2 md:grid-cols-4'>
             {[
-              { value: '5+', label: t('hero.stats.countriesServed'), icon: '🌎' },
-              { value: '24h', label: t('hero.stats.containersYear'), icon: '⚡' },
-              { value: '4+', label: t('hero.stats.yearsExperience'), icon: '🏆' },
-              { value: '100%', label: t('hero.stats.qualityGuaranteed'), icon: '✅' },
+              {
+                value: '5+',
+                label: t('hero.stats.countriesServed'),
+                icon: (
+                  <svg
+                    className='h-6 w-6 opacity-80'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418'
+                    />
+                  </svg>
+                ),
+              },
+              {
+                value: '24h',
+                label: t('hero.stats.containersYear'),
+                icon: (
+                  <svg
+                    className='h-6 w-6 opacity-80'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z'
+                    />
+                  </svg>
+                ),
+              },
+              {
+                value: '4+',
+                label: t('hero.stats.yearsExperience'),
+                icon: (
+                  <svg
+                    className='h-6 w-6 opacity-80'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0'
+                    />
+                  </svg>
+                ),
+              },
+              {
+                value: '100%',
+                label: t('hero.stats.qualityGuaranteed'),
+                icon: (
+                  <svg
+                    className='h-6 w-6 opacity-80'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z'
+                    />
+                  </svg>
+                ),
+              },
             ].map((stat, i) => (
               <div
                 key={i}
-                className='flex flex-col items-center gap-1 py-7 text-center'
+                className={`flex flex-col items-center gap-2 py-8 text-center ${i < 3 ? 'border-r border-white/15 last:border-0' : ''}`}
               >
-                <span className='text-2xl'>{stat.icon}</span>
-                <div className='text-3xl font-black'>{stat.value}</div>
-                <div className='text-xs font-medium text-white/80'>{stat.label}</div>
+                <div className='mb-1'>{stat.icon}</div>
+                <div className='text-3xl font-black tracking-tight'>{stat.value}</div>
+                <div className='text-xs font-medium tracking-wide text-white/75 uppercase'>
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
@@ -221,9 +295,22 @@ export default function HomePage() {
           <div className='mt-8 text-center'>
             <Link
               href={`/${locale}/products`}
-              className='border-primary text-primary hover:bg-primary inline-flex items-center gap-2 rounded-xl border-2 px-7 py-3 font-semibold transition-all hover:text-white'
+              className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-7 py-3 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg'
             >
               {t('hero.gallery.viewAll')}
+              <svg
+                className='h-4 w-4'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='M17 8l4 4m0 0l-4 4m4-4H3'
+                />
+              </svg>
             </Link>
           </div>
         </div>
@@ -357,8 +444,20 @@ export default function HomePage() {
                     {t(`process.steps.${i}.description`)}
                   </p>
                   {i < 3 && (
-                    <div className='text-muted-foreground/30 absolute top-1/2 -right-4 hidden -translate-y-1/2 text-xl lg:block'>
-                      →
+                    <div className='text-primary/30 absolute top-1/2 -right-4 hidden -translate-y-1/2 lg:block'>
+                      <svg
+                        className='h-6 w-6'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                        stroke='currentColor'
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          d='M9 5l7 7-7 7'
+                        />
+                      </svg>
                     </div>
                   )}
                 </div>
@@ -391,7 +490,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Testimonials ─────────────────────────────────────────────────── */}
-      <section className='bg-background py-20'>
+      <section className='bg-muted/20 py-20'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-12 text-center'>
             <div className='bg-accent/10 text-accent mb-3 inline-block rounded-full px-4 py-1.5 text-sm font-semibold'>
@@ -405,14 +504,20 @@ export default function HomePage() {
             {[0, 1, 2].map(i => (
               <div
                 key={i}
-                className='bg-card border-border/40 from-accent/5 to-card border-l-accent/50 flex flex-col rounded-2xl border border-l-4 bg-linear-to-br p-7 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md'
+                className='bg-card border-border/40 flex flex-col rounded-2xl border p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg'
               >
-                <div className='text-accent mb-4 text-4xl leading-none'>&ldquo;</div>
-                <p className='text-muted-foreground mb-6 flex-1 text-sm leading-relaxed italic'>
+                <svg
+                  className='text-primary/20 mb-4 h-8 w-8 shrink-0'
+                  fill='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path d='M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z' />
+                </svg>
+                <p className='text-muted-foreground mb-6 flex-1 text-sm leading-relaxed'>
                   {t(`testimonials.items.${i}.quote`)}
                 </p>
-                <div className='border-border/40 flex items-center gap-3 border-t pt-5'>
-                  <div className='bg-accent/10 text-accent flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg'>
+                <div className='border-border/40 flex items-center gap-3 border-t pt-4'>
+                  <div className='bg-primary/10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg'>
                     {t(`testimonials.items.${i}.flag`)}
                   </div>
                   <div>
@@ -431,14 +536,14 @@ export default function HomePage() {
       </section>
 
       {/* ── Newsletter ───────────────────────────────────────────────────── */}
-      <section className='bg-muted/40 border-border/50 border-y py-14'>
+      <section className='bg-primary py-16 text-white'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mx-auto max-w-xl text-center'>
-            <div className='text-accent mb-3 inline-block rounded-full bg-white px-4 py-1.5 text-xs font-semibold tracking-widest uppercase shadow-sm dark:bg-white/10'>
+            <div className='mb-3 inline-block rounded-full border border-white/30 bg-white/15 px-4 py-1.5 text-xs font-semibold tracking-widest text-white uppercase backdrop-blur-sm'>
               Newsletter B2B
             </div>
-            <h3 className='text-foreground mb-2 text-2xl font-bold'>{t('newsletter.title')}</h3>
-            <p className='text-muted-foreground mb-6 text-sm leading-relaxed'>
+            <h3 className='mb-2 text-2xl font-bold text-white'>{t('newsletter.title')}</h3>
+            <p className='mb-6 text-sm leading-relaxed text-white/80'>
               {t('newsletter.description')}
             </p>
             <form
@@ -455,16 +560,16 @@ export default function HomePage() {
                 name='email'
                 required
                 placeholder={t('newsletter.placeholder')}
-                className='border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-accent/50 flex-1 rounded-lg border px-4 py-2.5 text-sm focus:ring-2 focus:outline-none'
+                className='flex-1 rounded-lg border border-white/30 bg-white/15 px-4 py-2.5 text-sm text-white backdrop-blur-sm placeholder:text-white/60 focus:border-white/60 focus:ring-0 focus:outline-none'
               />
               <button
                 type='submit'
-                className='bg-primary hover:bg-primary/90 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-colors'
+                className='text-primary rounded-lg bg-white px-5 py-2.5 text-sm font-semibold transition-all hover:bg-white/90'
               >
                 {t('newsletter.cta')}
               </button>
             </form>
-            <p className='text-muted-foreground mt-3 text-xs'>{t('newsletter.privacy')}</p>
+            <p className='mt-3 text-xs text-white/60'>{t('newsletter.privacy')}</p>
           </div>
         </div>
       </section>

@@ -225,7 +225,7 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
             {/* CTA Button */}
             <Button
               asChild
-              variant='accent'
+              variant='default'
               size='default'
               className='hidden items-center gap-2 shadow-md hover:shadow-lg md:inline-flex'
             >
