@@ -95,7 +95,7 @@ export default function OptimizedImage({
     return (
       <div
         ref={imgRef}
-        className={`bg-muted text-muted-foreground flex items-center justify-center text-sm ${className}`}
+        className={`flex items-center justify-center bg-muted text-sm text-muted-foreground ${className}`}
         style={{ width, height, ...style }}
       >
         Failed to load image
@@ -133,7 +133,7 @@ export default function OptimizedImage({
       {/* Loading skeleton */}
       {!isLoaded && isInView && (
         <div
-          className='bg-muted absolute inset-0 animate-pulse'
+          className='absolute inset-0 animate-pulse bg-muted'
           style={{ width, height }}
         />
       )}

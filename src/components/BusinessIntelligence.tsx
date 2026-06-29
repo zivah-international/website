@@ -6,17 +6,11 @@ import { useAnalytics } from './Analytics';
 
 // Business Intelligence tracking for ZIVAH International
 export function useBusinessTracking() {
-  const {
-    trackEvent,
-    trackConversion,
-    trackProductView,
-    trackQuoteRequest,
-    trackFormSubmission,
-    trackGenerateLead,
-  } = useAnalytics();
+  const { trackEvent, trackConversion, trackQuoteRequest, trackFormSubmission, trackGenerateLead } =
+    useAnalytics();
 
   // Track business-specific events
-  const trackBusinessEvent = (eventName: string, properties?: Record<string, any>) => {
+  const trackBusinessEvent = (eventName: string, properties?: Record<string, unknown>) => {
     trackEvent(eventName, 'business', JSON.stringify(properties));
   };
 
@@ -108,7 +102,7 @@ export function useBusinessTracking() {
   };
 
   // Track user engagement metrics
-  const trackEngagement = (action: string, details?: Record<string, any>) => {
+  const trackEngagement = (action: string, details?: Record<string, unknown>) => {
     trackBusinessEvent('user_engagement', { action, ...details });
   };
 

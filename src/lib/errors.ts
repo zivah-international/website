@@ -20,7 +20,7 @@ export class AppError extends Error {
 export class ValidationError extends AppError {
   constructor(
     message: string,
-    public details?: any
+    public details?: unknown
   ) {
     super(message, 400);
     this.details = details;
@@ -83,7 +83,7 @@ export function handleApiError(error: unknown): NextResponse {
 
   // Prisma errors
   if (error && typeof error === 'object' && 'code' in error) {
-    const prismaError = error as any;
+    const prismaError = error as { code: string };
 
     switch (prismaError.code) {
       case 'P2002':
@@ -113,7 +113,7 @@ export function handleApiError(error: unknown): NextResponse {
 
   // Database connection errors (pg driver)
   if (error && typeof error === 'object' && 'code' in error) {
-    const dbError = error as any;
+    const dbError = error as { code: string; message?: string };
     // Common PostgreSQL error codes
     if (
       dbError.code === 'ECONNREFUSED' ||
@@ -137,7 +137,9 @@ export function handleApiError(error: unknown): NextResponse {
   // Generic server error - include details for debugging
   const errorMessage = error instanceof Error ? error.message : String(error);
   const errorCode =
-    error && typeof error === 'object' && 'code' in error ? (error as any).code : undefined;
+    error && typeof error === 'object' && 'code' in error
+      ? (error as { code: unknown }).code
+      : undefined;
 
   return NextResponse.json(
     {
@@ -152,7 +154,7 @@ export function handleApiError(error: unknown): NextResponse {
 }
 
 export function createApiResponse(
-  data?: any,
+  data?: unknown,
   message?: string,
   status: number = 200
 ): NextResponse {

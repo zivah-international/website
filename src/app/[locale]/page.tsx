@@ -89,7 +89,7 @@ export default function HomePage() {
   }, [locale]);
 
   return (
-    <div className='bg-background min-h-screen'>
+    <div className='min-h-screen bg-background'>
       <Navigation />
       <HeroSlider
         slides={SLIDES}
@@ -126,7 +126,7 @@ export default function HomePage() {
           <div className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
             {/* Image */}
             <div className='relative'>
-              <div className='shadow-primary/10 overflow-hidden rounded-2xl shadow-xl'>
+              <div className='overflow-hidden rounded-2xl shadow-xl shadow-primary/10'>
                 <Image
                   src='https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=900&q=90'
                   alt='Camarón Vannamei IQF Premium Ecuador'
@@ -151,15 +151,15 @@ export default function HomePage() {
 
             {/* Copy */}
             <div>
-              <span className='text-secondary mb-3 inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase'>
+              <span className='mb-3 inline-flex items-center gap-2 text-xs font-bold tracking-widest text-secondary uppercase'>
                 <span className='h-px w-5 bg-current' />
                 {t('home.shrimp.eyebrow')}
               </span>
-              <h2 className='text-foreground mb-4 text-3xl leading-tight font-black sm:text-4xl'>
+              <h2 className='mb-4 text-3xl leading-tight font-black text-foreground sm:text-4xl'>
                 {t('home.shrimp.title')}{' '}
                 <span className='text-secondary'>{t('home.shrimp.titleHighlight')}</span>
               </h2>
-              <p className='text-muted-foreground mb-6 text-sm leading-relaxed sm:text-base'>
+              <p className='mb-6 text-sm leading-relaxed text-muted-foreground sm:text-base'>
                 {t('home.shrimp.description')}
               </p>
               <ul className='mb-7 space-y-2.5'>
@@ -169,7 +169,7 @@ export default function HomePage() {
                     className='flex items-start gap-2.5 text-sm'
                   >
                     <svg
-                      className='text-secondary mt-0.5 h-4 w-4 shrink-0'
+                      className='mt-0.5 h-4 w-4 shrink-0 text-secondary'
                       fill='none'
                       viewBox='0 0 24 24'
                       stroke='currentColor'
@@ -188,7 +188,7 @@ export default function HomePage() {
               <div className='flex flex-wrap gap-3'>
                 <Link
                   href={`/${locale}/products?category=marinos-y-pesca`}
-                  className='bg-secondary hover:bg-secondary/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5'
+                  className='inline-flex items-center gap-2 rounded-xl bg-secondary px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-secondary/90'
                 >
                   {t('home.shrimp.cta')}
                   <svg
@@ -207,7 +207,10 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href={`/${locale}/quote`}
-                  className='border-border text-muted-foreground hover:border-secondary hover:text-secondary inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-semibold transition-all'
+                  className='inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold text-muted-foreground transition-all hover:border-secondary hover:text-secondary'
+                  data-track='begin_checkout'
+                  data-track-category='feature'
+                  data-track-label='home_shrimp_quote'
                 >
                   {t('home.shrimp.ctaSecondary')}
                 </Link>
@@ -223,15 +226,15 @@ export default function HomePage() {
           <div className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
             {/* Copy — left */}
             <div className='order-2 lg:order-1'>
-              <span className='text-primary mb-3 inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase'>
+              <span className='mb-3 inline-flex items-center gap-2 text-xs font-bold tracking-widest text-primary uppercase'>
                 <span className='h-px w-5 bg-current' />
                 {t('home.larvae.eyebrow')}
               </span>
-              <h2 className='text-foreground mb-4 text-3xl leading-tight font-black sm:text-4xl'>
+              <h2 className='mb-4 text-3xl leading-tight font-black text-foreground sm:text-4xl'>
                 {t('home.larvae.title')}{' '}
                 <span className='text-primary'>{t('home.larvae.titleHighlight')}</span>
               </h2>
-              <p className='text-muted-foreground mb-6 text-sm leading-relaxed sm:text-base'>
+              <p className='mb-6 text-sm leading-relaxed text-muted-foreground sm:text-base'>
                 {t('home.larvae.description')}
               </p>
               <ul className='mb-7 space-y-2.5'>
@@ -241,7 +244,7 @@ export default function HomePage() {
                     className='flex items-start gap-2.5 text-sm'
                   >
                     <svg
-                      className='text-primary mt-0.5 h-4 w-4 shrink-0'
+                      className='mt-0.5 h-4 w-4 shrink-0 text-primary'
                       fill='none'
                       viewBox='0 0 24 24'
                       stroke='currentColor'
@@ -260,7 +263,7 @@ export default function HomePage() {
               <div className='flex flex-wrap gap-3'>
                 <Link
                   href={`/${locale}/products?category=larvas`}
-                  className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5'
+                  className='inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-primary/90'
                 >
                   {t('home.larvae.cta')}
                   <svg
@@ -279,7 +282,10 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href={`/${locale}/quote`}
-                  className='border-border text-muted-foreground hover:border-primary hover:text-primary inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-semibold transition-all'
+                  className='inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold text-muted-foreground transition-all hover:border-primary hover:text-primary'
+                  data-track='begin_checkout'
+                  data-track-category='feature'
+                  data-track-label='home_larvae_quote'
                 >
                   {t('home.larvae.ctaSecondary')}
                 </Link>
@@ -288,7 +294,7 @@ export default function HomePage() {
 
             {/* Image — right */}
             <div className='relative order-1 lg:order-2'>
-              <div className='shadow-primary/10 overflow-hidden rounded-2xl shadow-xl'>
+              <div className='overflow-hidden rounded-2xl shadow-xl shadow-primary/10'>
                 <Image
                   src='https://images.unsplash.com/photo-1674962296996-b17a771d44b3?auto=format&fit=crop&w=900&q=90'
                   alt='Laboratorio de Larvas de Camarón Ecuador'
@@ -297,7 +303,7 @@ export default function HomePage() {
                   className='h-72 w-full object-cover lg:h-[420px]'
                 />
                 <div className='absolute top-3 right-3'>
-                  <span className='text-primary rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold shadow-sm'>
+                  <span className='rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-primary shadow-sm'>
                     🔬 SPF · Bioseguridad Nivel A
                   </span>
                 </div>
@@ -311,13 +317,13 @@ export default function HomePage() {
       <section className='bg-background py-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-10 text-center'>
-            <span className='text-secondary mb-2 block text-xs font-bold tracking-widest uppercase'>
+            <span className='mb-2 block text-xs font-bold tracking-widest text-secondary uppercase'>
               {t('home.whyEcuador.eyebrow')}
             </span>
-            <h2 className='text-foreground mb-3 text-3xl font-black sm:text-4xl'>
+            <h2 className='mb-3 text-3xl font-black text-foreground sm:text-4xl'>
               {t('home.whyEcuador.title')}
             </h2>
-            <p className='text-muted-foreground mx-auto max-w-2xl text-sm'>
+            <p className='mx-auto max-w-2xl text-sm text-muted-foreground'>
               {t('home.whyEcuador.subtitle')}
             </p>
           </div>
@@ -362,8 +368,8 @@ export default function HomePage() {
                 className={`rounded-xl border ${item.border} ${item.bg} p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-black/5`}
               >
                 <div className={`${item.color} mb-2 text-2xl font-black`}>{item.stat}</div>
-                <div className='text-foreground mb-1.5 text-sm font-bold'>{item.label}</div>
-                <div className='text-muted-foreground text-xs leading-relaxed'>{item.desc}</div>
+                <div className='mb-1.5 text-sm font-bold text-foreground'>{item.label}</div>
+                <div className='text-xs leading-relaxed text-muted-foreground'>{item.desc}</div>
               </div>
             ))}
           </div>
@@ -376,15 +382,15 @@ export default function HomePage() {
           <div className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
             {/* Copy — left */}
             <div className='order-2 lg:order-1'>
-              <span className='text-primary mb-3 inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase'>
+              <span className='mb-3 inline-flex items-center gap-2 text-xs font-bold tracking-widest text-primary uppercase'>
                 <span className='h-px w-5 bg-current' />
                 {t('home.larvae.eyebrow')}
               </span>
-              <h2 className='text-foreground mb-4 text-3xl leading-tight font-black sm:text-4xl'>
+              <h2 className='mb-4 text-3xl leading-tight font-black text-foreground sm:text-4xl'>
                 {t('home.larvae.title')}{' '}
                 <span className='text-primary'>{t('home.larvae.titleHighlight')}</span>
               </h2>
-              <p className='text-muted-foreground mb-6 text-sm leading-relaxed sm:text-base'>
+              <p className='mb-6 text-sm leading-relaxed text-muted-foreground sm:text-base'>
                 {t('home.larvae.description')}
               </p>
               <ul className='mb-7 space-y-2.5'>
@@ -394,7 +400,7 @@ export default function HomePage() {
                     className='flex items-start gap-2.5 text-sm'
                   >
                     <svg
-                      className='text-primary mt-0.5 h-4 w-4 shrink-0'
+                      className='mt-0.5 h-4 w-4 shrink-0 text-primary'
                       fill='none'
                       viewBox='0 0 24 24'
                       stroke='currentColor'
@@ -413,7 +419,7 @@ export default function HomePage() {
               <div className='flex flex-wrap gap-3'>
                 <Link
                   href={`/${locale}/products?category=larvas`}
-                  className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5'
+                  className='inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-primary/90'
                 >
                   {t('home.larvae.cta')}
                   <svg
@@ -432,7 +438,10 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href={`/${locale}/quote`}
-                  className='border-border text-muted-foreground hover:border-primary hover:text-primary inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-semibold transition-all'
+                  className='inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold text-muted-foreground transition-all hover:border-primary hover:text-primary'
+                  data-track='begin_checkout'
+                  data-track-category='feature'
+                  data-track-label='home_larvae2_quote'
                 >
                   {t('home.larvae.ctaSecondary')}
                 </Link>
@@ -441,7 +450,7 @@ export default function HomePage() {
 
             {/* Image — right */}
             <div className='relative order-1 lg:order-2'>
-              <div className='shadow-primary/10 overflow-hidden rounded-2xl shadow-xl'>
+              <div className='overflow-hidden rounded-2xl shadow-xl shadow-primary/10'>
                 <Image
                   src='https://images.unsplash.com/photo-1674962296996-b17a771d44b3?auto=format&fit=crop&w=900&q=90'
                   alt='Laboratorio de Larvas de Camarón Ecuador'
@@ -450,7 +459,7 @@ export default function HomePage() {
                   className='h-72 w-full object-cover lg:h-[420px]'
                 />
                 <div className='absolute top-3 right-3'>
-                  <span className='text-primary rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold shadow-sm'>
+                  <span className='rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-primary shadow-sm'>
                     🔬 SPF · Bioseguridad Nivel A
                   </span>
                 </div>
@@ -464,13 +473,13 @@ export default function HomePage() {
       <section className='bg-background py-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-10 text-center'>
-            <span className='text-secondary mb-2 block text-xs font-bold tracking-widest uppercase'>
+            <span className='mb-2 block text-xs font-bold tracking-widest text-secondary uppercase'>
               {t('home.whyEcuador.eyebrow')}
             </span>
-            <h2 className='text-foreground mb-3 text-3xl font-black sm:text-4xl'>
+            <h2 className='mb-3 text-3xl font-black text-foreground sm:text-4xl'>
               {t('home.whyEcuador.title')}
             </h2>
-            <p className='text-muted-foreground mx-auto max-w-2xl text-sm'>
+            <p className='mx-auto max-w-2xl text-sm text-muted-foreground'>
               {t('home.whyEcuador.subtitle')}
             </p>
           </div>
@@ -515,8 +524,8 @@ export default function HomePage() {
                 className={`rounded-xl border ${item.border} ${item.bg} p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-black/5`}
               >
                 <div className={`${item.color} mb-2 text-2xl font-black`}>{item.stat}</div>
-                <div className='text-foreground mb-1.5 text-sm font-bold'>{item.label}</div>
-                <div className='text-muted-foreground text-xs leading-relaxed'>{item.desc}</div>
+                <div className='mb-1.5 text-sm font-bold text-foreground'>{item.label}</div>
+                <div className='text-xs leading-relaxed text-muted-foreground'>{item.desc}</div>
               </div>
             ))}
           </div>
@@ -530,13 +539,13 @@ export default function HomePage() {
       >
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-8 text-center'>
-            <div className='bg-secondary/10 text-secondary mb-3 inline-block rounded-full px-4 py-1.5 text-sm font-semibold'>
+            <div className='mb-3 inline-block rounded-full bg-secondary/10 px-4 py-1.5 text-sm font-semibold text-secondary'>
               {t('products.badge')}
             </div>
-            <h2 className='text-foreground mb-4 text-3xl font-bold sm:text-4xl'>
+            <h2 className='mb-4 text-3xl font-bold text-foreground sm:text-4xl'>
               {t('products.title')}
             </h2>
-            <p className='text-muted-foreground mx-auto max-w-2xl text-lg'>
+            <p className='mx-auto max-w-2xl text-lg text-muted-foreground'>
               {t('products.description')}
             </p>
           </div>
@@ -546,11 +555,11 @@ export default function HomePage() {
               {[...Array(4)].map((_, i) => (
                 <div
                   key={i}
-                  className='bg-card animate-pulse rounded-2xl border p-8'
+                  className='animate-pulse rounded-2xl border bg-card p-8'
                 >
-                  <div className='bg-muted mb-4 h-12 w-12 rounded-xl' />
-                  <div className='bg-muted mb-3 h-5 rounded' />
-                  <div className='bg-muted h-4 rounded' />
+                  <div className='mb-4 h-12 w-12 rounded-xl bg-muted' />
+                  <div className='mb-3 h-5 rounded bg-muted' />
+                  <div className='h-4 rounded bg-muted' />
                 </div>
               ))}
             </div>
@@ -561,14 +570,14 @@ export default function HomePage() {
                 return (
                   <div
                     key={cat.id}
-                    className='bg-card group border-border/50 flex flex-col rounded-2xl border p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/5'
+                    className='group flex flex-col rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/5'
                   >
                     <div className='mb-4 flex items-start justify-between'>
                       <span className='text-4xl'>{cat.icon || '📦'}</span>
                       <span className={`${style.dot} mt-2 h-2 w-2 rounded-full`} />
                     </div>
-                    <h3 className='text-foreground mb-2 text-lg font-bold'>{cat.name}</h3>
-                    <p className='text-muted-foreground mb-6 flex-1 text-sm leading-relaxed'>
+                    <h3 className='mb-2 text-lg font-bold text-foreground'>{cat.name}</h3>
+                    <p className='mb-6 flex-1 text-sm leading-relaxed text-muted-foreground'>
                       {cat.description}
                     </p>
                     <div className='flex gap-2'>
@@ -580,7 +589,10 @@ export default function HomePage() {
                       </Link>
                       <Link
                         href={`/${locale}/quote`}
-                        className='border-border hover:border-accent/50 hover:text-accent rounded-lg border px-3 py-2 text-xs font-medium transition-colors'
+                        className='rounded-lg border border-border px-3 py-2 text-xs font-medium transition-colors hover:border-accent/50 hover:text-accent'
+                        data-track='begin_checkout'
+                        data-track-category='category_card'
+                        data-track-label='home_category_quote'
                       >
                         {t('products.requestQuote').split(' ')[0]}
                       </Link>
@@ -594,7 +606,7 @@ export default function HomePage() {
           <div className='mt-10 text-center'>
             <Link
               href={`/${locale}/products`}
-              className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg'
+              className='inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg'
             >
               {t('home.viewFullCatalog')}
               <svg
@@ -622,13 +634,13 @@ export default function HomePage() {
       >
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-8 text-center'>
-            <div className='bg-primary/10 text-primary mb-3 inline-block rounded-full px-4 py-1.5 text-sm font-semibold'>
+            <div className='mb-3 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary'>
               {t('process.badge')}
             </div>
-            <h2 className='text-foreground mb-4 text-3xl font-bold sm:text-4xl'>
+            <h2 className='mb-4 text-3xl font-bold text-foreground sm:text-4xl'>
               {t('process.title')}
             </h2>
-            <p className='text-muted-foreground mx-auto max-w-2xl text-lg'>
+            <p className='mx-auto max-w-2xl text-lg text-muted-foreground'>
               {t('process.description')}
             </p>
           </div>
@@ -637,20 +649,20 @@ export default function HomePage() {
             {(['📋', '🔍', '📄', '🚢'] as const).map((icon, i) => (
               <div
                 key={i}
-                className='bg-card border-border/50 relative rounded-2xl border p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-black/5'
+                className='relative rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-black/5'
               >
-                <div className='text-primary/12 mb-2 text-5xl font-black select-none'>
+                <div className='mb-2 text-5xl font-black text-primary/12 select-none'>
                   {String(i + 1).padStart(2, '0')}
                 </div>
                 <div className='mb-3 text-3xl'>{icon}</div>
-                <h3 className='text-foreground mb-1 text-base font-bold'>
+                <h3 className='mb-1 text-base font-bold text-foreground'>
                   {t(`process.steps.${i}.title`)}
                 </h3>
-                <p className='text-muted-foreground text-sm leading-relaxed'>
+                <p className='text-sm leading-relaxed text-muted-foreground'>
                   {t(`process.steps.${i}.description`)}
                 </p>
                 {i < 3 && (
-                  <div className='text-primary/25 absolute top-1/2 -right-4 hidden -translate-y-1/2 lg:block'>
+                  <div className='absolute top-1/2 -right-4 hidden -translate-y-1/2 text-primary/25 lg:block'>
                     <svg
                       className='h-6 w-6'
                       fill='none'
@@ -673,7 +685,10 @@ export default function HomePage() {
           <div className='mt-10 text-center'>
             <Link
               href={`/${locale}/quote`}
-              className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg'
+              className='inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg'
+              data-track='begin_checkout'
+              data-track-category='process'
+              data-track-label='home_process_quote'
             >
               {t('hero.requestQuote')}
               <svg
@@ -698,10 +713,10 @@ export default function HomePage() {
       <section className='bg-muted/20 py-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-8 text-center'>
-            <div className='bg-accent/10 text-accent mb-3 inline-block rounded-full px-4 py-1.5 text-sm font-semibold'>
+            <div className='mb-3 inline-block rounded-full bg-accent/10 px-4 py-1.5 text-sm font-semibold text-accent'>
               {t('testimonials.badge')}
             </div>
-            <h2 className='text-foreground mb-4 text-3xl font-bold sm:text-4xl'>
+            <h2 className='mb-4 text-3xl font-bold text-foreground sm:text-4xl'>
               {t('testimonials.title')}
             </h2>
           </div>
@@ -709,27 +724,27 @@ export default function HomePage() {
             {[0, 1, 2].map(i => (
               <div
                 key={i}
-                className='bg-card border-border/40 flex flex-col rounded-2xl border p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/5'
+                className='flex flex-col rounded-2xl border border-border/40 bg-card p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/5'
               >
                 <svg
-                  className='text-primary/15 mb-4 h-8 w-8 shrink-0'
+                  className='mb-4 h-8 w-8 shrink-0 text-primary/15'
                   fill='currentColor'
                   viewBox='0 0 24 24'
                 >
                   <path d='M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z' />
                 </svg>
-                <p className='text-muted-foreground mb-6 flex-1 text-sm leading-relaxed'>
+                <p className='mb-6 flex-1 text-sm leading-relaxed text-muted-foreground'>
                   {t(`testimonials.items.${i}.quote`)}
                 </p>
-                <div className='border-border/40 flex items-center gap-3 border-t pt-4'>
-                  <div className='bg-primary/10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg'>
+                <div className='flex items-center gap-3 border-t border-border/40 pt-4'>
+                  <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg'>
                     {t(`testimonials.items.${i}.flag`)}
                   </div>
                   <div>
-                    <div className='text-foreground text-sm font-semibold'>
+                    <div className='text-sm font-semibold text-foreground'>
                       {t(`testimonials.items.${i}.author`)}
                     </div>
-                    <div className='text-muted-foreground text-xs'>
+                    <div className='text-xs text-muted-foreground'>
                       {t(`testimonials.items.${i}.role`)} · {t(`testimonials.items.${i}.country`)}
                     </div>
                   </div>
@@ -770,7 +785,7 @@ export default function HomePage() {
               />
               <button
                 type='submit'
-                className='text-primary rounded-lg bg-white px-5 py-2.5 text-sm font-semibold transition-all hover:bg-white/90'
+                className='rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-primary transition-all hover:bg-white/90'
               >
                 {t('newsletter.cta')}
               </button>

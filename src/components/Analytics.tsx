@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 declare global {
   interface Window {
@@ -120,13 +120,14 @@ export function trackGenerateLead(params: {
   });
 }
 
-// Update consent settings
+// Update consent settings — Consent Mode v2 compliant.
+// Covers all 4 required params: analytics_storage, ad_storage, ad_user_data, ad_personalization.
 export function updateConsent(consent: {
   analytics?: boolean;
   marketing?: boolean;
   functional?: boolean;
 }) {
-  if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
+  if (typeof window === 'undefined' || !window.gtag) return;
 
   const consentUpdate: Record<string, string> = {};
 
@@ -135,7 +136,11 @@ export function updateConsent(consent: {
   }
 
   if (consent.marketing !== undefined) {
-    consentUpdate.ad_storage = consent.marketing ? 'granted' : 'denied';
+    // Consent Mode v2 requires ad_user_data and ad_personalization in addition to ad_storage
+    const adState = consent.marketing ? 'granted' : 'denied';
+    consentUpdate.ad_storage = adState;
+    consentUpdate.ad_user_data = adState;
+    consentUpdate.ad_personalization = adState;
   }
 
   if (consent.functional !== undefined) {
@@ -145,12 +150,19 @@ export function updateConsent(consent: {
   window.gtag('consent', 'update', consentUpdate);
 }
 
-// Analytics component — tracks SPA page view changes (gtag is initialized via next/script in layout)
+// Analytics component — tracks SPA page view changes via history API.
+// Skips the initial mount: gtag('config') already sends the first page_view.
+// Only subsequent route changes (pathname or searchParams) fire a new page_view.
 export default function Analytics() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isMounted = useRef(false);
 
   useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return; // skip initial load — gtag config handles it
+    }
     if (typeof window === 'undefined' || !window.gtag || !GA_MEASUREMENT_ID) return;
 
     const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');

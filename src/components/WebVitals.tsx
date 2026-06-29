@@ -29,10 +29,20 @@ export default function WebVitals() {
   return null;
 }
 
-function sendToAnalytics({ name, delta, value, id }: any) {
+interface WebVitalMetric {
+  name: string;
+  delta: number;
+  value: number;
+  id: string;
+}
+
+function sendToAnalytics({ name, delta, value, id }: WebVitalMetric) {
   // Send to Google Analytics 4
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', name, {
+  if (
+    typeof window !== 'undefined' &&
+    (window as Window & { gtag?: (...args: unknown[]) => void }).gtag
+  ) {
+    (window as Window & { gtag?: (...args: unknown[]) => void }).gtag!('event', name, {
       event_category: 'Web Vitals',
       event_label: id,
       value: Math.round(name === 'CLS' ? delta * 1000 : delta),
@@ -59,18 +69,18 @@ function sendToAnalytics({ name, delta, value, id }: any) {
 // Performance monitoring utilities
 export const performanceUtils = {
   // Measure function execution time
-  measureExecutionTime<T>(fn: () => T, label: string): T {
-    const start = performance.now();
+  measureExecutionTime<T>(fn: () => T, _label: string): T {
+    const _start = performance.now();
     const result = fn();
-    const end = performance.now();
+    const _end = performance.now();
     return result;
   },
 
   // Measure async function execution time
-  async measureAsyncExecutionTime<T>(fn: () => Promise<T>, label: string): Promise<T> {
-    const start = performance.now();
+  async measureAsyncExecutionTime<T>(fn: () => Promise<T>, _label: string): Promise<T> {
+    const _start = performance.now();
     const result = await fn();
-    const end = performance.now();
+    const _end = performance.now();
     return result;
   },
 
@@ -93,8 +103,8 @@ export const performanceUtils = {
     if ('PerformanceObserver' in window) {
       const observer = new PerformanceObserver(list => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
-          callback(entry.processingStart - entry.startTime);
+        entries.forEach((entry: PerformanceEntry & { processingStart?: number }) => {
+          callback((entry.processingStart ?? entry.startTime) - entry.startTime);
         });
       });
       observer.observe({ entryTypes: ['first-input'] });
@@ -109,11 +119,13 @@ export const performanceUtils = {
     if ('PerformanceObserver' in window) {
       const observer = new PerformanceObserver(list => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+        entries.forEach(
+          (entry: PerformanceEntry & { hadRecentInput?: boolean; value?: number }) => {
+            if (!entry.hadRecentInput) {
+              clsValue += entry.value ?? 0;
+            }
           }
-        });
+        );
         callback(clsValue);
       });
       observer.observe({ entryTypes: ['layout-shift'] });
@@ -158,8 +170,7 @@ export function usePerformanceMonitoring(componentName: string) {
     const startTime = performance.now();
 
     return () => {
-      const endTime = performance.now();
-      const duration = endTime - startTime;
+      const _duration = performance.now() - startTime;
     };
   }, [componentName]);
 }

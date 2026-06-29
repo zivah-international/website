@@ -103,17 +103,17 @@ export async function queryTyped<T>(
 }
 
 // Utility to parse JSON fields from database TEXT columns
-export function parseJsonFields<T>(row: T, jsonFields: readonly (keyof any)[]): T {
-  const parsed: Record<string, unknown> = { ...(row as any) };
+export function parseJsonFields<T>(row: T, jsonFields: readonly (keyof T)[]): T {
+  const parsed: Record<string, unknown> = { ...(row as Record<string, unknown>) };
   for (const field of jsonFields) {
-    const key = field as keyof typeof parsed;
+    const key = field as string;
     if (typeof parsed[key] === 'string' && parsed[key]) {
       try {
         parsed[key] = JSON.parse(parsed[key] as string);
       } catch {
         // If parsing fails, leave as null or original value
-        logger.warn(`Failed to parse JSON field: ${String(field)}`);
-        parsed[key] = null as any;
+        logger.warn(`Failed to parse JSON field: ${key}`);
+        parsed[key] = null;
       }
     }
   }

@@ -176,7 +176,7 @@ export function checkRequestSize(
 // Log security events
 export function logSecurityEvent(
   event: string,
-  details: Record<string, any>,
+  details: Record<string, unknown>,
   request: NextRequest
 ) {
   const logEntry = {

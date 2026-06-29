@@ -18,7 +18,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       data-scroll-behavior='smooth'
     >
       <body
-        className='bg-background text-foreground min-h-screen font-sans antialiased transition-colors duration-300'
+        className='min-h-screen bg-background font-sans text-foreground antialiased transition-colors duration-300'
         suppressHydrationWarning
       >
         <Script

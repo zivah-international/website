@@ -37,7 +37,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export function ShadcnExamples() {
-  const [loading, setLoading] = useState(false);
+  // loading state available for future use
+  const [_loading, _setLoading] = useState(false);
 
   return (
     <div className='container mx-auto space-y-8 p-8'>
@@ -77,7 +78,7 @@ export function ShadcnExamples() {
               <CardDescription>High-quality shrimp and seafood exports</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className='text-muted-foreground text-sm'>
+              <p className='text-sm text-muted-foreground'>
                 Our seafood products meet the highest international standards for quality and
                 sustainability.
               </p>
@@ -94,7 +95,7 @@ export function ShadcnExamples() {
               <CardDescription>Fresh from Ecuador</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className='text-muted-foreground text-sm'>
+              <p className='text-sm text-muted-foreground'>
                 Bananas, passion fruit, and more exotic fruits delivered fresh.
               </p>
             </CardContent>
@@ -115,7 +116,7 @@ export function ShadcnExamples() {
               <CardDescription>Ecuadorian specialty coffee</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className='text-muted-foreground text-sm'>
+              <p className='text-sm text-muted-foreground'>
                 Arabica coffee beans from the best regions of Ecuador.
               </p>
             </CardContent>

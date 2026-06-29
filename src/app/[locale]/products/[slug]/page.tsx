@@ -94,9 +94,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const quoteUrl = `/${locale ?? 'es'}/#quote`;
 
   return (
-    <div className='bg-background min-h-screen'>
+    <div className='min-h-screen bg-background'>
       {/* Sticky CTA bar for mobile */}
-      <div className='border-border bg-background fixed right-0 bottom-0 left-0 z-40 border-t p-3 shadow-lg sm:hidden'>
+      <div className='fixed right-0 bottom-0 left-0 z-40 border-t border-border bg-background p-3 shadow-lg sm:hidden'>
         <Link
           href={quoteUrl}
           data-track='begin_checkout'
@@ -119,11 +119,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
           className='mb-8'
           aria-label='Breadcrumb'
         >
-          <ol className='text-muted-foreground flex flex-wrap items-center gap-1 text-sm'>
+          <ol className='flex flex-wrap items-center gap-1 text-sm text-muted-foreground'>
             <li>
               <Link
                 href={`/${locale ?? 'es'}`}
-                className='hover:text-accent transition-colors'
+                className='transition-colors hover:text-accent'
               >
                 Inicio
               </Link>
@@ -132,7 +132,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <li>
               <Link
                 href={`/${locale ?? 'es'}/#products`}
-                className='hover:text-accent transition-colors'
+                className='transition-colors hover:text-accent'
               >
                 Productos
               </Link>
@@ -143,7 +143,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <li>
                   <Link
                     href={`/${locale ?? 'es'}/#${product.category.slug}`}
-                    className='hover:text-accent transition-colors'
+                    className='transition-colors hover:text-accent'
                   >
                     {product.category.name}
                   </Link>
@@ -151,15 +151,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </>
             )}
             <li aria-hidden='true'>/</li>
-            <li className='text-foreground font-medium'>{product.name}</li>
+            <li className='font-medium text-foreground'>{product.name}</li>
           </ol>
         </nav>
 
         {/* Product Header */}
-        <div className='bg-card mb-8 overflow-hidden rounded-2xl shadow-lg'>
+        <div className='mb-8 overflow-hidden rounded-2xl bg-card shadow-lg'>
           <div className='grid gap-0 md:grid-cols-2'>
             {/* Product Image */}
-            <div className='bg-muted/30 relative flex min-h-64 items-center justify-center p-8 md:min-h-80'>
+            <div className='relative flex min-h-64 items-center justify-center bg-muted/30 p-8 md:min-h-80'>
               {product.imageUrl ? (
                 <Image
                   src={product.imageUrl}
@@ -172,11 +172,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
               ) : (
                 <div className='flex flex-col items-center gap-3'>
                   <span className='text-8xl'>{product.category?.icon ?? '📦'}</span>
-                  <span className='text-muted-foreground text-sm'>Imagen no disponible</span>
+                  <span className='text-sm text-muted-foreground'>Imagen no disponible</span>
                 </div>
               )}
               {product.isFeatured && (
-                <div className='bg-primary/80 text-primary-foreground absolute top-4 left-4 rounded-full px-3 py-1 text-xs font-bold shadow'>
+                <div className='absolute top-4 left-4 rounded-full bg-primary/80 px-3 py-1 text-xs font-bold text-primary-foreground shadow'>
                   ⭐ Destacado
                 </div>
               )}
@@ -187,15 +187,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {/* Category + Name */}
               <div>
                 {product.category && (
-                  <p className='text-accent mb-2 text-sm font-semibold tracking-wider uppercase'>
+                  <p className='mb-2 text-sm font-semibold tracking-wider text-accent uppercase'>
                     {product.category.name}
                   </p>
                 )}
-                <h1 className='text-foreground mb-3 text-2xl font-bold sm:text-3xl'>
+                <h1 className='mb-3 text-2xl font-bold text-foreground sm:text-3xl'>
                   {product.name}
                 </h1>
                 {product.shortDescription && (
-                  <p className='text-muted-foreground text-base leading-relaxed'>
+                  <p className='text-base leading-relaxed text-muted-foreground'>
                     {product.shortDescription}
                   </p>
                 )}
@@ -216,45 +216,45 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
 
               {/* Commercial Info */}
-              <div className='bg-muted/50 rounded-xl p-5'>
+              <div className='rounded-xl bg-muted/50 p-5'>
                 <div className='mb-3 flex items-center justify-between'>
-                  <span className='text-muted-foreground text-sm'>Precio base FOB:</span>
+                  <span className='text-sm text-muted-foreground'>Precio base FOB:</span>
                   {product.basePrice ? (
-                    <span className='text-accent text-2xl font-bold'>
+                    <span className='text-2xl font-bold text-accent'>
                       ${product.basePrice.toFixed(2)}{' '}
-                      <span className='text-muted-foreground text-sm font-normal'>
+                      <span className='text-sm font-normal text-muted-foreground'>
                         {product.priceUnit}
                       </span>
                     </span>
                   ) : (
-                    <span className='text-muted-foreground text-sm font-medium'>
+                    <span className='text-sm font-medium text-muted-foreground'>
                       Consultar cotización
                     </span>
                   )}
                 </div>
                 <div className='grid grid-cols-2 gap-3 text-sm'>
                   <div>
-                    <span className='text-muted-foreground block'>Pedido mínimo:</span>
-                    <span className='text-foreground font-semibold'>
+                    <span className='block text-muted-foreground'>Pedido mínimo:</span>
+                    <span className='font-semibold text-foreground'>
                       {product.minOrderQty
                         ? `${product.minOrderQty.toLocaleString()} ${product.priceUnit?.split('/')[1] ?? ''}`
                         : 'A convenir'}
                     </span>
                   </div>
                   <div>
-                    <span className='text-muted-foreground block'>Origen:</span>
-                    <span className='text-foreground font-semibold'>🇪🇨 {product.origin}</span>
+                    <span className='block text-muted-foreground'>Origen:</span>
+                    <span className='font-semibold text-foreground'>🇪🇨 {product.origin}</span>
                   </div>
                   {product.harvestSeason && (
                     <div>
-                      <span className='text-muted-foreground block'>Temporada:</span>
-                      <span className='text-foreground font-semibold'>{product.harvestSeason}</span>
+                      <span className='block text-muted-foreground'>Temporada:</span>
+                      <span className='font-semibold text-foreground'>{product.harvestSeason}</span>
                     </div>
                   )}
                   {product.sku && (
                     <div>
-                      <span className='text-muted-foreground block'>SKU:</span>
-                      <span className='text-foreground font-mono text-xs font-semibold'>
+                      <span className='block text-muted-foreground'>SKU:</span>
+                      <span className='font-mono text-xs font-semibold text-foreground'>
                         {product.sku}
                       </span>
                     </div>
@@ -288,7 +288,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <Button
                     variant='outline'
                     size='lg'
-                    className='hover:bg-muted w-full border-2 font-medium'
+                    className='w-full border-2 font-medium hover:bg-muted'
                   >
                     💬 Contactar
                   </Button>
@@ -299,7 +299,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {ficha && (
                 <Link
                   href={`/${locale ?? 'es'}/products/${product.slug}/ficha-tecnica`}
-                  className='text-primary hidden items-center gap-2 text-sm font-medium hover:underline sm:flex'
+                  className='hidden items-center gap-2 text-sm font-medium text-primary hover:underline sm:flex'
                   target='_blank'
                   rel='noopener'
                 >
@@ -307,7 +307,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </Link>
               )}
 
-              <p className='text-muted-foreground/60 text-xs'>
+              <p className='text-xs text-muted-foreground/60'>
                 * Precio referencial FOB Ecuador. El precio final puede variar según Incoterms,
                 volumen y destino.
               </p>
@@ -321,28 +321,28 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className='space-y-8 lg:col-span-2'>
             {/* Full Description */}
             {product.description && (
-              <div className='bg-card rounded-2xl p-8 shadow-sm'>
-                <h2 className='text-foreground mb-4 text-xl font-bold'>Descripción del Producto</h2>
-                <p className='text-muted-foreground leading-relaxed'>{product.description}</p>
+              <div className='rounded-2xl bg-card p-8 shadow-sm'>
+                <h2 className='mb-4 text-xl font-bold text-foreground'>Descripción del Producto</h2>
+                <p className='leading-relaxed text-muted-foreground'>{product.description}</p>
               </div>
             )}
 
             {/* Technical Specifications */}
             {product.specifications && Object.keys(product.specifications).length > 0 && (
-              <div className='bg-card rounded-2xl p-8 shadow-sm'>
-                <h2 className='text-foreground mb-6 text-xl font-bold'>
+              <div className='rounded-2xl bg-card p-8 shadow-sm'>
+                <h2 className='mb-6 text-xl font-bold text-foreground'>
                   🔬 Especificaciones Técnicas
                 </h2>
-                <div className='divide-border divide-y'>
+                <div className='divide-y divide-border'>
                   {Object.entries(product.specifications).map(([key, value]) => (
                     <div
                       key={key}
                       className='flex items-start justify-between gap-4 py-3'
                     >
-                      <span className='text-foreground min-w-0 shrink-0 font-medium capitalize'>
+                      <span className='min-w-0 shrink-0 font-medium text-foreground capitalize'>
                         {key.replace(/([A-Z])/g, ' $1').trim()}
                       </span>
-                      <span className='text-muted-foreground text-right'>{value as string}</span>
+                      <span className='text-right text-muted-foreground'>{value as string}</span>
                     </div>
                   ))}
                 </div>
@@ -351,18 +351,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Nutritional / Additional Info */}
             {product.nutritionalInfo && Object.keys(product.nutritionalInfo).length > 0 && (
-              <div className='bg-card rounded-2xl p-8 shadow-sm'>
-                <h2 className='text-foreground mb-6 text-xl font-bold'>
+              <div className='rounded-2xl bg-card p-8 shadow-sm'>
+                <h2 className='mb-6 text-xl font-bold text-foreground'>
                   📊 Información Nutricional
                 </h2>
                 <div className='grid grid-cols-2 gap-3 sm:grid-cols-3'>
                   {Object.entries(product.nutritionalInfo).map(([key, value]) => (
                     <div
                       key={key}
-                      className='bg-muted/40 rounded-xl p-3 text-center'
+                      className='rounded-xl bg-muted/40 p-3 text-center'
                     >
-                      <div className='text-accent text-sm font-bold'>{value as string}</div>
-                      <div className='text-muted-foreground mt-1 text-xs capitalize'>
+                      <div className='text-sm font-bold text-accent'>{value as string}</div>
+                      <div className='mt-1 text-xs text-muted-foreground capitalize'>
                         {key.replace(/([A-Z])/g, ' $1').trim()}
                       </div>
                     </div>
@@ -372,9 +372,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             )}
 
             {/* Trust Signals */}
-            <div className='border-accent/20 bg-accent/5 rounded-2xl border p-8'>
-              <h2 className='text-accent mb-4 text-xl font-bold'>✅ Por qué comprar con ZIVAH</h2>
-              <ul className='text-accent/80 space-y-3 text-sm'>
+            <div className='rounded-2xl border border-accent/20 bg-accent/5 p-8'>
+              <h2 className='mb-4 text-xl font-bold text-accent'>✅ Por qué comprar con ZIVAH</h2>
+              <ul className='space-y-3 text-sm text-accent/80'>
                 <li className='flex items-start gap-2'>
                   <span className='mt-0.5 shrink-0'>🏆</span>
                   <span>Certificaciones HACCP, BRC, BAP y GlobalGAP vigentes en cada embarque</span>
@@ -405,11 +405,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
           {/* Sidebar */}
           <div className='space-y-6'>
             {/* Quote CTA Card */}
-            <div className='bg-card rounded-2xl p-6 shadow-sm'>
-              <h3 className='text-foreground mb-1 text-lg font-bold'>
+            <div className='rounded-2xl bg-card p-6 shadow-sm'>
+              <h3 className='mb-1 text-lg font-bold text-foreground'>
                 ¿Interesado en este producto?
               </h3>
-              <p className='text-muted-foreground mb-5 text-sm'>
+              <p className='mb-5 text-sm text-muted-foreground'>
                 Recibe una cotización FOB con especificaciones técnicas y documentación de
                 exportación en menos de 24 horas.
               </p>
@@ -436,7 +436,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <Button
                   variant='outline'
                   size='full'
-                  className='hover:bg-muted w-full border-2 font-medium'
+                  className='w-full border-2 font-medium hover:bg-muted'
                 >
                   💬 Hablar con un Asesor
                 </Button>
@@ -446,7 +446,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   href={`/${locale ?? 'es'}/products/${product.slug}/ficha-tecnica`}
                   target='_blank'
                   rel='noopener'
-                  className='text-primary mt-3 flex items-center justify-center gap-2 text-sm font-medium hover:underline'
+                  className='mt-3 flex items-center justify-center gap-2 text-sm font-medium text-primary hover:underline'
                 >
                   📄 Ver Ficha Técnica de Exportación
                 </Link>
@@ -454,12 +454,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             {/* Quick Contact */}
-            <div className='bg-accent/5 border-accent/20 dark:bg-accent/10 dark:border-accent/30 rounded-2xl border p-6'>
-              <h3 className='text-accent mb-4 text-base font-semibold'>Contacto Directo</h3>
+            <div className='rounded-2xl border border-accent/20 bg-accent/5 p-6 dark:border-accent/30 dark:bg-accent/10'>
+              <h3 className='mb-4 text-base font-semibold text-accent'>Contacto Directo</h3>
               <div className='space-y-2 text-sm'>
                 <a
                   href='mailto:sales@zivahinternational.com'
-                  className='text-muted-foreground hover:text-accent flex items-center gap-2 transition-colors'
+                  className='flex items-center gap-2 text-muted-foreground transition-colors hover:text-accent'
                   data-track='generate_lead'
                   data-track-source='email_product'
                   data-track-currency='USD'
@@ -470,12 +470,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </a>
                 <a
                   href='tel:+593999002893'
-                  className='text-muted-foreground hover:text-accent flex items-center gap-2 transition-colors'
+                  className='flex items-center gap-2 text-muted-foreground transition-colors hover:text-accent'
                 >
                   <span>📱</span>
                   <span>+593 99 900 2893</span>
                 </a>
-                <div className='text-muted-foreground flex items-center gap-2'>
+                <div className='flex items-center gap-2 text-muted-foreground'>
                   <span>🏢</span>
                   <span>Samborondón, Guayas · Miami, FL</span>
                 </div>
@@ -484,8 +484,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Certifications display */}
             {product.certifications && product.certifications.length > 0 && (
-              <div className='bg-card rounded-2xl p-6 shadow-sm'>
-                <h3 className='text-foreground mb-4 text-base font-bold'>Certificaciones</h3>
+              <div className='rounded-2xl bg-card p-6 shadow-sm'>
+                <h3 className='mb-4 text-base font-bold text-foreground'>Certificaciones</h3>
                 <div className='flex flex-wrap gap-2'>
                   {product.certifications.map((cert, i) => (
                     <span
@@ -505,7 +505,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className='mt-12 text-center'>
           <Link
             href={`/${locale ?? 'es'}/#products`}
-            className='text-accent hover:text-accent/80 inline-flex items-center gap-2 text-sm font-medium transition-colors'
+            className='inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-accent/80'
           >
             ← Ver todos los productos
           </Link>

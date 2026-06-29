@@ -7,7 +7,7 @@ export default async function Footer() {
   const t = await getTranslations('footer');
 
   return (
-    <footer className='border-border/30 bg-foreground/[0.03] text-foreground border-t py-16 dark:bg-white/[0.02]'>
+    <footer className='border-t border-border/30 bg-foreground/[0.03] py-16 text-foreground dark:bg-white/[0.02]'>
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='mb-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4'>
           {/* Brand */}
@@ -22,8 +22,8 @@ export default async function Footer() {
                 style={{ width: '100px', height: '34px' }}
               />
             </div>
-            <p className='text-muted-foreground mb-4 text-sm'>{t('companyDescription')}</p>
-            <p className='text-muted-foreground text-sm'>
+            <p className='mb-4 text-sm text-muted-foreground'>{t('companyDescription')}</p>
+            <p className='text-sm text-muted-foreground'>
               <strong className='text-foreground'>{t('specialists')}</strong> {t('specialistsList')}
             </p>
             <div className='mt-6 flex items-center gap-3'>
@@ -32,7 +32,7 @@ export default async function Footer() {
                 target='_blank'
                 rel='noopener noreferrer'
                 aria-label='LinkedIn'
-                className='text-muted-foreground hover:text-primary flex h-9 w-9 items-center justify-center rounded-lg border border-current/20 transition-colors hover:border-current/60'
+                className='flex h-9 w-9 items-center justify-center rounded-lg border border-current/20 text-muted-foreground transition-colors hover:border-current/60 hover:text-primary'
               >
                 <svg
                   className='h-4 w-4'
@@ -47,7 +47,7 @@ export default async function Footer() {
                 target='_blank'
                 rel='noopener noreferrer'
                 aria-label='Instagram'
-                className='text-muted-foreground hover:text-accent flex h-9 w-9 items-center justify-center rounded-lg border border-current/20 transition-colors hover:border-current/60'
+                className='flex h-9 w-9 items-center justify-center rounded-lg border border-current/20 text-muted-foreground transition-colors hover:border-current/60 hover:text-accent'
               >
                 <svg
                   className='h-4 w-4'
@@ -62,7 +62,7 @@ export default async function Footer() {
                 target='_blank'
                 rel='noopener noreferrer'
                 aria-label='Facebook'
-                className='text-muted-foreground hover:text-primary flex h-9 w-9 items-center justify-center rounded-lg border border-current/20 transition-colors hover:border-current/60'
+                className='flex h-9 w-9 items-center justify-center rounded-lg border border-current/20 text-muted-foreground transition-colors hover:border-current/60 hover:text-primary'
               >
                 <svg
                   className='h-4 w-4'
@@ -81,8 +81,8 @@ export default async function Footer() {
 
           {/* Products */}
           <div>
-            <h4 className='text-foreground mb-4 text-lg font-semibold'>{t('mainProducts')}</h4>
-            <ul className='text-muted-foreground space-y-2 text-sm'>
+            <h4 className='mb-4 text-lg font-semibold text-foreground'>{t('mainProducts')}</h4>
+            <ul className='space-y-2 text-sm text-muted-foreground'>
               {(
                 [
                   ['tropicalFruits', '/products?category=frutas-tropicales'],
@@ -97,7 +97,7 @@ export default async function Footer() {
                   <Link
                     href={href as '/products'}
                     locale={locale as 'es' | 'en'}
-                    className='hover:text-accent transition-colors'
+                    className='transition-colors hover:text-accent'
                   >
                     {t(key)}
                   </Link>
@@ -108,8 +108,8 @@ export default async function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className='text-foreground mb-4 text-lg font-semibold'>{t('services')}</h4>
-            <ul className='text-muted-foreground space-y-2 text-sm'>
+            <h4 className='mb-4 text-lg font-semibold text-foreground'>{t('services')}</h4>
+            <ul className='space-y-2 text-sm text-muted-foreground'>
               {(
                 [
                   ['certifications', '/quality'],
@@ -123,7 +123,7 @@ export default async function Footer() {
                   <Link
                     href={href as '/quality'}
                     locale={locale as 'es' | 'en'}
-                    className='hover:text-accent transition-colors'
+                    className='transition-colors hover:text-accent'
                   >
                     {t(key)}
                   </Link>
@@ -134,8 +134,8 @@ export default async function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className='text-foreground mb-4 text-lg font-semibold'>{t('legal')}</h4>
-            <ul className='text-muted-foreground space-y-2 text-sm'>
+            <h4 className='mb-4 text-lg font-semibold text-foreground'>{t('legal')}</h4>
+            <ul className='space-y-2 text-sm text-muted-foreground'>
               {(
                 [
                   ['privacyPolicy', '/legal/privacy-policy'],
@@ -148,7 +148,7 @@ export default async function Footer() {
                   <Link
                     href={href as '/legal/privacy-policy'}
                     locale={locale as 'es' | 'en'}
-                    className='hover:text-accent transition-colors'
+                    className='transition-colors hover:text-accent'
                   >
                     {t(key)}
                   </Link>
@@ -158,31 +158,39 @@ export default async function Footer() {
           </div>
         </div>
 
-        <div className='border-border border-t pt-8'>
+        <div className='border-t border-border pt-8'>
           <div className='flex flex-col items-center justify-between gap-4 md:flex-row'>
-            <p className='text-muted-foreground text-sm'>
+            <p className='text-sm text-muted-foreground'>
               {t('copyright', { year: new Date().getFullYear() })}
             </p>
             <div className='flex flex-wrap items-center justify-center gap-2'>
-              <span className='text-muted-foreground text-xs'>
+              <span className='text-xs text-muted-foreground'>
                 Samborondón, Ecuador &amp; Miami, FL
               </span>
               <span className='text-muted-foreground/30'>·</span>
               <a
                 href='mailto:sales@zivahinternational.com'
-                className='text-muted-foreground hover:text-accent text-xs transition-colors'
+                className='text-xs text-muted-foreground transition-colors hover:text-accent'
+                data-track='generate_lead'
+                data-track-source='email_footer'
+                data-track-currency='USD'
+                data-track-value='0'
               >
                 sales@zivahinternational.com
               </a>
               <span className='text-muted-foreground/30'>·</span>
               <a
                 href='tel:+593999002893'
-                className='text-muted-foreground hover:text-accent text-xs transition-colors'
+                className='text-xs text-muted-foreground transition-colors hover:text-accent'
+                data-track='generate_lead'
+                data-track-source='phone_footer'
+                data-track-currency='USD'
+                data-track-value='0'
               >
                 +593 99 900 2893
               </a>
             </div>
-            <p className='text-muted-foreground text-sm'>{t('tagline')}</p>
+            <p className='text-sm text-muted-foreground'>{t('tagline')}</p>
           </div>
         </div>
       </div>

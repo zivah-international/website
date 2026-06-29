@@ -15,7 +15,7 @@ interface FormFieldProps {
 export function FormField({ label, required, error, children, className }: FormFieldProps) {
   return (
     <div className={cn('space-y-2', className)}>
-      <Label className='text-foreground text-sm font-medium'>
+      <Label className='text-sm font-medium text-foreground'>
         {label}
         {required && <span className='ml-1 text-red-500'>*</span>}
       </Label>
@@ -51,9 +51,9 @@ interface FormSectionProps {
 export function FormSection({ title, description, children, className }: FormSectionProps) {
   return (
     <div className={cn('space-y-6', className)}>
-      <div className='border-border border-b pb-4'>
-        <h3 className='text-foreground text-lg font-semibold'>{title}</h3>
-        {description && <p className='text-muted-foreground mt-1 text-sm'>{description}</p>}
+      <div className='border-b border-border pb-4'>
+        <h3 className='text-lg font-semibold text-foreground'>{title}</h3>
+        {description && <p className='mt-1 text-sm text-muted-foreground'>{description}</p>}
       </div>
       {children}
     </div>
@@ -69,7 +69,7 @@ export function FormActions({ children, className }: FormActionsProps) {
   return (
     <div
       className={cn(
-        'border-border flex flex-col justify-end gap-4 border-t pt-6 sm:flex-row',
+        'flex flex-col justify-end gap-4 border-t border-border pt-6 sm:flex-row',
         className
       )}
     >

@@ -26,12 +26,12 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className='bg-background min-h-screen py-16'>
+    <div className='min-h-screen bg-background py-16'>
       <div className='container mx-auto max-w-4xl px-4'>
         {/* Header */}
         <div className='mb-12 text-center'>
-          <h1 className='text-foreground mb-4 text-4xl font-bold'>Política de Privacidad</h1>
-          <p className='text-muted-foreground text-lg'>
+          <h1 className='mb-4 text-4xl font-bold text-foreground'>Política de Privacidad</h1>
+          <p className='text-lg text-muted-foreground'>
             Última actualización:{' '}
             {new Date().toLocaleDateString('es-ES', {
               year: 'numeric',
@@ -42,11 +42,11 @@ export default function PrivacyPolicyPage() {
         </div>
 
         {/* Content */}
-        <div className='bg-card space-y-8 rounded-xl p-8 shadow-lg'>
+        <div className='space-y-8 rounded-xl bg-card p-8 shadow-lg'>
           {/* Introduction */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>1. Introducción</h2>
-            <p className='text-muted-foreground leading-relaxed'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>1. Introducción</h2>
+            <p className='leading-relaxed text-muted-foreground'>
               ZIVAH International S.A. (&quot;nosotros&quot;, &quot;nuestro&quot; o
               &quot;ZIVAH&quot;) se compromete a proteger su privacidad y sus datos personales. Esta
               Política de Privacidad explica cómo recopilamos, usamos, divulgamos y protegemos su
@@ -56,14 +56,14 @@ export default function PrivacyPolicyPage() {
 
           {/* Information We Collect */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               2. Información que Recopilamos
             </h2>
 
-            <h3 className='text-foreground mb-3 text-xl font-medium'>
+            <h3 className='mb-3 text-xl font-medium text-foreground'>
               2.1 Información que Usted Nos Proporciona
             </h3>
-            <ul className='text-muted-foreground mb-4 list-inside list-disc space-y-2'>
+            <ul className='mb-4 list-inside list-disc space-y-2 text-muted-foreground'>
               <li>Nombre y apellidos</li>
               <li>Dirección de correo electrónico</li>
               <li>Número de teléfono</li>
@@ -73,10 +73,10 @@ export default function PrivacyPolicyPage() {
               <li>Cualquier otra información que nos proporcione voluntariamente</li>
             </ul>
 
-            <h3 className='text-foreground mb-3 text-xl font-medium'>
+            <h3 className='mb-3 text-xl font-medium text-foreground'>
               2.2 Información Recopilada Automáticamente
             </h3>
-            <ul className='text-muted-foreground list-inside list-disc space-y-2'>
+            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
               <li>Dirección IP y ubicación geográfica</li>
               <li>Tipo de navegador y versión</li>
               <li>Sistema operativo</li>
@@ -88,13 +88,13 @@ export default function PrivacyPolicyPage() {
 
           {/* How We Use Information */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               3. Cómo Utilizamos su Información
             </h2>
-            <p className='text-muted-foreground mb-4'>
+            <p className='mb-4 text-muted-foreground'>
               Utilizamos la información recopilada para los siguientes propósitos:
             </p>
-            <ul className='text-muted-foreground list-inside list-disc space-y-2'>
+            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
               <li>Procesar y gestionar sus solicitudes de cotización</li>
               <li>Proporcionar información sobre nuestros productos y servicios</li>
               <li>Mejorar nuestro sitio web y servicios</li>
@@ -106,14 +106,14 @@ export default function PrivacyPolicyPage() {
 
           {/* Information Sharing */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               4. Compartir su Información
             </h2>
-            <p className='text-muted-foreground mb-4'>
+            <p className='mb-4 text-muted-foreground'>
               No vendemos, alquilamos ni compartimos su información personal con terceros, excepto
               en las siguientes situaciones:
             </p>
-            <ul className='text-muted-foreground list-inside list-disc space-y-2'>
+            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
               <li>Con su consentimiento expreso</li>
               <li>
                 Con proveedores de servicios que nos ayudan a operar (bajo acuerdos de
@@ -126,15 +126,15 @@ export default function PrivacyPolicyPage() {
 
           {/* Data Security */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               5. Seguridad de los Datos
             </h2>
-            <p className='text-muted-foreground leading-relaxed'>
+            <p className='leading-relaxed text-muted-foreground'>
               Implementamos medidas de seguridad técnicas, administrativas y físicas apropiadas para
               proteger su información personal contra acceso no autorizado, alteración, divulgación
               o destrucción. Estas medidas incluyen:
             </p>
-            <ul className='text-muted-foreground mt-4 list-inside list-disc space-y-2'>
+            <ul className='mt-4 list-inside list-disc space-y-2 text-muted-foreground'>
               <li>Encriptación SSL/TLS para transmisiones de datos</li>
               <li>Almacenamiento seguro de datos con acceso restringido</li>
               <li>Monitoreo continuo de sistemas y redes</li>
@@ -145,10 +145,10 @@ export default function PrivacyPolicyPage() {
 
           {/* Cookies */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               6. Cookies y Tecnologías Similares
             </h2>
-            <p className='text-muted-foreground mb-4 leading-relaxed'>
+            <p className='mb-4 leading-relaxed text-muted-foreground'>
               Utilizamos cookies y tecnologías similares para mejorar su experiencia en nuestro
               sitio web. Para más información sobre cómo utilizamos las cookies, consulte nuestra{' '}
               <Link
@@ -163,12 +163,12 @@ export default function PrivacyPolicyPage() {
 
           {/* Your Rights */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>7. Sus Derechos</h2>
-            <p className='text-muted-foreground mb-4'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>7. Sus Derechos</h2>
+            <p className='mb-4 text-muted-foreground'>
               De acuerdo con las leyes aplicables de protección de datos, usted tiene los siguientes
               derechos:
             </p>
-            <ul className='text-muted-foreground list-inside list-disc space-y-2'>
+            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
               <li>
                 <strong>Derecho de acceso:</strong> Solicitar una copia de sus datos personales
               </li>
@@ -193,15 +193,15 @@ export default function PrivacyPolicyPage() {
 
           {/* Contact Information */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>8. Contacto</h2>
-            <p className='text-muted-foreground mb-4 leading-relaxed'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>8. Contacto</h2>
+            <p className='mb-4 leading-relaxed text-muted-foreground'>
               Si tiene preguntas sobre esta Política de Privacidad o desea ejercer sus derechos,
               puede contactarnos a través de:
             </p>
             <div className='rounded-lg bg-gray-50 p-6 dark:bg-gray-700'>
               <div className='grid gap-6 md:grid-cols-2'>
                 <div>
-                  <h4 className='text-foreground mb-2 font-semibold'>Oficina Principal</h4>
+                  <h4 className='mb-2 font-semibold text-foreground'>Oficina Principal</h4>
                   <p className='text-muted-foreground'>
                     ZIVAH International S.A.
                     <br />
@@ -215,7 +215,7 @@ export default function PrivacyPolicyPage() {
                   </p>
                 </div>
                 <div>
-                  <h4 className='text-foreground mb-2 font-semibold'>Oficina de Distribución</h4>
+                  <h4 className='mb-2 font-semibold text-foreground'>Oficina de Distribución</h4>
                   <p className='text-muted-foreground'>
                     ZIVAH International
                     <br />
@@ -230,10 +230,10 @@ export default function PrivacyPolicyPage() {
 
           {/* Updates */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               9. Actualizaciones de esta Política
             </h2>
-            <p className='text-muted-foreground leading-relaxed'>
+            <p className='leading-relaxed text-muted-foreground'>
               Podemos actualizar esta Política de Privacidad periódicamente. Le notificaremos sobre
               cambios significativos mediante un aviso destacado en nuestro sitio web o enviando un
               correo electrónico. El uso continuado de nuestros servicios después de dichos cambios
@@ -246,7 +246,7 @@ export default function PrivacyPolicyPage() {
         <div className='mt-8 text-center'>
           <Link
             href='/'
-            className='text-accent hover:text-dark-accent inline-flex items-center transition-colors'
+            className='hover:text-dark-accent inline-flex items-center text-accent transition-colors'
           >
             ← Volver al Inicio
           </Link>

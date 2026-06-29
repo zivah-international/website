@@ -161,7 +161,7 @@ Crawl-delay: 1`;
       })
     );
 
-    const successful = results.filter(
+    const _successful = results.filter(
       result => result.status === 'fulfilled' && result.value
     ).length;
   },

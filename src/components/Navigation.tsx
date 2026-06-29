@@ -229,7 +229,12 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
               size='default'
               className='hidden items-center gap-2 shadow-md hover:shadow-lg md:inline-flex'
             >
-              <Link href='/quote'>
+              <Link
+                href='/quote'
+                data-track='begin_checkout'
+                data-track-category='nav'
+                data-track-label='nav_quote_desktop'
+              >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   className='h-4 w-4'
@@ -287,7 +292,7 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
           }`}
           suppressHydrationWarning
         >
-          <div className='border-border bg-background max-h-[70vh] overflow-y-auto rounded-xl border p-4 shadow-xl'>
+          <div className='max-h-[70vh] overflow-y-auto rounded-xl border border-border bg-background p-4 shadow-xl'>
             {/* Mobile Navigation Items */}
             <div className='space-y-2'>
               {navigationItems.map(item => (
@@ -310,9 +315,9 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
             </div>
 
             {/* Mobile Actions */}
-            <div className='border-border mt-6 border-t pt-4'>
+            <div className='mt-6 border-t border-border pt-4'>
               <div className='mb-4 flex items-center justify-between'>
-                <span className='text-foreground text-sm font-medium'>{t('language')}</span>
+                <span className='text-sm font-medium text-foreground'>{t('language')}</span>
                 <LanguageSwitcher />
               </div>
 
@@ -325,6 +330,9 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
                 <Link
                   href='/quote'
                   onClick={() => setIsMobileMenuOpen(false)}
+                  data-track='begin_checkout'
+                  data-track-category='nav'
+                  data-track-label='nav_quote_mobile'
                 >
                   {t('quote')}
                 </Link>
@@ -332,29 +340,29 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
             </div>
 
             {/* Quick Links */}
-            <div className='border-border mt-6 border-t pt-4'>
+            <div className='mt-6 border-t border-border pt-4'>
               <div className='grid grid-cols-2 gap-3'>
                 <Link
                   href='/legal/privacy-policy'
-                  className='text-muted-foreground hover:text-accent text-sm transition-colors'
+                  className='text-sm text-muted-foreground transition-colors hover:text-accent'
                 >
                   {t('privacy')}
                 </Link>
                 <Link
                   href='/legal/terms-of-service'
-                  className='text-muted-foreground hover:text-accent text-sm transition-colors'
+                  className='text-sm text-muted-foreground transition-colors hover:text-accent'
                 >
                   {t('terms')}
                 </Link>
                 <Link
                   href='/legal/cookie-policy'
-                  className='text-muted-foreground hover:text-accent text-sm transition-colors'
+                  className='text-sm text-muted-foreground transition-colors hover:text-accent'
                 >
                   {t('cookies')}
                 </Link>
                 <Link
                   href='/legal/data-protection'
-                  className='text-muted-foreground hover:text-accent text-sm transition-colors'
+                  className='text-sm text-muted-foreground transition-colors hover:text-accent'
                 >
                   {t('dataProtection')}
                 </Link>

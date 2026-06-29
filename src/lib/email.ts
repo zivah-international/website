@@ -307,7 +307,10 @@ class EmailService {
     }
   }
 
-  private generateSubscriptionHTML(data: SubscriptionEmailData, t: any): string {
+  private generateSubscriptionHTML(
+    data: SubscriptionEmailData,
+    t: (typeof subscriptionTranslations)['es']
+  ): string {
     const locale = data.locale || 'es';
 
     return `

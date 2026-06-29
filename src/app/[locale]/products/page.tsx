@@ -70,11 +70,17 @@ export default function ProductsPage() {
           const catJson = await catRes.json();
           const prodJson = await prodRes.json();
           const cats: Category[] = catJson.data || catJson || [];
-          const prods: Product[] = (prodJson.data || prodJson || []).map((p: any) => ({
-            ...p,
-            basePrice: p.basePrice ? parseFloat(p.basePrice) : null,
-            certifications: Array.isArray(p.certifications) ? p.certifications : [],
-          }));
+          const prods: Product[] = (prodJson.data || prodJson || []).map(
+            (p: {
+              basePrice?: string | number | null;
+              certifications?: unknown;
+              [key: string]: unknown;
+            }) => ({
+              ...p,
+              basePrice: p.basePrice ? parseFloat(p.basePrice) : null,
+              certifications: Array.isArray(p.certifications) ? p.certifications : [],
+            })
+          );
           setCategories(cats);
           setProducts(prods);
         }
@@ -97,39 +103,39 @@ export default function ProductsPage() {
       <Navigation />
 
       {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='from-background to-muted/30 bg-linear-to-b pt-28 pb-12'>
+      <section className='bg-linear-to-b from-background to-muted/30 pt-28 pb-12'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Breadcrumb */}
           <nav
-            className='text-muted-foreground mb-6 flex items-center gap-2 text-sm'
+            className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'
             aria-label='Breadcrumb'
           >
             <Link
               href={`/${locale}`}
-              className='hover:text-accent transition-colors'
+              className='transition-colors hover:text-accent'
             >
               Inicio
             </Link>
             <span>/</span>
-            <span className='text-foreground font-medium'>{t('products.title')}</span>
+            <span className='font-medium text-foreground'>{t('products.title')}</span>
           </nav>
 
           <div className='flex flex-col gap-6 md:flex-row md:items-end md:justify-between'>
-            <div className='border-primary/30 border-l-4 pl-5'>
-              <p className='text-primary mb-1 text-xs font-semibold tracking-widest uppercase'>
+            <div className='border-l-4 border-primary/30 pl-5'>
+              <p className='mb-1 text-xs font-semibold tracking-widest text-primary uppercase'>
                 {t('products.badge')}
               </p>
-              <h1 className='text-foreground text-3xl font-bold sm:text-4xl'>
+              <h1 className='text-3xl font-bold text-foreground sm:text-4xl'>
                 {t('products.title')}
               </h1>
-              <p className='text-muted-foreground mt-2 max-w-xl text-base'>
+              <p className='mt-2 max-w-xl text-base text-muted-foreground'>
                 {t('products.description')}
               </p>
             </div>
             <div className='flex items-center gap-3'>
               <Link
                 href={`/${locale}/quote`}
-                className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:-translate-y-0.5'
+                className='inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-primary/90'
                 data-track='begin_checkout'
                 data-track-label='solicitar_cotizacion_products_header'
                 data-track-category='cta'
@@ -142,7 +148,7 @@ export default function ProductsPage() {
       </section>
 
       {/* ── Category Filter ───────────────────────────────────────────────── */}
-      <div className='bg-card/80 border-border/40 sticky top-16 z-40 border-b backdrop-blur-md'>
+      <div className='sticky top-16 z-40 border-b border-border/40 bg-card/80 backdrop-blur-md'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='scrollbar-hide flex gap-2 overflow-x-auto py-3'>
             <button
@@ -180,25 +186,25 @@ export default function ProductsPage() {
               {[...Array(6)].map((_, i) => (
                 <div
                   key={i}
-                  className='bg-card animate-pulse rounded-2xl border p-6'
+                  className='animate-pulse rounded-2xl border bg-card p-6'
                 >
-                  <div className='bg-muted mb-4 h-48 rounded-xl' />
-                  <div className='bg-muted mb-3 h-5 rounded' />
-                  <div className='bg-muted mb-2 h-4 rounded' />
-                  <div className='bg-muted h-4 w-2/3 rounded' />
+                  <div className='mb-4 h-48 rounded-xl bg-muted' />
+                  <div className='mb-3 h-5 rounded bg-muted' />
+                  <div className='mb-2 h-4 rounded bg-muted' />
+                  <div className='h-4 w-2/3 rounded bg-muted' />
                 </div>
               ))}
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className='py-20 text-center'>
-              <div className='text-muted-foreground text-5xl'>📦</div>
-              <p className='text-muted-foreground mt-4 text-lg'>
+              <div className='text-5xl text-muted-foreground'>📦</div>
+              <p className='mt-4 text-lg text-muted-foreground'>
                 No hay productos en esta categoría.
               </p>
             </div>
           ) : (
             <>
-              <p className='text-muted-foreground mb-6 text-sm'>
+              <p className='mb-6 text-sm text-muted-foreground'>
                 {filteredProducts.length} producto{filteredProducts.length !== 1 ? 's' : ''}{' '}
                 encontrado{filteredProducts.length !== 1 ? 's' : ''}
               </p>
@@ -206,10 +212,10 @@ export default function ProductsPage() {
                 {filteredProducts.map(product => (
                   <article
                     key={product.id}
-                    className='bg-card border-border/50 group flex flex-col overflow-hidden rounded-2xl border shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg'
+                    className='group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg'
                   >
                     {/* Image */}
-                    <div className='bg-muted relative h-48 overflow-hidden'>
+                    <div className='relative h-48 overflow-hidden bg-muted'>
                       <Image
                         src={getProductImage(
                           product.slug,
@@ -222,7 +228,7 @@ export default function ProductsPage() {
                         sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
                       />
                       {product.isFeatured && (
-                        <div className='bg-primary/80 text-primary-foreground absolute top-3 left-3 rounded-full px-2.5 py-1 text-xs font-bold shadow'>
+                        <div className='absolute top-3 left-3 rounded-full bg-primary/80 px-2.5 py-1 text-xs font-bold text-primary-foreground shadow'>
                           ⭐ Destacado
                         </div>
                       )}
@@ -232,16 +238,16 @@ export default function ProductsPage() {
                     <div className='flex flex-1 flex-col p-5'>
                       {/* Category */}
                       {product.category && (
-                        <div className='text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase'>
+                        <div className='mb-1 text-xs font-medium tracking-wide text-muted-foreground uppercase'>
                           {product.category.icon} {product.category.name}
                         </div>
                       )}
 
-                      <h2 className='text-foreground mb-2 text-lg leading-tight font-bold'>
+                      <h2 className='mb-2 text-lg leading-tight font-bold text-foreground'>
                         {product.name}
                       </h2>
 
-                      <p className='text-muted-foreground mb-4 flex-1 text-sm leading-relaxed'>
+                      <p className='mb-4 flex-1 text-sm leading-relaxed text-muted-foreground'>
                         {product.shortDescription || product.description}
                       </p>
 
@@ -260,14 +266,14 @@ export default function ProductsPage() {
                       )}
 
                       {/* Price + origin */}
-                      <div className='border-border/40 mb-4 flex items-center justify-between border-t pt-4'>
-                        <div className='text-muted-foreground flex items-center gap-1.5 text-xs'>
+                      <div className='mb-4 flex items-center justify-between border-t border-border/40 pt-4'>
+                        <div className='flex items-center gap-1.5 text-xs text-muted-foreground'>
                           🇪🇨 {product.origin || 'Ecuador'}
                         </div>
                         {product.basePrice && (
-                          <div className='text-accent text-sm font-bold'>
+                          <div className='text-sm font-bold text-accent'>
                             ${product.basePrice.toFixed(2)}{' '}
-                            <span className='text-muted-foreground text-xs font-normal'>
+                            <span className='text-xs font-normal text-muted-foreground'>
                               /{product.priceUnit}
                             </span>
                           </div>
@@ -278,7 +284,7 @@ export default function ProductsPage() {
                       <div className='flex gap-2'>
                         <Link
                           href={`/${locale}/quote?product=${product.slug}`}
-                          className='bg-primary hover:bg-primary/90 flex-1 rounded-lg py-2 text-center text-sm font-semibold text-white transition-colors'
+                          className='flex-1 rounded-lg bg-primary py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-primary/90'
                           data-track='begin_checkout'
                           data-track-label='solicitar_cotizacion_card'
                           data-track-category='cta'
@@ -287,7 +293,7 @@ export default function ProductsPage() {
                         </Link>
                         <Link
                           href={`/${locale}/products/${product.slug}`}
-                          className='border-border hover:border-accent/50 hover:text-accent rounded-lg border px-4 py-2 text-sm font-medium transition-colors'
+                          className='rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:border-accent/50 hover:text-accent'
                         >
                           {t('products.viewDetail')}
                         </Link>
@@ -324,6 +330,9 @@ export default function ProductsPage() {
             <Link
               href={`/${locale}/contact`}
               className='inline-flex items-center gap-2 rounded-xl border-2 border-white/40 px-6 py-3 font-semibold text-white transition-all hover:border-white hover:bg-white/10'
+              data-track='cta_click'
+              data-track-category='cta'
+              data-track-label='contact_form_products'
             >
               Formulario de contacto
             </Link>

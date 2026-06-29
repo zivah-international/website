@@ -63,7 +63,7 @@ interface QuoteItem {
   quantity: number;
   unitPrice?: number;
   notes?: string;
-  specifications?: Record<string, any>;
+  specifications?: Record<string, unknown>;
 }
 
 interface QuoteFormData {
@@ -105,7 +105,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
   } | null>(null);
   const [countriesLoading, setCountriesLoading] = useState(true);
   const [countriesError, setCountriesError] = useState<string | null>(null);
-  const [measuresLoading, _setMeasuresLoading] = useState(true);
+  const [_measuresLoading, _setMeasuresLoading] = useState(true);
   const [productsSearching, setProductsSearching] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -239,7 +239,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         setProducts([]);
         setShowProductList(true); // Show empty state
       }
-    } catch (error) {
+    } catch {
       setProducts([]);
       setShowProductList(false);
     } finally {
@@ -613,7 +613,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
           text: result.message || t('errorMessage'),
         });
       }
-    } catch (_error) {
+    } catch {
       setSubmitMessage({
         type: 'error',
         text: t('errorMessage'),
@@ -624,7 +624,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
   };
 
   return (
-    <div className='bg-card/80 border-border rounded-2xl border p-8 shadow-xl backdrop-blur-sm'>
+    <div className='rounded-2xl border border-border bg-card/80 p-8 shadow-xl backdrop-blur-sm'>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='space-y-6'
@@ -634,7 +634,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
           <div>
             <label
               htmlFor='customerName'
-              className='text-foreground mb-2 block text-sm font-medium'
+              className='mb-2 block text-sm font-medium text-foreground'
             >
               {t('fullName')} *
             </label>
@@ -642,17 +642,17 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               {...register('customerName')}
               id='customerName'
               type='text'
-              className='bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none'
+              className='w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
               placeholder={t('fullNamePlaceholder')}
             />
             {errors.customerName && (
-              <p className='text-destructive mt-1 text-sm'>{errors.customerName.message}</p>
+              <p className='mt-1 text-sm text-destructive'>{errors.customerName.message}</p>
             )}
           </div>
           <div>
             <label
               htmlFor='customerEmail'
-              className='text-foreground mb-2 block text-sm font-medium'
+              className='mb-2 block text-sm font-medium text-foreground'
             >
               {t('email')} *
             </label>
@@ -660,26 +660,26 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               {...register('customerEmail')}
               id='customerEmail'
               type='email'
-              className='bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none'
+              className='w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
               placeholder={t('emailPlaceholder')}
             />
             {errors.customerEmail && (
-              <p className='text-destructive mt-1 text-sm'>{errors.customerEmail.message}</p>
+              <p className='mt-1 text-sm text-destructive'>{errors.customerEmail.message}</p>
             )}
           </div>{' '}
           <div>
             <label
               htmlFor='countryId'
-              className='text-foreground mb-2 block text-sm font-medium'
+              className='mb-2 block text-sm font-medium text-foreground'
             >
               {t('destinationCountry')} *
             </label>
             {countriesLoading ? (
-              <div className='bg-muted text-muted-foreground border-border w-full rounded-lg border px-4 py-3 backdrop-blur-sm'>
+              <div className='w-full rounded-lg border border-border bg-muted px-4 py-3 text-muted-foreground backdrop-blur-sm'>
                 {t('loadingCountries')}
               </div>
             ) : countriesError ? (
-              <div className='bg-destructive/10 text-destructive border-destructive/30 w-full rounded-lg border px-4 py-3 text-sm'>
+              <div className='w-full rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive'>
                 {countriesError}
               </div>
             ) : (
@@ -759,12 +759,12 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                 )}
               />
             )}
-            {errors.countryId && <p className='text-destructive mt-1 text-sm'>{t('required')}</p>}
+            {errors.countryId && <p className='mt-1 text-sm text-destructive'>{t('required')}</p>}
           </div>
           <div>
             <label
               htmlFor='customerPhone'
-              className='text-foreground mb-2 block text-sm font-medium'
+              className='mb-2 block text-sm font-medium text-foreground'
             >
               {t('phone')}
             </label>
@@ -774,7 +774,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                   <span className='text-lg'>
                     {countries.find(c => c.id === watch('countryId'))?.icon || '🌍'}
                   </span>
-                  <span className='text-muted-foreground text-sm'>
+                  <span className='text-sm text-muted-foreground'>
                     {countries.find(c => c.id === watch('countryId'))?.callingCode || '+'}
                   </span>
                 </div>
@@ -788,7 +788,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                   },
                 })}
                 type='tel'
-                className={`bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none ${
+                className={`w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none ${
                   watch('countryId') ? 'pl-20' : ''
                 }`}
                 placeholder={
@@ -797,20 +797,20 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               />
             </div>
             {errors.customerPhone && (
-              <p className='text-destructive mt-1 text-sm'>{errors.customerPhone.message}</p>
+              <p className='mt-1 text-sm text-destructive'>{errors.customerPhone.message}</p>
             )}
           </div>
           <div className='md:col-span-2'>
             <label
               htmlFor='company'
-              className='text-foreground mb-2 block text-sm font-medium'
+              className='mb-2 block text-sm font-medium text-foreground'
             >
               {t('company')}
             </label>
             <input
               {...register('company')}
               type='text'
-              className='bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none'
+              className='w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
               placeholder={t('companyPlaceholder')}
             />
           </div>
@@ -820,7 +820,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         <div className='relative'>
           <label
             htmlFor='productSearch'
-            className='text-foreground mb-2 block text-sm font-medium'
+            className='mb-2 block text-sm font-medium text-foreground'
           >
             {t('searchProducts')} *
           </label>
@@ -831,14 +831,14 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
             placeholder={t('searchPlaceholder')}
             onChange={e => searchProducts(e.target.value)}
             onFocus={() => searchQuery.length >= 2 && setShowProductList(true)}
-            className='bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none'
+            className='w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
           />
 
           {productsSearching && searchQuery.length >= 2 && (
-            <div className='bg-card border-border absolute z-10 mt-2 w-full rounded-md border p-4 shadow-lg'>
-              <div className='text-muted-foreground flex items-center justify-center'>
+            <div className='absolute z-10 mt-2 w-full rounded-md border border-border bg-card p-4 shadow-lg'>
+              <div className='flex items-center justify-center text-muted-foreground'>
                 <svg
-                  className='text-muted-foreground mr-3 -ml-1 h-5 w-5 animate-spin'
+                  className='mr-3 -ml-1 h-5 w-5 animate-spin text-muted-foreground'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
                   viewBox='0 0 24 24'
@@ -863,10 +863,10 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
           )}
 
           {showProductList && !productsSearching && searchQuery.length >= 2 && (
-            <div className='bg-card border-border absolute z-10 mt-2 max-h-60 w-full overflow-y-auto rounded-md border shadow-lg'>
+            <div className='absolute z-10 mt-2 max-h-60 w-full overflow-y-auto rounded-md border border-border bg-card shadow-lg'>
               {products.length > 0 ? (
                 <>
-                  <div className='border-border bg-muted/50 border-b p-2'>
+                  <div className='border-b border-border bg-muted/50 p-2'>
                     <small className='text-muted-foreground'>{t('clickToAdd')}</small>
                   </div>
                   {products.map(product => {
@@ -875,7 +875,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                       <button
                         key={product.id}
                         type='button'
-                        className={`hover:bg-muted/50 border-border text-foreground w-full cursor-pointer border-b p-3 text-left last:border-b-0 ${isSelected ? 'bg-accent/10 border-l-accent border-l-4' : ''}`}
+                        className={`w-full cursor-pointer border-b border-border p-3 text-left text-foreground last:border-b-0 hover:bg-muted/50 ${isSelected ? 'border-l-4 border-l-accent bg-accent/10' : ''}`}
                         onClick={() => addProduct(product)}
                       >
                         <div className='flex items-start justify-between'>
@@ -883,14 +883,14 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                             <div className='flex items-center font-medium'>
                               {product.name}
                               {isSelected && (
-                                <span className='text-accent ml-2 text-sm'>{t('added')}</span>
+                                <span className='ml-2 text-sm text-accent'>{t('added')}</span>
                               )}
                             </div>
-                            <div className='text-muted-foreground text-sm'>
+                            <div className='text-sm text-muted-foreground'>
                               ${product.basePrice || 0} {t('perUnitPrice')} -{' '}
                               {product.description || t('noDescription')}
                             </div>
-                            <div className='text-muted-foreground text-xs'>
+                            <div className='text-xs text-muted-foreground'>
                               SKU: {product.sku || 'N/A'}
                             </div>
                           </div>
@@ -900,18 +900,18 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                   })}
                 </>
               ) : (
-                <div className='text-muted-foreground p-4 text-center'>
+                <div className='p-4 text-center text-muted-foreground'>
                   <div className='text-sm'>
                     {t('noProductsFound')} &quot;{searchQuery}&quot;
                   </div>
-                  <div className='text-muted-foreground mt-1 text-xs'>{t('tryOtherTerms')}</div>
+                  <div className='mt-1 text-xs text-muted-foreground'>{t('tryOtherTerms')}</div>
                 </div>
               )}
-              <div className='border-border bg-muted/50 border-t p-2'>
+              <div className='border-t border-border bg-muted/50 p-2'>
                 <button
                   type='button'
                   onClick={() => setShowProductList(false)}
-                  className='text-secondary hover:text-secondary/80 text-sm'
+                  className='text-sm text-secondary hover:text-secondary/80'
                 >
                   {t('closeList')}
                 </button>
@@ -924,7 +924,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         {selectedProducts.length > 0 && (
           <div className='space-y-4'>
             <div className='flex items-center justify-between'>
-              <h3 className='text-foreground font-medium'>
+              <h3 className='font-medium text-foreground'>
                 {t('selectedProducts')} ({selectedProducts.length})
               </h3>
               <button
@@ -933,18 +933,18 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                   setSelectedProducts([]);
                   setValue('items', []);
                 }}
-                className='text-destructive hover:text-destructive/80 text-sm'
+                className='text-sm text-destructive hover:text-destructive/80'
               >
                 {t('clearAll')}
               </button>
             </div>
 
             {selectedProducts.length > 0 && (
-              <div className='bg-muted/50 border-border rounded-lg border p-3 text-sm'>
-                <p className='text-muted-foreground mb-2'>
+              <div className='rounded-lg border border-border bg-muted/50 p-3 text-sm'>
+                <p className='mb-2 text-muted-foreground'>
                   💡 <strong>{t('measureUnitsHelp')}</strong>
                 </p>
-                <ul className='text-muted-foreground space-y-1 text-xs'>
+                <ul className='space-y-1 text-xs text-muted-foreground'>
                   <li>
                     • <strong>{t('weightUnits')}</strong>
                   </li>
@@ -966,22 +966,22 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               return (
                 <div
                   key={product.id}
-                  className='bg-card border-border rounded-lg border p-4 shadow-sm'
+                  className='rounded-lg border border-border bg-card p-4 shadow-sm'
                 >
                   <div className='flex items-start justify-between'>
-                    <div className='text-foreground flex-1'>
+                    <div className='flex-1 text-foreground'>
                       <div className='font-medium'>{product.name}</div>
-                      <div className='text-muted-foreground text-sm'>
+                      <div className='text-sm text-muted-foreground'>
                         {product.description || t('noDescription')}
                       </div>
-                      <div className='text-muted-foreground text-xs'>
+                      <div className='text-xs text-muted-foreground'>
                         SKU: {product.sku || 'N/A'}
                       </div>
                     </div>
                     <button
                       type='button'
                       onClick={() => removeProduct(product.id)}
-                      className='text-destructive hover:text-destructive/80 ml-4'
+                      className='ml-4 text-destructive hover:text-destructive/80'
                     >
                       ✕
                     </button>
@@ -991,7 +991,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     <div>
                       <label
                         htmlFor={`quantity-${product.id}`}
-                        className='text-muted-foreground mb-1 block text-xs'
+                        className='mb-1 block text-xs text-muted-foreground'
                       >
                         {t('quantity')}
                       </label>
@@ -1001,14 +1001,14 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                         min='1'
                         value={item?.quantity || 1}
                         onChange={e => updateQuantity(product.id, parseInt(e.target.value) || 1)}
-                        className='bg-background border-border text-foreground w-full rounded-md border px-3 py-2 text-center'
+                        className='w-full rounded-md border border-border bg-background px-3 py-2 text-center text-foreground'
                       />
                     </div>
 
                     <div>
                       <label
                         htmlFor={`measure-${product.id}`}
-                        className='text-muted-foreground mb-1 block text-xs'
+                        className='mb-1 block text-xs text-muted-foreground'
                       >
                         {t('measureUnit')}
                       </label>
@@ -1016,7 +1016,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                         id={`measure-${product.id}`}
                         value={item?.measureId || ''}
                         onChange={e => updateMeasure(product.id, parseInt(e.target.value))}
-                        className='bg-background border-border text-foreground w-full rounded-md border px-3 py-2'
+                        className='w-full rounded-md border border-border bg-background px-3 py-2 text-foreground'
                         title={
                           item?.measureId
                             ? measures.find(m => m.id === item.measureId)?.description
@@ -1077,7 +1077,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     </div>
 
                     <div>
-                      <label className='text-muted-foreground mb-1 block text-xs'>
+                      <label className='mb-1 block text-xs text-muted-foreground'>
                         {t('unitPrice')}
                         {item?.measureId && (
                           <span className='ml-1'>
@@ -1089,16 +1089,16 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                           </span>
                         )}
                       </label>
-                      <div className='bg-muted text-foreground rounded-md px-3 py-2 text-center'>
+                      <div className='rounded-md bg-muted px-3 py-2 text-center text-foreground'>
                         ${item?.unitPrice ? item.unitPrice.toFixed(2) : product.basePrice || 0}
                       </div>
                     </div>
 
                     <div>
-                      <span className='text-muted-foreground mb-1 block text-xs'>
+                      <span className='mb-1 block text-xs text-muted-foreground'>
                         {t('subtotal')}
                       </span>
-                      <div className='bg-muted text-foreground rounded-md px-3 py-2 text-center font-medium'>
+                      <div className='rounded-md bg-muted px-3 py-2 text-center font-medium text-foreground'>
                         $
                         {(
                           calculatedPrices[product.id] ||
@@ -1111,7 +1111,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                   <div>
                     <label
                       htmlFor={`notes-${product.id}`}
-                      className='text-muted-foreground mb-1 block text-xs'
+                      className='mb-1 block text-xs text-muted-foreground'
                     >
                       {t('specialNotes')}
                     </label>
@@ -1120,13 +1120,13 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                       placeholder={t('specialNotesPlaceholder')}
                       value={item?.notes || ''}
                       onChange={e => updateNotes(product.id, e.target.value)}
-                      className='bg-background border-border text-foreground placeholder:text-muted-foreground w-full rounded-md border px-3 py-2 text-sm'
+                      className='w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground'
                       rows={2}
                     />
                   </div>
 
                   {conversionErrors[product.id] && (
-                    <div className='bg-destructive/10 text-destructive border-destructive/30 mt-2 rounded-md border p-2'>
+                    <div className='mt-2 rounded-md border border-destructive/30 bg-destructive/10 p-2 text-destructive'>
                       <p className='text-sm'>⚠️ {conversionErrors[product.id]}</p>
                     </div>
                   )}
@@ -1135,10 +1135,10 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
             })}
 
             <div className='text-right'>
-              <div className='bg-accent/10 text-accent inline-block rounded-lg px-4 py-2 text-xl font-bold'>
+              <div className='inline-block rounded-lg bg-accent/10 px-4 py-2 text-xl font-bold text-accent'>
                 {t('estimatedTotal')}: ${calculateTotal().toFixed(2)} USD
               </div>
-              <div className='text-muted-foreground mt-1 text-xs'>{t('priceDisclaimer')}</div>
+              <div className='mt-1 text-xs text-muted-foreground'>{t('priceDisclaimer')}</div>
             </div>
           </div>
         )}
@@ -1147,7 +1147,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         <div>
           <label
             htmlFor='message'
-            className='text-foreground mb-2 block text-sm font-medium'
+            className='mb-2 block text-sm font-medium text-foreground'
           >
             {t('additionalMessage')}
           </label>
@@ -1155,7 +1155,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
             {...register('message')}
             id='message'
             rows={4}
-            className='bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-ring w-full rounded-lg border px-4 py-3 backdrop-blur-sm focus:ring-2 focus:outline-none'
+            className='w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
             placeholder={t('additionalMessagePlaceholder')}
           />
         </div>
@@ -1165,7 +1165,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
           <Button
             type='submit'
             disabled={isSubmitting || selectedProducts.length === 0}
-            className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-8 py-3 font-bold transition-colors disabled:opacity-50'
+            className='rounded-lg bg-primary px-8 py-3 font-bold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50'
           >
             {isSubmitting
               ? t('submitting')
@@ -1176,7 +1176,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         </div>
 
         {/* Info Message */}
-        <div className='text-muted-foreground text-center text-sm'>{t('autoEmailMessage')}</div>
+        <div className='text-center text-sm text-muted-foreground'>{t('autoEmailMessage')}</div>
 
         {/* Submit Message */}
         {submitMessage && (

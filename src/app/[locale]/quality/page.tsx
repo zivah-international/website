@@ -83,24 +83,24 @@ export default async function QualityPage({ params }: Props) {
       <Navigation />
 
       {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='from-background to-muted/40 bg-linear-to-b pt-28 pb-14'>
+      <section className='bg-linear-to-b from-background to-muted/40 pt-28 pb-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <nav
-            className='text-muted-foreground mb-6 flex items-center gap-2 text-sm'
+            className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'
             aria-label='Breadcrumb'
           >
             <Link
               href='/'
-              className='hover:text-accent transition-colors'
+              className='transition-colors hover:text-accent'
             >
               Inicio
             </Link>
             <span>/</span>
-            <span className='text-foreground font-medium'>Calidad y Certificaciones</span>
+            <span className='font-medium text-foreground'>Calidad y Certificaciones</span>
           </nav>
 
-          <div className='border-primary/30 flex items-center gap-4 border-l-4 pl-5'>
-            <div className='bg-primary/10 text-primary hidden shrink-0 rounded-xl p-3 sm:block'>
+          <div className='flex items-center gap-4 border-l-4 border-primary/30 pl-5'>
+            <div className='hidden shrink-0 rounded-xl bg-primary/10 p-3 text-primary sm:block'>
               <svg
                 className='h-7 w-7'
                 fill='none'
@@ -116,18 +116,18 @@ export default async function QualityPage({ params }: Props) {
               </svg>
             </div>
             <div>
-              <p className='text-primary mb-1 text-xs font-semibold tracking-widest uppercase'>
+              <p className='mb-1 text-xs font-semibold tracking-widest text-primary uppercase'>
                 Calidad y Certificaciones
               </p>
-              <h1 className='text-foreground text-3xl font-bold sm:text-4xl'>{t('title')}</h1>
-              <p className='text-muted-foreground mt-1 max-w-2xl text-base'>{t('description')}</p>
+              <h1 className='text-3xl font-bold text-foreground sm:text-4xl'>{t('title')}</h1>
+              <p className='mt-1 max-w-2xl text-base text-muted-foreground'>{t('description')}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── Cert badges strip ─────────────────────────────────────────────── */}
-      <div className='bg-card border-border/40 border-b'>
+      <div className='border-b border-border/40 bg-card'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex flex-wrap items-center justify-center gap-4 py-5'>
             {CERTS.map(cert => (
@@ -146,13 +146,13 @@ export default async function QualityPage({ params }: Props) {
       <section className='bg-background py-16'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-12 text-center'>
-            <div className='bg-primary/10 text-primary mb-3 inline-block rounded-full px-4 py-1.5 text-sm font-semibold'>
+            <div className='mb-3 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary'>
               Estándares Internacionales
             </div>
-            <h2 className='text-foreground text-3xl font-bold sm:text-4xl'>
+            <h2 className='text-3xl font-bold text-foreground sm:text-4xl'>
               Nuestras Certificaciones
             </h2>
-            <p className='text-muted-foreground mt-3 text-base'>
+            <p className='mt-3 text-base text-muted-foreground'>
               Cada certificación nos permite acceder a mercados más exigentes y dar a nuestros
               clientes la garantía que necesitan.
             </p>
@@ -172,10 +172,10 @@ export default async function QualityPage({ params }: Props) {
                     >
                       {cert.code}
                     </div>
-                    <h3 className='text-foreground text-lg font-bold'>{cert.name}</h3>
+                    <h3 className='text-lg font-bold text-foreground'>{cert.name}</h3>
                   </div>
                 </div>
-                <p className='text-muted-foreground text-sm leading-relaxed'>
+                <p className='text-sm leading-relaxed text-muted-foreground'>
                   {t(`certifications.${cert.descKey}`)}
                 </p>
               </div>
@@ -188,10 +188,10 @@ export default async function QualityPage({ params }: Props) {
       <section className='bg-muted/30 py-16'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-12 text-center'>
-            <h2 className='text-foreground mb-3 text-3xl font-bold sm:text-4xl'>
+            <h2 className='mb-3 text-3xl font-bold text-foreground sm:text-4xl'>
               Proceso de Control de Calidad
             </h2>
-            <p className='text-muted-foreground text-base'>
+            <p className='text-base text-muted-foreground'>
               De la granja al contenedor, cada paso está documentado y auditado.
             </p>
           </div>
@@ -200,16 +200,16 @@ export default async function QualityPage({ params }: Props) {
             {PROCESS_STEPS.map((step, i) => (
               <div
                 key={i}
-                className='bg-card relative rounded-2xl border p-6 shadow-sm'
+                className='relative rounded-2xl border bg-card p-6 shadow-sm'
               >
-                <div className='text-primary/15 mb-2 text-5xl font-black'>
+                <div className='mb-2 text-5xl font-black text-primary/15'>
                   {String(i + 1).padStart(2, '0')}
                 </div>
                 <div className='mb-3 text-3xl'>{step.icon}</div>
-                <h3 className='text-foreground mb-1 text-base font-bold'>{step.title}</h3>
-                <p className='text-muted-foreground text-sm leading-relaxed'>{step.desc}</p>
+                <h3 className='mb-1 text-base font-bold text-foreground'>{step.title}</h3>
+                <p className='text-sm leading-relaxed text-muted-foreground'>{step.desc}</p>
                 {i < PROCESS_STEPS.length - 1 && (
-                  <div className='text-primary/30 absolute top-1/2 -right-4 hidden -translate-y-1/2 lg:block'>
+                  <div className='absolute top-1/2 -right-4 hidden -translate-y-1/2 text-primary/30 lg:block'>
                     <svg
                       className='h-6 w-6'
                       fill='none'
@@ -235,10 +235,10 @@ export default async function QualityPage({ params }: Props) {
       <section className='bg-background py-16'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mx-auto max-w-3xl'>
-            <div className='bg-card border-primary/20 rounded-2xl border-2 p-8 text-center shadow-sm'>
+            <div className='rounded-2xl border-2 border-primary/20 bg-card p-8 text-center shadow-sm'>
               <div className='mb-4 text-4xl'>🏆</div>
-              <h2 className='text-foreground mb-3 text-2xl font-bold'>{t('awards.title')}</h2>
-              <p className='text-muted-foreground text-base leading-relaxed'>
+              <h2 className='mb-3 text-2xl font-bold text-foreground'>{t('awards.title')}</h2>
+              <p className='text-base leading-relaxed text-muted-foreground'>
                 {t('awards.description')}
               </p>
               <div className='mt-8 grid gap-6 sm:grid-cols-3'>
@@ -248,8 +248,8 @@ export default async function QualityPage({ params }: Props) {
                   { value: '100%', label: 'Productos certificados' },
                 ].map(stat => (
                   <div key={stat.label}>
-                    <div className='text-primary text-3xl font-black'>{stat.value}</div>
-                    <div className='text-muted-foreground text-sm'>{stat.label}</div>
+                    <div className='text-3xl font-black text-primary'>{stat.value}</div>
+                    <div className='text-sm text-muted-foreground'>{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -268,7 +268,7 @@ export default async function QualityPage({ params }: Props) {
           <div className='flex flex-col items-center gap-3 sm:flex-row sm:justify-center'>
             <Link
               href='/quote'
-              className='text-primary inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold shadow-md transition-all hover:bg-white/90'
+              className='inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-primary shadow-md transition-all hover:bg-white/90'
               data-track='begin_checkout'
               data-track-label='solicitar_cotizacion_quality'
               data-track-category='cta'

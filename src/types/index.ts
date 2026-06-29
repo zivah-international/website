@@ -26,7 +26,7 @@ export interface Product extends BaseEntity {
   description?: string;
   shortDescription?: string;
   features?: string[];
-  specifications?: Record<string, any>;
+  specifications?: Record<string, unknown>;
   price?: number;
   priceUnit?: string;
   stockQuantity: number;
@@ -51,7 +51,7 @@ export interface ProductVariant extends BaseEntity {
   sku?: string;
   price?: number;
   stockQuantity: number;
-  specifications?: Record<string, any>;
+  specifications?: Record<string, unknown>;
   isActive: boolean;
   sortOrder: number;
   product: Product;
@@ -106,7 +106,7 @@ export interface QuoteItem {
   unitPrice: number;
   totalPrice: number;
   notes?: string;
-  specifications?: Record<string, any>;
+  specifications?: Record<string, unknown>;
   createdAt: Date;
   quote: Quote;
   product: Product;
@@ -179,7 +179,7 @@ export interface SiteSetting {
   category?: string;
   description?: string;
   isPublic: boolean;
-  validationRules?: Record<string, any>;
+  validationRules?: Record<string, unknown>;
   updatedAt: Date;
   updatedBy?: number;
 }
@@ -206,11 +206,11 @@ export interface ActivityLog {
   action: string;
   tableName?: string;
   recordId?: number;
-  oldValues?: Record<string, any>;
-  newValues?: Record<string, any>;
+  oldValues?: Record<string, unknown>;
+  newValues?: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: Date;
   user?: User;
 }
@@ -286,7 +286,7 @@ export interface CompanyInfo {
 }
 
 // API response types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   error: boolean;
   data?: T;
   message?: string;
@@ -298,7 +298,7 @@ export interface ApiErrorResponse {
   message: string;
   code: string;
   statusCode: number;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   timestamp: string;
 }
 
@@ -322,7 +322,7 @@ export interface CreateProductInput {
   description?: string;
   shortDescription?: string;
   features?: string[];
-  specifications?: Record<string, any>;
+  specifications?: Record<string, unknown>;
   price?: number;
   priceUnit?: string;
   stockQuantity?: number;
@@ -353,7 +353,7 @@ export interface CreateQuoteInput {
     quantity: number;
     unitPrice?: number;
     notes?: string;
-    specifications?: Record<string, any>;
+    specifications?: Record<string, unknown>;
   }[];
 }
 
@@ -490,7 +490,7 @@ export interface StructuredData {
     availableLanguage?: string[];
   };
   foundingDate?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Measurement unit types

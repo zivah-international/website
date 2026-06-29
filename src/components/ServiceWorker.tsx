@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 export default function ServiceWorkerRegistration() {
-  const [isRegistered, setIsRegistered] = useState(false);
+  const [_isRegistered, setIsRegistered] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
 
@@ -77,7 +77,7 @@ export default function ServiceWorkerRegistration() {
   return (
     <>
       {updateAvailable && (
-        <div className='bg-secondary fixed right-4 bottom-4 z-50 rounded-lg px-4 py-3 text-white shadow-lg'>
+        <div className='fixed right-4 bottom-4 z-50 rounded-lg bg-secondary px-4 py-3 text-white shadow-lg'>
           <div className='flex items-center justify-between'>
             <div>
               <p className='font-medium'>Update Available</p>
@@ -86,7 +86,7 @@ export default function ServiceWorkerRegistration() {
             <div className='ml-4 flex space-x-2'>
               <button
                 onClick={updateServiceWorker}
-                className='bg-background text-secondary hover:bg-muted rounded px-3 py-1 text-sm font-medium'
+                className='rounded bg-background px-3 py-1 text-sm font-medium text-secondary hover:bg-muted'
               >
                 Update
               </button>
