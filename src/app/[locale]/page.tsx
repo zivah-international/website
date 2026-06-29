@@ -370,6 +370,159 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── Larvae feature — soft warm tint background ───────────────────── */}
+      <section className='bg-primary/[0.04] py-20 lg:py-28'>
+        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
+            {/* Copy — left */}
+            <div className='order-2 lg:order-1'>
+              <span className='text-primary mb-3 inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase'>
+                <span className='h-px w-5 bg-current' />
+                {t('home.larvae.eyebrow')}
+              </span>
+              <h2 className='text-foreground mb-4 text-3xl leading-tight font-black sm:text-4xl'>
+                {t('home.larvae.title')}{' '}
+                <span className='text-primary'>{t('home.larvae.titleHighlight')}</span>
+              </h2>
+              <p className='text-muted-foreground mb-6 text-sm leading-relaxed sm:text-base'>
+                {t('home.larvae.description')}
+              </p>
+              <ul className='mb-7 space-y-2.5'>
+                {[0, 1, 2, 3].map(i => (
+                  <li
+                    key={i}
+                    className='flex items-start gap-2.5 text-sm'
+                  >
+                    <svg
+                      className='text-primary mt-0.5 h-4 w-4 shrink-0'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
+                      strokeWidth={2.5}
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M4.5 12.75l6 6 9-13.5'
+                      />
+                    </svg>
+                    <span className='text-foreground/80'>{t(`home.larvae.features.${i}`)}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className='flex flex-wrap gap-3'>
+                <Link
+                  href={`/${locale}/products?category=larvas`}
+                  className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5'
+                >
+                  {t('home.larvae.cta')}
+                  <svg
+                    className='h-4 w-4'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M17 8l4 4m0 0l-4 4m4-4H3'
+                    />
+                  </svg>
+                </Link>
+                <Link
+                  href={`/${locale}/quote`}
+                  className='border-border text-muted-foreground hover:border-primary hover:text-primary inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-semibold transition-all'
+                >
+                  {t('home.larvae.ctaSecondary')}
+                </Link>
+              </div>
+            </div>
+
+            {/* Image — right */}
+            <div className='relative order-1 lg:order-2'>
+              <div className='shadow-primary/10 overflow-hidden rounded-2xl shadow-xl'>
+                <Image
+                  src='https://images.unsplash.com/photo-1629046881043-ce35df40960e?auto=format&fit=crop&w=900&q=90'
+                  alt='Laboratorio de Larvas de Camarón Ecuador'
+                  width={900}
+                  height={600}
+                  className='h-72 w-full object-cover lg:h-[420px]'
+                />
+                <div className='absolute top-3 right-3'>
+                  <span className='text-primary rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold shadow-sm'>
+                    🔬 SPF · Bioseguridad Nivel A
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why Ecuador ──────────────────────────────────────────────────── */}
+      <section className='bg-background py-14'>
+        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='mb-10 text-center'>
+            <span className='text-secondary mb-2 block text-xs font-bold tracking-widest uppercase'>
+              {t('home.whyEcuador.eyebrow')}
+            </span>
+            <h2 className='text-foreground mb-3 text-3xl font-black sm:text-4xl'>
+              {t('home.whyEcuador.title')}
+            </h2>
+            <p className='text-muted-foreground mx-auto max-w-2xl text-sm'>
+              {t('home.whyEcuador.subtitle')}
+            </p>
+          </div>
+
+          <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-4'>
+            {[
+              {
+                stat: '#4',
+                color: 'text-primary',
+                bg: 'bg-primary/6',
+                border: 'border-primary/12',
+                label: t('home.whyEcuador.items.0.label'),
+                desc: t('home.whyEcuador.items.0.desc'),
+              },
+              {
+                stat: '28°C',
+                color: 'text-secondary',
+                bg: 'bg-secondary/6',
+                border: 'border-secondary/12',
+                label: t('home.whyEcuador.items.1.label'),
+                desc: t('home.whyEcuador.items.1.desc'),
+              },
+              {
+                stat: 'BAP',
+                color: 'text-primary',
+                bg: 'bg-primary/6',
+                border: 'border-primary/12',
+                label: t('home.whyEcuador.items.2.label'),
+                desc: t('home.whyEcuador.items.2.desc'),
+              },
+              {
+                stat: 'FOB',
+                color: 'text-secondary',
+                bg: 'bg-secondary/6',
+                border: 'border-secondary/12',
+                label: t('home.whyEcuador.items.3.label'),
+                desc: t('home.whyEcuador.items.3.desc'),
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className={`rounded-xl border ${item.border} ${item.bg} p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-black/5`}
+              >
+                <div className={`${item.color} mb-2 text-2xl font-black`}>{item.stat}</div>
+                <div className='text-foreground mb-1.5 text-sm font-bold'>{item.label}</div>
+                <div className='text-muted-foreground text-xs leading-relaxed'>{item.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Categories ───────────────────────────────────────────────────── */}
       <section
         className='bg-muted/30 py-14'
