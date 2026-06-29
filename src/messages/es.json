@@ -32,9 +32,9 @@
   },
   "hero": {
     "badge": "🇪🇨 Desde Ecuador Hacia el Mundo · Samborondón, Guayas · Miami, Florida",
-    "title": "Productos Ecuatorianos",
-    "titleHighlight": "Premium",
-    "titleEnd": "con Trazabilidad y Certificación Internacional",
+    "title": "Camarón · Larvas",
+    "titleHighlight": "Acuicultura Premium",
+    "titleEnd": "Exportación Directa desde Ecuador",
     "description": "Exportamos camarón vannamei, larvas de acuicultura, frutas tropicales y café arábica directamente desde Ecuador. Certificaciones BAP, HACCP, BRC y GlobalGAP. Documentación lista. Respuesta en 24h.",
     "exploreProducts": "Ver Catálogo",
     "requestQuote": "Solicitar Cotización",
@@ -52,26 +52,26 @@
     },
     "slides": {
       "shrimp": {
-        "badge": "🦐 Acuicultura Premium · Ecuador",
+        "badge": "🦐 Camarón Vannamei · Exportación Directa Ecuador",
         "title": "Camarón Vannamei",
-        "titleHighlight": "Certificado",
-        "subtitle": "BAP · HACCP · GlobalGAP · Exportación directa desde Guayas",
+        "titleHighlight": "Certificado BAP",
+        "subtitle": "IQF · Tallas 10/20 a 100/200 · Documentación completa · 24h respuesta",
         "cta": "Ver Camarón",
         "ctaSecondary": "Solicitar Cotización"
       },
-      "fruits": {
-        "badge": "🥭 Frutas Tropicales · Origen Ecuador",
-        "title": "Mango · Piña",
-        "titleHighlight": "Premium",
-        "subtitle": "Certificado GlobalGAP · Trazabilidad completa · 24h respuesta",
-        "cta": "Ver Frutas",
+      "larvae": {
+        "badge": "🔬 Laboratorio de Larvas · Nauplios y PL · Ecuador",
+        "title": "Larvas de Camarón",
+        "titleHighlight": "Bioseguras",
+        "subtitle": "SPF · Alta supervivencia · Genética probada · Despacho semanal",
+        "cta": "Ver Larvas",
         "ctaSecondary": "Solicitar Cotización"
       },
-      "specialties": {
-        "badge": "🌿 Especialidades · Cacao · Café · Flores",
-        "title": "Cacao Fino",
-        "titleHighlight": "de Aroma",
-        "subtitle": "Rainforest Alliance · UTZ · Comercio Justo · +30 productos",
+      "fruits": {
+        "badge": "🥭 Frutas Tropicales · Café · Cacao · Ecuador",
+        "title": "Productos",
+        "titleHighlight": "Tropicales",
+        "subtitle": "Mango · Piña · Café Arábica · GlobalGAP · Trazabilidad completa",
         "cta": "Ver Catálogo",
         "ctaSecondary": "Hablar con un asesor"
       }
@@ -98,6 +98,60 @@
       "premiumSeafood": "Camarón Vannamei Certificado",
       "highlandCoffee": "Café Arábica de Altura",
       "aquaculture": "Larvas y Nauplios de Acuicultura"
+    }
+  },
+  "home": {
+    "viewFullCatalog": "Ver catálogo completo",
+    "shrimp": {
+      "eyebrow": "Camarón Vannamei Premium",
+      "title": "Exportamos Camarón",
+      "titleHighlight": "IQF Certificado",
+      "description": "Camarón vannamei congelado individualmente (IQF) directo desde las granjas certificadas de Guayas, Ecuador. Tallas 10/20 hasta 100/200. Documentación sanitaria, BRC y BAP lista para cualquier mercado.",
+      "features": [
+        "Certificación BAP · HACCP · GlobalGAP vigentes",
+        "IQF · Block Frozen · Cooked · Tail-on / Headless",
+        "Trazabilidad completa de granja a contenedor",
+        "Embarque desde Puerto de Guayaquil — FOB"
+      ],
+      "cta": "Ver Camarón",
+      "ctaSecondary": "Solicitar Cotización"
+    },
+    "larvae": {
+      "eyebrow": "Laboratorio de Larvas",
+      "title": "Nauplios y PL",
+      "titleHighlight": "de Alta Supervivencia",
+      "description": "Larvas de camarón blanco (Litopenaeus vannamei) producidas en laboratorio de bioseguridad nivel A. Genética seleccionada, SPF certificado, alta supervivencia y despacho semanal para operaciones de cualquier escala.",
+      "features": [
+        "SPF — Libre de Patógenos Específicos certificado",
+        "PL10 · PL12 · PL15 · Nauplios — según pedido",
+        "Aclimatación guiada y soporte técnico post-venta",
+        "Despacho aéreo nacional e internacional semanal"
+      ],
+      "cta": "Ver Larvas",
+      "ctaSecondary": "Consultar disponibilidad"
+    },
+    "whyEcuador": {
+      "eyebrow": "Por qué Ecuador",
+      "title": "La Ventaja Ecuatoriana en Acuicultura",
+      "subtitle": "Ecuador es el 4° exportador mundial de camarón. Condiciones tropicales únicas, agua limpia y productores certificados hacen de Guayas el origen preferido por compradores internacionales.",
+      "items": [
+        {
+          "label": "4° Exportador Mundial",
+          "desc": "Ecuador exporta más de 1.2 millones de toneladas de camarón al año. El mayor proveedor de la UE y uno de los principales hacia Asia."
+        },
+        {
+          "label": "Temperatura Óptima",
+          "desc": "Aguas entre 24–28°C todo el año en Guayas. Ciclos de producción más cortos y mejor conversión alimenticia que competidores regionales."
+        },
+        {
+          "label": "Certificación BAP",
+          "desc": "Granjas y laboratorios auditados bajo estándares BAP, HACCP y BRC. Documentación lista para UE, EE.UU. y Asia sin demoras."
+        },
+        {
+          "label": "Logística FOB Directa",
+          "desc": "Puerto de Guayaquil con salidas semanales. Oficina comercial en Miami para facilitar operaciones con compradores norteamericanos."
+        }
+      ]
     }
   },
   "products": {

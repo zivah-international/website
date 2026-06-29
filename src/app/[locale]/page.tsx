@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import HeroSlider from '@/components/HeroSlider';
 import Navigation from '@/components/Navigation';
@@ -17,74 +17,31 @@ interface Category {
   isActive: boolean;
 }
 
-// ─── Featured products for photo grid (images only — names come from t()) ─────
-const FEATURED_PRODUCTS = [
-  {
-    slug: 'camaron-blanco-premium',
-    nameKey: 'shrimp',
-    img: '1544551763-46a013bb70d5',
-    href: '/products',
-  },
-  {
-    slug: 'cacao-fino-aroma',
-    nameKey: 'cacao',
-    img: 'https://images.pexels.com/photos/7450070/pexels-photo-7450070.jpeg?auto=compress&cs=tinysrgb&w=500',
-    href: '/products',
-  },
-  {
-    slug: 'rosas-rojas-premium',
-    nameKey: 'roses',
-    img: 'https://images.pexels.com/photos/22604232/pexels-photo-22604232.jpeg?auto=compress&cs=tinysrgb&w=500',
-    href: '/products',
-  },
-  {
-    slug: 'mango-tommy-atkins',
-    nameKey: 'mango',
-    img: '1553279768-865429fa0078',
-    href: '/products',
-  },
-  {
-    slug: 'aguacate-hass-premium',
-    nameKey: 'avocado',
-    img: '1523049673857-eb18f1d7b578',
-    href: '/products',
-  },
-  {
-    slug: 'cafe-arabica-altura',
-    nameKey: 'coffee',
-    img: '1447933601403-0c6688de566e',
-    href: '/products',
-  },
-  {
-    slug: 'banano-cavendish-premium',
-    nameKey: 'banana',
-    img: '1571771894821-ce9b6c11b08e',
-    href: '/products',
-  },
-  { slug: 'pina-golden', nameKey: 'pineapple', img: '1550258987-190a2d41a8ba', href: '/products' },
-];
-
-// ─── Category card accent colors ─────────────────────────────────────────────
+// ─── Card styles per category slot ───────────────────────────────────────────
 const CARD_STYLES = [
   {
-    bg: 'from-primary/10 to-primary/5 border-primary/20 hover:border-primary/50',
-    dot: 'bg-primary',
-    btn: 'bg-primary hover:bg-primary/90 text-white',
-  },
-  {
-    bg: 'from-accent/10 to-accent/5 border-accent/20 hover:border-accent/50',
-    dot: 'bg-accent',
-    btn: 'bg-accent hover:bg-accent/90 text-white',
-  },
-  {
-    bg: 'from-secondary/10 to-secondary/5 border-secondary/20 hover:border-secondary/50',
+    bg: 'from-[#0c3547]/8 to-[#0c3547]/4 border-[#0c3547]/20 hover:border-[#0c3547]/50',
     dot: 'bg-secondary',
     btn: 'bg-secondary hover:bg-secondary/90 text-white',
+    accent: 'text-secondary',
   },
   {
-    bg: 'from-primary/10 to-accent/5 border-primary/20 hover:border-accent/50',
+    bg: 'from-accent/10 to-accent/4 border-accent/20 hover:border-accent/50',
+    dot: 'bg-accent',
+    btn: 'bg-accent hover:bg-accent/90 text-white',
+    accent: 'text-accent',
+  },
+  {
+    bg: 'from-primary/10 to-primary/4 border-primary/20 hover:border-primary/50',
     dot: 'bg-primary',
     btn: 'bg-primary hover:bg-primary/90 text-white',
+    accent: 'text-primary',
+  },
+  {
+    bg: 'from-secondary/8 to-accent/4 border-secondary/20 hover:border-accent/40',
+    dot: 'bg-secondary',
+    btn: 'bg-secondary hover:bg-secondary/90 text-white',
+    accent: 'text-secondary',
   },
 ];
 
@@ -93,8 +50,9 @@ export default function HomePage() {
   const locale = useLocale();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const larvaeRef = useRef<HTMLDivElement>(null);
 
-  // ─── Slides (inside component so t() is in scope) ───────────────────────
+  // ─── Hero slides — seafood & larvae primary, tropicals secondary ─────────
   const SLIDES = [
     {
       image:
@@ -110,6 +68,18 @@ export default function HomePage() {
     },
     {
       image:
+        'https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=1920&q=85',
+      badge: t('hero.slides.larvae.badge'),
+      title: t('hero.slides.larvae.title'),
+      titleHighlight: t('hero.slides.larvae.titleHighlight'),
+      subtitle: t('hero.slides.larvae.subtitle'),
+      cta: t('hero.slides.larvae.cta'),
+      ctaHref: '/products?category=larvas',
+      ctaSecondary: t('hero.slides.larvae.ctaSecondary'),
+      ctaSecondaryHref: '/quote',
+    },
+    {
+      image:
         'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=1920&q=85',
       badge: t('hero.slides.fruits.badge'),
       title: t('hero.slides.fruits.title'),
@@ -119,18 +89,6 @@ export default function HomePage() {
       ctaHref: '/products?category=frutas-tropicales',
       ctaSecondary: t('hero.slides.fruits.ctaSecondary'),
       ctaSecondaryHref: '/quote',
-    },
-    {
-      image:
-        'https://images.pexels.com/photos/37516666/pexels-photo-37516666.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
-      badge: t('hero.slides.specialties.badge'),
-      title: t('hero.slides.specialties.title'),
-      titleHighlight: t('hero.slides.specialties.titleHighlight'),
-      subtitle: t('hero.slides.specialties.subtitle'),
-      cta: t('hero.slides.specialties.cta'),
-      ctaHref: '/products',
-      ctaSecondary: t('hero.slides.specialties.ctaSecondary'),
-      ctaSecondaryHref: '/contact',
     },
   ];
 
@@ -146,13 +104,13 @@ export default function HomePage() {
     <div className='min-h-screen'>
       <Navigation />
 
-      {/* ── Hero Slider ──────────────────────────────────────────────────── */}
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <HeroSlider
         slides={SLIDES}
         locale={locale}
       />
 
-      {/* ── Stats trust strip ────────────────────────────────────────────── */}
+      {/* ── Stats strip ──────────────────────────────────────────────────── */}
       <section className='bg-primary text-white'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='grid grid-cols-2 md:grid-cols-4'>
@@ -236,7 +194,7 @@ export default function HomePage() {
             ].map((stat, i) => (
               <div
                 key={i}
-                className={`flex flex-col items-center gap-2 py-8 text-center ${i < 3 ? 'border-r border-white/15 last:border-0' : ''}`}
+                className={`flex flex-col items-center gap-2 py-8 text-center ${i < 3 ? 'border-r border-white/15' : ''}`}
               >
                 <div className='mb-1'>{stat.icon}</div>
                 <div className='text-3xl font-black tracking-tight'>{stat.value}</div>
@@ -249,74 +207,364 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Product photo gallery ─────────────────────────────────────────── */}
-      <section className='bg-background py-16'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mb-10 text-center'>
-            <p className='text-primary mb-2 text-sm font-bold tracking-widest uppercase'>
-              {t('hero.gallery.badge')}
-            </p>
-            <h2 className='text-foreground text-3xl font-bold sm:text-4xl'>
-              {t('hero.gallery.title')}
-            </h2>
-            <p className='text-muted-foreground mx-auto mt-3 max-w-xl text-base'>
-              {t('hero.gallery.subtitle')}
-            </p>
+      {/* ── PRIMARY SPECIALTY — Shrimp & Larvae split panel ──────────────── */}
+      <section className='overflow-hidden bg-[#071b26] py-0'>
+        {/* Shrimp panel */}
+        <div className='grid lg:grid-cols-2'>
+          {/* Image */}
+          <div className='relative min-h-80 lg:min-h-[520px]'>
+            <Image
+              src='https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=900&q=85'
+              alt='Camarón Vannamei Premium Ecuador'
+              fill
+              className='object-cover object-center'
+              sizes='(max-width:1024px) 100vw, 50vw'
+            />
+            {/* Deep ocean overlay — subtle blue-to-dark */}
+            <div className='absolute inset-0 bg-linear-to-r from-[#071b26]/80 via-[#071b26]/30 to-transparent lg:from-transparent lg:via-transparent lg:to-[#071b26]/75' />
+            <div className='absolute inset-0 bg-linear-to-b from-transparent via-transparent to-[#071b26]/60 lg:hidden' />
+            {/* BAP cert badge overlay */}
+            <div className='absolute top-6 left-6 flex gap-2'>
+              {['BAP', 'HACCP', 'GlobalGAP'].map(c => (
+                <span
+                  key={c}
+                  className='rounded-full border border-white/30 bg-[#071b26]/60 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm'
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
           </div>
 
-          <div className='grid grid-cols-2 gap-3 sm:grid-cols-4'>
-            {FEATURED_PRODUCTS.map(product => (
-              <Link
-                key={product.slug}
-                href={`/${locale}${product.href}`}
-                className='group relative aspect-square overflow-hidden rounded-2xl shadow-sm'
-              >
-                <Image
-                  src={
-                    product.img.startsWith('http')
-                      ? product.img
-                      : `https://images.unsplash.com/photo-${product.img}?auto=format&fit=crop&w=500&q=80`
-                  }
-                  alt={t(`hero.gallery.products.${product.nameKey}`)}
-                  fill
-                  className='object-cover transition-transform duration-500 group-hover:scale-105'
-                  sizes='(max-width: 640px) 50vw, 25vw'
-                />
-                <div className='absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent' />
-                <div className='absolute right-0 bottom-0 left-0 p-3'>
-                  <p className='text-sm font-semibold text-white drop-shadow'>
-                    {t(`hero.gallery.products.${product.nameKey}`)}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <div className='mt-8 text-center'>
-            <Link
-              href={`/${locale}/products`}
-              className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-7 py-3 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg'
-            >
-              {t('hero.gallery.viewAll')}
+          {/* Copy */}
+          <div className='flex flex-col justify-center px-8 py-14 lg:px-14 xl:px-20'>
+            <span className='text-accent mb-4 flex items-center gap-2 text-xs font-bold tracking-widest uppercase'>
               <svg
                 className='h-4 w-4'
                 fill='none'
                 viewBox='0 0 24 24'
                 stroke='currentColor'
-                strokeWidth={2.5}
+                strokeWidth={2}
               >
                 <path
                   strokeLinecap='round'
                   strokeLinejoin='round'
-                  d='M17 8l4 4m0 0l-4 4m4-4H3'
+                  d='M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z'
                 />
               </svg>
-            </Link>
+              {t('home.shrimp.eyebrow')}
+            </span>
+            <h2 className='mb-4 text-3xl leading-tight font-black text-white sm:text-4xl xl:text-5xl'>
+              {t('home.shrimp.title')}{' '}
+              <span className='from-accent bg-linear-to-r to-[#5de4a0] bg-clip-text text-transparent'>
+                {t('home.shrimp.titleHighlight')}
+              </span>
+            </h2>
+            <p className='mb-8 text-base leading-relaxed text-white/70 sm:text-lg'>
+              {t('home.shrimp.description')}
+            </p>
+            <ul className='mb-8 space-y-3'>
+              {[
+                t('home.shrimp.features.0'),
+                t('home.shrimp.features.1'),
+                t('home.shrimp.features.2'),
+                t('home.shrimp.features.3'),
+              ].map((f, i) => (
+                <li
+                  key={i}
+                  className='flex items-start gap-3 text-sm text-white/80'
+                >
+                  <svg
+                    className='text-accent mt-0.5 h-4 w-4 shrink-0'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M4.5 12.75l6 6 9-13.5'
+                    />
+                  </svg>
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <div className='flex flex-wrap gap-3'>
+              <Link
+                href={`/${locale}/products?category=marinos-y-pesca`}
+                className='bg-accent hover:bg-accent/90 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white shadow-lg shadow-black/30 transition-all hover:-translate-y-0.5'
+              >
+                {t('home.shrimp.cta')}
+                <svg
+                  className='h-4 w-4'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  stroke='currentColor'
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M17 8l4 4m0 0l-4 4m4-4H3'
+                  />
+                </svg>
+              </Link>
+              <Link
+                href={`/${locale}/quote`}
+                className='inline-flex items-center gap-2 rounded-xl border border-white/25 px-6 py-3 text-sm font-semibold text-white/90 backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/10'
+              >
+                {t('home.shrimp.ctaSecondary')}
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Thin divider */}
+        <div className='h-px bg-white/5' />
+
+        {/* Larvae Lab panel — reversed */}
+        <div
+          ref={larvaeRef}
+          className='grid lg:grid-cols-2'
+        >
+          {/* Copy — left on desktop */}
+          <div className='order-2 flex flex-col justify-center px-8 py-14 lg:order-1 lg:px-14 xl:px-20'>
+            <span className='text-primary mb-4 flex items-center gap-2 text-xs font-bold tracking-widest uppercase'>
+              <svg
+                className='h-4 w-4'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z'
+                />
+              </svg>
+              {t('home.larvae.eyebrow')}
+            </span>
+            <h2 className='mb-4 text-3xl leading-tight font-black text-white sm:text-4xl xl:text-5xl'>
+              {t('home.larvae.title')}{' '}
+              <span className='from-primary bg-linear-to-r to-[#ffaa6b] bg-clip-text text-transparent'>
+                {t('home.larvae.titleHighlight')}
+              </span>
+            </h2>
+            <p className='mb-8 text-base leading-relaxed text-white/70 sm:text-lg'>
+              {t('home.larvae.description')}
+            </p>
+            <ul className='mb-8 space-y-3'>
+              {[
+                t('home.larvae.features.0'),
+                t('home.larvae.features.1'),
+                t('home.larvae.features.2'),
+                t('home.larvae.features.3'),
+              ].map((f, i) => (
+                <li
+                  key={i}
+                  className='flex items-start gap-3 text-sm text-white/80'
+                >
+                  <svg
+                    className='text-primary mt-0.5 h-4 w-4 shrink-0'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M4.5 12.75l6 6 9-13.5'
+                    />
+                  </svg>
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <div className='flex flex-wrap gap-3'>
+              <Link
+                href={`/${locale}/products?category=larvas`}
+                className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white shadow-lg shadow-black/30 transition-all hover:-translate-y-0.5'
+              >
+                {t('home.larvae.cta')}
+                <svg
+                  className='h-4 w-4'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  stroke='currentColor'
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M17 8l4 4m0 0l-4 4m4-4H3'
+                  />
+                </svg>
+              </Link>
+              <Link
+                href={`/${locale}/quote`}
+                className='inline-flex items-center gap-2 rounded-xl border border-white/25 px-6 py-3 text-sm font-semibold text-white/90 backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/10'
+              >
+                {t('home.larvae.ctaSecondary')}
+              </Link>
+            </div>
+          </div>
+
+          {/* Image — right on desktop */}
+          <div className='relative order-1 min-h-80 lg:order-2 lg:min-h-[520px]'>
+            <Image
+              src='https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=900&q=85'
+              alt='Laboratorio de Larvas de Camarón Ecuador'
+              fill
+              className='object-cover object-center'
+              sizes='(max-width:1024px) 100vw, 50vw'
+            />
+            <div className='absolute inset-0 bg-linear-to-l from-[#071b26]/80 via-[#071b26]/30 to-transparent lg:from-transparent lg:via-transparent lg:to-[#071b26]/75' />
+            <div className='absolute inset-0 bg-linear-to-b from-transparent via-transparent to-[#071b26]/60 lg:hidden' />
+            {/* Biosecurity label */}
+            <div className='absolute top-6 right-6'>
+              <span className='rounded-full border border-white/30 bg-[#071b26]/60 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-sm'>
+                🔬 Bioseguridad Nivel A
+              </span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Categories ───────────────────────────────────────────────────── */}
+      {/* ── Why Ecuador — ocean-toned full-bleed section ──────────────────── */}
+      <section className='relative overflow-hidden bg-[#0a2535] py-20'>
+        {/* Subtle wave pattern background */}
+        <div
+          className='absolute inset-0 opacity-[0.04]'
+          style={{
+            backgroundImage:
+              'radial-gradient(ellipse at 20% 50%, #00d4aa 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, #0066cc 0%, transparent 50%)',
+          }}
+        />
+        <div className='relative container mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='mb-12 text-center'>
+            <span className='text-accent mb-3 block text-xs font-bold tracking-widest uppercase'>
+              {t('home.whyEcuador.eyebrow')}
+            </span>
+            <h2 className='mb-4 text-3xl font-black text-white sm:text-4xl'>
+              {t('home.whyEcuador.title')}
+            </h2>
+            <p className='mx-auto max-w-2xl text-base text-white/60'>
+              {t('home.whyEcuador.subtitle')}
+            </p>
+          </div>
+
+          <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-4'>
+            {[
+              {
+                icon: (
+                  <svg
+                    className='h-7 w-7'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M6.115 5.19l.319 1.913A6 6 0 008.11 10.36L9.75 12l-.387.775c-.217.433-.132.956.21 1.298l1.348 1.348c.21.21.329.497.329.795v1.089c0 .426.24.815.622 1.006l.153.076c.433.217.956.132 1.298-.21l.723-.723a8.7 8.7 0 002.288-4.042 1.087 1.087 0 00-.358-1.099l-1.33-1.108c-.251-.21-.582-.299-.905-.245l-1.17.195a1.125 1.125 0 01-.98-.314l-.295-.295a1.125 1.125 0 010-1.591l.13-.132a1.125 1.125 0 011.3-.21l.603.302a.809.809 0 001.086-1.086L14.25 7.5l1.256-.837a4.5 4.5 0 001.528-1.732l.146-.292M6.115 5.19A9 9 0 1017.18 4.64M6.115 5.19A8.965 8.965 0 0112 3c1.929 0 3.716.607 5.18 1.64'
+                    />
+                  </svg>
+                ),
+                stat: '#1',
+                label: t('home.whyEcuador.items.0.label'),
+                desc: t('home.whyEcuador.items.0.desc'),
+                color: 'text-accent',
+                border: 'border-accent/20 hover:border-accent/50',
+              },
+              {
+                icon: (
+                  <svg
+                    className='h-7 w-7'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605'
+                    />
+                  </svg>
+                ),
+                stat: '12°C',
+                label: t('home.whyEcuador.items.1.label'),
+                desc: t('home.whyEcuador.items.1.desc'),
+                color: 'text-secondary',
+                border: 'border-secondary/20 hover:border-secondary/50',
+              },
+              {
+                icon: (
+                  <svg
+                    className='h-7 w-7'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z'
+                    />
+                  </svg>
+                ),
+                stat: 'BAP',
+                label: t('home.whyEcuador.items.2.label'),
+                desc: t('home.whyEcuador.items.2.desc'),
+                color: 'text-primary',
+                border: 'border-primary/20 hover:border-primary/50',
+              },
+              {
+                icon: (
+                  <svg
+                    className='h-7 w-7'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12'
+                    />
+                  </svg>
+                ),
+                stat: 'FOB',
+                label: t('home.whyEcuador.items.3.label'),
+                desc: t('home.whyEcuador.items.3.desc'),
+                color: 'text-accent',
+                border: 'border-accent/20 hover:border-accent/50',
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className={`rounded-2xl border bg-white/[0.04] p-6 transition-all duration-300 hover:bg-white/[0.07] ${item.border}`}
+              >
+                <div className={`${item.color} mb-3`}>{item.icon}</div>
+                <div className={`${item.color} mb-1 text-2xl font-black tracking-tight`}>
+                  {item.stat}
+                </div>
+                <div className='mb-2 text-sm font-bold text-white'>{item.label}</div>
+                <div className='text-xs leading-relaxed text-white/50'>{item.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Categories (DB-driven) ────────────────────────────────────────── */}
       <section
         className='bg-background py-20'
         id='products'
@@ -389,7 +637,7 @@ export default function HomePage() {
               href={`/${locale}/products`}
               className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg'
             >
-              Ver catálogo completo
+              {t('home.viewFullCatalog')}
               <svg
                 className='h-4 w-4'
                 fill='none'
@@ -427,42 +675,40 @@ export default function HomePage() {
           </div>
 
           <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
-            {(['📋', '🔍', '📄', '🚢'] as const).map((icon, i) => {
-              return (
-                <div
-                  key={i}
-                  className='bg-card border-accent/25 hover:border-accent/55 relative rounded-2xl border-2 p-6 shadow-sm transition-all duration-300 hover:shadow-md'
-                >
-                  <div className='text-accent mb-2 text-5xl font-black opacity-15'>
-                    {String(i + 1).padStart(2, '0')}
-                  </div>
-                  <div className='mb-3 text-3xl'>{icon}</div>
-                  <h3 className='text-foreground mb-1 text-base font-bold'>
-                    {t(`process.steps.${i}.title`)}
-                  </h3>
-                  <p className='text-muted-foreground text-sm leading-relaxed'>
-                    {t(`process.steps.${i}.description`)}
-                  </p>
-                  {i < 3 && (
-                    <div className='text-primary/30 absolute top-1/2 -right-4 hidden -translate-y-1/2 lg:block'>
-                      <svg
-                        className='h-6 w-6'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        stroke='currentColor'
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          d='M9 5l7 7-7 7'
-                        />
-                      </svg>
-                    </div>
-                  )}
+            {(['📋', '🔍', '📄', '🚢'] as const).map((icon, i) => (
+              <div
+                key={i}
+                className='bg-card border-accent/25 hover:border-accent/55 relative rounded-2xl border-2 p-6 shadow-sm transition-all duration-300 hover:shadow-md'
+              >
+                <div className='text-accent mb-2 text-5xl font-black opacity-15'>
+                  {String(i + 1).padStart(2, '0')}
                 </div>
-              );
-            })}
+                <div className='mb-3 text-3xl'>{icon}</div>
+                <h3 className='text-foreground mb-1 text-base font-bold'>
+                  {t(`process.steps.${i}.title`)}
+                </h3>
+                <p className='text-muted-foreground text-sm leading-relaxed'>
+                  {t(`process.steps.${i}.description`)}
+                </p>
+                {i < 3 && (
+                  <div className='text-primary/30 absolute top-1/2 -right-4 hidden -translate-y-1/2 lg:block'>
+                    <svg
+                      className='h-6 w-6'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M9 5l7 7-7 7'
+                      />
+                    </svg>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
 
           <div className='mt-10 text-center'>

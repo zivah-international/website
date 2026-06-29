@@ -32,9 +32,9 @@
   },
   "hero": {
     "badge": "🇪🇨 From Ecuador to the World · Samborondón, Guayas · Miami, Florida",
-    "title": "Premium Ecuadorian Products",
-    "titleHighlight": "Certified",
-    "titleEnd": "for International Markets",
+    "title": "Shrimp · Larvae",
+    "titleHighlight": "Premium Aquaculture",
+    "titleEnd": "Direct Export from Ecuador",
     "description": "We export vannamei shrimp, aquaculture larvae, tropical fruits and arabica coffee directly from Ecuador. BAP, HACCP, BRC and GlobalGAP certified. Documentation ready. Response within 24h.",
     "exploreProducts": "View Catalog",
     "requestQuote": "Request Quote",
@@ -52,26 +52,26 @@
     },
     "slides": {
       "shrimp": {
-        "badge": "🦐 Premium Aquaculture · Ecuador",
+        "badge": "🦐 Vannamei Shrimp · Direct Export Ecuador",
         "title": "Vannamei Shrimp",
-        "titleHighlight": "Certified",
-        "subtitle": "BAP · HACCP · GlobalGAP · Direct export from Guayas",
+        "titleHighlight": "BAP Certified",
+        "subtitle": "IQF · Sizes 10/20 to 100/200 · Full documentation · 24h response",
         "cta": "View Shrimp",
         "ctaSecondary": "Request Quote"
       },
-      "fruits": {
-        "badge": "🥭 Tropical Fruits · Origin Ecuador",
-        "title": "Mango · Pineapple",
-        "titleHighlight": "Premium",
-        "subtitle": "GlobalGAP certified · Full traceability · 24h response",
-        "cta": "View Fruits",
+      "larvae": {
+        "badge": "🔬 Larvae Lab · Nauplii & PL · Ecuador",
+        "title": "Shrimp Larvae",
+        "titleHighlight": "Biosecure",
+        "subtitle": "SPF · High survival · Proven genetics · Weekly dispatch",
+        "cta": "View Larvae",
         "ctaSecondary": "Request Quote"
       },
-      "specialties": {
-        "badge": "🌿 Specialties · Cacao · Coffee · Flowers",
-        "title": "Fine Cacao",
-        "titleHighlight": "of Aroma",
-        "subtitle": "Rainforest Alliance · UTZ · Fair Trade · +30 products",
+      "fruits": {
+        "badge": "🥭 Tropical Fruits · Coffee · Cacao · Ecuador",
+        "title": "Tropical",
+        "titleHighlight": "Products",
+        "subtitle": "Mango · Pineapple · Arabica Coffee · GlobalGAP · Full traceability",
         "cta": "View Catalog",
         "ctaSecondary": "Talk to an advisor"
       }
@@ -98,6 +98,60 @@
       "premiumSeafood": "Certified Vannamei Shrimp",
       "highlandCoffee": "High-Altitude Arabica Coffee",
       "aquaculture": "Aquaculture Larvae & Nauplii"
+    }
+  },
+  "home": {
+    "viewFullCatalog": "View full catalog",
+    "shrimp": {
+      "eyebrow": "Premium Vannamei Shrimp",
+      "title": "We Export Shrimp",
+      "titleHighlight": "IQF Certified",
+      "description": "Individually quick frozen (IQF) vannamei shrimp direct from certified farms in Guayas, Ecuador. Sizes 10/20 through 100/200. Sanitary, BRC and BAP documentation ready for any market.",
+      "features": [
+        "BAP · HACCP · GlobalGAP certifications current",
+        "IQF · Block Frozen · Cooked · Tail-on / Headless",
+        "Full traceability from farm to container",
+        "Shipment from Port of Guayaquil — FOB"
+      ],
+      "cta": "View Shrimp",
+      "ctaSecondary": "Request Quote"
+    },
+    "larvae": {
+      "eyebrow": "Larvae Laboratory",
+      "title": "Nauplii and PL",
+      "titleHighlight": "High Survival",
+      "description": "White shrimp larvae (Litopenaeus vannamei) produced in a biosecurity level-A laboratory. Selected genetics, SPF certified, high survival rate and weekly dispatch for operations of any scale.",
+      "features": [
+        "SPF — Specific Pathogen Free certified",
+        "PL10 · PL12 · PL15 · Nauplii — on request",
+        "Guided acclimation and post-sale technical support",
+        "Weekly domestic and international air dispatch"
+      ],
+      "cta": "View Larvae",
+      "ctaSecondary": "Check availability"
+    },
+    "whyEcuador": {
+      "eyebrow": "Why Ecuador",
+      "title": "The Ecuadorian Aquaculture Advantage",
+      "subtitle": "Ecuador is the world's 4th largest shrimp exporter. Unique tropical conditions, clean water and certified producers make Guayas the preferred origin for international buyers.",
+      "items": [
+        {
+          "label": "4th Largest Exporter",
+          "desc": "Ecuador exports over 1.2 million tons of shrimp annually — the EU's top supplier and a major source for Asia."
+        },
+        {
+          "label": "Optimal Temperature",
+          "desc": "Water between 24–28°C year-round in Guayas. Shorter production cycles and better feed conversion than regional competitors."
+        },
+        {
+          "label": "BAP Certification",
+          "desc": "Farms and laboratories audited under BAP, HACCP and BRC standards. Documentation ready for the EU, US and Asia without delays."
+        },
+        {
+          "label": "Direct FOB Logistics",
+          "desc": "Port of Guayaquil with weekly sailings. Miami commercial office to streamline operations with North American buyers."
+        }
+      ]
     }
   },
   "products": {
