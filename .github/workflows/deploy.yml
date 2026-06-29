@@ -151,10 +151,10 @@ jobs:
         if: ${{ steps.deps-changed.outputs.changed == 'true' || github.event.inputs.run_npm_install == 'true' }}
         run: |
           echo "Triggering npm install via cPanel UAPI..."
-          RESPONSE=$(curl -s \
+          RESPONSE=$(curl -s -G \
             -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            "https://${{ secrets.CPANEL_HOST }}:2083/execute/NodeJS/npm_install?app_name=${{ secrets.CPANEL_APP_NAME }}")
+            --data-urlencode "app_name=${{ secrets.CPANEL_APP_NAME }}" \
+            "https://${{ secrets.CPANEL_HOST }}:2083/execute/NodeJS/npm_install")
           echo "$RESPONSE"
           # Fail if cPanel returned an error status
           echo "$RESPONSE" | python3 -c "
@@ -174,10 +174,10 @@ jobs:
       - name: Restart Node.js app
         run: |
           echo "Restarting app via cPanel UAPI..."
-          RESPONSE=$(curl -s \
+          RESPONSE=$(curl -s -G \
             -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            "https://${{ secrets.CPANEL_HOST }}:2083/execute/NodeJS/restart_app?app_name=${{ secrets.CPANEL_APP_NAME }}")
+            --data-urlencode "app_name=${{ secrets.CPANEL_APP_NAME }}" \
+            "https://${{ secrets.CPANEL_HOST }}:2083/execute/NodeJS/restart_app")
           echo "$RESPONSE"
           echo "$RESPONSE" | python3 -c "
           import sys, json
