@@ -19,7 +19,7 @@ const buttonVariants = cva(
         glass: 'border border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/20',
         icon: 'hover:bg-accent hover:text-accent-foreground rounded-full',
         nav: 'text-foreground/70 hover:text-foreground hover:bg-accent/50 transition-all',
-        'nav-active': 'text-foreground bg-accent font-semibold',
+        'nav-active': 'text-primary bg-primary/8 font-semibold',
         'nav-mobile': 'text-foreground hover:bg-accent w-full justify-start',
         'cta-primary':
           'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg transition-all hover:shadow-xl',

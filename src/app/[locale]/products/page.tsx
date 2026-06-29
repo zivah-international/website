@@ -129,7 +129,7 @@ export default function ProductsPage() {
             <div className='flex items-center gap-3'>
               <Link
                 href={`/${locale}/quote`}
-                className='bg-accent hover:bg-accent/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:-translate-y-0.5'
+                className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:-translate-y-0.5'
                 data-track='begin_checkout'
                 data-track-label='solicitar_cotizacion_products_header'
                 data-track-category='cta'
@@ -278,7 +278,7 @@ export default function ProductsPage() {
                       <div className='flex gap-2'>
                         <Link
                           href={`/${locale}/quote?product=${product.slug}`}
-                          className='bg-accent hover:bg-accent/90 flex-1 rounded-lg py-2 text-center text-sm font-semibold text-white transition-colors'
+                          className='bg-primary hover:bg-primary/90 flex-1 rounded-lg py-2 text-center text-sm font-semibold text-white transition-colors'
                           data-track='begin_checkout'
                           data-track-label='solicitar_cotizacion_card'
                           data-track-category='cta'

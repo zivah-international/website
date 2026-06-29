@@ -204,7 +204,7 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
                   {item.label}
                   <div
                     className={`absolute bottom-0 left-1/2 h-0.5 w-4/5 -translate-x-1/2 transform rounded-full transition-all duration-300 ${
-                      activeSection === item.id ? 'bg-accent' : 'bg-transparent'
+                      activeSection === item.id ? 'bg-primary' : 'bg-transparent'
                     }`}
                   />
                 </Link>

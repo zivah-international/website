@@ -114,7 +114,7 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
             >
               <Link
                 href={`/${locale}${slide.ctaHref}`}
-                className='bg-accent hover:bg-accent/90 inline-flex items-center gap-2 rounded-xl px-7 py-4 text-base font-bold text-white shadow-lg shadow-black/30 transition-all hover:-translate-y-0.5 hover:shadow-xl'
+                className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-7 py-4 text-base font-bold text-white shadow-lg shadow-black/30 transition-all hover:-translate-y-0.5 hover:shadow-xl'
               >
                 {slide.cta}
                 <svg

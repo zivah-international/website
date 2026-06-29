@@ -69,22 +69,22 @@ const CARD_STYLES = [
   {
     bg: 'from-primary/10 to-primary/5 border-primary/20 hover:border-primary/50',
     dot: 'bg-primary',
-    btn: 'bg-primary hover:bg-primary/90',
+    btn: 'bg-primary hover:bg-primary/90 text-white',
   },
   {
     bg: 'from-accent/10 to-accent/5 border-accent/20 hover:border-accent/50',
     dot: 'bg-accent',
-    btn: 'bg-accent hover:bg-accent/90',
+    btn: 'bg-accent hover:bg-accent/90 text-white',
   },
   {
     bg: 'from-secondary/10 to-secondary/5 border-secondary/20 hover:border-secondary/50',
     dot: 'bg-secondary',
-    btn: 'bg-secondary hover:bg-secondary/90',
+    btn: 'bg-secondary hover:bg-secondary/90 text-white',
   },
   {
     bg: 'from-primary/10 to-accent/5 border-primary/20 hover:border-accent/50',
     dot: 'bg-primary',
-    btn: 'bg-primary hover:bg-primary/90',
+    btn: 'bg-primary hover:bg-primary/90 text-white',
   },
 ];
 
@@ -280,7 +280,7 @@ export default function HomePage() {
                     <div className='flex gap-2'>
                       <Link
                         href={`/${locale}/products?category=${cat.slug}`}
-                        className={`${style.btn} flex-1 rounded-lg py-2 text-center text-xs font-semibold text-white transition-colors`}
+                        className={`${style.btn} flex-1 rounded-lg py-2 text-center text-xs font-semibold transition-colors`}
                       >
                         {t('products.viewDetail')}
                       </Link>
@@ -300,7 +300,7 @@ export default function HomePage() {
           <div className='mt-10 text-center'>
             <Link
               href={`/${locale}/products`}
-              className='bg-accent hover:bg-accent/90 inline-flex items-center gap-2 rounded-xl px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg'
+              className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg'
             >
               Ver catálogo completo
               <svg
@@ -459,7 +459,7 @@ export default function HomePage() {
               />
               <button
                 type='submit'
-                className='bg-accent hover:bg-accent/90 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-colors'
+                className='bg-primary hover:bg-primary/90 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition-colors'
               >
                 {t('newsletter.cta')}
               </button>
