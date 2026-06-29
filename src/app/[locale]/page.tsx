@@ -290,7 +290,7 @@ export default function HomePage() {
             <div className='relative order-1 lg:order-2'>
               <div className='shadow-primary/10 overflow-hidden rounded-2xl shadow-xl'>
                 <Image
-                  src='https://images.unsplash.com/photo-1629046881043-ce35df40960e?auto=format&fit=crop&w=900&q=90'
+                  src='https://images.unsplash.com/photo-1674962296996-b17a771d44b3?auto=format&fit=crop&w=900&q=90'
                   alt='Laboratorio de Larvas de Camarón Ecuador'
                   width={900}
                   height={600}
@@ -443,7 +443,7 @@ export default function HomePage() {
             <div className='relative order-1 lg:order-2'>
               <div className='shadow-primary/10 overflow-hidden rounded-2xl shadow-xl'>
                 <Image
-                  src='https://images.unsplash.com/photo-1629046881043-ce35df40960e?auto=format&fit=crop&w=900&q=90'
+                  src='https://images.unsplash.com/photo-1674962296996-b17a771d44b3?auto=format&fit=crop&w=900&q=90'
                   alt='Laboratorio de Larvas de Camarón Ecuador'
                   width={900}
                   height={600}
