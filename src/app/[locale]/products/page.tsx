@@ -35,12 +35,12 @@ interface Product {
 }
 
 const CERT_COLORS: Record<string, string> = {
-  BAP: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  HACCP: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
-  BRC: 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300',
-  GlobalGAP: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  USDA: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  ISO: 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300',
+  BAP: 'bg-secondary/10 text-secondary',
+  HACCP: 'bg-accent/10 text-accent',
+  BRC: 'bg-primary/10 text-primary',
+  GlobalGAP: 'bg-accent/15 text-accent',
+  USDA: 'bg-primary/15 text-primary',
+  ISO: 'bg-secondary/15 text-secondary',
 };
 
 export default function ProductsPage() {
@@ -222,7 +222,7 @@ export default function ProductsPage() {
                         sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
                       />
                       {product.isFeatured && (
-                        <div className='absolute top-3 left-3 rounded-full bg-amber-500 px-2.5 py-1 text-xs font-bold text-white shadow'>
+                        <div className='bg-primary/80 text-primary-foreground absolute top-3 left-3 rounded-full px-2.5 py-1 text-xs font-bold shadow'>
                           ⭐ Destacado
                         </div>
                       )}

@@ -308,7 +308,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       {/* MS Application tile meta (not covered by generateMetadata) */}
       <meta
         name='msapplication-TileColor'
-        content='#ff6347'
+        content='#e8541e'
       />
       <meta
         name='msapplication-TileImage'
@@ -363,7 +363,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           />
         </>
       )}
-      <div className={`${inter.variable} ${montserrat.variable}`}>
+      <div className={`${inter.variable} ${montserrat.variable} contents`}>
         <NextIntlClientProvider messages={messages}>
           <ErrorBoundary>
             <ClientThemeProvider>

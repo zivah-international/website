@@ -58,13 +58,11 @@ function ErrorFallback({ error, reset }: { error: Error; reset: () => void }) {
   const t = useTranslations('common');
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-gray-50 p-4 dark:bg-gray-900'>
-      <div className='w-full max-w-md rounded-lg bg-white p-8 text-center shadow-lg dark:bg-gray-800'>
+    <div className='bg-background flex min-h-screen items-center justify-center p-4'>
+      <div className='bg-card border-border w-full max-w-md rounded-xl border p-8 text-center shadow-lg'>
         <div className='mb-4 text-6xl'>⚠️</div>
-        <h2 className='mb-4 text-2xl font-bold text-gray-900 dark:text-white'>
-          {t('somethingWentWrong')}
-        </h2>
-        <p className='mb-6 text-gray-600 dark:text-gray-400'>{t('unexpectedError')}</p>
+        <h2 className='text-foreground mb-4 text-2xl font-bold'>{t('somethingWentWrong')}</h2>
+        <p className='text-muted-foreground mb-6'>{t('unexpectedError')}</p>
 
         <div className='space-y-3'>
           <Button
@@ -84,10 +82,10 @@ function ErrorFallback({ error, reset }: { error: Error; reset: () => void }) {
 
         {process.env.NODE_ENV === 'development' && (
           <details className='mt-6 text-left'>
-            <summary className='cursor-pointer text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'>
+            <summary className='text-muted-foreground hover:text-foreground cursor-pointer text-sm'>
               {t('technicalDetails')}
             </summary>
-            <pre className='mt-2 overflow-auto rounded bg-gray-100 p-3 text-xs dark:bg-gray-700'>
+            <pre className='bg-muted mt-2 overflow-auto rounded p-3 text-xs'>
               {error.message}
               {error.stack}
             </pre>
@@ -120,9 +118,7 @@ export function LoadingSpinner({
       <div
         className={`${sizeClasses[size]} border-accent/20 border-t-accent mb-4 animate-spin rounded-full border-4`}
       />
-      {displayMessage && (
-        <p className='text-sm text-gray-600 dark:text-gray-400'>{displayMessage}</p>
-      )}
+      {displayMessage && <p className='text-muted-foreground text-sm'>{displayMessage}</p>}
     </div>
   );
 }
@@ -143,13 +139,13 @@ export function LoadingSpinner({
  */
 export function ProductSkeleton() {
   return (
-    <div className='animate-pulse rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800'>
-      <div className='mb-4 h-48 w-full rounded-lg bg-gray-200 dark:bg-gray-700' />
-      <div className='mb-2 h-4 rounded bg-gray-200 dark:bg-gray-700' />
-      <div className='mb-4 h-3 rounded bg-gray-200 dark:bg-gray-700' />
+    <div className='bg-card border-border animate-pulse rounded-xl border p-6'>
+      <div className='bg-muted mb-4 h-48 w-full rounded-lg' />
+      <div className='bg-muted mb-2 h-4 rounded' />
+      <div className='bg-muted mb-4 h-3 rounded' />
       <div className='flex items-center justify-between'>
-        <div className='h-4 w-16 rounded bg-gray-200 dark:bg-gray-700' />
-        <div className='h-6 w-20 rounded bg-gray-200 dark:bg-gray-700' />
+        <div className='bg-muted h-4 w-16 rounded' />
+        <div className='bg-muted h-6 w-20 rounded' />
       </div>
     </div>
   );
@@ -172,10 +168,10 @@ export function ProductSkeleton() {
 export function ContentSkeleton() {
   return (
     <div className='animate-pulse space-y-4'>
-      <div className='h-8 w-3/4 rounded bg-gray-200 dark:bg-gray-700' />
-      <div className='h-4 w-full rounded bg-gray-200 dark:bg-gray-700' />
-      <div className='h-4 w-5/6 rounded bg-gray-200 dark:bg-gray-700' />
-      <div className='h-4 w-4/6 rounded bg-gray-200 dark:bg-gray-700' />
+      <div className='bg-muted h-8 w-3/4 rounded' />
+      <div className='bg-muted h-4 w-full rounded' />
+      <div className='bg-muted h-4 w-5/6 rounded' />
+      <div className='bg-muted h-4 w-4/6 rounded' />
     </div>
   );
 }
@@ -201,7 +197,7 @@ export function NetworkStatus() {
   if (isOnline) return null;
 
   return (
-    <div className='fixed right-4 bottom-4 z-50 rounded-lg bg-red-600 px-4 py-2 text-white shadow-lg'>
+    <div className='bg-destructive text-destructive-foreground fixed right-4 bottom-4 z-50 rounded-lg px-4 py-2 shadow-lg'>
       <div className='flex items-center space-x-2'>
         <div className='h-2 w-2 animate-pulse rounded-full bg-white' />
         <span className='text-sm font-medium'>{t('offline')}</span>

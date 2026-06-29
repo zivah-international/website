@@ -182,7 +182,7 @@ export default async function MarketsPage({ params }: Props) {
                 <div className='mb-3 flex items-start justify-between'>
                   <span className='text-4xl'>{market.flag}</span>
                   {market.active ? (
-                    <span className='rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-400'>
+                    <span className='bg-accent/10 text-accent rounded-full px-2.5 py-0.5 text-xs font-semibold'>
                       Activo
                     </span>
                   ) : (
