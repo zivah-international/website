@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import HeroSlider from '@/components/HeroSlider';
 import Navigation from '@/components/Navigation';
@@ -37,6 +37,7 @@ export default function HomePage() {
   const locale = useLocale();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const larvaeRef = useRef<HTMLDivElement>(null);
 
   const SLIDES = [
     {
@@ -370,7 +371,137 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Categories ───────────────────────────────────────────────────── */}
+      {/* ── Why Ecuador — ocean-toned full-bleed section ──────────────────── */}
+      <section className='relative overflow-hidden bg-[#0a2535] py-20'>
+        {/* Subtle wave pattern background */}
+        <div
+          className='absolute inset-0 opacity-[0.04]'
+          style={{
+            backgroundImage:
+              'radial-gradient(ellipse at 20% 50%, #00d4aa 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, #0066cc 0%, transparent 50%)',
+          }}
+        />
+        <div className='relative container mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='mb-12 text-center'>
+            <span className='text-accent mb-3 block text-xs font-bold tracking-widest uppercase'>
+              {t('home.whyEcuador.eyebrow')}
+            </span>
+            <h2 className='mb-4 text-3xl font-black text-white sm:text-4xl'>
+              {t('home.whyEcuador.title')}
+            </h2>
+            <p className='mx-auto max-w-2xl text-base text-white/60'>
+              {t('home.whyEcuador.subtitle')}
+            </p>
+          </div>
+
+          <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-4'>
+            {[
+              {
+                icon: (
+                  <svg
+                    className='h-7 w-7'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M6.115 5.19l.319 1.913A6 6 0 008.11 10.36L9.75 12l-.387.775c-.217.433-.132.956.21 1.298l1.348 1.348c.21.21.329.497.329.795v1.089c0 .426.24.815.622 1.006l.153.076c.433.217.956.132 1.298-.21l.723-.723a8.7 8.7 0 002.288-4.042 1.087 1.087 0 00-.358-1.099l-1.33-1.108c-.251-.21-.582-.299-.905-.245l-1.17.195a1.125 1.125 0 01-.98-.314l-.295-.295a1.125 1.125 0 010-1.591l.13-.132a1.125 1.125 0 011.3-.21l.603.302a.809.809 0 001.086-1.086L14.25 7.5l1.256-.837a4.5 4.5 0 001.528-1.732l.146-.292M6.115 5.19A9 9 0 1017.18 4.64M6.115 5.19A8.965 8.965 0 0112 3c1.929 0 3.716.607 5.18 1.64'
+                    />
+                  </svg>
+                ),
+                stat: '#1',
+                label: t('home.whyEcuador.items.0.label'),
+                desc: t('home.whyEcuador.items.0.desc'),
+                color: 'text-accent',
+                border: 'border-accent/20 hover:border-accent/50',
+              },
+              {
+                icon: (
+                  <svg
+                    className='h-7 w-7'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605'
+                    />
+                  </svg>
+                ),
+                stat: '12°C',
+                label: t('home.whyEcuador.items.1.label'),
+                desc: t('home.whyEcuador.items.1.desc'),
+                color: 'text-secondary',
+                border: 'border-secondary/20 hover:border-secondary/50',
+              },
+              {
+                icon: (
+                  <svg
+                    className='h-7 w-7'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z'
+                    />
+                  </svg>
+                ),
+                stat: 'BAP',
+                label: t('home.whyEcuador.items.2.label'),
+                desc: t('home.whyEcuador.items.2.desc'),
+                color: 'text-primary',
+                border: 'border-primary/20 hover:border-primary/50',
+              },
+              {
+                icon: (
+                  <svg
+                    className='h-7 w-7'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12'
+                    />
+                  </svg>
+                ),
+                stat: 'FOB',
+                label: t('home.whyEcuador.items.3.label'),
+                desc: t('home.whyEcuador.items.3.desc'),
+                color: 'text-accent',
+                border: 'border-accent/20 hover:border-accent/50',
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className={`rounded-2xl border bg-white/[0.04] p-6 transition-all duration-300 hover:bg-white/[0.07] ${item.border}`}
+              >
+                <div className={`${item.color} mb-3`}>{item.icon}</div>
+                <div className={`${item.color} mb-1 text-2xl font-black tracking-tight`}>
+                  {item.stat}
+                </div>
+                <div className='mb-2 text-sm font-bold text-white'>{item.label}</div>
+                <div className='text-xs leading-relaxed text-white/50'>{item.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Categories (DB-driven) ────────────────────────────────────────── */}
       <section
         className='bg-muted/30 py-14'
         id='products'
