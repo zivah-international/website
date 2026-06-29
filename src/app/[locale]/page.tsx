@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import HeroSlider from '@/components/HeroSlider';
 import Navigation from '@/components/Navigation';
@@ -37,6 +37,7 @@ export default function HomePage() {
   const locale = useLocale();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const larvaeRef = useRef<HTMLDivElement>(null);
 
   const SLIDES = [
     {
