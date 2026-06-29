@@ -1,6 +1,7 @@
 import nextPlugin from '@next/eslint-plugin-next';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import prettierConfig from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import reactPlugin from 'eslint-plugin-react';
@@ -61,6 +62,9 @@ export default [
       '.idea/',
       '*.swp',
       '*.swo',
+      // Python virtual environment
+      '.venv/',
+      'venv/',
       // OS files
       '.DS_Store',
       'Thumbs.db',
@@ -184,4 +188,15 @@ export default [
       '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
+  // Node scripts and seed files — console is intentional
+  {
+    files: ['scripts/**/*.{js,ts}', 'prisma/**/*.{js,ts}'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  // Prettier — must be last to disable any ESLint rules that conflict with Prettier formatting
+  prettierConfig,
 ];

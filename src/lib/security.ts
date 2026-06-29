@@ -89,7 +89,7 @@ const blockedUserAgents = [
 const sensitiveEndpoints = ['/api/auth', '/api/quotes', '/api/contact', '/api/products'];
 
 export async function securityMiddleware(request: NextRequest) {
-  const { pathname, searchParams } = request.nextUrl;
+  const { pathname } = request.nextUrl;
   const ip =
     request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     request.headers.get('x-real-ip') ||

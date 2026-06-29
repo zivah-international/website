@@ -111,7 +111,10 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
             >
               <Link
                 href={`/${locale}${slide.ctaHref}`}
-                className='bg-accent hover:bg-accent/90 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-base font-bold text-white shadow-lg shadow-black/30 transition-all hover:-translate-y-0.5 hover:shadow-xl'
+                className='inline-flex items-center gap-2 rounded-xl bg-accent px-7 py-3.5 text-base font-bold text-white shadow-lg shadow-black/30 transition-all hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-xl'
+                data-track='view_item_list'
+                data-track-category='hero'
+                data-track-label={`hero_primary_${slide.ctaHref.replace(/\//g, '_')}`}
               >
                 {slide.cta}
                 <svg
@@ -131,6 +134,9 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
               <Link
                 href={`/${locale}${slide.ctaSecondaryHref}`}
                 className='inline-flex items-center gap-2 rounded-xl border-2 border-white/50 px-7 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:border-white hover:bg-white/15'
+                data-track='begin_checkout'
+                data-track-category='hero'
+                data-track-label='hero_secondary_quote'
               >
                 {slide.ctaSecondary}
               </Link>

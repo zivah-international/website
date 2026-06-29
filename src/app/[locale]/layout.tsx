@@ -318,9 +318,47 @@ export default async function LocaleLayout({ children, params }: Props) {
         name='msapplication-config'
         content='/assets/images/icons/browserconfig.xml'
       />
-      {/* Google Analytics 4 — same pattern as Kjaia: init inline first, then async loader */}
+      {/* Google Analytics 4 — Consent Mode v2 (Advanced)
+          Order matters per Google docs:
+          1. dataLayer + gtag() stub
+          2. gtag('consent', 'default', ...) — ALL denied except security_storage
+          3. gtag.js loader (async)
+          4. gtag('js') + gtag('config') after loader
+          The Analytics component handles SPA page_view via history-change detection.
+          send_page_view: false avoids double-counting on initial load (gtag fires
+          one automatically; the Analytics component fires for subsequent route changes). */}
       {gaId && (
         <>
+          {/* Step 1-2: stub + consent defaults — must run before gtag.js loads */}
+          <Script
+            id='google-analytics-consent'
+            strategy='afterInteractive'
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+
+                // Consent Mode v2 — all denied by default (GDPR / ePrivacy compliant).
+                // CookieConsent component calls gtag('consent','update',...) after user choice.
+                gtag('consent', 'default', {
+                  analytics_storage: 'denied',
+                  ad_storage: 'denied',
+                  ad_user_data: 'denied',
+                  ad_personalization: 'denied',
+                  functionality_storage: 'denied',
+                  personalization_storage: 'denied',
+                  security_storage: 'granted',
+                  wait_for_update: 500
+                });
+              `,
+            }}
+          />
+          {/* Step 3: async gtag.js loader */}
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            strategy='afterInteractive'
+          />
+          {/* Step 4: config + [data-track] global click handler */}
           <Script
             id='google-analytics-init'
             strategy='afterInteractive'
@@ -328,23 +366,18 @@ export default async function LocaleLayout({ children, params }: Props) {
               __html: `
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
-                gtag('consent', 'default', {
-                  analytics_storage: 'granted',
-                  ad_storage: 'denied',
-                  ad_user_data: 'denied',
-                  ad_personalization: 'denied',
-                  functionality_storage: 'denied',
-                  personalization_storage: 'denied',
-                  security_storage: 'granted'
-                });
                 gtag('js', new Date());
-                gtag('config', '${gaId}', { anonymize_ip: true, send_page_view: true });
+                // send_page_view:false — the Analytics component tracks SPA route changes via
+                // history API; GA4 enhanced measurement also handles history-based page_views.
+                // Keeping both active would double-count the initial load.
+                gtag('config', '${gaId}', { send_page_view: false });
 
-                // Global [data-track] CTA handler (GA4 recommended events)
+                // Global [data-track] CTA handler — GA4 recommended events via data attributes.
+                // Usage: <button data-track="generate_lead" data-track-category="cta" data-track-label="Quote CTA">
                 document.addEventListener('click', function(e) {
                   var el = e.target.closest('[data-track]');
                   if (!el) return;
-                  var event = el.dataset.track;
+                  var eventName = el.dataset.track;
                   var params = {
                     event_category: el.dataset.trackCategory || 'cta',
                     event_label: el.dataset.trackLabel || (el.innerText || '').trim().substring(0, 100),
@@ -352,14 +385,10 @@ export default async function LocaleLayout({ children, params }: Props) {
                   if (el.dataset.trackSource) params.lead_source = el.dataset.trackSource;
                   if (el.dataset.trackCurrency) params.currency = el.dataset.trackCurrency;
                   if (el.dataset.trackValue) params.value = parseFloat(el.dataset.trackValue);
-                  gtag('event', event, params);
+                  gtag('event', eventName, params);
                 });
               `,
             }}
-          />
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-            strategy='afterInteractive'
           />
         </>
       )}

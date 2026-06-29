@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className='mb-6 break-inside-avoid overflow-hidden rounded-xl border border-gray-200'>
-      <h2 className='bg-primary/10 border-b border-gray-200 px-5 py-2.5 text-sm font-bold tracking-wider text-gray-800 uppercase'>
+      <h2 className='border-b border-gray-200 bg-primary/10 px-5 py-2.5 text-sm font-bold tracking-wider text-gray-800 uppercase'>
         {title}
       </h2>
       <div className='px-5 py-4'>{children}</div>
@@ -119,7 +119,7 @@ export default async function FichaTecnicaPage({ params }: PageProps) {
         <div className='no-print mx-auto mb-4 max-w-4xl px-4'>
           <Link
             href={`/${locale ?? 'es'}/products/${slug}`}
-            className='text-primary text-sm underline hover:opacity-80'
+            className='text-sm text-primary underline hover:opacity-80'
           >
             ← Volver al producto
           </Link>
@@ -128,7 +128,7 @@ export default async function FichaTecnicaPage({ params }: PageProps) {
         {/* ── DOCUMENT ── */}
         <div className='mx-auto max-w-4xl bg-white shadow-lg print:shadow-none'>
           {/* Header band */}
-          <header className='bg-primary text-primary-foreground flex items-center justify-between px-8 py-4'>
+          <header className='flex items-center justify-between bg-primary px-8 py-4 text-primary-foreground'>
             <div>
               <p className='text-xs font-semibold tracking-widest uppercase opacity-80'>
                 ZIVAH International S.A.
@@ -159,7 +159,7 @@ export default async function FichaTecnicaPage({ params }: PageProps) {
               {/* Identity */}
               <div className='flex-1 p-5'>
                 {product.category && (
-                  <p className='text-primary mb-1 text-xs font-semibold tracking-widest uppercase'>
+                  <p className='mb-1 text-xs font-semibold tracking-widest text-primary uppercase'>
                     {product.category.icon} {product.category.name}
                   </p>
                 )}
@@ -178,7 +178,7 @@ export default async function FichaTecnicaPage({ params }: PageProps) {
                   {certifications.map(cert => (
                     <span
                       key={cert}
-                      className='bg-accent/15 text-accent-foreground rounded-full px-2.5 py-0.5 text-xs font-semibold'
+                      className='rounded-full bg-accent/15 px-2.5 py-0.5 text-xs font-semibold text-accent-foreground'
                     >
                       ✓ {cert}
                     </span>
@@ -258,9 +258,9 @@ export default async function FichaTecnicaPage({ params }: PageProps) {
                 {certifications.map(cert => (
                   <div
                     key={cert}
-                    className='border-accent/30 bg-accent/5 rounded-lg border px-4 py-2 text-center'
+                    className='rounded-lg border border-accent/30 bg-accent/5 px-4 py-2 text-center'
                   >
-                    <p className='text-accent text-sm font-bold'>{cert}</p>
+                    <p className='text-sm font-bold text-accent'>{cert}</p>
                     <p className='text-xs text-gray-500'>Certificado vigente</p>
                   </div>
                 ))}

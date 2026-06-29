@@ -16,33 +16,33 @@ class Logger {
     return level <= this.level;
   }
 
-  private formatMessage(level: string, message: string, meta?: any): string {
+  private formatMessage(level: string, message: string, meta?: unknown): string {
     const timestamp = new Date().toISOString();
     const metaStr = meta ? ` ${JSON.stringify(meta)}` : '';
     return `[${timestamp}] ${level}: ${message}${metaStr}`;
   }
 
-  error(message: string, meta?: any) {
+  error(message: string, meta?: unknown) {
     if (this.shouldLog(LogLevel.ERROR)) {
       console.error(this.formatMessage('ERROR', message, meta));
     }
   }
 
-  warn(message: string, meta?: any) {
+  warn(message: string, meta?: unknown) {
     if (this.shouldLog(LogLevel.WARN)) {
       console.warn(this.formatMessage('WARN', message, meta));
     }
   }
 
-  info(message: string, meta?: any) {
+  info(message: string, meta?: unknown) {
     if (this.shouldLog(LogLevel.INFO)) {
-      console.info(this.formatMessage('INFO', message, meta));
+      console.warn(this.formatMessage('INFO', message, meta));
     }
   }
 
-  debug(message: string, meta?: any) {
+  debug(message: string, meta?: unknown) {
     if (this.shouldLog(LogLevel.DEBUG)) {
-      console.debug(this.formatMessage('DEBUG', message, meta));
+      console.warn(this.formatMessage('DEBUG', message, meta));
     }
   }
 
@@ -60,10 +60,10 @@ class Logger {
   }
 
   // Database operation logging
-  logDatabase(operation: string, table: string, duration: number, error?: any) {
+  logDatabase(operation: string, table: string, duration: number, error?: unknown) {
     const message = `DB ${operation} on ${table} took ${duration}ms`;
     if (error) {
-      this.error(message, { error: error.message });
+      this.error(message, { error: error instanceof Error ? error.message : String(error) });
     } else {
       this.debug(message);
     }

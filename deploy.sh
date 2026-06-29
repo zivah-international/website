@@ -85,7 +85,7 @@ if command -v curl &> /dev/null; then
             echo "1. Login to cPanel File Manager"
             echo "2. Navigate to $FTP_PATH"
             echo "3. Extract zivah-deploy.tar.gz"
-            echo "4. Configure Node.js app (startup: server.js)"
+            echo "4. Configure Node.js app (startup: server.cjs)"
             echo "5. Set environment variables in cPanel"
             echo "6. Start your application"
         else

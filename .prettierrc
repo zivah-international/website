@@ -15,8 +15,8 @@
   "proseWrap": "preserve",
   "htmlWhitespaceSensitivity": "css",
   "singleAttributePerLine": true,
-  "experimentalTernaries": false,
   "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./src/app/globals.css",
   "tailwindAttributes": ["className", "class"],
   "tailwindFunctions": ["clsx", "cn", "cva", "tw"]
 }

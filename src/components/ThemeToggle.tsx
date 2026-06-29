@@ -23,7 +23,7 @@ export default function ThemeToggle() {
         className='relative overflow-hidden'
       >
         <div className='relative h-6 w-6'>
-          <div className='bg-muted h-6 w-6 animate-pulse rounded' />
+          <div className='h-6 w-6 animate-pulse rounded bg-muted' />
         </div>
       </Button>
     );
@@ -35,7 +35,7 @@ export default function ThemeToggle() {
       size='icon'
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-      className='group border-border/50 bg-background/50 hover:bg-accent/10 hover:border-accent/30 relative overflow-hidden backdrop-blur-sm transition-all duration-300'
+      className='group relative overflow-hidden border-border/50 bg-background/50 backdrop-blur-sm transition-all duration-300 hover:border-accent/30 hover:bg-accent/10'
     >
       <div className='relative h-6 w-6'>
         {/* Sun Icon — warm amber, reads naturally as "day" */}
@@ -55,7 +55,7 @@ export default function ThemeToggle() {
 
         {/* Moon Icon — secondary brand blue for dark mode */}
         <svg
-          className={`text-secondary group-hover:text-secondary/80 absolute inset-0 h-6 w-6 transition-all duration-500 ${
+          className={`absolute inset-0 h-6 w-6 text-secondary transition-all duration-500 group-hover:text-secondary/80 ${
             theme === 'light' ? 'scale-0 -rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'
           }`}
           fill='currentColor'
@@ -66,7 +66,7 @@ export default function ThemeToggle() {
       </div>
 
       {/* Subtle glow effect on hover */}
-      <div className='from-accent/5 to-primary/5 absolute inset-0 rounded-md bg-gradient-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+      <div className='absolute inset-0 rounded-md bg-gradient-to-br from-accent/5 to-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
     </Button>
   );
 }

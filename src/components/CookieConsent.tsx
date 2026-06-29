@@ -46,10 +46,12 @@ export default function CookieConsent() {
         localStorage.removeItem('cookie-preferences');
         setShowBanner(true);
       } else {
-        // Load existing preferences
+        // Load and re-apply existing preferences so gtag honours them on this page load
         const savedPreferences = localStorage.getItem('cookie-preferences');
         if (savedPreferences) {
-          setPreferences(JSON.parse(savedPreferences));
+          const prefs: CookiePreferences = JSON.parse(savedPreferences);
+          setPreferences(prefs);
+          initializeTracking(prefs);
         }
       }
     }
@@ -82,6 +84,10 @@ export default function CookieConsent() {
     setPreferences(necessaryOnly);
     saveConsent(necessaryOnly);
     setShowBanner(false);
+
+    // Explicitly deny all non-essential consent (required because default is 'denied'
+    // but calling update ensures the tag honours the user's explicit choice on this session).
+    initializeTracking(necessaryOnly);
   };
 
   const saveCustomPreferences = () => {
@@ -128,19 +134,19 @@ export default function CookieConsent() {
   return (
     <>
       {/* Cookie Banner */}
-      <div className='border-border bg-background fixed right-0 bottom-0 left-0 z-50 border-t shadow-lg'>
+      <div className='fixed right-0 bottom-0 left-0 z-50 border-t border-border bg-background shadow-lg'>
         <div className='container mx-auto px-4 py-6'>
           <div className='flex flex-col items-start gap-4 lg:flex-row lg:items-center'>
             <div className='flex-1'>
               <div className='mb-3 flex items-center gap-3'>
                 <div className='text-2xl'>🍪</div>
-                <h3 className='text-foreground text-lg font-semibold'>{t('title')}</h3>
+                <h3 className='text-lg font-semibold text-foreground'>{t('title')}</h3>
               </div>
-              <p className='text-muted-foreground text-sm leading-relaxed'>
+              <p className='text-sm leading-relaxed text-muted-foreground'>
                 {t('description')}{' '}
                 <Link
                   href='/legal/cookie-policy'
-                  className='text-accent dark:text-accent hover:underline'
+                  className='text-accent hover:underline dark:text-accent'
                 >
                   {t('cookiePolicy')}
                 </Link>
@@ -178,13 +184,13 @@ export default function CookieConsent() {
       {/* Preferences Modal */}
       {showPreferences && (
         <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4'>
-          <div className='bg-background border-border max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border shadow-xl'>
+          <div className='max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-border bg-background shadow-xl'>
             <div className='p-6'>
               <div className='mb-6 flex items-center justify-between'>
-                <h3 className='text-foreground text-xl font-semibold'>{t('preferencesTitle')}</h3>
+                <h3 className='text-xl font-semibold text-foreground'>{t('preferencesTitle')}</h3>
                 <button
                   onClick={() => setShowPreferences(false)}
-                  className='text-muted-foreground hover:text-foreground transition-colors'
+                  className='text-muted-foreground transition-colors hover:text-foreground'
                 >
                   ✕
                 </button>
@@ -192,14 +198,14 @@ export default function CookieConsent() {
 
               <div className='space-y-6'>
                 {/* Necessary Cookies */}
-                <div className='border-border rounded-xl border p-4'>
+                <div className='rounded-xl border border-border p-4'>
                   <div className='mb-3 flex items-center justify-between'>
-                    <h4 className='text-foreground font-semibold'>{t('necessaryCookies')}</h4>
-                    <span className='bg-accent/10 text-accent rounded px-2 py-1 text-xs font-semibold'>
+                    <h4 className='font-semibold text-foreground'>{t('necessaryCookies')}</h4>
+                    <span className='rounded bg-accent/10 px-2 py-1 text-xs font-semibold text-accent'>
                       {t('alwaysActive')}
                     </span>
                   </div>
-                  <p className='text-muted-foreground mb-3 text-sm'>{t('necessaryDescription')}</p>
+                  <p className='mb-3 text-sm text-muted-foreground'>{t('necessaryDescription')}</p>
                   <div className='flex items-center'>
                     <input
                       type='checkbox'
@@ -207,14 +213,14 @@ export default function CookieConsent() {
                       disabled
                       className='mr-3'
                     />
-                    <span className='text-muted-foreground text-sm'>{t('necessary')}</span>
+                    <span className='text-sm text-muted-foreground'>{t('necessary')}</span>
                   </div>
                 </div>
 
                 {/* Analytics Cookies */}
-                <div className='border-border rounded-xl border p-4'>
+                <div className='rounded-xl border border-border p-4'>
                   <div className='mb-3 flex items-center justify-between'>
-                    <h4 className='text-foreground font-semibold'>{t('analyticsCookies')}</h4>
+                    <h4 className='font-semibold text-foreground'>{t('analyticsCookies')}</h4>
                     <label className='relative inline-flex cursor-pointer items-center'>
                       <span className='sr-only'>{t('enableAnalytics')}</span>
                       <input
@@ -223,16 +229,16 @@ export default function CookieConsent() {
                         onChange={e => updatePreference('analytics', e.target.checked)}
                         className='peer sr-only'
                       />
-                      <div className="peer-focus:ring-accent/30 peer peer-checked:bg-accent bg-muted h-6 w-11 rounded-full peer-focus:ring-4 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
+                      <div className="peer h-6 w-11 rounded-full bg-muted peer-checked:bg-accent peer-focus:ring-4 peer-focus:ring-accent/30 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
                     </label>
                   </div>
-                  <p className='text-muted-foreground text-sm'>{t('analyticsDescription')}</p>
+                  <p className='text-sm text-muted-foreground'>{t('analyticsDescription')}</p>
                 </div>
 
                 {/* Functional Cookies */}
-                <div className='border-border rounded-xl border p-4'>
+                <div className='rounded-xl border border-border p-4'>
                   <div className='mb-3 flex items-center justify-between'>
-                    <h4 className='text-foreground font-semibold'>{t('functionalCookies')}</h4>
+                    <h4 className='font-semibold text-foreground'>{t('functionalCookies')}</h4>
                     <label className='relative inline-flex cursor-pointer items-center'>
                       <span className='sr-only'>{t('enableFunctional')}</span>
                       <input
@@ -241,16 +247,16 @@ export default function CookieConsent() {
                         onChange={e => updatePreference('functional', e.target.checked)}
                         className='peer sr-only'
                       />
-                      <div className="peer-focus:ring-accent/30 peer peer-checked:bg-accent bg-muted h-6 w-11 rounded-full peer-focus:ring-4 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
+                      <div className="peer h-6 w-11 rounded-full bg-muted peer-checked:bg-accent peer-focus:ring-4 peer-focus:ring-accent/30 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
                     </label>
                   </div>
-                  <p className='text-muted-foreground text-sm'>{t('functionalDescription')}</p>
+                  <p className='text-sm text-muted-foreground'>{t('functionalDescription')}</p>
                 </div>
 
                 {/* Marketing Cookies */}
-                <div className='border-border rounded-xl border p-4'>
+                <div className='rounded-xl border border-border p-4'>
                   <div className='mb-3 flex items-center justify-between'>
-                    <h4 className='text-foreground font-semibold'>{t('marketingCookies')}</h4>
+                    <h4 className='font-semibold text-foreground'>{t('marketingCookies')}</h4>
                     <label className='relative inline-flex cursor-pointer items-center'>
                       <span className='sr-only'>{t('enableMarketing')}</span>
                       <input
@@ -259,14 +265,14 @@ export default function CookieConsent() {
                         onChange={e => updatePreference('marketing', e.target.checked)}
                         className='peer sr-only'
                       />
-                      <div className="peer-focus:ring-accent/30 peer peer-checked:bg-accent bg-muted h-6 w-11 rounded-full peer-focus:ring-4 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
+                      <div className="peer h-6 w-11 rounded-full bg-muted peer-checked:bg-accent peer-focus:ring-4 peer-focus:ring-accent/30 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
                     </label>
                   </div>
-                  <p className='text-muted-foreground text-sm'>{t('marketingDescription')}</p>
+                  <p className='text-sm text-muted-foreground'>{t('marketingDescription')}</p>
                 </div>
               </div>
 
-              <div className='border-border mt-6 flex flex-col gap-3 border-t pt-6 sm:flex-row'>
+              <div className='mt-6 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row'>
                 <Button
                   onClick={acceptNecessaryOnly}
                   variant='outline'
@@ -285,11 +291,11 @@ export default function CookieConsent() {
                 </Button>
               </div>
 
-              <p className='text-muted-foreground mt-4 text-center text-xs'>
+              <p className='mt-4 text-center text-xs text-muted-foreground'>
                 {t('moreInfo')}{' '}
                 <Link
                   href='/legal/cookie-policy'
-                  className='text-accent dark:text-accent hover:underline'
+                  className='text-accent hover:underline dark:text-accent'
                 >
                   {t('cookiePolicy')}
                 </Link>

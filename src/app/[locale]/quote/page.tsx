@@ -26,25 +26,25 @@ export default async function QuotePage({ params }: Props) {
       <Navigation />
 
       {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='from-background to-muted/40 bg-linear-to-b pt-28 pb-14'>
+      <section className='bg-linear-to-b from-background to-muted/40 pt-28 pb-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           {/* Breadcrumb */}
           <nav
-            className='text-muted-foreground mb-6 flex items-center gap-2 text-sm'
+            className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'
             aria-label='Breadcrumb'
           >
             <Link
               href='/'
-              className='hover:text-accent transition-colors'
+              className='transition-colors hover:text-accent'
             >
               Inicio
             </Link>
             <span>/</span>
-            <span className='text-foreground font-medium'>{t('title')}</span>
+            <span className='font-medium text-foreground'>{t('title')}</span>
           </nav>
 
-          <div className='border-accent/30 flex items-center gap-4 border-l-4 pl-5'>
-            <div className='bg-accent/10 text-accent hidden shrink-0 rounded-xl p-3 sm:block'>
+          <div className='flex items-center gap-4 border-l-4 border-accent/30 pl-5'>
+            <div className='hidden shrink-0 rounded-xl bg-accent/10 p-3 text-accent sm:block'>
               <svg
                 className='h-7 w-7'
                 fill='none'
@@ -60,18 +60,18 @@ export default async function QuotePage({ params }: Props) {
               </svg>
             </div>
             <div>
-              <p className='text-accent mb-1 text-xs font-semibold tracking-widest uppercase'>
+              <p className='mb-1 text-xs font-semibold tracking-widest text-accent uppercase'>
                 Cotización B2B
               </p>
-              <h1 className='text-foreground text-3xl font-bold sm:text-4xl'>{t('title')}</h1>
-              <p className='text-muted-foreground mt-1 text-base'>{t('description')}</p>
+              <h1 className='text-3xl font-bold text-foreground sm:text-4xl'>{t('title')}</h1>
+              <p className='mt-1 text-base text-muted-foreground'>{t('description')}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── Trust strip ──────────────────────────────────────────────────── */}
-      <div className='bg-card border-border/40 border-b'>
+      <div className='border-b border-border/40 bg-card'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex flex-wrap items-center justify-center gap-6 py-4 text-sm'>
             {[
@@ -82,7 +82,7 @@ export default async function QuotePage({ params }: Props) {
             ].map(item => (
               <div
                 key={item.text}
-                className='text-muted-foreground flex items-center gap-2'
+                className='flex items-center gap-2 text-muted-foreground'
               >
                 <span>{item.icon}</span>
                 <span>{item.text}</span>
@@ -105,7 +105,7 @@ export default async function QuotePage({ params }: Props) {
       <section className='bg-muted/30 py-12'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mx-auto max-w-2xl text-center'>
-            <p className='text-muted-foreground mb-6 text-base'>
+            <p className='mb-6 text-base text-muted-foreground'>
               ¿Preferís contacto directo? Estamos disponibles por WhatsApp o email.
             </p>
             <div className='flex flex-col items-center gap-3 sm:flex-row sm:justify-center'>
@@ -130,7 +130,7 @@ export default async function QuotePage({ params }: Props) {
               </a>
               <a
                 href='mailto:sales@zivahinternational.com?subject=Solicitud%20de%20Cotización'
-                className='text-foreground border-border inline-flex items-center gap-2 rounded-xl border-2 px-6 py-3 font-semibold transition-all hover:border-current/60'
+                className='inline-flex items-center gap-2 rounded-xl border-2 border-border px-6 py-3 font-semibold text-foreground transition-all hover:border-current/60'
                 data-track='generate_lead'
                 data-track-source='email_quote'
                 data-track-currency='USD'

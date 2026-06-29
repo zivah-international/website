@@ -23,7 +23,6 @@ export default function LazyLoad({
   delay = 0,
 }: LazyLoadProps) {
   const [isInView, setIsInView] = useState(false);
-  const [hasLoaded, setHasLoaded] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -37,12 +36,10 @@ export default function LazyLoad({
             if (delay > 0) {
               setTimeout(() => {
                 setIsInView(true);
-                setHasLoaded(true);
                 if (once) observer.disconnect();
               }, delay);
             } else {
               setIsInView(true);
-              setHasLoaded(true);
               if (once) observer.disconnect();
             }
           } else if (!once) {
@@ -172,7 +169,7 @@ export function LazyImage({
   if (hasError) {
     return (
       <div
-        className={`bg-muted text-muted-foreground flex items-center justify-center text-sm ${className}`}
+        className={`flex items-center justify-center bg-muted text-sm text-muted-foreground ${className}`}
       >
         Failed to load image
       </div>
@@ -211,7 +208,7 @@ export function usePerformanceMonitor(componentName: string) {
 
     return () => {
       if (startTime.current) {
-        const duration = performance.now() - startTime.current;
+        performance.now() - startTime.current; // duration tracked silently
       }
     };
   });

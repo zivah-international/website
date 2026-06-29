@@ -4,14 +4,14 @@ import { query } from '@/lib/db';
 import { logger } from '@/lib/logger';
 
 export interface ProductPricingService {
-  getAvailableMeasuresForProduct(productId: number): Promise<any[]>;
+  getAvailableMeasuresForProduct(productId: number): Promise<Record<string, unknown>[]>;
   getPriceForUnit(productId: number, measureId: number): Promise<number | null>;
   getTotalPrice(productId: number, measureId: number, quantity: number): Promise<number | null>;
   areMeasuresCompatible(fromMeasureId: number, toMeasureId: number): Promise<boolean>;
 }
 
 class DatabasePricingService implements ProductPricingService {
-  async getAvailableMeasuresForProduct(productId: number): Promise<any[]> {
+  async getAvailableMeasuresForProduct(productId: number): Promise<Record<string, unknown>[]> {
     try {
       // Get product with its default measure family
       const productQuery = `

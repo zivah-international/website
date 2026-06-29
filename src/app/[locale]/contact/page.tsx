@@ -25,23 +25,23 @@ export default async function ContactPage({ params }: Props) {
       <Navigation />
 
       {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='from-background to-muted/40 bg-linear-to-b pt-28 pb-14'>
+      <section className='bg-linear-to-b from-background to-muted/40 pt-28 pb-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <nav
-            className='text-muted-foreground mb-6 flex items-center gap-2 text-sm'
+            className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'
             aria-label='Breadcrumb'
           >
             <Link
               href='/'
-              className='hover:text-accent transition-colors'
+              className='transition-colors hover:text-accent'
             >
               Inicio
             </Link>
             <span>/</span>
-            <span className='text-foreground font-medium'>{t('title')}</span>
+            <span className='font-medium text-foreground'>{t('title')}</span>
           </nav>
-          <div className='border-primary/30 flex items-center gap-4 border-l-4 pl-5'>
-            <div className='bg-primary/10 text-primary hidden shrink-0 rounded-xl p-3 sm:block'>
+          <div className='flex items-center gap-4 border-l-4 border-primary/30 pl-5'>
+            <div className='hidden shrink-0 rounded-xl bg-primary/10 p-3 text-primary sm:block'>
               <svg
                 className='h-7 w-7'
                 fill='none'
@@ -57,11 +57,11 @@ export default async function ContactPage({ params }: Props) {
               </svg>
             </div>
             <div>
-              <p className='text-primary mb-1 text-xs font-semibold tracking-widest uppercase'>
+              <p className='mb-1 text-xs font-semibold tracking-widest text-primary uppercase'>
                 Contacto
               </p>
-              <h1 className='text-foreground text-3xl font-bold sm:text-4xl'>{t('title')}</h1>
-              <p className='text-muted-foreground mt-1 text-base'>{t('description')}</p>
+              <h1 className='text-3xl font-bold text-foreground sm:text-4xl'>{t('title')}</h1>
+              <p className='mt-1 text-base text-muted-foreground'>{t('description')}</p>
             </div>
           </div>
         </div>
@@ -73,14 +73,14 @@ export default async function ContactPage({ params }: Props) {
           <div className='grid gap-8 lg:grid-cols-2'>
             {/* Contact Channels */}
             <div className='space-y-5'>
-              <h2 className='text-foreground text-xl font-bold'>{t('contactChannels')}</h2>
+              <h2 className='text-xl font-bold text-foreground'>{t('contactChannels')}</h2>
 
               {/* WhatsApp */}
               <a
                 href='https://wa.me/593999002893?text=Hola%2C%20me%20pongo%20en%20contacto%20desde%20la%20web%20de%20ZIVAH%20International.'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='border-border bg-card flex items-center gap-4 rounded-2xl border p-5 shadow-sm transition-all hover:border-[#25D366]/40 hover:shadow-md'
+                className='flex items-center gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:border-[#25D366]/40 hover:shadow-md'
                 data-track='generate_lead'
                 data-track-source='whatsapp_contact'
                 data-track-currency='USD'
@@ -96,13 +96,13 @@ export default async function ContactPage({ params }: Props) {
                   </svg>
                 </div>
                 <div>
-                  <p className='text-foreground font-semibold'>WhatsApp Business</p>
-                  <p className='text-muted-foreground text-sm'>
+                  <p className='font-semibold text-foreground'>WhatsApp Business</p>
+                  <p className='text-sm text-muted-foreground'>
                     +593 99 900 2893 · Respuesta inmediata
                   </p>
                 </div>
                 <svg
-                  className='text-muted-foreground ml-auto h-5 w-5'
+                  className='ml-auto h-5 w-5 text-muted-foreground'
                   fill='none'
                   viewBox='0 0 24 24'
                   stroke='currentColor'
@@ -119,15 +119,15 @@ export default async function ContactPage({ params }: Props) {
               {/* Email */}
               <a
                 href='mailto:sales@zivahinternational.com'
-                className='border-border bg-card hover:border-primary/30 flex items-center gap-4 rounded-2xl border p-5 shadow-sm transition-all hover:shadow-md'
+                className='flex items-center gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary/30 hover:shadow-md'
                 data-track='generate_lead'
                 data-track-source='email_contact'
                 data-track-currency='USD'
                 data-track-value='0'
               >
-                <div className='bg-primary/10 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl'>
+                <div className='flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10'>
                   <svg
-                    className='text-primary h-6 w-6'
+                    className='h-6 w-6 text-primary'
                     fill='none'
                     viewBox='0 0 24 24'
                     stroke='currentColor'
@@ -141,13 +141,13 @@ export default async function ContactPage({ params }: Props) {
                   </svg>
                 </div>
                 <div>
-                  <p className='text-foreground font-semibold'>Email Comercial</p>
-                  <p className='text-muted-foreground text-sm'>
+                  <p className='font-semibold text-foreground'>Email Comercial</p>
+                  <p className='text-sm text-muted-foreground'>
                     sales@zivahinternational.com · 24h respuesta
                   </p>
                 </div>
                 <svg
-                  className='text-muted-foreground ml-auto h-5 w-5'
+                  className='ml-auto h-5 w-5 text-muted-foreground'
                   fill='none'
                   viewBox='0 0 24 24'
                   stroke='currentColor'
@@ -164,11 +164,11 @@ export default async function ContactPage({ params }: Props) {
               {/* Phone */}
               <a
                 href='tel:+593999002893'
-                className='border-border bg-card hover:border-secondary/30 flex items-center gap-4 rounded-2xl border p-5 shadow-sm transition-all hover:shadow-md'
+                className='flex items-center gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:border-secondary/30 hover:shadow-md'
               >
-                <div className='bg-secondary/10 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl'>
+                <div className='flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-secondary/10'>
                   <svg
-                    className='text-secondary h-6 w-6'
+                    className='h-6 w-6 text-secondary'
                     fill='none'
                     viewBox='0 0 24 24'
                     stroke='currentColor'
@@ -182,11 +182,11 @@ export default async function ContactPage({ params }: Props) {
                   </svg>
                 </div>
                 <div>
-                  <p className='text-foreground font-semibold'>Teléfono</p>
-                  <p className='text-muted-foreground text-sm'>+593 99 900 2893</p>
+                  <p className='font-semibold text-foreground'>Teléfono</p>
+                  <p className='text-sm text-muted-foreground'>+593 99 900 2893</p>
                 </div>
                 <svg
-                  className='text-muted-foreground ml-auto h-5 w-5'
+                  className='ml-auto h-5 w-5 text-muted-foreground'
                   fill='none'
                   viewBox='0 0 24 24'
                   stroke='currentColor'
@@ -201,18 +201,18 @@ export default async function ContactPage({ params }: Props) {
               </a>
 
               {/* Offices */}
-              <div className='border-border bg-card rounded-2xl border p-5 shadow-sm'>
-                <p className='text-foreground mb-3 font-semibold'>📍 Oficinas</p>
+              <div className='rounded-2xl border border-border bg-card p-5 shadow-sm'>
+                <p className='mb-3 font-semibold text-foreground'>📍 Oficinas</p>
                 <div className='grid gap-3 sm:grid-cols-2'>
                   <div>
-                    <p className='text-foreground text-sm font-medium'>🇪🇨 Ecuador</p>
-                    <p className='text-muted-foreground text-xs'>Samborondón, Guayas</p>
-                    <p className='text-muted-foreground text-xs'>Operación logística principal</p>
+                    <p className='text-sm font-medium text-foreground'>🇪🇨 Ecuador</p>
+                    <p className='text-xs text-muted-foreground'>Samborondón, Guayas</p>
+                    <p className='text-xs text-muted-foreground'>Operación logística principal</p>
                   </div>
                   <div>
-                    <p className='text-foreground text-sm font-medium'>🇺🇸 Estados Unidos</p>
-                    <p className='text-muted-foreground text-xs'>Miami, Florida</p>
-                    <p className='text-muted-foreground text-xs'>Operación comercial</p>
+                    <p className='text-sm font-medium text-foreground'>🇺🇸 Estados Unidos</p>
+                    <p className='text-xs text-muted-foreground'>Miami, Florida</p>
+                    <p className='text-xs text-muted-foreground'>Operación comercial</p>
                   </div>
                 </div>
               </div>
@@ -220,84 +220,87 @@ export default async function ContactPage({ params }: Props) {
 
             {/* Quick Contact Form */}
             <div>
-              <h2 className='text-foreground mb-5 text-xl font-bold'>{t('sendMessage')}</h2>
+              <h2 className='mb-5 text-xl font-bold text-foreground'>{t('sendMessage')}</h2>
               <form
                 action='mailto:sales@zivahinternational.com'
                 method='post'
                 encType='text/plain'
-                className='bg-card border-border space-y-4 rounded-2xl border p-6 shadow-sm'
+                className='space-y-4 rounded-2xl border border-border bg-card p-6 shadow-sm'
               >
                 <div className='grid gap-4 sm:grid-cols-2'>
                   <div>
-                    <label className='text-foreground mb-1.5 block text-sm font-medium'>
+                    <label className='mb-1.5 block text-sm font-medium text-foreground'>
                       {t('name')} *
                     </label>
                     <input
                       type='text'
                       name='name'
                       required
-                      className='border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-accent/50 w-full rounded-lg border px-3 py-2.5 text-sm focus:ring-2 focus:outline-none'
+                      className='w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent/50 focus:outline-none'
                       placeholder='Tu nombre'
                     />
                   </div>
                   <div>
-                    <label className='text-foreground mb-1.5 block text-sm font-medium'>
+                    <label className='mb-1.5 block text-sm font-medium text-foreground'>
                       {t('company')}
                     </label>
                     <input
                       type='text'
                       name='company'
-                      className='border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-accent/50 w-full rounded-lg border px-3 py-2.5 text-sm focus:ring-2 focus:outline-none'
+                      className='w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent/50 focus:outline-none'
                       placeholder='Tu empresa'
                     />
                   </div>
                 </div>
                 <div>
-                  <label className='text-foreground mb-1.5 block text-sm font-medium'>
+                  <label className='mb-1.5 block text-sm font-medium text-foreground'>
                     {t('email')} *
                   </label>
                   <input
                     type='email'
                     name='email'
                     required
-                    className='border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-accent/50 w-full rounded-lg border px-3 py-2.5 text-sm focus:ring-2 focus:outline-none'
+                    className='w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent/50 focus:outline-none'
                     placeholder='tu@empresa.com'
                   />
                 </div>
                 <div>
-                  <label className='text-foreground mb-1.5 block text-sm font-medium'>
+                  <label className='mb-1.5 block text-sm font-medium text-foreground'>
                     {t('subject')}
                   </label>
                   <input
                     type='text'
                     name='subject'
-                    className='border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-accent/50 w-full rounded-lg border px-3 py-2.5 text-sm focus:ring-2 focus:outline-none'
+                    className='w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent/50 focus:outline-none'
                     placeholder='¿En qué te podemos ayudar?'
                   />
                 </div>
                 <div>
-                  <label className='text-foreground mb-1.5 block text-sm font-medium'>
+                  <label className='mb-1.5 block text-sm font-medium text-foreground'>
                     {t('message')} *
                   </label>
                   <textarea
                     name='message'
                     required
                     rows={4}
-                    className='border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-accent/50 w-full rounded-lg border px-3 py-2.5 text-sm focus:ring-2 focus:outline-none'
+                    className='w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-accent/50 focus:outline-none'
                     placeholder='Cuéntanos sobre tu proyecto de importación...'
                   />
                 </div>
                 <button
                   type='submit'
-                  className='bg-primary hover:bg-primary/90 w-full rounded-xl py-3 font-semibold text-white transition-colors'
+                  className='w-full rounded-xl bg-primary py-3 font-semibold text-white transition-colors hover:bg-primary/90'
                 >
                   {t('send')}
                 </button>
-                <p className='text-muted-foreground text-center text-xs'>
+                <p className='text-center text-xs text-muted-foreground'>
                   También podés ir directamente a{' '}
                   <Link
                     href='/quote'
                     className='text-accent hover:underline'
+                    data-track='begin_checkout'
+                    data-track-category='contact'
+                    data-track-label='contact_inline_quote'
                   >
                     Solicitar Cotización
                   </Link>{' '}

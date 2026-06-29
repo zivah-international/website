@@ -126,16 +126,20 @@ export default function SEOOptimization({
           // Performance metrics tracked
 
           // Send to analytics if available
-          if ((window as any).gtag) {
-            (window as any).gtag('event', 'page_load_performance', {
-              event_category: 'Performance',
-              event_label: window.location.pathname,
-              value: Math.round(loadTime),
-              custom_map: {
-                dom_content_loaded: domContentLoaded,
-                dns_lookup: navigation.domainLookupEnd - navigation.domainLookupStart,
-              },
-            });
+          if ((window as Window & { gtag?: (...args: unknown[]) => void }).gtag) {
+            (window as Window & { gtag?: (...args: unknown[]) => void }).gtag!(
+              'event',
+              'page_load_performance',
+              {
+                event_category: 'Performance',
+                event_label: window.location.pathname,
+                value: Math.round(loadTime),
+                custom_map: {
+                  dom_content_loaded: domContentLoaded,
+                  dns_lookup: navigation.domainLookupEnd - navigation.domainLookupStart,
+                },
+              }
+            );
           }
         }
       }
@@ -190,7 +194,7 @@ export const seoOptimizationUtils = {
     try {
       // Check page load speed
       const startTime = performance.now();
-      const response = await fetch(url, { method: 'HEAD' });
+      const _response = await fetch(url, { method: 'HEAD' });
       const loadTime = performance.now() - startTime;
 
       report.scores.loadSpeed = loadTime < 1000 ? 100 : loadTime < 3000 ? 70 : 50;
@@ -214,7 +218,7 @@ export const seoOptimizationUtils = {
         report.issues.push('Page may not be mobile-friendly');
         report.recommendations.push('Implement responsive design');
       }
-    } catch (error) {
+    } catch {
       report.issues.push('Failed to analyze page');
     }
 

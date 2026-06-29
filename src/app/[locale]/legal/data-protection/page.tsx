@@ -24,14 +24,14 @@ export const metadata: Metadata = {
 
 export default function DataProtectionPage() {
   return (
-    <div className='bg-background min-h-screen py-16'>
+    <div className='min-h-screen bg-background py-16'>
       <div className='container mx-auto max-w-4xl px-4'>
         {/* Header */}
         <div className='mb-12 text-center'>
-          <h1 className='text-foreground mb-4 text-4xl font-bold'>
+          <h1 className='mb-4 text-4xl font-bold text-foreground'>
             Protección de Datos Personales
           </h1>
-          <p className='text-muted-foreground text-lg'>
+          <p className='text-lg text-muted-foreground'>
             Última actualización:{' '}
             {new Date().toLocaleDateString('es-ES', {
               year: 'numeric',
@@ -42,23 +42,23 @@ export default function DataProtectionPage() {
         </div>
 
         {/* Content */}
-        <div className='bg-card space-y-8 rounded-xl p-8 shadow-lg'>
+        <div className='space-y-8 rounded-xl bg-card p-8 shadow-lg'>
           {/* Introduction */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               1. Responsable del Tratamiento
             </h2>
             <div className='rounded-lg bg-gray-50 p-6 dark:bg-gray-700'>
-              <h3 className='text-foreground mb-2 text-lg font-semibold'>
+              <h3 className='mb-2 text-lg font-semibold text-foreground'>
                 ZIVAH International S.A.
               </h3>
-              <p className='text-muted-foreground mb-2'>
+              <p className='mb-2 text-muted-foreground'>
                 <strong>Domicilio:</strong> Casa Matriz Mz 10 S L 31, Samborondón, Guayas, Ecuador
               </p>
-              <p className='text-muted-foreground mb-2'>
+              <p className='mb-2 text-muted-foreground'>
                 <strong>RUC:</strong> [Número de RUC]
               </p>
-              <p className='text-muted-foreground mb-2'>
+              <p className='mb-2 text-muted-foreground'>
                 <strong>Email:</strong> privacy@zivahinternational.com
               </p>
               <p className='text-muted-foreground'>
@@ -69,11 +69,11 @@ export default function DataProtectionPage() {
 
           {/* Legal Framework */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>2. Marco Legal</h2>
-            <p className='text-muted-foreground mb-4 leading-relaxed'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>2. Marco Legal</h2>
+            <p className='mb-4 leading-relaxed text-muted-foreground'>
               Esta política de protección de datos se basa en las siguientes normativas:
             </p>
-            <ul className='text-muted-foreground list-inside list-disc space-y-2'>
+            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
               <li>
                 <strong>Reglamento (UE) 2016/679 (RGPD):</strong> Para residentes de la Unión
                 Europea
@@ -94,16 +94,16 @@ export default function DataProtectionPage() {
 
           {/* Data Processing Principles */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               3. Principios de Tratamiento de Datos
             </h2>
-            <p className='text-muted-foreground mb-4 leading-relaxed'>
+            <p className='mb-4 leading-relaxed text-muted-foreground'>
               Tratamos sus datos personales de acuerdo con los siguientes principios:
             </p>
             <div className='grid gap-6 md:grid-cols-2'>
-              <div className='bg-accent/10 rounded-lg p-4'>
+              <div className='rounded-lg bg-accent/10 p-4'>
                 <h4 className='text-dark-accent mb-2 font-semibold'>Transparencia Total</h4>
-                <p className='text-accent text-sm'>
+                <p className='text-sm text-accent'>
                   Tratamos sus datos de forma legal, leal y transparente
                 </p>
               </div>
@@ -152,31 +152,31 @@ export default function DataProtectionPage() {
 
           {/* Data Categories */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               4. Categorías de Datos Personales
             </h2>
 
-            <h3 className='text-foreground mb-3 text-xl font-medium'>
+            <h3 className='mb-3 text-xl font-medium text-foreground'>
               4.1 Datos de Identificación
             </h3>
-            <ul className='text-muted-foreground mb-4 list-inside list-disc space-y-2'>
+            <ul className='mb-4 list-inside list-disc space-y-2 text-muted-foreground'>
               <li>Nombre y apellidos</li>
               <li>Dirección de correo electrónico</li>
               <li>Número de teléfono</li>
               <li>Nombre de la empresa</li>
             </ul>
 
-            <h3 className='text-foreground mb-3 text-xl font-medium'>
+            <h3 className='mb-3 text-xl font-medium text-foreground'>
               4.2 Datos de Contacto y Ubicación
             </h3>
-            <ul className='text-muted-foreground mb-4 list-inside list-disc space-y-2'>
+            <ul className='mb-4 list-inside list-disc space-y-2 text-muted-foreground'>
               <li>Dirección postal</li>
               <li>País y ciudad de residencia</li>
               <li>Dirección IP</li>
             </ul>
 
-            <h3 className='text-foreground mb-3 text-xl font-medium'>4.3 Datos de Navegación</h3>
-            <ul className='text-muted-foreground list-inside list-disc space-y-2'>
+            <h3 className='mb-3 text-xl font-medium text-foreground'>4.3 Datos de Navegación</h3>
+            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
               <li>Páginas visitadas</li>
               <li>Tiempo de permanencia</li>
               <li>Preferencias de idioma</li>
@@ -186,13 +186,13 @@ export default function DataProtectionPage() {
 
           {/* Legal Basis */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               5. Base Legal para el Tratamiento
             </h2>
-            <p className='text-muted-foreground mb-4 leading-relaxed'>
+            <p className='mb-4 leading-relaxed text-muted-foreground'>
               Tratamos sus datos personales basándonos en las siguientes bases legales:
             </p>
-            <ul className='text-muted-foreground list-inside list-disc space-y-2'>
+            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
               <li>
                 <strong>Consentimiento:</strong> Para comunicaciones comerciales y cookies no
                 esenciales
@@ -213,13 +213,13 @@ export default function DataProtectionPage() {
 
           {/* Data Retention */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               6. Plazos de Conservación
             </h2>
-            <p className='text-muted-foreground mb-4 leading-relaxed'>
+            <p className='mb-4 leading-relaxed text-muted-foreground'>
               Conservamos sus datos personales durante los siguientes períodos:
             </p>
-            <ul className='text-muted-foreground list-inside list-disc space-y-2'>
+            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
               <li>
                 <strong>Datos de clientes activos:</strong> Durante la relación comercial y 5 años
                 después
@@ -238,31 +238,31 @@ export default function DataProtectionPage() {
 
           {/* Your Rights */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               7. Sus Derechos como Titular de Datos
             </h2>
 
             <div className='grid gap-6 md:grid-cols-2'>
               <div className='space-y-4'>
                 <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='text-foreground mb-2 font-semibold'>✅ Derecho de Acceso</h4>
-                  <p className='text-muted-foreground text-sm'>
+                  <h4 className='mb-2 font-semibold text-foreground'>✅ Derecho de Acceso</h4>
+                  <p className='text-sm text-muted-foreground'>
                     Solicitar copia de sus datos personales que tratamos
                   </p>
                 </div>
 
                 <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='text-foreground mb-2 font-semibold'>
+                  <h4 className='mb-2 font-semibold text-foreground'>
                     ✏️ Derecho de Rectificación
                   </h4>
-                  <p className='text-muted-foreground text-sm'>
+                  <p className='text-sm text-muted-foreground'>
                     Corregir datos inexactos o incompletos
                   </p>
                 </div>
 
                 <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='text-foreground mb-2 font-semibold'>🗑️ Derecho de Supresión</h4>
-                  <p className='text-muted-foreground text-sm'>
+                  <h4 className='mb-2 font-semibold text-foreground'>🗑️ Derecho de Supresión</h4>
+                  <p className='text-sm text-muted-foreground'>
                     Solicitar eliminación de sus datos (&quot;Derecho al olvido&quot;)
                   </p>
                 </div>
@@ -270,22 +270,22 @@ export default function DataProtectionPage() {
 
               <div className='space-y-4'>
                 <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='text-foreground mb-2 font-semibold'>📤 Derecho de Portabilidad</h4>
-                  <p className='text-muted-foreground text-sm'>
+                  <h4 className='mb-2 font-semibold text-foreground'>📤 Derecho de Portabilidad</h4>
+                  <p className='text-sm text-muted-foreground'>
                     Obtener sus datos en formato estructurado
                   </p>
                 </div>
 
                 <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='text-foreground mb-2 font-semibold'>🚫 Derecho de Oposición</h4>
-                  <p className='text-muted-foreground text-sm'>
+                  <h4 className='mb-2 font-semibold text-foreground'>🚫 Derecho de Oposición</h4>
+                  <p className='text-sm text-muted-foreground'>
                     Oponerse al tratamiento de sus datos
                   </p>
                 </div>
 
                 <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='text-foreground mb-2 font-semibold'>⏸️ Derecho de Limitación</h4>
-                  <p className='text-muted-foreground text-sm'>
+                  <h4 className='mb-2 font-semibold text-foreground'>⏸️ Derecho de Limitación</h4>
+                  <p className='text-sm text-muted-foreground'>
                     Limitar el tratamiento de sus datos
                   </p>
                 </div>
@@ -295,10 +295,10 @@ export default function DataProtectionPage() {
 
           {/* How to Exercise Rights */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               8. Cómo Ejercer sus Derechos
             </h2>
-            <p className='text-muted-foreground mb-4 leading-relaxed'>
+            <p className='mb-4 leading-relaxed text-muted-foreground'>
               Para ejercer cualquiera de sus derechos, puede contactarnos a través de:
             </p>
 
@@ -333,7 +333,7 @@ export default function DataProtectionPage() {
               </div>
             </div>
 
-            <p className='text-muted-foreground mt-4 leading-relaxed'>
+            <p className='mt-4 leading-relaxed text-muted-foreground'>
               Para verificar su identidad, podremos solicitarle información adicional. Todos los
               derechos se ejercen de forma gratuita, salvo que las solicitudes sean manifiestamente
               infundadas o excesivas.
@@ -342,11 +342,11 @@ export default function DataProtectionPage() {
 
           {/* Data Security */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>9. Medidas de Seguridad</h2>
-            <p className='text-muted-foreground mb-4 leading-relaxed'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>9. Medidas de Seguridad</h2>
+            <p className='mb-4 leading-relaxed text-muted-foreground'>
               Implementamos medidas técnicas y organizativas apropiadas para proteger sus datos:
             </p>
-            <ul className='text-muted-foreground list-inside list-disc space-y-2'>
+            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
               <li>
                 <strong>Encriptación:</strong> Datos en tránsito y en reposo
               </li>
@@ -367,10 +367,10 @@ export default function DataProtectionPage() {
 
           {/* International Data Transfers */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
               10. Transferencias Internacionales
             </h2>
-            <p className='text-muted-foreground leading-relaxed'>
+            <p className='leading-relaxed text-muted-foreground'>
               Sus datos pueden transferirse a países fuera del Espacio Económico Europeo (EEE). En
               estos casos, garantizamos que las transferencias cumplan con las garantías adecuadas
               establecidas por la legislación aplicable, incluyendo cláusulas contractuales tipo o
@@ -380,13 +380,13 @@ export default function DataProtectionPage() {
 
           {/* Complaints */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>11. Reclamaciones</h2>
-            <p className='text-muted-foreground mb-4 leading-relaxed'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>11. Reclamaciones</h2>
+            <p className='mb-4 leading-relaxed text-muted-foreground'>
               Si considera que el tratamiento de sus datos personales no cumple con la normativa
               aplicable, tiene derecho a presentar una reclamación ante la autoridad de control
               competente:
             </p>
-            <ul className='text-muted-foreground list-inside list-disc space-y-2'>
+            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
               <li>
                 <strong>En Ecuador:</strong> Agencia de Regulación y Control de las
                 Telecomunicaciones (ARCOTEL)
@@ -402,8 +402,8 @@ export default function DataProtectionPage() {
 
           {/* Updates */}
           <section>
-            <h2 className='text-foreground mb-4 text-2xl font-semibold'>12. Actualizaciones</h2>
-            <p className='text-muted-foreground leading-relaxed'>
+            <h2 className='mb-4 text-2xl font-semibold text-foreground'>12. Actualizaciones</h2>
+            <p className='leading-relaxed text-muted-foreground'>
               Esta política puede actualizarse para reflejar cambios en nuestras prácticas o en la
               legislación aplicable. Le informaremos sobre cambios significativos mediante un aviso
               destacado en nuestro sitio web o enviando una comunicación directa.
@@ -415,7 +415,7 @@ export default function DataProtectionPage() {
         <div className='mt-8 text-center'>
           <Link
             href='/'
-            className='text-accent dark:text-accent hover:text-accent/90 dark:hover:text-accent/90 inline-flex items-center transition-colors'
+            className='inline-flex items-center text-accent transition-colors hover:text-accent/90 dark:text-accent dark:hover:text-accent/90'
           >
             ← Volver al Inicio
           </Link>

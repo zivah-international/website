@@ -51,7 +51,8 @@ export default function LanguageSwitcher({
     else if (!storedLocale) {
       setStoredLocale(defaultLocale);
     }
-  }, []); // Only run on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Intentionally runs only on mount to apply stored preference once
 
   const handleLocaleChange = (newLocale: Locale) => {
     if (newLocale !== locale) {
@@ -90,7 +91,7 @@ export default function LanguageSwitcher({
         <select
           value={locale}
           onChange={e => handleLocaleChange(e.target.value as Locale)}
-          className='focus:ring-accent border-border bg-background text-foreground cursor-pointer appearance-none rounded-lg border px-4 py-2 pr-8 text-sm font-medium focus:border-transparent focus:ring-2 focus:outline-none'
+          className='cursor-pointer appearance-none rounded-lg border border-border bg-background px-4 py-2 pr-8 text-sm font-medium text-foreground focus:border-transparent focus:ring-2 focus:ring-accent focus:outline-none'
           aria-label='Select language'
         >
           {locales.map(loc => (
@@ -102,7 +103,7 @@ export default function LanguageSwitcher({
             </option>
           ))}
         </select>
-        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 right-0 flex items-center px-2'>
+        <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground'>
           <svg
             className='h-4 w-4 fill-current'
             viewBox='0 0 20 20'
@@ -119,7 +120,7 @@ export default function LanguageSwitcher({
     <select
       value={locale}
       onChange={e => handleLocaleChange(e.target.value as Locale)}
-      className={`focus:ring-accent border-border bg-background text-foreground cursor-pointer rounded-lg border px-3 py-1 text-sm focus:ring-2 focus:outline-none ${className}`}
+      className={`cursor-pointer rounded-lg border border-border bg-background px-3 py-1 text-sm text-foreground focus:ring-2 focus:ring-accent focus:outline-none ${className}`}
       aria-label='Select language'
     >
       {locales.map(loc => (

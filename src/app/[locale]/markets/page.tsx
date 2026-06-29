@@ -93,24 +93,24 @@ export default async function MarketsPage({ params }: Props) {
       <Navigation />
 
       {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='from-background to-muted/40 bg-linear-to-b pt-28 pb-14'>
+      <section className='bg-linear-to-b from-background to-muted/40 pt-28 pb-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <nav
-            className='text-muted-foreground mb-6 flex items-center gap-2 text-sm'
+            className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'
             aria-label='Breadcrumb'
           >
             <Link
               href='/'
-              className='hover:text-accent transition-colors'
+              className='transition-colors hover:text-accent'
             >
               Inicio
             </Link>
             <span>/</span>
-            <span className='text-foreground font-medium'>Mercados</span>
+            <span className='font-medium text-foreground'>Mercados</span>
           </nav>
 
-          <div className='border-secondary/30 flex items-center gap-4 border-l-4 pl-5'>
-            <div className='bg-secondary/10 text-secondary hidden shrink-0 rounded-xl p-3 sm:block'>
+          <div className='flex items-center gap-4 border-l-4 border-secondary/30 pl-5'>
+            <div className='hidden shrink-0 rounded-xl bg-secondary/10 p-3 text-secondary sm:block'>
               <svg
                 className='h-7 w-7'
                 fill='none'
@@ -126,20 +126,20 @@ export default async function MarketsPage({ params }: Props) {
               </svg>
             </div>
             <div>
-              <p className='text-secondary mb-1 text-xs font-semibold tracking-widest uppercase'>
+              <p className='mb-1 text-xs font-semibold tracking-widest text-secondary uppercase'>
                 {t('badge')}
               </p>
-              <h1 className='text-foreground text-3xl font-bold sm:text-4xl'>{t('title')}</h1>
-              <p className='text-muted-foreground mt-1 max-w-2xl text-base'>{t('description')}</p>
+              <h1 className='text-3xl font-bold text-foreground sm:text-4xl'>{t('title')}</h1>
+              <p className='mt-1 max-w-2xl text-base text-muted-foreground'>{t('description')}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── Stats strip ───────────────────────────────────────────────────── */}
-      <div className='bg-card border-border/40 border-b'>
+      <div className='border-b border-border/40 bg-card'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='divide-border/30 grid grid-cols-3 divide-x py-1'>
+          <div className='grid grid-cols-3 divide-x divide-border/30 py-1'>
             {[
               { value: t('statValues.countriesServed'), label: t('stats.countriesServed') },
               { value: t('statValues.yearsExperience'), label: t('stats.yearsExperience') },
@@ -149,8 +149,8 @@ export default async function MarketsPage({ params }: Props) {
                 key={i}
                 className='py-5 text-center'
               >
-                <div className='text-accent text-2xl font-black sm:text-3xl'>{stat.value}</div>
-                <div className='text-muted-foreground mt-1 text-xs font-medium'>{stat.label}</div>
+                <div className='text-2xl font-black text-accent sm:text-3xl'>{stat.value}</div>
+                <div className='mt-1 text-xs font-medium text-muted-foreground'>{stat.label}</div>
               </div>
             ))}
           </div>
@@ -161,10 +161,10 @@ export default async function MarketsPage({ params }: Props) {
       <section className='bg-background py-16'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-12 text-center'>
-            <h2 className='text-foreground mb-3 text-3xl font-bold sm:text-4xl'>
+            <h2 className='mb-3 text-3xl font-bold text-foreground sm:text-4xl'>
               Destinos de Exportación
             </h2>
-            <p className='text-muted-foreground text-base'>
+            <p className='text-base text-muted-foreground'>
               Exportamos activamente a 5+ países y expandiéndonos continuamente.
             </p>
           </div>
@@ -173,7 +173,7 @@ export default async function MarketsPage({ params }: Props) {
             {MARKETS.map(market => (
               <div
                 key={market.country}
-                className={`bg-card rounded-2xl border p-6 shadow-sm transition-all hover:shadow-md ${
+                className={`rounded-2xl border bg-card p-6 shadow-sm transition-all hover:shadow-md ${
                   market.active
                     ? 'border-primary/20 hover:border-primary/40'
                     : 'border-border/50 opacity-75'
@@ -182,18 +182,18 @@ export default async function MarketsPage({ params }: Props) {
                 <div className='mb-3 flex items-start justify-between'>
                   <span className='text-4xl'>{market.flag}</span>
                   {market.active ? (
-                    <span className='bg-accent/10 text-accent rounded-full px-2.5 py-0.5 text-xs font-semibold'>
+                    <span className='rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent'>
                       Activo
                     </span>
                   ) : (
-                    <span className='text-muted-foreground bg-muted rounded-full px-2.5 py-0.5 text-xs font-semibold'>
+                    <span className='rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground'>
                       Expansión
                     </span>
                   )}
                 </div>
-                <h3 className='text-foreground mb-0.5 text-lg font-bold'>{market.country}</h3>
-                <p className='text-accent mb-3 text-xs font-medium'>{market.city}</p>
-                <p className='text-muted-foreground text-sm leading-relaxed'>{market.desc}</p>
+                <h3 className='mb-0.5 text-lg font-bold text-foreground'>{market.country}</h3>
+                <p className='mb-3 text-xs font-medium text-accent'>{market.city}</p>
+                <p className='text-sm leading-relaxed text-muted-foreground'>{market.desc}</p>
               </div>
             ))}
           </div>
@@ -204,10 +204,10 @@ export default async function MarketsPage({ params }: Props) {
       <section className='bg-muted/30 py-16'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-12 text-center'>
-            <h2 className='text-foreground mb-3 text-3xl font-bold sm:text-4xl'>
+            <h2 className='mb-3 text-3xl font-bold text-foreground sm:text-4xl'>
               ¿Por qué elegir ZIVAH?
             </h2>
-            <p className='text-muted-foreground text-base'>
+            <p className='text-base text-muted-foreground'>
               Ventajas competitivas para importadores exigentes.
             </p>
           </div>
@@ -216,11 +216,11 @@ export default async function MarketsPage({ params }: Props) {
             {ADVANTAGES.map((adv, i) => (
               <div
                 key={i}
-                className='bg-card rounded-2xl border p-6 shadow-sm transition-all hover:shadow-md'
+                className='rounded-2xl border bg-card p-6 shadow-sm transition-all hover:shadow-md'
               >
                 <div className='mb-4 text-3xl'>{adv.icon}</div>
-                <h3 className='text-foreground mb-2 text-base font-bold'>{adv.title}</h3>
-                <p className='text-muted-foreground text-sm leading-relaxed'>{adv.desc}</p>
+                <h3 className='mb-2 text-base font-bold text-foreground'>{adv.title}</h3>
+                <p className='text-sm leading-relaxed text-muted-foreground'>{adv.desc}</p>
               </div>
             ))}
           </div>
@@ -238,7 +238,7 @@ export default async function MarketsPage({ params }: Props) {
           <div className='flex flex-col items-center gap-3 sm:flex-row sm:justify-center'>
             <Link
               href='/quote'
-              className='text-primary inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold shadow-md transition-all hover:bg-white/90'
+              className='inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-primary shadow-md transition-all hover:bg-white/90'
               data-track='begin_checkout'
               data-track-label='solicitar_cotizacion_markets'
               data-track-category='cta'

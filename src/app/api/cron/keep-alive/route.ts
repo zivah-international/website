@@ -23,6 +23,6 @@ export async function GET() {
     return NextResponse.json({ error: error.message, timestamp }, { status: 500 });
   }
 
-  console.log('✅ Database keep-alive check successful', { timestamp, recordCount: count });
+  console.warn('✅ Database keep-alive check successful', { timestamp, recordCount: count });
   return NextResponse.json({ ok: true, timestamp, recordCount: count });
 }
