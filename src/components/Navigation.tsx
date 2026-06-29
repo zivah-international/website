@@ -159,8 +159,8 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
   // Use consistent className order to prevent hydration mismatch
   const headerClassName = `fixed top-0 w-full z-50 transition-all duration-300 ${
     mounted && isScrolled
-      ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg'
-      : 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm'
+      ? 'bg-background/95 backdrop-blur-md shadow-lg'
+      : 'bg-background/90 backdrop-blur-sm'
   }`;
 
   return (
@@ -204,7 +204,7 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
                   {item.label}
                   <div
                     className={`absolute bottom-0 left-1/2 h-0.5 w-4/5 -translate-x-1/2 transform rounded-full transition-all duration-300 ${
-                      activeSection === item.id ? 'bg-accent' : 'bg-transparent'
+                      activeSection === item.id ? 'bg-primary' : 'bg-transparent'
                     }`}
                   />
                 </Link>
@@ -225,7 +225,7 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
             {/* CTA Button */}
             <Button
               asChild
-              variant='accent'
+              variant='default'
               size='default'
               className='hidden items-center gap-2 shadow-md hover:shadow-lg md:inline-flex'
             >
@@ -287,7 +287,7 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
           }`}
           suppressHydrationWarning
         >
-          <div className='max-h-[70vh] overflow-y-auto rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800'>
+          <div className='border-border bg-background max-h-[70vh] overflow-y-auto rounded-xl border p-4 shadow-xl'>
             {/* Mobile Navigation Items */}
             <div className='space-y-2'>
               {navigationItems.map(item => (
@@ -310,11 +310,9 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
             </div>
 
             {/* Mobile Actions */}
-            <div className='mt-6 border-t border-gray-200 pt-4 dark:border-gray-700'>
+            <div className='border-border mt-6 border-t pt-4'>
               <div className='mb-4 flex items-center justify-between'>
-                <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                  {t('language')}
-                </span>
+                <span className='text-foreground text-sm font-medium'>{t('language')}</span>
                 <LanguageSwitcher />
               </div>
 
@@ -334,29 +332,29 @@ export default function Navigation({ onScrollToSection: _onScrollToSection }: Na
             </div>
 
             {/* Quick Links */}
-            <div className='mt-6 border-t border-gray-200 pt-4 dark:border-gray-700'>
+            <div className='border-border mt-6 border-t pt-4'>
               <div className='grid grid-cols-2 gap-3'>
                 <Link
                   href='/legal/privacy-policy'
-                  className='text-sm text-gray-600 transition-colors hover:text-green-600 dark:text-gray-400'
+                  className='text-muted-foreground hover:text-accent text-sm transition-colors'
                 >
                   {t('privacy')}
                 </Link>
                 <Link
                   href='/legal/terms-of-service'
-                  className='text-sm text-gray-600 transition-colors hover:text-green-600 dark:text-gray-400'
+                  className='text-muted-foreground hover:text-accent text-sm transition-colors'
                 >
                   {t('terms')}
                 </Link>
                 <Link
                   href='/legal/cookie-policy'
-                  className='text-sm text-gray-600 transition-colors hover:text-green-600 dark:text-gray-400'
+                  className='text-muted-foreground hover:text-accent text-sm transition-colors'
                 >
                   {t('cookies')}
                 </Link>
                 <Link
                   href='/legal/data-protection'
-                  className='text-sm text-gray-600 transition-colors hover:text-green-600 dark:text-gray-400'
+                  className='text-muted-foreground hover:text-accent text-sm transition-colors'
                 >
                   {t('dataProtection')}
                 </Link>

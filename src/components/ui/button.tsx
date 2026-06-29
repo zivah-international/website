@@ -15,16 +15,16 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        accent: 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600',
+        accent: 'bg-accent text-accent-foreground hover:bg-accent/90',
         glass: 'border border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/20',
         icon: 'hover:bg-accent hover:text-accent-foreground rounded-full',
         nav: 'text-foreground/70 hover:text-foreground hover:bg-accent/50 transition-all',
-        'nav-active': 'text-foreground bg-accent font-semibold',
+        'nav-active': 'text-primary bg-primary/8 font-semibold',
         'nav-mobile': 'text-foreground hover:bg-accent w-full justify-start',
         'cta-primary':
-          'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-xl',
+          'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg transition-all hover:shadow-xl',
         'cta-secondary':
-          'bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg transition-all hover:from-gray-700 hover:to-gray-800 hover:shadow-xl',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-lg transition-all hover:shadow-xl',
       },
       size: {
         default: 'h-10 px-4 py-2',

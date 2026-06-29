@@ -25,7 +25,7 @@ export default async function ContactPage({ params }: Props) {
       <Navigation />
 
       {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='from-background to-muted/30 bg-linear-to-b pt-28 pb-12'>
+      <section className='from-background to-muted/40 bg-linear-to-b pt-28 pb-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <nav
             className='text-muted-foreground mb-6 flex items-center gap-2 text-sm'
@@ -40,10 +40,10 @@ export default async function ContactPage({ params }: Props) {
             <span>/</span>
             <span className='text-foreground font-medium'>{t('title')}</span>
           </nav>
-          <div className='flex items-center gap-3'>
-            <div className='bg-primary/10 text-primary rounded-full p-3'>
+          <div className='border-primary/30 flex items-center gap-4 border-l-4 pl-5'>
+            <div className='bg-primary/10 text-primary hidden shrink-0 rounded-xl p-3 sm:block'>
               <svg
-                className='h-6 w-6'
+                className='h-7 w-7'
                 fill='none'
                 viewBox='0 0 24 24'
                 stroke='currentColor'
@@ -57,6 +57,9 @@ export default async function ContactPage({ params }: Props) {
               </svg>
             </div>
             <div>
+              <p className='text-primary mb-1 text-xs font-semibold tracking-widest uppercase'>
+                Contacto
+              </p>
               <h1 className='text-foreground text-3xl font-bold sm:text-4xl'>{t('title')}</h1>
               <p className='text-muted-foreground mt-1 text-base'>{t('description')}</p>
             </div>

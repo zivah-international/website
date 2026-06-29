@@ -17,13 +17,13 @@ export default function ThemeToggle() {
   if (!mounted) {
     return (
       <Button
-        variant='glass'
+        variant='ghost'
         size='icon'
         disabled
-        className='group ring-offset-background focus-visible:ring-ring relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gray-200 text-sm font-medium whitespace-nowrap transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-800'
+        className='relative overflow-hidden'
       >
         <div className='relative h-6 w-6'>
-          <div className='h-6 w-6 animate-pulse rounded bg-gray-300' />
+          <div className='bg-muted h-6 w-6 animate-pulse rounded' />
         </div>
       </Button>
     );
@@ -38,9 +38,9 @@ export default function ThemeToggle() {
       className='group border-border/50 bg-background/50 hover:bg-accent/10 hover:border-accent/30 relative overflow-hidden backdrop-blur-sm transition-all duration-300'
     >
       <div className='relative h-6 w-6'>
-        {/* Sun Icon */}
+        {/* Sun Icon — warm amber, reads naturally as "day" */}
         <svg
-          className={`absolute inset-0 h-6 w-6 text-yellow-500 transition-all duration-500 group-hover:text-yellow-400 ${
+          className={`absolute inset-0 h-6 w-6 text-amber-500 transition-all duration-500 group-hover:text-amber-400 ${
             theme === 'dark' ? 'scale-0 rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'
           }`}
           fill='currentColor'
@@ -53,9 +53,9 @@ export default function ThemeToggle() {
           />
         </svg>
 
-        {/* Moon Icon */}
+        {/* Moon Icon — secondary brand blue for dark mode */}
         <svg
-          className={`absolute inset-0 h-6 w-6 text-blue-400 transition-all duration-500 group-hover:text-blue-300 ${
+          className={`text-secondary group-hover:text-secondary/80 absolute inset-0 h-6 w-6 transition-all duration-500 ${
             theme === 'light' ? 'scale-0 -rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'
           }`}
           fill='currentColor'

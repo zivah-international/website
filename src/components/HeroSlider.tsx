@@ -54,8 +54,8 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
   const slide = slides[current];
 
   return (
-    <section className='relative h-[92vh] min-h-150 w-full overflow-hidden'>
-      {/* Background Images — preload all, show current */}
+    <section className='relative h-[75vh] min-h-[520px] w-full overflow-hidden'>
+      {/* Background Images */}
       {slides.map((s, i) => (
         <div
           key={i}
@@ -74,9 +74,9 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
         </div>
       ))}
 
-      {/* Gradient overlay — lighter for a daylight feel */}
-      <div className='absolute inset-0 bg-linear-to-b from-black/45 via-black/25 to-black/55' />
-      <div className='absolute inset-0 bg-linear-to-r from-black/35 to-transparent' />
+      {/* Gradient overlay — blue-tinted for ocean feel */}
+      <div className='absolute inset-0 bg-linear-to-r from-[#0a2744]/75 via-[#0a2744]/40 to-[#0a3d5c]/25' />
+      <div className='absolute inset-0 bg-linear-to-b from-transparent via-transparent to-[#0a2744]/40' />
 
       {/* Content */}
       <div className='relative flex h-full items-center'>
@@ -93,12 +93,9 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
 
             {/* Headline */}
             <h1
-              className={`mb-4 text-4xl leading-tight font-black text-white drop-shadow-lg transition-all duration-500 sm:text-5xl lg:text-7xl ${isTransitioning ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'}`}
+              className={`mb-4 text-4xl leading-tight font-black text-white drop-shadow-lg transition-all duration-500 sm:text-5xl lg:text-6xl ${isTransitioning ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'}`}
             >
-              {slide.title}{' '}
-              <span className='from-accent to-primary bg-linear-to-r bg-clip-text text-transparent'>
-                {slide.titleHighlight}
-              </span>
+              {slide.title} <span className='text-[#7dd3fc]'>{slide.titleHighlight}</span>
             </h1>
 
             {/* Subtitle */}
@@ -114,7 +111,7 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
             >
               <Link
                 href={`/${locale}${slide.ctaHref}`}
-                className='bg-accent hover:bg-accent/90 inline-flex items-center gap-2 rounded-xl px-7 py-4 text-base font-bold text-white shadow-lg shadow-black/30 transition-all hover:-translate-y-0.5 hover:shadow-xl'
+                className='bg-accent hover:bg-accent/90 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-base font-bold text-white shadow-lg shadow-black/30 transition-all hover:-translate-y-0.5 hover:shadow-xl'
               >
                 {slide.cta}
                 <svg

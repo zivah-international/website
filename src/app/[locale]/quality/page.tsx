@@ -21,32 +21,32 @@ const CERTS = [
     code: 'BAP',
     name: 'Best Aquaculture Practices',
     descKey: 'bap' as const,
-    color: 'border-blue-300 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-700',
-    badge: 'bg-blue-600 text-white',
+    color: 'border-secondary/30 bg-secondary/5',
+    badge: 'bg-secondary text-secondary-foreground',
     icon: '🦐',
   },
   {
     code: 'HACCP',
     name: 'Hazard Analysis Critical Control Points',
     descKey: 'haccp' as const,
-    color: 'border-green-300 bg-green-50 dark:bg-green-950/30 dark:border-green-700',
-    badge: 'bg-green-600 text-white',
+    color: 'border-accent/30 bg-accent/5',
+    badge: 'bg-accent text-accent-foreground',
     icon: '🔬',
   },
   {
     code: 'BRC',
     name: 'British Retail Consortium',
     descKey: 'brc' as const,
-    color: 'border-purple-300 bg-purple-50 dark:bg-purple-950/30 dark:border-purple-700',
-    badge: 'bg-purple-600 text-white',
+    color: 'border-primary/30 bg-primary/5',
+    badge: 'bg-primary text-primary-foreground',
     icon: '🏷️',
   },
   {
     code: 'GlobalGAP',
     name: 'Global Good Agricultural Practices',
     descKey: 'globalGap' as const,
-    color: 'border-amber-300 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-700',
-    badge: 'bg-amber-600 text-white',
+    color: 'border-accent/20 bg-accent/8',
+    badge: 'bg-accent/80 text-accent-foreground',
     icon: '🌱',
   },
 ];
@@ -83,7 +83,7 @@ export default async function QualityPage({ params }: Props) {
       <Navigation />
 
       {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='from-background to-muted/30 bg-linear-to-b pt-28 pb-12'>
+      <section className='from-background to-muted/40 bg-linear-to-b pt-28 pb-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <nav
             className='text-muted-foreground mb-6 flex items-center gap-2 text-sm'
@@ -99,10 +99,10 @@ export default async function QualityPage({ params }: Props) {
             <span className='text-foreground font-medium'>Calidad y Certificaciones</span>
           </nav>
 
-          <div className='flex items-center gap-3'>
-            <div className='bg-primary/10 text-primary rounded-full p-3'>
+          <div className='border-primary/30 flex items-center gap-4 border-l-4 pl-5'>
+            <div className='bg-primary/10 text-primary hidden shrink-0 rounded-xl p-3 sm:block'>
               <svg
-                className='h-6 w-6'
+                className='h-7 w-7'
                 fill='none'
                 viewBox='0 0 24 24'
                 stroke='currentColor'
@@ -116,6 +116,9 @@ export default async function QualityPage({ params }: Props) {
               </svg>
             </div>
             <div>
+              <p className='text-primary mb-1 text-xs font-semibold tracking-widest uppercase'>
+                Calidad y Certificaciones
+              </p>
               <h1 className='text-foreground text-3xl font-bold sm:text-4xl'>{t('title')}</h1>
               <p className='text-muted-foreground mt-1 max-w-2xl text-base'>{t('description')}</p>
             </div>
@@ -206,8 +209,20 @@ export default async function QualityPage({ params }: Props) {
                 <h3 className='text-foreground mb-1 text-base font-bold'>{step.title}</h3>
                 <p className='text-muted-foreground text-sm leading-relaxed'>{step.desc}</p>
                 {i < PROCESS_STEPS.length - 1 && (
-                  <div className='text-muted-foreground/30 absolute top-1/2 -right-4 hidden -translate-y-1/2 text-xl lg:block'>
-                    →
+                  <div className='text-primary/30 absolute top-1/2 -right-4 hidden -translate-y-1/2 lg:block'>
+                    <svg
+                      className='h-6 w-6'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M9 5l7 7-7 7'
+                      />
+                    </svg>
                   </div>
                 )}
               </div>

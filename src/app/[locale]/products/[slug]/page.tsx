@@ -83,20 +83,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const ficha = getFichaTecnica(product.slug);
 
   const certBadgeColors: Record<string, string> = {
-    HACCP: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
-    BRC: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
-    BAP: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300',
-    GlobalGAP: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300',
-    Orgánico: 'bg-lime-100 text-lime-800 dark:bg-lime-900/30 dark:text-lime-300',
-    'Comercio Justo': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
+    HACCP: 'bg-secondary/10 text-secondary',
+    BRC: 'bg-accent/10 text-accent',
+    BAP: 'bg-secondary/15 text-secondary',
+    GlobalGAP: 'bg-accent/15 text-accent',
+    Orgánico: 'bg-accent/20 text-accent',
+    'Comercio Justo': 'bg-primary/10 text-primary',
   };
 
   const quoteUrl = `/${locale ?? 'es'}/#quote`;
 
   return (
-    <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
+    <div className='bg-background min-h-screen'>
       {/* Sticky CTA bar for mobile */}
-      <div className='fixed right-0 bottom-0 left-0 z-40 border-t border-gray-200 bg-white p-3 shadow-lg sm:hidden dark:border-gray-700 dark:bg-gray-800'>
+      <div className='border-border bg-background fixed right-0 bottom-0 left-0 z-40 border-t p-3 shadow-lg sm:hidden'>
         <Link
           href={quoteUrl}
           data-track='begin_checkout'
@@ -119,7 +119,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           className='mb-8'
           aria-label='Breadcrumb'
         >
-          <ol className='flex flex-wrap items-center gap-1 text-sm text-gray-500 dark:text-gray-400'>
+          <ol className='text-muted-foreground flex flex-wrap items-center gap-1 text-sm'>
             <li>
               <Link
                 href={`/${locale ?? 'es'}`}
@@ -151,12 +151,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </>
             )}
             <li aria-hidden='true'>/</li>
-            <li className='font-medium text-gray-900 dark:text-white'>{product.name}</li>
+            <li className='text-foreground font-medium'>{product.name}</li>
           </ol>
         </nav>
 
         {/* Product Header */}
-        <div className='mb-8 overflow-hidden rounded-2xl bg-white shadow-lg dark:bg-gray-800'>
+        <div className='bg-card mb-8 overflow-hidden rounded-2xl shadow-lg'>
           <div className='grid gap-0 md:grid-cols-2'>
             {/* Product Image */}
             <div className='bg-muted/30 relative flex min-h-64 items-center justify-center p-8 md:min-h-80'>
@@ -176,7 +176,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               )}
               {product.isFeatured && (
-                <div className='absolute top-4 left-4 rounded-full bg-amber-400 px-3 py-1 text-xs font-bold text-amber-900 shadow'>
+                <div className='bg-primary/80 text-primary-foreground absolute top-4 left-4 rounded-full px-3 py-1 text-xs font-bold shadow'>
                   ⭐ Destacado
                 </div>
               )}
@@ -191,11 +191,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     {product.category.name}
                   </p>
                 )}
-                <h1 className='mb-3 text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white'>
+                <h1 className='text-foreground mb-3 text-2xl font-bold sm:text-3xl'>
                   {product.name}
                 </h1>
                 {product.shortDescription && (
-                  <p className='text-base leading-relaxed text-gray-600 dark:text-gray-300'>
+                  <p className='text-muted-foreground text-base leading-relaxed'>
                     {product.shortDescription}
                   </p>
                 )}
@@ -207,7 +207,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   {product.certifications.map((cert, i) => (
                     <span
                       key={i}
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${certBadgeColors[cert] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'}`}
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${certBadgeColors[cert] ?? 'bg-muted text-muted-foreground'}`}
                     >
                       ✓ {cert}
                     </span>
@@ -216,47 +216,45 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
 
               {/* Commercial Info */}
-              <div className='rounded-xl bg-gray-50 p-5 dark:bg-gray-700/50'>
+              <div className='bg-muted/50 rounded-xl p-5'>
                 <div className='mb-3 flex items-center justify-between'>
-                  <span className='text-sm text-gray-500 dark:text-gray-400'>Precio base FOB:</span>
+                  <span className='text-muted-foreground text-sm'>Precio base FOB:</span>
                   {product.basePrice ? (
                     <span className='text-accent text-2xl font-bold'>
                       ${product.basePrice.toFixed(2)}{' '}
-                      <span className='text-sm font-normal text-gray-500'>{product.priceUnit}</span>
+                      <span className='text-muted-foreground text-sm font-normal'>
+                        {product.priceUnit}
+                      </span>
                     </span>
                   ) : (
-                    <span className='text-sm font-medium text-gray-600 dark:text-gray-300'>
+                    <span className='text-muted-foreground text-sm font-medium'>
                       Consultar cotización
                     </span>
                   )}
                 </div>
                 <div className='grid grid-cols-2 gap-3 text-sm'>
                   <div>
-                    <span className='block text-gray-500 dark:text-gray-400'>Pedido mínimo:</span>
-                    <span className='font-semibold text-gray-900 dark:text-white'>
+                    <span className='text-muted-foreground block'>Pedido mínimo:</span>
+                    <span className='text-foreground font-semibold'>
                       {product.minOrderQty
                         ? `${product.minOrderQty.toLocaleString()} ${product.priceUnit?.split('/')[1] ?? ''}`
                         : 'A convenir'}
                     </span>
                   </div>
                   <div>
-                    <span className='block text-gray-500 dark:text-gray-400'>Origen:</span>
-                    <span className='font-semibold text-gray-900 dark:text-white'>
-                      🇪🇨 {product.origin}
-                    </span>
+                    <span className='text-muted-foreground block'>Origen:</span>
+                    <span className='text-foreground font-semibold'>🇪🇨 {product.origin}</span>
                   </div>
                   {product.harvestSeason && (
                     <div>
-                      <span className='block text-gray-500 dark:text-gray-400'>Temporada:</span>
-                      <span className='font-semibold text-gray-900 dark:text-white'>
-                        {product.harvestSeason}
-                      </span>
+                      <span className='text-muted-foreground block'>Temporada:</span>
+                      <span className='text-foreground font-semibold'>{product.harvestSeason}</span>
                     </div>
                   )}
                   {product.sku && (
                     <div>
-                      <span className='block text-gray-500 dark:text-gray-400'>SKU:</span>
-                      <span className='font-mono text-xs font-semibold text-gray-900 dark:text-white'>
+                      <span className='text-muted-foreground block'>SKU:</span>
+                      <span className='text-foreground font-mono text-xs font-semibold'>
                         {product.sku}
                       </span>
                     </div>
@@ -309,7 +307,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </Link>
               )}
 
-              <p className='text-xs text-gray-400 dark:text-gray-500'>
+              <p className='text-muted-foreground/60 text-xs'>
                 * Precio referencial FOB Ecuador. El precio final puede variar según Incoterms,
                 volumen y destino.
               </p>
@@ -323,34 +321,28 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className='space-y-8 lg:col-span-2'>
             {/* Full Description */}
             {product.description && (
-              <div className='rounded-2xl bg-white p-8 shadow-sm dark:bg-gray-800'>
-                <h2 className='mb-4 text-xl font-bold text-gray-900 dark:text-white'>
-                  Descripción del Producto
-                </h2>
-                <p className='leading-relaxed text-gray-700 dark:text-gray-300'>
-                  {product.description}
-                </p>
+              <div className='bg-card rounded-2xl p-8 shadow-sm'>
+                <h2 className='text-foreground mb-4 text-xl font-bold'>Descripción del Producto</h2>
+                <p className='text-muted-foreground leading-relaxed'>{product.description}</p>
               </div>
             )}
 
             {/* Technical Specifications */}
             {product.specifications && Object.keys(product.specifications).length > 0 && (
-              <div className='rounded-2xl bg-white p-8 shadow-sm dark:bg-gray-800'>
-                <h2 className='mb-6 text-xl font-bold text-gray-900 dark:text-white'>
+              <div className='bg-card rounded-2xl p-8 shadow-sm'>
+                <h2 className='text-foreground mb-6 text-xl font-bold'>
                   🔬 Especificaciones Técnicas
                 </h2>
-                <div className='divide-y divide-gray-100 dark:divide-gray-700'>
+                <div className='divide-border divide-y'>
                   {Object.entries(product.specifications).map(([key, value]) => (
                     <div
                       key={key}
                       className='flex items-start justify-between gap-4 py-3'
                     >
-                      <span className='min-w-0 shrink-0 font-medium text-gray-900 capitalize dark:text-white'>
+                      <span className='text-foreground min-w-0 shrink-0 font-medium capitalize'>
                         {key.replace(/([A-Z])/g, ' $1').trim()}
                       </span>
-                      <span className='text-right text-gray-600 dark:text-gray-400'>
-                        {value as string}
-                      </span>
+                      <span className='text-muted-foreground text-right'>{value as string}</span>
                     </div>
                   ))}
                 </div>
@@ -359,18 +351,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Nutritional / Additional Info */}
             {product.nutritionalInfo && Object.keys(product.nutritionalInfo).length > 0 && (
-              <div className='rounded-2xl bg-white p-8 shadow-sm dark:bg-gray-800'>
-                <h2 className='mb-6 text-xl font-bold text-gray-900 dark:text-white'>
+              <div className='bg-card rounded-2xl p-8 shadow-sm'>
+                <h2 className='text-foreground mb-6 text-xl font-bold'>
                   📊 Información Nutricional
                 </h2>
                 <div className='grid grid-cols-2 gap-3 sm:grid-cols-3'>
                   {Object.entries(product.nutritionalInfo).map(([key, value]) => (
                     <div
                       key={key}
-                      className='rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-700/40'
+                      className='bg-muted/40 rounded-xl p-3 text-center'
                     >
                       <div className='text-accent text-sm font-bold'>{value as string}</div>
-                      <div className='mt-1 text-xs text-gray-500 capitalize dark:text-gray-400'>
+                      <div className='text-muted-foreground mt-1 text-xs capitalize'>
                         {key.replace(/([A-Z])/g, ' $1').trim()}
                       </div>
                     </div>
@@ -380,11 +372,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             )}
 
             {/* Trust Signals */}
-            <div className='rounded-2xl border border-green-200 bg-green-50 p-8 dark:border-green-800/50 dark:bg-green-900/10'>
-              <h2 className='mb-4 text-xl font-bold text-green-800 dark:text-green-300'>
-                ✅ Por qué comprar con ZIVAH
-              </h2>
-              <ul className='space-y-3 text-sm text-green-700 dark:text-green-400'>
+            <div className='border-accent/20 bg-accent/5 rounded-2xl border p-8'>
+              <h2 className='text-accent mb-4 text-xl font-bold'>✅ Por qué comprar con ZIVAH</h2>
+              <ul className='text-accent/80 space-y-3 text-sm'>
                 <li className='flex items-start gap-2'>
                   <span className='mt-0.5 shrink-0'>🏆</span>
                   <span>Certificaciones HACCP, BRC, BAP y GlobalGAP vigentes en cada embarque</span>
@@ -415,11 +405,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
           {/* Sidebar */}
           <div className='space-y-6'>
             {/* Quote CTA Card */}
-            <div className='rounded-2xl bg-white p-6 shadow-sm dark:bg-gray-800'>
-              <h3 className='mb-1 text-lg font-bold text-gray-900 dark:text-white'>
+            <div className='bg-card rounded-2xl p-6 shadow-sm'>
+              <h3 className='text-foreground mb-1 text-lg font-bold'>
                 ¿Interesado en este producto?
               </h3>
-              <p className='mb-5 text-sm text-gray-500 dark:text-gray-400'>
+              <p className='text-muted-foreground mb-5 text-sm'>
                 Recibe una cotización FOB con especificaciones técnicas y documentación de
                 exportación en menos de 24 horas.
               </p>
@@ -494,15 +484,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Certifications display */}
             {product.certifications && product.certifications.length > 0 && (
-              <div className='rounded-2xl bg-white p-6 shadow-sm dark:bg-gray-800'>
-                <h3 className='mb-4 text-base font-bold text-gray-900 dark:text-white'>
-                  Certificaciones
-                </h3>
+              <div className='bg-card rounded-2xl p-6 shadow-sm'>
+                <h3 className='text-foreground mb-4 text-base font-bold'>Certificaciones</h3>
                 <div className='flex flex-wrap gap-2'>
                   {product.certifications.map((cert, i) => (
                     <span
                       key={i}
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${certBadgeColors[cert] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'}`}
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${certBadgeColors[cert] ?? 'bg-muted text-muted-foreground'}`}
                     >
                       ✓ {cert}
                     </span>

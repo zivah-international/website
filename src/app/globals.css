@@ -2,54 +2,64 @@
 
 /* Zivah International Brand System - shadcn/ui OKLCH Variables */
 :root {
-  --radius: 0.625rem;
+  /* Border radius — refined for premium B2B feel */
+  --radius: 0.75rem;
 
-  /* Base colors - Slate theme */
+  /* ─── Surface colors ─────────────────────────────────────────────────── */
   --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.13 0.035 262);
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
+  --card: oklch(0.99 0.002 247);
+  --card-foreground: oklch(0.13 0.035 262);
 
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
+  --popover-foreground: oklch(0.13 0.035 262);
 
-  /* Zivah Brand Colors - OKLCH format */
-  --primary: oklch(0.65 0.25 25); /* Orange - #ff6231 */
-  --primary-foreground: oklch(0.984 0.003 247.858);
+  /* ─── Zivah Brand Colors ─────────────────────────────────────────────
+   *
+   *  primary  → Deep Ocean Blue  #1a5fa8  — sea, trust, aquaculture
+   *  secondary → Teal-Cyan       #0d8fa0  — water, freshness, Ecuador coast
+   *  accent   → Coral-Orange     #e8541e  — Ecuador sun, energy, warmth CTA
+   *
+   * Ocean blue primary makes immediate visual sense for a seafood &
+   * aquaculture export brand. Orange becomes the CTA accent — high
+   * contrast on blue, draws the eye to conversion actions.
+   * ──────────────────────────────────────────────────────────────────── */
+  --primary: oklch(0.42 0.16 255); /* Deep Ocean Blue ≈ #1a5fa8 */
+  --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.35 0.2 250); /* Blue - #055aad */
-  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --secondary: oklch(0.54 0.12 210); /* Teal-Cyan       ≈ #0d8fa0 */
+  --secondary-foreground: oklch(1 0 0);
 
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
+  --muted: oklch(0.965 0.006 248);
+  --muted-foreground: oklch(0.5 0.04 258);
 
-  --accent: oklch(0.4 0.15 145); /* Green - #0d8c49 */
-  --accent-foreground: oklch(0.984 0.003 247.858);
+  --accent: oklch(0.6 0.22 30); /* Coral-Orange    ≈ #e8541e — CTA color */
+  --accent-foreground: oklch(1 0 0);
 
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
+  --destructive-foreground: oklch(1 0 0);
 
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.65 0.25 25);
+  --border: oklch(0.92 0.01 256);
+  --input: oklch(0.92 0.01 256);
+  --ring: oklch(0.42 0.16 255);
 
-  /* Chart colors */
-  --chart-1: oklch(0.65 0.25 25); /* Orange */
-  --chart-2: oklch(0.4 0.15 145); /* Green */
-  --chart-3: oklch(0.35 0.2 250); /* Blue */
-  --chart-4: oklch(0.75 0.2 85); /* Yellow */
-  --chart-5: oklch(0.7 0.22 35); /* Red */
+  /* ─── Chart palette ──────────────────────────────────────────────────── */
+  --chart-1: oklch(0.42 0.16 255); /* Deep Ocean Blue */
+  --chart-2: oklch(0.54 0.12 210); /* Teal-Cyan       */
+  --chart-3: oklch(0.6 0.22 30); /* Coral-Orange    */
+  --chart-4: oklch(0.75 0.18 88); /* Warm Yellow     */
+  --chart-5: oklch(0.68 0.2 15); /* Deep Red        */
 
-  /* Sidebar colors */
+  /* ─── Sidebar ────────────────────────────────────────────────────────── */
   --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.65 0.25 25);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
+  --sidebar-foreground: oklch(0.13 0.035 262);
+  --sidebar-primary: oklch(0.42 0.16 255);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.965 0.006 248);
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.65 0.25 25);
+  --sidebar-border: oklch(0.92 0.01 256);
+  --sidebar-ring: oklch(0.42 0.16 255);
 }
 
 @theme inline {
@@ -87,70 +97,112 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* Dark mode */
+/* ─── Dark mode ──────────────────────────────────────────────────────────── */
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
+  /* Deep navy-slate — more refined than pure black for premium feel */
+  --background: oklch(0.13 0.03 260);
+  --foreground: oklch(0.97 0.005 248);
 
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
+  --card: oklch(0.18 0.03 262);
+  --card-foreground: oklch(0.97 0.005 248);
 
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.18 0.03 262);
+  --popover-foreground: oklch(0.97 0.005 248);
 
-  /* Zivah Brand Colors - Dark Mode */
-  --primary: oklch(0.75 0.22 35); /* Lighter Orange */
-  --primary-foreground: oklch(0.129 0.042 264.695);
+  /* ─── Zivah Brand Colors - Dark Mode ─────────────────────────────────
+   *  Lighten each brand color enough for contrast on dark backgrounds.
+   *  All three colors stay distinct — orange, blue, green.
+   * ──────────────────────────────────────────────────────────────────── */
+  --primary: oklch(0.6 0.15 250); /* Lighter ocean blue */
+  --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.4 0.15 145); /* Green instead of blue for contrast */
-  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --secondary: oklch(0.68 0.11 205); /* Lighter teal-cyan */
+  --secondary-foreground: oklch(1 0 0);
 
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
+  --muted: oklch(0.22 0.025 260);
+  --muted-foreground: oklch(0.65 0.035 258);
 
-  --accent: oklch(0.45 0.12 155); /* Lighter Green */
-  --accent-foreground: oklch(0.984 0.003 247.858);
+  --accent: oklch(0.72 0.2 32); /* Lighter coral-orange */
+  --accent-foreground: oklch(0.12 0.03 260);
 
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
+  --destructive: oklch(0.7 0.19 22);
+  --destructive-foreground: oklch(1 0 0);
 
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.75 0.22 35);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.6 0.15 250);
 
-  /* Chart colors - Dark mode */
-  --chart-1: oklch(0.65 0.25 25);
-  --chart-2: oklch(0.45 0.12 155);
-  --chart-3: oklch(0.75 0.22 35);
-  --chart-4: oklch(0.6 0.25 310);
-  --chart-5: oklch(0.65 0.25 15);
+  /* ─── Chart palette - Dark mode ─────────────────────────────────────── */
+  --chart-1: oklch(0.6 0.15 250); /* Ocean Blue    */
+  --chart-2: oklch(0.68 0.11 205); /* Teal-Cyan     */
+  --chart-3: oklch(0.72 0.2 32); /* Coral-Orange  */
+  --chart-4: oklch(0.78 0.18 88); /* Warm Yellow   */
+  --chart-5: oklch(0.68 0.2 15); /* Deep Red      */
 
-  /* Sidebar colors - Dark mode */
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.65 0.25 25);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  /* ─── Sidebar - Dark mode ────────────────────────────────────────────── */
+  --sidebar: oklch(0.18 0.03 262);
+  --sidebar-foreground: oklch(0.97 0.005 248);
+  --sidebar-primary: oklch(0.6 0.15 250);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.22 0.025 260);
+  --sidebar-accent-foreground: oklch(0.97 0.005 248);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.65 0.25 25);
+  --sidebar-ring: oklch(0.6 0.15 250);
 }
 
-/* Smooth scroll behavior */
+/* ─── Base typography & scroll ───────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
 
-/* Font settings */
 html,
 body {
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--font-inter, Inter), system-ui, sans-serif;
   font-feature-settings:
     'rlig' 1,
     'calt' 1;
 }
 
-/* Ficha técnica print support */
+/* Montserrat for all headings — premium display presence */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-montserrat, Montserrat), system-ui, sans-serif;
+  font-feature-settings: 'ss01' 1;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Utility: brand gradient text ──────────────────────────────────────── */
+.text-brand-gradient {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Smooth color transitions on theme switch ───────────────────────────── */
+*,
+::before,
+::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
+
+/* Disable the above for motion-sensitive users */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}
+
+/* ─── Ficha técnica print support ────────────────────────────────────────── */
 @media print {
   .no-print {
     display: none !important;

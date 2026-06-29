@@ -172,7 +172,7 @@ export function LazyImage({
   if (hasError) {
     return (
       <div
-        className={`flex items-center justify-center bg-gray-200 text-sm text-gray-500 ${className}`}
+        className={`bg-muted text-muted-foreground flex items-center justify-center text-sm ${className}`}
       >
         Failed to load image
       </div>
