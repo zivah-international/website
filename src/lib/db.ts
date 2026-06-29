@@ -103,7 +103,7 @@ export async function queryTyped<T>(
 }
 
 // Utility to parse JSON fields from database TEXT columns
-export function parseJsonFields<T>(row: T, jsonFields: readonly (keyof T)[]): T {
+export function parseJsonFields<T>(row: T, jsonFields: readonly string[]): T {
   const parsed: Record<string, unknown> = { ...(row as Record<string, unknown>) };
   for (const field of jsonFields) {
     const key = field as string;

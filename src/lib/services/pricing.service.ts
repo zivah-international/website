@@ -40,7 +40,7 @@ class DatabasePricingService implements ProductPricingService {
       `;
       const measuresResult = await query(measuresQuery, [defaultFamily]);
 
-      return measuresResult.rows;
+      return measuresResult.rows as Record<string, unknown>[];
     } catch (error) {
       logger.error('Error getting available measures:', error);
       return [];

@@ -77,7 +77,7 @@ export default function ProductsPage() {
               [key: string]: unknown;
             }) => ({
               ...p,
-              basePrice: p.basePrice ? parseFloat(p.basePrice) : null,
+              basePrice: p.basePrice != null ? Number(p.basePrice) : null,
               certifications: Array.isArray(p.certifications) ? p.certifications : [],
             })
           );
