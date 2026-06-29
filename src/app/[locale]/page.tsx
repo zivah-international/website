@@ -40,8 +40,9 @@ export default function HomePage() {
 
   const SLIDES = [
     {
+      // Premium IQF shrimp on ice — bright, well-lit, blue-toned
       image:
-        'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1920&q=85',
+        'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=1920&q=90',
       badge: t('hero.slides.shrimp.badge'),
       title: t('hero.slides.shrimp.title'),
       titleHighlight: t('hero.slides.shrimp.titleHighlight'),
@@ -52,8 +53,9 @@ export default function HomePage() {
       ctaSecondaryHref: '/quote',
     },
     {
+      // Aquaculture / fish farm aerial or water lab — blue/teal
       image:
-        'https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=1920&q=85',
+        'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=90',
       badge: t('hero.slides.larvae.badge'),
       title: t('hero.slides.larvae.title'),
       titleHighlight: t('hero.slides.larvae.titleHighlight'),
@@ -64,8 +66,9 @@ export default function HomePage() {
       ctaSecondaryHref: '/quote',
     },
     {
+      // Fishing / ocean harvest
       image:
-        'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=1920&q=85',
+        'https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&w=1920&q=90',
       badge: t('hero.slides.fruits.badge'),
       title: t('hero.slides.fruits.title'),
       titleHighlight: t('hero.slides.fruits.titleHighlight'),
@@ -94,21 +97,21 @@ export default function HomePage() {
       />
 
       {/* ── Stats strip ──────────────────────────────────────────────────── */}
-      <section className='border-border/40 bg-background border-b'>
+      <section className='bg-primary text-white'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='divide-border/40 grid grid-cols-2 divide-x md:grid-cols-4'>
+          <div className='grid grid-cols-2 divide-x divide-white/20 md:grid-cols-4'>
             {[
-              { value: '5+', label: t('hero.stats.countriesServed'), color: 'text-secondary' },
-              { value: '24h', label: t('hero.stats.containersYear'), color: 'text-primary' },
-              { value: '4+', label: t('hero.stats.yearsExperience'), color: 'text-accent' },
-              { value: '100%', label: t('hero.stats.qualityGuaranteed'), color: 'text-secondary' },
+              { value: '5+', label: t('hero.stats.countriesServed') },
+              { value: '24h', label: t('hero.stats.containersYear') },
+              { value: '4+', label: t('hero.stats.yearsExperience') },
+              { value: '100%', label: t('hero.stats.qualityGuaranteed') },
             ].map((s, i) => (
               <div
                 key={i}
-                className='flex flex-col items-center gap-1.5 py-7 text-center'
+                className='flex flex-col items-center gap-1.5 py-6 text-center'
               >
-                <div className={`text-3xl font-black tracking-tight ${s.color}`}>{s.value}</div>
-                <div className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
+                <div className='text-2xl font-black tracking-tight'>{s.value}</div>
+                <div className='text-xs font-medium tracking-widest text-white/75 uppercase'>
                   {s.label}
                 </div>
               </div>
@@ -117,28 +120,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Shrimp feature — light, spacious ─────────────────────────────── */}
-      <section className='bg-background py-20 lg:py-28'>
+      {/* ── Shrimp feature ───────────────────────────────────────────────── */}
+      <section className='bg-background py-14 lg:py-20'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='grid items-center gap-12 lg:grid-cols-2 lg:gap-20'>
-            {/* Image — rounded, with soft shadow and a subtle teal ring */}
+          <div className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
+            {/* Image */}
             <div className='relative'>
-              <div className='bg-secondary/8 absolute -inset-3 rounded-3xl blur-xl' />
-              <div className='shadow-secondary/15 relative overflow-hidden rounded-3xl shadow-2xl'>
+              <div className='shadow-primary/10 overflow-hidden rounded-2xl shadow-xl'>
                 <Image
-                  src='https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=900&q=85'
+                  src='https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=900&q=90'
                   alt='Camarón Vannamei IQF Premium Ecuador'
                   width={900}
                   height={600}
-                  className='h-80 w-full object-cover lg:h-[480px]'
+                  className='h-72 w-full object-cover lg:h-[420px]'
                 />
-                {/* Cert strip at bottom of image */}
-                <div className='absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 to-transparent px-5 py-4'>
-                  <div className='flex flex-wrap gap-2'>
+                <div className='absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 to-transparent px-4 py-3'>
+                  <div className='flex flex-wrap gap-1.5'>
                     {['BAP', 'HACCP', 'GlobalGAP', 'BRC'].map(c => (
                       <span
                         key={c}
-                        className='rounded-full border border-white/40 bg-white/20 px-2.5 py-0.5 text-xs font-bold text-white backdrop-blur-sm'
+                        className='rounded-full border border-white/40 bg-white/20 px-2 py-0.5 text-xs font-bold text-white backdrop-blur-sm'
                       >
                         {c}
                       </span>
@@ -149,26 +150,26 @@ export default function HomePage() {
             </div>
 
             {/* Copy */}
-            <div className='lg:max-w-lg'>
-              <span className='text-secondary mb-4 inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase'>
-                <span className='h-px w-6 bg-current' />
+            <div>
+              <span className='text-secondary mb-3 inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase'>
+                <span className='h-px w-5 bg-current' />
                 {t('home.shrimp.eyebrow')}
               </span>
-              <h2 className='text-foreground mb-5 text-3xl leading-tight font-black sm:text-4xl xl:text-5xl'>
+              <h2 className='text-foreground mb-4 text-3xl leading-tight font-black sm:text-4xl'>
                 {t('home.shrimp.title')}{' '}
                 <span className='text-secondary'>{t('home.shrimp.titleHighlight')}</span>
               </h2>
-              <p className='text-muted-foreground mb-8 text-base leading-relaxed sm:text-lg'>
+              <p className='text-muted-foreground mb-6 text-sm leading-relaxed sm:text-base'>
                 {t('home.shrimp.description')}
               </p>
-              <ul className='mb-8 space-y-3'>
+              <ul className='mb-7 space-y-2.5'>
                 {[0, 1, 2, 3].map(i => (
                   <li
                     key={i}
-                    className='flex items-start gap-3 text-sm'
+                    className='flex items-start gap-2.5 text-sm'
                   >
                     <svg
-                      className='text-secondary mt-0.5 h-5 w-5 shrink-0'
+                      className='text-secondary mt-0.5 h-4 w-4 shrink-0'
                       fill='none'
                       viewBox='0 0 24 24'
                       stroke='currentColor'
@@ -187,7 +188,7 @@ export default function HomePage() {
               <div className='flex flex-wrap gap-3'>
                 <Link
                   href={`/${locale}/products?category=marinos-y-pesca`}
-                  className='bg-secondary hover:bg-secondary/90 shadow-secondary/20 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg'
+                  className='bg-secondary hover:bg-secondary/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5'
                 >
                   {t('home.shrimp.cta')}
                   <svg
@@ -206,7 +207,7 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href={`/${locale}/quote`}
-                  className='border-border text-foreground hover:border-secondary/50 hover:text-secondary inline-flex items-center gap-2 rounded-xl border-2 px-6 py-3 text-sm font-semibold transition-all'
+                  className='border-border text-muted-foreground hover:border-secondary hover:text-secondary inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-semibold transition-all'
                 >
                   {t('home.shrimp.ctaSecondary')}
                 </Link>
@@ -216,31 +217,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Larvae feature — soft warm tint background ───────────────────── */}
-      <section className='bg-primary/[0.04] py-20 lg:py-28'>
+      {/* ── Larvae feature ───────────────────────────────────────────────── */}
+      <section className='bg-primary/[0.03] py-14 lg:py-20'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='grid items-center gap-12 lg:grid-cols-2 lg:gap-20'>
+          <div className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
             {/* Copy — left */}
-            <div className='order-2 lg:order-1 lg:max-w-lg'>
-              <span className='text-primary mb-4 inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase'>
-                <span className='h-px w-6 bg-current' />
+            <div className='order-2 lg:order-1'>
+              <span className='text-primary mb-3 inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase'>
+                <span className='h-px w-5 bg-current' />
                 {t('home.larvae.eyebrow')}
               </span>
-              <h2 className='text-foreground mb-5 text-3xl leading-tight font-black sm:text-4xl xl:text-5xl'>
+              <h2 className='text-foreground mb-4 text-3xl leading-tight font-black sm:text-4xl'>
                 {t('home.larvae.title')}{' '}
                 <span className='text-primary'>{t('home.larvae.titleHighlight')}</span>
               </h2>
-              <p className='text-muted-foreground mb-8 text-base leading-relaxed sm:text-lg'>
+              <p className='text-muted-foreground mb-6 text-sm leading-relaxed sm:text-base'>
                 {t('home.larvae.description')}
               </p>
-              <ul className='mb-8 space-y-3'>
+              <ul className='mb-7 space-y-2.5'>
                 {[0, 1, 2, 3].map(i => (
                   <li
                     key={i}
-                    className='flex items-start gap-3 text-sm'
+                    className='flex items-start gap-2.5 text-sm'
                   >
                     <svg
-                      className='text-primary mt-0.5 h-5 w-5 shrink-0'
+                      className='text-primary mt-0.5 h-4 w-4 shrink-0'
                       fill='none'
                       viewBox='0 0 24 24'
                       stroke='currentColor'
@@ -259,7 +260,7 @@ export default function HomePage() {
               <div className='flex flex-wrap gap-3'>
                 <Link
                   href={`/${locale}/products?category=larvas`}
-                  className='bg-primary hover:bg-primary/90 shadow-primary/20 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg'
+                  className='bg-primary hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5'
                 >
                   {t('home.larvae.cta')}
                   <svg
@@ -278,7 +279,7 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href={`/${locale}/quote`}
-                  className='border-border text-foreground hover:border-primary/50 hover:text-primary inline-flex items-center gap-2 rounded-xl border-2 px-6 py-3 text-sm font-semibold transition-all'
+                  className='border-border text-muted-foreground hover:border-primary hover:text-primary inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-semibold transition-all'
                 >
                   {t('home.larvae.ctaSecondary')}
                 </Link>
@@ -287,17 +288,16 @@ export default function HomePage() {
 
             {/* Image — right */}
             <div className='relative order-1 lg:order-2'>
-              <div className='bg-primary/8 absolute -inset-3 rounded-3xl blur-xl' />
-              <div className='shadow-primary/15 relative overflow-hidden rounded-3xl shadow-2xl'>
+              <div className='shadow-primary/10 overflow-hidden rounded-2xl shadow-xl'>
                 <Image
-                  src='https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=900&q=85'
+                  src='https://images.unsplash.com/photo-1629046881043-ce35df40960e?auto=format&fit=crop&w=900&q=90'
                   alt='Laboratorio de Larvas de Camarón Ecuador'
                   width={900}
                   height={600}
-                  className='h-80 w-full object-cover lg:h-[480px]'
+                  className='h-72 w-full object-cover lg:h-[420px]'
                 />
-                <div className='absolute top-4 right-4'>
-                  <span className='text-primary rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold shadow-sm backdrop-blur-sm'>
+                <div className='absolute top-3 right-3'>
+                  <span className='text-primary rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold shadow-sm'>
                     🔬 SPF · Bioseguridad Nivel A
                   </span>
                 </div>
@@ -307,62 +307,62 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Why Ecuador — light cards on white ───────────────────────────── */}
-      <section className='bg-background py-20'>
+      {/* ── Why Ecuador ──────────────────────────────────────────────────── */}
+      <section className='bg-background py-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mb-12 text-center'>
-            <span className='text-accent mb-3 block text-xs font-bold tracking-widest uppercase'>
+          <div className='mb-10 text-center'>
+            <span className='text-secondary mb-2 block text-xs font-bold tracking-widest uppercase'>
               {t('home.whyEcuador.eyebrow')}
             </span>
-            <h2 className='text-foreground mb-4 text-3xl font-black sm:text-4xl'>
+            <h2 className='text-foreground mb-3 text-3xl font-black sm:text-4xl'>
               {t('home.whyEcuador.title')}
             </h2>
-            <p className='text-muted-foreground mx-auto max-w-2xl text-base'>
+            <p className='text-muted-foreground mx-auto max-w-2xl text-sm'>
               {t('home.whyEcuador.subtitle')}
             </p>
           </div>
 
-          <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+          <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-4'>
             {[
               {
                 stat: '#4',
-                color: 'text-secondary',
-                bg: 'bg-secondary/8',
-                border: 'border-secondary/15',
+                color: 'text-primary',
+                bg: 'bg-primary/6',
+                border: 'border-primary/12',
                 label: t('home.whyEcuador.items.0.label'),
                 desc: t('home.whyEcuador.items.0.desc'),
               },
               {
                 stat: '28°C',
-                color: 'text-accent',
-                bg: 'bg-accent/8',
-                border: 'border-accent/15',
+                color: 'text-secondary',
+                bg: 'bg-secondary/6',
+                border: 'border-secondary/12',
                 label: t('home.whyEcuador.items.1.label'),
                 desc: t('home.whyEcuador.items.1.desc'),
               },
               {
                 stat: 'BAP',
                 color: 'text-primary',
-                bg: 'bg-primary/8',
-                border: 'border-primary/15',
+                bg: 'bg-primary/6',
+                border: 'border-primary/12',
                 label: t('home.whyEcuador.items.2.label'),
                 desc: t('home.whyEcuador.items.2.desc'),
               },
               {
                 stat: 'FOB',
                 color: 'text-secondary',
-                bg: 'bg-secondary/8',
-                border: 'border-secondary/15',
+                bg: 'bg-secondary/6',
+                border: 'border-secondary/12',
                 label: t('home.whyEcuador.items.3.label'),
                 desc: t('home.whyEcuador.items.3.desc'),
               },
             ].map((item, i) => (
               <div
                 key={i}
-                className={`rounded-2xl border ${item.border} ${item.bg} p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/5`}
+                className={`rounded-xl border ${item.border} ${item.bg} p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-black/5`}
               >
-                <div className={`${item.color} mb-3 text-3xl font-black`}>{item.stat}</div>
-                <div className='text-foreground mb-2 text-sm font-bold'>{item.label}</div>
+                <div className={`${item.color} mb-2 text-2xl font-black`}>{item.stat}</div>
+                <div className='text-foreground mb-1.5 text-sm font-bold'>{item.label}</div>
                 <div className='text-muted-foreground text-xs leading-relaxed'>{item.desc}</div>
               </div>
             ))}
@@ -372,11 +372,11 @@ export default function HomePage() {
 
       {/* ── Categories ───────────────────────────────────────────────────── */}
       <section
-        className='bg-muted/30 py-20'
+        className='bg-muted/30 py-14'
         id='products'
       >
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mb-12 text-center'>
+          <div className='mb-8 text-center'>
             <div className='bg-secondary/10 text-secondary mb-3 inline-block rounded-full px-4 py-1.5 text-sm font-semibold'>
               {t('products.badge')}
             </div>
@@ -464,11 +464,11 @@ export default function HomePage() {
 
       {/* ── Process ──────────────────────────────────────────────────────── */}
       <section
-        className='bg-background py-20'
+        className='bg-background py-14'
         id='process'
       >
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mb-12 text-center'>
+          <div className='mb-8 text-center'>
             <div className='bg-primary/10 text-primary mb-3 inline-block rounded-full px-4 py-1.5 text-sm font-semibold'>
               {t('process.badge')}
             </div>
@@ -542,9 +542,9 @@ export default function HomePage() {
       </section>
 
       {/* ── Testimonials ─────────────────────────────────────────────────── */}
-      <section className='bg-muted/20 py-20'>
+      <section className='bg-muted/20 py-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mb-12 text-center'>
+          <div className='mb-8 text-center'>
             <div className='bg-accent/10 text-accent mb-3 inline-block rounded-full px-4 py-1.5 text-sm font-semibold'>
               {t('testimonials.badge')}
             </div>

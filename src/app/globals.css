@@ -17,23 +17,24 @@
 
   /* ─── Zivah Brand Colors ─────────────────────────────────────────────
    *
-   *  primary  → Coral-Orange  #e8541e  — energy, freshness, Ecuador sun
-   *  secondary → Ocean Blue   #0f5ca3  — trust, international trade, sea
-   *  accent   → Tropical Green #0a7c3e  — nature, sustainability, freshness
+   *  primary  → Deep Ocean Blue  #1a5fa8  — sea, trust, aquaculture
+   *  secondary → Teal-Cyan       #0d8fa0  — water, freshness, Ecuador coast
+   *  accent   → Coral-Orange     #e8541e  — Ecuador sun, energy, warmth CTA
    *
-   * These are deliberately slightly desaturated vs the originals so they
-   * read as "premium" rather than "loud" — important for B2B buyers.
+   * Ocean blue primary makes immediate visual sense for a seafood &
+   * aquaculture export brand. Orange becomes the CTA accent — high
+   * contrast on blue, draws the eye to conversion actions.
    * ──────────────────────────────────────────────────────────────────── */
-  --primary: oklch(0.6 0.22 30); /* Coral-Orange  ≈ #e8541e */
+  --primary: oklch(0.42 0.16 255); /* Deep Ocean Blue ≈ #1a5fa8 */
   --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.38 0.18 252); /* Ocean Blue    ≈ #0f5ca3 */
+  --secondary: oklch(0.54 0.12 210); /* Teal-Cyan       ≈ #0d8fa0 */
   --secondary-foreground: oklch(1 0 0);
 
   --muted: oklch(0.965 0.006 248);
   --muted-foreground: oklch(0.5 0.04 258);
 
-  --accent: oklch(0.52 0.18 148); /* Tropical Green ≈ #12a85e — vivid, white-text safe */
+  --accent: oklch(0.6 0.22 30); /* Coral-Orange    ≈ #e8541e — CTA color */
   --accent-foreground: oklch(1 0 0);
 
   --destructive: oklch(0.577 0.245 27.325);
@@ -41,24 +42,24 @@
 
   --border: oklch(0.92 0.01 256);
   --input: oklch(0.92 0.01 256);
-  --ring: oklch(0.6 0.22 30);
+  --ring: oklch(0.42 0.16 255);
 
   /* ─── Chart palette ──────────────────────────────────────────────────── */
-  --chart-1: oklch(0.6 0.22 30); /* Coral-Orange  */
-  --chart-2: oklch(0.52 0.18 148); /* Tropical Green */
-  --chart-3: oklch(0.38 0.18 252); /* Ocean Blue    */
-  --chart-4: oklch(0.75 0.18 88); /* Warm Yellow   */
-  --chart-5: oklch(0.68 0.2 15); /* Deep Red      */
+  --chart-1: oklch(0.42 0.16 255); /* Deep Ocean Blue */
+  --chart-2: oklch(0.54 0.12 210); /* Teal-Cyan       */
+  --chart-3: oklch(0.6 0.22 30); /* Coral-Orange    */
+  --chart-4: oklch(0.75 0.18 88); /* Warm Yellow     */
+  --chart-5: oklch(0.68 0.2 15); /* Deep Red        */
 
   /* ─── Sidebar ────────────────────────────────────────────────────────── */
   --sidebar: oklch(0.984 0.003 247.858);
   --sidebar-foreground: oklch(0.13 0.035 262);
-  --sidebar-primary: oklch(0.6 0.22 30);
+  --sidebar-primary: oklch(0.42 0.16 255);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.965 0.006 248);
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.92 0.01 256);
-  --sidebar-ring: oklch(0.6 0.22 30);
+  --sidebar-ring: oklch(0.42 0.16 255);
 }
 
 @theme inline {
@@ -112,41 +113,41 @@
    *  Lighten each brand color enough for contrast on dark backgrounds.
    *  All three colors stay distinct — orange, blue, green.
    * ──────────────────────────────────────────────────────────────────── */
-  --primary: oklch(0.72 0.2 32); /* Lighter coral-orange */
-  --primary-foreground: oklch(0.12 0.03 260);
+  --primary: oklch(0.6 0.15 250); /* Lighter ocean blue */
+  --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.55 0.16 252); /* Lighter ocean blue (stays blue) */
+  --secondary: oklch(0.68 0.11 205); /* Lighter teal-cyan */
   --secondary-foreground: oklch(1 0 0);
 
   --muted: oklch(0.22 0.025 260);
   --muted-foreground: oklch(0.65 0.035 258);
 
-  --accent: oklch(0.62 0.18 148); /* Lighter tropical green — vivid on dark bg */
-  --accent-foreground: oklch(1 0 0);
+  --accent: oklch(0.72 0.2 32); /* Lighter coral-orange */
+  --accent-foreground: oklch(0.12 0.03 260);
 
   --destructive: oklch(0.7 0.19 22);
   --destructive-foreground: oklch(1 0 0);
 
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.72 0.2 32);
+  --ring: oklch(0.6 0.15 250);
 
   /* ─── Chart palette - Dark mode ─────────────────────────────────────── */
-  --chart-1: oklch(0.72 0.2 32); /* Coral-Orange  */
-  --chart-2: oklch(0.62 0.18 148); /* Tropical Green */
-  --chart-3: oklch(0.55 0.16 252); /* Ocean Blue    */
+  --chart-1: oklch(0.6 0.15 250); /* Ocean Blue    */
+  --chart-2: oklch(0.68 0.11 205); /* Teal-Cyan     */
+  --chart-3: oklch(0.72 0.2 32); /* Coral-Orange  */
   --chart-4: oklch(0.78 0.18 88); /* Warm Yellow   */
   --chart-5: oklch(0.68 0.2 15); /* Deep Red      */
 
   /* ─── Sidebar - Dark mode ────────────────────────────────────────────── */
   --sidebar: oklch(0.18 0.03 262);
   --sidebar-foreground: oklch(0.97 0.005 248);
-  --sidebar-primary: oklch(0.72 0.2 32);
-  --sidebar-primary-foreground: oklch(0.12 0.03 260);
+  --sidebar-primary: oklch(0.6 0.15 250);
+  --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.22 0.025 260);
   --sidebar-accent-foreground: oklch(0.97 0.005 248);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.72 0.2 32);
+  --sidebar-ring: oklch(0.6 0.15 250);
 }
 
 /* ─── Base typography & scroll ───────────────────────────────────────────── */
