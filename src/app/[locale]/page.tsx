@@ -97,7 +97,7 @@ export default function HomePage() {
       />
 
       {/* ── Stats strip ──────────────────────────────────────────────────── */}
-      <section className='border-border/40 bg-background border-b'>
+      <section className='bg-primary text-white'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='grid grid-cols-2 divide-x divide-white/20 md:grid-cols-4'>
             {[
@@ -475,7 +475,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+          <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-4'>
             {[
               {
                 stat: '#4',
