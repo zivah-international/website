@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import HeroSlider from '@/components/HeroSlider';
 import Navigation from '@/components/Navigation';
@@ -37,7 +37,6 @@ export default function HomePage() {
   const locale = useLocale();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const larvaeRef = useRef<HTMLDivElement>(null);
 
   const SLIDES = [
     {
@@ -98,7 +97,7 @@ export default function HomePage() {
       />
 
       {/* ── Stats strip ──────────────────────────────────────────────────── */}
-      <section className='bg-primary text-white'>
+      <section className='border-border/40 bg-background border-b'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='grid grid-cols-2 divide-x divide-white/20 md:grid-cols-4'>
             {[
@@ -476,7 +475,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-4'>
+          <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
             {[
               {
                 stat: '#4',
