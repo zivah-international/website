@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import type { AuthUser } from '@/lib/auth';
-import { createClient } from '@/utils/supabase/client';
 
 interface AdminHeaderProps {
   user: AuthUser;
@@ -17,8 +16,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   async function handleSignOut() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    await fetch('/api/auth/sign-out', { method: 'POST' });
     router.push('/sign-in');
     router.refresh();
   }

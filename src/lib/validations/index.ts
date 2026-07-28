@@ -36,10 +36,8 @@ export const createProductSchema = z.object({
     .string()
     .max(500, 'La descripción corta no puede exceder 500 caracteres')
     .optional(),
-  features: z.array(z.string()).optional(),
+  sku: z.string().max(100).optional(),
   specifications: z.record(z.string(), z.any()).optional(),
-  price: z.number().positive('El precio debe ser mayor a 0').optional(),
-  priceUnit: z.string().max(20).optional(),
   stockQuantity: z.number().int().min(0, 'El stock no puede ser negativo').default(0),
   minOrderQty: z.number().int().positive('La cantidad mínima debe ser mayor a 0').default(1),
   imageUrl: z.string().url('Debe ser una URL válida').optional(),
@@ -47,10 +45,13 @@ export const createProductSchema = z.object({
   origin: z.string().max(100).default('Ecuador'),
   harvestSeason: z.string().max(100).optional(),
   certifications: z.array(z.string()).optional(),
+  nutritionalInfo: z.record(z.string(), z.any()).optional(),
   isActive: z.boolean().default(true),
   isFeatured: z.boolean().default(false),
   seoTitle: z.string().max(255).optional(),
   seoDescription: z.string().max(500).optional(),
+  measureId: z.number().int().positive().optional(),
+  code: z.string().max(50).optional(),
 });
 
 export const updateProductSchema = createProductSchema.partial();

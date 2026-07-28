@@ -1,52 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
+import { query } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { createCategorySchema } from '@/lib/validations';
-import { createClient } from '@/utils/supabase/server';
 
-// Helper to apply translations to categories
-async function applyCategoryTranslations(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  categories: any[],
-  locale: string
-): Promise<any[]> {
-  if (locale === 'es' || !categories.length) {
-    return categories;
-  }
+async function applyCategoryTranslations(categories: any[], locale: string): Promise<any[]> {
+  if (locale === 'es' || !categories.length) return categories;
 
-  // Get language ID for the locale
-  const { data: langData } = await supabase
-    .from('languages')
-    .select('id')
-    .eq('code', locale)
-    .single();
+  const langResult = await query<{ id: number }>(
+    `SELECT id FROM languages WHERE code = $1 AND is_active = true LIMIT 1`,
+    [locale]
+  );
 
-  if (!langData) {
-    return categories;
-  }
+  if (langResult.rows.length === 0) return categories;
 
-  const languageId = langData.id;
+  const languageId = langResult.rows[0].id;
   const categoryIds = categories.map(c => c.id);
 
-  // Get translations for all categories
-  const { data: translations } = await supabase
-    .from('category_translations')
-    .select('category_id, name, description')
-    .in('category_id', categoryIds)
-    .eq('language_id', languageId);
+  const tResult = await query<{ category_id: number; name: string; description: string | null }>(
+    `SELECT category_id, name, description FROM category_translations WHERE category_id = ANY($1) AND language_id = $2`,
+    [categoryIds, languageId]
+  );
 
-  if (!translations) {
-    return categories;
-  }
-
-  // Create a map of translations
   const translationsMap = new Map<number, any>();
-  for (const row of translations) {
+  for (const row of tResult.rows) {
     translationsMap.set(row.category_id, row);
   }
 
-  // Apply translations to categories
   return categories.map(category => {
     const translation = translationsMap.get(category.id);
     if (translation) {
@@ -62,32 +43,29 @@ async function applyCategoryTranslations(
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     const locale = searchParams.get('locale') || 'es';
     const includeProducts = searchParams.get('includeProducts') === 'true';
     const isActive = searchParams.get('isActive');
 
-    // Build query
-    let query = supabase.from('categories').select(`
-      *,
-      products:products(id, name, slug, is_featured, is_active)
-    `);
+    let sql = `SELECT c.*, COALESCE(json_agg(json_build_object('id', p.id, 'name', p.name, 'slug', p.slug, 'is_featured', p.is_featured, 'is_active', p.is_active) ORDER BY p.name) FILTER (WHERE p.id IS NOT NULL), '[]'::json) as products FROM categories c LEFT JOIN products p ON c.id = p.category_id`;
+    const conditions: string[] = [];
+    const params: unknown[] = [];
 
     if (isActive !== null) {
-      query = query.eq('is_active', isActive === 'true');
+      conditions.push(`c.is_active = $${params.length + 1}`);
+      params.push(isActive === 'true');
     }
 
-    query = query.order('is_active', { ascending: false }).order('name', { ascending: true });
-
-    const { data: categories, error } = await query;
-
-    if (error) {
-      throw error;
+    if (conditions.length > 0) {
+      sql += ` WHERE ${conditions.join(' AND ')}`;
     }
 
-    // Process categories to add products_count
-    const processedCategories = (categories || []).map(category => {
+    sql += ` GROUP BY c.id ORDER BY c.is_active DESC, c.name ASC`;
+
+    const result = await query(sql, params);
+
+    const processedCategories = result.rows.map((category: any) => {
       const activeProducts = (category.products || []).filter(
         (p: any) => p !== null && p.is_active
       );
@@ -105,12 +83,7 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    // Apply translations if locale is not Spanish
-    const translatedCategories = await applyCategoryTranslations(
-      supabase,
-      processedCategories,
-      locale
-    );
+    const translatedCategories = await applyCategoryTranslations(processedCategories, locale);
 
     return NextResponse.json({
       error: false,
@@ -119,7 +92,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error: any) {
     logger.error('Error fetching categories:', error);
-
     return NextResponse.json(
       {
         error: true,
@@ -135,11 +107,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
     const body = await request.json();
     const validatedData = createCategorySchema.parse(body);
 
-    // Auto-generate slug if not provided
     if (!validatedData.slug) {
       validatedData.slug = validatedData.name
         .toLowerCase()
@@ -148,14 +118,11 @@ export async function POST(request: NextRequest) {
         .trim();
     }
 
-    // Check if slug is unique
-    const { data: existing } = await supabase
-      .from('categories')
-      .select('id')
-      .eq('slug', validatedData.slug)
-      .single();
+    const existing = await query(`SELECT id FROM categories WHERE slug = $1 LIMIT 1`, [
+      validatedData.slug,
+    ]);
 
-    if (existing) {
+    if (existing.rows.length > 0) {
       return NextResponse.json(
         {
           error: true,
@@ -166,21 +133,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert new category
-    const { data: category, error } = await supabase
-      .from('categories')
-      .insert(validatedData)
-      .select()
-      .single();
+    const result = await query(
+      `INSERT INTO categories (name, slug, description, icon, color, sort_order, is_active) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+      [
+        validatedData.name,
+        validatedData.slug,
+        validatedData.description || null,
+        validatedData.icon || null,
+        validatedData.color || null,
+        validatedData.sortOrder || 0,
+        validatedData.isActive ?? true,
+      ]
+    );
 
-    if (error) {
-      throw error;
-    }
-
+    const row = result.rows[0] ?? {};
     return NextResponse.json(
       {
         error: false,
-        data: { ...category, products_count: 0 },
+        data: { ...row, products_count: 0 },
         message: 'Category created successfully',
         timestamp: new Date().toISOString(),
       },
@@ -188,7 +158,6 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     logger.error('Error creating category:', error);
-
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -200,7 +169,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     return NextResponse.json(
       {
         error: true,

@@ -2670,6 +2670,24 @@ async function main() {
     }
   }
 
+  console.log('🔐 Creating admin user...');
+  const adminEmail = process.env.ADMIN_SEED_EMAIL || 'admin@zivahinternational.com';
+  const adminPassword = process.env.ADMIN_SEED_PASSWORD || 'admin123!';
+
+  const { hashPassword } = await import('../src/lib/password');
+
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {},
+    create: {
+      email: adminEmail,
+      passwordHash: hashPassword(adminPassword),
+      fullName: 'Admin',
+      role: 'admin',
+      isActive: true,
+    },
+  });
+
   console.log('✅ Database seeding completed successfully!');
 }
 

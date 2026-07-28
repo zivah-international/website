@@ -1,12 +1,11 @@
 import { NextRequest } from 'next/server';
 
+import { query } from '@/lib/db';
 import { createApiResponse, handleApiError } from '@/lib/errors';
 import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
-import { createClient } from '@/utils/supabase/server';
 
 export async function GET(request: NextRequest) {
   try {
-    // Rate limiting: 50 requests per minute
     const ip =
       request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
     const rateLimit = await checkRateLimit(
@@ -19,34 +18,11 @@ export async function GET(request: NextRequest) {
       return createApiResponse(null, 'Too many requests. Please try again later.', 429);
     }
 
-    const supabase = await createClient();
+    const result = await query(
+      `SELECT c.id, c.name, c.code, c.icon, c.calling_code, c.phone_format, json_build_object('id', cur.id, 'code', cur.code, 'name', cur.name, 'symbol', cur.symbol) as currency FROM countries c LEFT JOIN currencies cur ON c.currency_id = cur.id WHERE c.is_active = true ORDER BY c.name ASC`
+    );
 
-    const { data: countries, error } = await supabase
-      .from('countries')
-      .select(
-        `
-        id,
-        name,
-        code,
-        icon,
-        calling_code,
-        phone_format,
-        currency:currencies(
-          id,
-          code,
-          name,
-          symbol
-        )
-      `
-      )
-      .eq('is_active', true)
-      .order('name', { ascending: true });
-
-    if (error) {
-      throw error;
-    }
-
-    return createApiResponse(countries);
+    return createApiResponse(result.rows);
   } catch (error) {
     return handleApiError(error);
   }

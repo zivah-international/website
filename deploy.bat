@@ -35,15 +35,9 @@ node -e "const fs = require('fs'); const pkg = require('./package.json'); delete
 copy pnpm-lock.yaml deploy\pnpm-lock.yaml /y 2>nul
 copy .npmrc deploy\.npmrc /y 2>nul
 
-REM Copy prisma schema (needed for Prisma client)
-mkdir deploy\prisma
+REM Copy prisma schema (dev-only, for db:push/db:seed)
+mkdir deploy\prisma 2>nul
 copy prisma\schema.prisma deploy\prisma\schema.prisma /y
-
-REM Copy generated prisma client
-if exist generated\prisma (
-    mkdir deploy\generated\prisma
-    xcopy generated\prisma deploy\generated\prisma\ /e /i /h /y
-)
 
 REM Copy helpers
 REM .env configured manually on server

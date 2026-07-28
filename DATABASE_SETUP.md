@@ -1,192 +1,111 @@
 # Database Setup Guide
 
-This guide explains how to set up the ZIVAH International MySQL database using Prisma ORM.
+This guide explains how to set up the ZIVAH International PostgreSQL database using Prisma ORM.
 
 ## Overview
 
-The project uses MySQL 8.0+ with Prisma ORM for type-safe database operations. Prisma provides:
-
-- **Type-safe database client** - Full TypeScript support
-- **Migration system** - Version-controlled schema changes
-- **Prisma Studio** - Visual database editor
-- **Seeding** - Automated initial data setup
+The project uses PostgreSQL 13+ with **Prisma ORM for dev-only schema management**. Production queries use direct SQL via `pg` connection pool (`src/lib/db.ts`). The generated `@prisma/client` is **never imported** in application code.
 
 ## Prerequisites
 
-- MySQL 8.0+ database server running
-- Database user with permissions to create databases and tables
+- PostgreSQL 13+ database server running
+- Database user with permissions to create tables
 - Node.js 18+ installed
 
 ## Environment Variables
 
-Set your database connection in `.env`:
+Set your database connection in `.env.local`:
 
-```bash
-DATABASE_URL="mysql://username:password@localhost:3306/zivah_international"
+```env
+DATABASE_URL="postgresql://user:password@host:5432/zivahint_web"
 ```
 
-Example for local development:
-
-```bash
-DATABASE_URL="mysql://root:password@localhost:3306/zivah_international"
-```
-
-## Setup Methods
-
-### Method 1: Quick Setup (Recommended for Development)
+## Setup
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
-# Generate Prisma Client
-npm run db:generate
+# Generate Prisma Client (dev only — not used at runtime)
+pnpm db:generate
 
-# Push schema to database (creates tables)
-npm run db:push
+# Push schema to database (creates all tables)
+pnpm db:push
 
-# Seed database with initial data (if configured)
-npm run db:seed
+# Seed database with initial data
+pnpm db:seed
 ```
 
-### Method 2: Production Setup with Migrations
+## Prisma Commands Reference (Dev Only)
 
 ```bash
-# Install dependencies
-npm install
+# Generate Prisma Client (after schema changes — dev only)
+pnpm db:generate
 
-# Generate Prisma Client
-npm run db:generate
-
-# Create and apply migration
-npm run db:migrate
-
-# Deploy to production
-npx prisma migrate deploy
-
-# Seed database (if needed)
-npm run db:seed
-```
-
-## Prisma Commands Reference
-
-### Development
-
-```bash
-# Generate Prisma Client (after schema changes)
-npm run db:generate
-# or
-npx prisma generate
-
-# Push schema changes to database (no migration files)
-npm run db:push
-# or
-npx prisma db push
+# Push schema to database (no migration files — for development)
+pnpm db:push
 
 # Open Prisma Studio (visual database editor)
-npm run db:studio
-# or
-npx prisma studio
-```
+pnpm db:studio
 
-### Migrations (Production-Ready)
-
-```bash
-# Create a new migration
-npm run db:migrate
-# or
-npx prisma migrate dev --name description
-
-# Apply pending migrations (production)
-npx prisma migrate deploy
-
-# Reset database (⚠️ deletes all data)
-npx prisma migrate reset
-
-# Check migration status
-npx prisma migrate status
-```
-
-### Seeding
-
-```bash
 # Run seed script
-npm run db:seed
-# or
-npx prisma db seed
+pnpm db:seed
 ```
 
 ## Database Schema
 
 The database schema is defined in `prisma/schema.prisma`. Key models include:
 
-- **Users** - Authentication and user management
-- **Categories** - Product categories
-- **Products** - Product catalog
-- **Quotes** - Quote requests
-- **QuoteItems** - Individual items in quotes
-- **Countries** - Shipping destinations
-- **Measures** - Measurement units
-- **Currencies** - Supported currencies
+- **Users / Sessions** — Custom authentication
+- **Categories** — Product categories (hierarchical)
+- **Products / ProductVariants / ProductPrices** — Product catalog with i18n
+- **Quotes / QuoteItems / QuoteCommunications** — Quote system
+- **Countries** — Shipping destinations
+- **Measures / MeasureFamilies** — Measurement units
+- **Currencies** — Supported currencies
+- **ContactSubmissions** — Contact form entries
+- **ActivityLogs** — Audit trail
 
 ## Default Admin Credentials
 
-After seeding the database, you can log in with:
+After seeding, you can log in with:
 
-**Admin Account:**
+- **Admin**: `admin@zivahinternational.com` / `admin123!`
 
-- Email: `admin@zivahinternational.com`
-- Password: `admin123!`
-
-**Manager Account:**
-
-- Email: `manager@zivahinternational.com`
-- Password: `manager123!`
+Override via `ADMIN_SEED_EMAIL` and `ADMIN_SEED_PASSWORD` env vars.
 
 ## Troubleshooting
 
 ### Connection Issues
 
-- Ensure MySQL is running: `mysql -u root -p`
-- Verify DATABASE_URL format: `mysql://user:pass@host:3306/dbname`
-- Check firewall settings allow MySQL connections
+- Ensure PostgreSQL is running and accessible
+- Verify `DATABASE_URL` format: `postgresql://user:pass@host:5432/dbname`
+- Check firewall allows the PostgreSQL port
 - Test connection: `npx prisma db pull`
 
 ### Schema Issues
 
-- If schema is out of sync: `npm run db:push`
-- If migration fails: Check Prisma Studio for conflicts
-- Reset database: `npx prisma migrate reset` (⚠️ deletes data)
-
-### Prisma Client Issues
-
-- If types are wrong: `npm run db:generate`
-- If client not found: Restart your IDE/terminal
-- Clear node_modules: `npm install`
-
-## Best Practices
-
-1. **Use migrations in production** - Never use `db:push` in production
-2. **Always generate client** - Run `db:generate` after schema changes
-3. **Version control migrations** - Commit all migration files
-4. **Test migrations locally** - Before deploying to production
-5. **Backup before migrating** - Always backup production data first
+- If schema is out of sync: `pnpm db:push`
+- If Prisma Client types are wrong: `pnpm db:generate`
 
 ## Production Deployment
 
 ```bash
 # 1. Ensure DATABASE_URL is set in production environment
 
-# 2. Generate Prisma Client
-npm run db:generate
+# 2. Push schema
+pnpm db:push
 
-# 3. Deploy migrations
-npx prisma migrate deploy
+# 3. Seed if needed (first deployment only)
+pnpm db:seed
 
-# 4. Seed if needed (first deployment only)
-npx prisma db seed
-
-# 5. Start application
-npm run build
+# 4. Build and start
+pnpm build
 npm start
 ```
+
+**Note**:
+
+- Prisma (`db:generate`, `db:push`, `db:seed`) is **dev-only** — the generated client is not used at runtime
+- All production queries use `pg` pool directly (`src/lib/db.ts`)
+- For version-controlled schema changes, consider `prisma migrate dev` + `prisma migrate deploy`

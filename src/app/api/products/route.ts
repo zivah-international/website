@@ -1,52 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
+import { query } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { createProductSchema } from '@/lib/validations';
-import { createClient } from '@/utils/supabase/server';
 
-// Helper to apply translations to products
-async function applyProductTranslations(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  products: any[],
-  locale: string
-): Promise<any[]> {
-  if (locale === 'es' || !products.length) {
-    return products;
-  }
+async function applyProductTranslations(products: any[], locale: string): Promise<any[]> {
+  if (locale === 'es' || !products.length) return products;
 
-  // Get language ID for the locale
-  const { data: langData } = await supabase
-    .from('languages')
-    .select('id')
-    .eq('code', locale)
-    .single();
+  const langResult = await query<{ id: number }>(
+    `SELECT id FROM languages WHERE code = $1 AND is_active = true LIMIT 1`,
+    [locale]
+  );
 
-  if (!langData) {
-    return products;
-  }
+  if (langResult.rows.length === 0) return products;
 
-  const languageId = langData.id;
+  const languageId = langResult.rows[0].id;
   const productIds = products.map(p => p.id);
 
-  // Get translations for all products
-  const { data: translations } = await supabase
-    .from('product_translations')
-    .select('product_id, name, description, short_description')
-    .in('product_id', productIds)
-    .eq('language_id', languageId);
+  const tResult = await query<{
+    product_id: number;
+    name: string;
+    description: string | null;
+    short_description: string | null;
+  }>(
+    `SELECT product_id, name, description, short_description FROM product_translations WHERE product_id = ANY($1) AND language_id = $2`,
+    [productIds, languageId]
+  );
 
-  if (!translations) {
-    return products;
-  }
-
-  // Create a map of translations
   const translationsMap = new Map<number, any>();
-  for (const row of translations) {
+  for (const row of tResult.rows) {
     translationsMap.set(row.product_id, row);
   }
 
-  // Apply translations to products
   return products.map(product => {
     const translation = translationsMap.get(product.id);
     if (translation) {
@@ -63,11 +49,9 @@ async function applyProductTranslations(
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     const locale = searchParams.get('locale') || 'es';
 
-    // Parse and validate query parameters
     const filterParams = {
       categoryId: searchParams.get('categoryId')
         ? parseInt(searchParams.get('categoryId')!)
@@ -83,56 +67,56 @@ export async function GET(request: NextRequest) {
       pageSize: searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')!) : 100,
     };
 
-    // Build query
-    let query = supabase.from('products').select(
-      `
-      *,
-      category:categories(id, name, slug, description, icon, color)
-    `,
-      { count: 'exact' }
-    );
+    let sql = `SELECT p.*, json_build_object('id', c.id, 'name', c.name, 'slug', c.slug, 'description', c.description, 'icon', c.icon, 'color', c.color) as category FROM products p LEFT JOIN categories c ON p.category_id = c.id`;
+    const conditions: string[] = [];
+    const params: unknown[] = [];
 
-    // Apply filters
     if (filterParams.categoryId !== undefined) {
-      query = query.eq('category_id', filterParams.categoryId);
+      conditions.push(`p.category_id = $${params.length + 1}`);
+      params.push(filterParams.categoryId);
     }
     if (filterParams.isActive !== undefined) {
-      query = query.eq('is_active', filterParams.isActive);
+      conditions.push(`p.is_active = $${params.length + 1}`);
+      params.push(filterParams.isActive);
     }
     if (filterParams.isFeatured !== undefined) {
-      query = query.eq('is_featured', filterParams.isFeatured);
+      conditions.push(`p.is_featured = $${params.length + 1}`);
+      params.push(filterParams.isFeatured);
     }
     if (filterParams.origin) {
-      query = query.ilike('origin', `%${filterParams.origin}%`);
+      conditions.push(`p.origin ILIKE $${params.length + 1}`);
+      params.push(`%${filterParams.origin}%`);
     }
     if (filterParams.inStock) {
-      query = query.gt('stock_quantity', 0);
+      conditions.push(`p.stock_quantity > 0`);
     }
     if (filterParams.search) {
-      query = query.or(
-        `name.ilike.%${filterParams.search}%,description.ilike.%${filterParams.search}%,slug.ilike.%${filterParams.search}%`
+      conditions.push(
+        `(p.name ILIKE $${params.length + 1} OR p.description ILIKE $${params.length + 1} OR p.slug ILIKE $${params.length + 1})`
       );
+      params.push(`%${filterParams.search}%`);
     }
 
-    // Pagination
+    if (conditions.length > 0) {
+      sql += ` WHERE ${conditions.join(' AND ')}`;
+    }
+
+    const countResult = await query<{ count: string }>(
+      `SELECT COUNT(*) as count FROM (${sql}) sub`,
+      params
+    );
+    const total = parseInt(countResult.rows[0].count, 10);
+
     const page = filterParams.page || 1;
     const pageSize = filterParams.pageSize || 100;
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize - 1;
+    const offset = (page - 1) * pageSize;
 
-    query = query
-      .order('is_featured', { ascending: false })
-      .order('created_at', { ascending: false })
-      .range(from, to);
+    sql += ` ORDER BY p.is_featured DESC, p.created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+    params.push(pageSize, offset);
 
-    const { data: products, error, count } = await query;
+    const result = await query(sql, params);
 
-    if (error) {
-      throw error;
-    }
-
-    // Apply translations if locale is not Spanish
-    const translatedProducts = await applyProductTranslations(supabase, products || [], locale);
+    const translatedProducts = await applyProductTranslations(result.rows, locale);
 
     return NextResponse.json({
       error: false,
@@ -140,14 +124,13 @@ export async function GET(request: NextRequest) {
       pagination: {
         page,
         pageSize,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / pageSize),
+        total,
+        totalPages: Math.ceil(total / pageSize),
       },
       timestamp: new Date().toISOString(),
     });
   } catch (error: any) {
     logger.error('Error fetching products:', error);
-
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -159,7 +142,6 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
-
     return NextResponse.json(
       {
         error: true,
@@ -174,11 +156,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
     const body = await request.json();
     const validatedData = createProductSchema.parse(body);
 
-    // Auto-generate slug if not provided
     if (!validatedData.slug) {
       validatedData.slug = validatedData.name
         .toLowerCase()
@@ -187,20 +167,37 @@ export async function POST(request: NextRequest) {
         .trim();
     }
 
-    const { data: product, error } = await supabase
-      .from('products')
-      .insert(validatedData)
-      .select()
-      .single();
-
-    if (error) {
-      throw error;
-    }
+    const result = await query(
+      `INSERT INTO products (name, slug, description, short_description, sku, specifications, stock_quantity, min_order_qty, image_url, image_gallery, origin, harvest_season, certifications, nutritional_info, is_active, is_featured, seo_title, seo_description, measure_id, code, category_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING *`,
+      [
+        validatedData.name,
+        validatedData.slug,
+        validatedData.description || null,
+        validatedData.shortDescription || null,
+        validatedData.sku || null,
+        validatedData.specifications || null,
+        validatedData.stockQuantity || 0,
+        validatedData.minOrderQty || 1,
+        validatedData.imageUrl || null,
+        validatedData.imageGallery || null,
+        validatedData.origin || 'Ecuador',
+        validatedData.harvestSeason || null,
+        validatedData.certifications || null,
+        validatedData.nutritionalInfo || null,
+        validatedData.isActive ?? true,
+        validatedData.isFeatured ?? false,
+        validatedData.seoTitle || null,
+        validatedData.seoDescription || null,
+        validatedData.measureId || null,
+        validatedData.code || null,
+        validatedData.categoryId || null,
+      ]
+    );
 
     return NextResponse.json(
       {
         error: false,
-        data: product,
+        data: result.rows[0],
         message: 'Product created successfully',
         timestamp: new Date().toISOString(),
       },
@@ -208,7 +205,6 @@ export async function POST(request: NextRequest) {
     );
   } catch (error: any) {
     logger.error('Error creating product:', error);
-
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
@@ -220,7 +216,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     return NextResponse.json(
       {
         error: true,
