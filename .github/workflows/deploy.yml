@@ -79,6 +79,9 @@ jobs:
           cp .npmrc deploy/.npmrc 2>/dev/null || :
           cp pnpm-workspace.yaml deploy/pnpm-workspace.yaml 2>/dev/null || :
 
+          # Remove top-level node_modules (CloudLinux manages it via symlink)
+          rm -rf deploy/node_modules
+
           # Prisma schema (dev-only, for db:push/db:seed on server)
           cp prisma/schema.prisma deploy/prisma/schema.prisma
 
@@ -95,7 +98,6 @@ jobs:
           server-dir: ${{ secrets.FTP_PATH }}/
           exclude: |
             **/.git*/**
-            **/node_modules/**
             **/.next/cache/**
             **/*.map
             **/.DS_Store
