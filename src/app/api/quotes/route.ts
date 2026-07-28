@@ -12,8 +12,6 @@ import {
   sanitizeEmail,
   sanitizeString,
 } from '@/lib/validation';
-import { createClient } from '@/utils/supabase/server';
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -361,19 +359,14 @@ export async function POST(request: NextRequest) {
       return parseJsonFields(quoteData, ['items', 'shipping_address']);
     });
 
-    // Fetch country and product details using Supabase client (respects RLS)
-    const supabase = await createClient();
-
-    // Fetch country if countryId exists
+    // Fetch country details
     if (quote.country_id) {
-      const { data: country } = await supabase
-        .from('countries')
-        .select('id, name, code')
-        .eq('id', quote.country_id)
-        .single();
-
-      if (country) {
-        (quote as any).country = country;
+      const countryResult = await query(
+        `SELECT id, name, code FROM countries WHERE id = $1 LIMIT 1`,
+        [quote.country_id]
+      );
+      if (countryResult.rows.length > 0) {
+        (quote as any).country = countryResult.rows[0];
       }
     }
 
@@ -382,13 +375,13 @@ export async function POST(request: NextRequest) {
       const productIds = (quote as any).items.map((item: any) => item.productId).filter(Boolean);
 
       if (productIds.length > 0) {
-        const { data: products } = await supabase
-          .from('products')
-          .select('id, name, sku')
-          .in('id', productIds);
+        const productsResult = await query<{ id: number; name: string; sku: string | null }>(
+          `SELECT id, name, sku FROM products WHERE id = ANY($1)`,
+          [productIds]
+        );
 
-        if (products) {
-          const productsMap = new Map(products.map(p => [p.id, p]));
+        if (productsResult.rows.length > 0) {
+          const productsMap = new Map(productsResult.rows.map(p => [p.id, p]));
           (quote as any).items = (quote as any).items.map((item: any) => ({
             ...item,
             product: productsMap.get(item.productId) || null,

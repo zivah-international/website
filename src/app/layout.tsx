@@ -7,6 +7,9 @@ import { getLocale } from 'next-intl/server';
 export const metadata: Metadata = {
   title: 'ZIVAH International S.A.',
   description: 'Premium Ecuadorian Products Exporters',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

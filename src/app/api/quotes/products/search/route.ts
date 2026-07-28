@@ -1,49 +1,32 @@
 import { NextRequest } from 'next/server';
 
+import { query } from '@/lib/db';
 import { createApiResponse, handleApiError } from '@/lib/errors';
 import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
-import { createClient } from '@/utils/supabase/server';
 
-// Helper function to apply product translations
-async function applyProductTranslations(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  products: any[],
-  locale: string
-) {
+async function applyProductTranslations(products: any[], locale: string) {
   if (!products.length || locale === 'es') return products;
 
-  // Get language ID for the locale
-  const { data: langData } = await supabase
-    .from('languages')
-    .select('id')
-    .eq('code', locale)
-    .single();
+  const langResult = await query<{ id: number }>(
+    `SELECT id FROM languages WHERE code = $1 AND is_active = true LIMIT 1`,
+    [locale]
+  );
 
-  if (!langData) {
-    return products;
-  }
+  if (langResult.rows.length === 0) return products;
 
-  const languageId = langData.id;
+  const languageId = langResult.rows[0].id;
   const productIds = products.map((p: any) => p.id);
 
-  // Get translations for all products
-  const { data: translations } = await supabase
-    .from('product_translations')
-    .select('product_id, name, description')
-    .in('product_id', productIds)
-    .eq('language_id', languageId);
+  const tResult = await query<{ product_id: number; name: string; description: string | null }>(
+    `SELECT product_id, name, description FROM product_translations WHERE product_id = ANY($1) AND language_id = $2`,
+    [productIds, languageId]
+  );
 
-  if (!translations) {
-    return products;
-  }
-
-  // Create a map of translations
   const translationsMap = new Map<number, any>();
-  for (const row of translations) {
+  for (const row of tResult.rows) {
     translationsMap.set(row.product_id, row);
   }
 
-  // Apply translations to products
   return products.map((product: any) => {
     const translation = translationsMap.get(product.id);
     if (translation) {
@@ -59,7 +42,6 @@ async function applyProductTranslations(
 
 export async function GET(request: NextRequest) {
   try {
-    // Rate limiting: 50 requests per minute
     const ip =
       request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
 
@@ -71,7 +53,6 @@ export async function GET(request: NextRequest) {
         RATE_LIMITS.API_GENERAL.windowMs
       );
     } catch {
-      // Continue without rate limiting if it fails
       rateLimit = { success: true };
     }
 
@@ -79,95 +60,60 @@ export async function GET(request: NextRequest) {
       return createApiResponse(null, 'Too many requests. Please try again later.', 429);
     }
 
-    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     const searchQuery = searchParams.get('q') || '';
     const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50);
     const category = searchParams.get('category');
     const locale = searchParams.get('locale') || 'es';
 
-    // Build query using Supabase client - include prices
-    let query = supabase
-      .from('products')
-      .select(
-        `
-        id,
-        name,
-        description,
-        sku,
-        measure_id,
-        product_prices(
-          measure_id,
-          price,
-          is_active
-        )
-      `
-      )
-      .eq('is_active', true)
-      .ilike('name', `%${searchQuery}%`)
-      .order('name', { ascending: true })
-      .limit(limit);
+    let sql = `SELECT p.id, p.name, p.description, p.sku, p.measure_id, COALESCE((SELECT json_agg(json_build_object('measure_id', pp.measure_id, 'price', pp.price, 'is_active', pp.is_active)) FROM product_prices pp WHERE pp.product_id = p.id), '[]'::json) as product_prices FROM products p WHERE p.is_active = true`;
+    const params: unknown[] = [];
 
-    // Add category filter if provided
+    if (searchQuery) {
+      params.push(`%${searchQuery}%`);
+      sql += ` AND p.name ILIKE $${params.length}`;
+    }
+
     if (category) {
-      // Get category ID from slug
-      const { data: categoryData } = await supabase
-        .from('categories')
-        .select('id')
-        .eq('slug', category)
-        .single();
-
-      if (categoryData) {
-        query = query.eq('category_id', categoryData.id);
+      const catResult = await query<{ id: number }>(
+        `SELECT id FROM categories WHERE slug = $1 LIMIT 1`,
+        [category]
+      );
+      if (catResult.rows.length > 0) {
+        params.push(catResult.rows[0].id);
+        sql += ` AND p.category_id = $${params.length}`;
       }
     }
 
-    const { data: products, error } = await query;
+    params.push(limit);
+    sql += ` ORDER BY p.name ASC LIMIT $${params.length}`;
 
-    if (error) {
-      console.error('Supabase query error:', error);
-      throw error;
-    }
+    const result = await query(sql, params);
 
-    console.error('Raw products from DB:', JSON.stringify(products, null, 2));
-
-    // Transform products to include priceMatrix
-    const transformedProducts = (products || []).map((product: any) => {
+    const transformedProducts = result.rows.map((product: any) => {
       const priceMatrix: { [key: number]: number } = {};
       let basePrice: number | undefined;
 
-      console.error(`Processing product ${product.id} (${product.name}):`, {
-        measure_id: product.measure_id,
-        product_prices: product.product_prices,
-      });
-
-      // Build price matrix from product_prices
-      if (product.product_prices && Array.isArray(product.product_prices)) {
-        product.product_prices.forEach((pp: any) => {
+      const prices = product.product_prices || [];
+      if (Array.isArray(prices)) {
+        prices.forEach((pp: any) => {
           if (pp.is_active) {
             const price = parseFloat(pp.price);
             priceMatrix[pp.measure_id] = price;
-            console.error(`  Added price for measure ${pp.measure_id}: $${price}`);
-
-            // Set base price from the product's default measure
             if (pp.measure_id === product.measure_id) {
               basePrice = price;
-              console.error(`  Set as base price: $${price}`);
             }
           }
         });
-
-        // If no base price set yet, use the first active price
-        if (!basePrice && product.product_prices.length > 0) {
-          const firstPrice = product.product_prices.find((pp: any) => pp.is_active);
+        if (!basePrice && prices.length > 0) {
+          const firstPrice = prices.find((pp: any) => pp.is_active);
           if (firstPrice) {
             basePrice = parseFloat(firstPrice.price);
-            console.error(`  Using first price as base: $${basePrice}`);
           }
         }
       }
 
-      const result = {
+      return {
         id: product.id,
         name: product.name,
         description: product.description,
@@ -175,17 +121,9 @@ export async function GET(request: NextRequest) {
         basePrice,
         priceMatrix: Object.keys(priceMatrix).length > 0 ? priceMatrix : undefined,
       };
-
-      console.error(`Final product:`, result);
-      return result;
     });
 
-    // Apply translations
-    const translatedProducts = await applyProductTranslations(
-      supabase,
-      transformedProducts,
-      locale
-    );
+    const translatedProducts = await applyProductTranslations(transformedProducts, locale);
 
     return createApiResponse(translatedProducts);
   } catch (error) {

@@ -64,12 +64,9 @@ jobs:
         env:
           NODE_ENV: production
           # Public vars – match cPanel Node.js Selector panel exactly
-          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY }}
           NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
-          # Server-side secrets – required by Prisma at build time
+          # Required by Prisma client generation during build
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL }}
 
       # -------------------------------------------------------
       # 5. Detect if package.json changed (auto npm install)
@@ -107,19 +104,13 @@ jobs:
 
           # Dependency manifests (needed by cPanel "Run NPM Install" button)
           # We use node to create a clean production-only package.json
-          node -e "const fs = require('fs'); const pkg = require('./package.json'); delete pkg.devDependencies; delete pkg['lint-staged']; pkg.scripts = { start: 'node server.js' }; fs.writeFileSync('deploy/package.json', JSON.stringify(pkg, null, 2));"
+          node -e "const fs = require('fs'); const pkg = require('./package.json'); delete pkg.devDependencies; delete pkg['lint-staged']; pkg.scripts = { start: 'node server.cjs' }; fs.writeFileSync('deploy/package.json', JSON.stringify(pkg, null, 2));"
           cp pnpm-lock.yaml deploy/pnpm-lock.yaml 2>/dev/null || :
           cp .npmrc deploy/.npmrc 2>/dev/null || :
           cp pnpm-workspace.yaml deploy/pnpm-workspace.yaml 2>/dev/null || :
 
-          # Prisma schema
+          # Prisma schema (dev-only, for db:push/db:seed on server)
           cp prisma/schema.prisma deploy/prisma/schema.prisma
-
-          # Generated Prisma client
-          if [ -d generated/prisma ]; then
-            mkdir -p deploy/generated/prisma
-            cp -r generated/prisma/. deploy/generated/prisma/
-          fi
 
       # -------------------------------------------------------
       # 7. Upload to cPanel via FTP
