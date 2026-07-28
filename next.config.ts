@@ -5,12 +5,14 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
   // Enable experimental features
-  experimental: {},
+  experimental: {
+    useTypeScriptCli: true,
+  },
 
   // Output file tracing includes
   outputFileTracingIncludes: {},
 
-  // Server external packages
+  // Server external packages (pg is auto-externalized by Next.js)
   serverExternalPackages: [],
 
   // Image configuration
