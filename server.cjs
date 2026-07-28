@@ -49,7 +49,9 @@ app.prepare().then(() => {
     // eslint-disable-next-line no-console
     console.log(`> Environment: ${process.env.NODE_ENV}`);
     // eslint-disable-next-line no-console
-    console.log(`> Database: ${process.env.DATABASE_URL ? `Connected (${process.env.DATABASE_URL.includes('zivahint_admin') ? 'zivahint_admin' : 'configured'})` : 'Not configured'}`);
+    console.log(
+      `> Database: ${process.env.DATABASE_URL ? `Connected (${process.env.DATABASE_URL.includes('zivahint_admin') ? 'zivahint_admin' : 'configured'})` : 'Not configured'}`
+    );
 
     // Start database health monitoring (check every 30 seconds)
     if (startHealthMonitoring && process.env.DATABASE_URL) {
@@ -57,7 +59,6 @@ app.prepare().then(() => {
       // eslint-disable-next-line no-console
       console.log('> Database health monitoring: Active');
     }
-
   });
 
   // Graceful shutdown
