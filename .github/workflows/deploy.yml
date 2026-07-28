@@ -113,6 +113,7 @@ jobs:
           echo "Restarting app via cPanel UAPI..."
           RESPONSE=$(curl -s -G \
             -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
             --data-urlencode "app_name=${{ secrets.CPANEL_APP_NAME }}" \
             "https://${{ secrets.CPANEL_HOST }}:2083/execute/NodeJS/restart_app")
           echo "$RESPONSE"

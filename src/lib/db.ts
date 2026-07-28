@@ -14,7 +14,7 @@ const pool = new Pool({
   idleTimeoutMillis: 30000, // Close idle connections after 30s
   connectionTimeoutMillis: 10000, // 10 seconds to establish connection
   allowExitOnIdle: false,
-  ssl: false, // Server at 157.250.199.66 does not support SSL
+  ssl: { rejectUnauthorized: false }, // Requires SSL per pg_hba.conf
 });
 
 // Handle pool errors
