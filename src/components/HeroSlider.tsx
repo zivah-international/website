@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 
+import { ArrowLeft, ArrowRight, ChevronRight } from '@/components/ui/icons';
+
 interface Slide {
   image: string;
   badge: string;
@@ -23,29 +25,19 @@ interface HeroSliderProps {
 
 export default function HeroSlider({ slides, locale }: HeroSliderProps) {
   const [current, setCurrent] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const goTo = useCallback(
-    (index: number) => {
-      if (isTransitioning) return;
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrent(index);
-        setIsTransitioning(false);
-      }, 300);
-    },
-    [isTransitioning]
-  );
+  const goTo = useCallback((index: number) => {
+    setCurrent(index);
+  }, []);
 
   const next = useCallback(() => {
-    goTo((current + 1) % slides.length);
-  }, [current, goTo, slides.length]);
+    setCurrent(prev => (prev + 1) % slides.length);
+  }, [slides.length]);
 
   const prev = useCallback(() => {
-    goTo((current - 1 + slides.length) % slides.length);
-  }, [current, goTo, slides.length]);
+    setCurrent(prev => (prev - 1 + slides.length) % slides.length);
+  }, [slides.length]);
 
-  // Auto-advance every 6s
   useEffect(() => {
     const timer = setInterval(next, 6000);
     return () => clearInterval(timer);
@@ -54,13 +46,13 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
   const slide = slides[current];
 
   return (
-    <section className='relative h-[75vh] min-h-[520px] w-full overflow-hidden'>
-      {/* Background Images */}
+    <section className='relative h-[80vh] min-h-[560px] w-full overflow-hidden'>
+      {/* Background images with crossfade */}
       {slides.map((s, i) => (
         <div
           key={i}
-          className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-            i === current && !isTransitioning ? 'opacity-100' : 'opacity-0'
+          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
+            i === current ? 'scale-100 opacity-100' : 'scale-105 opacity-0'
           }`}
         >
           <Image
@@ -74,18 +66,16 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
         </div>
       ))}
 
-      {/* Gradient overlay — blue-tinted for ocean feel */}
-      <div className='absolute inset-0 bg-linear-to-r from-[#0a2744]/75 via-[#0a2744]/40 to-[#0a3d5c]/25' />
-      <div className='absolute inset-0 bg-linear-to-b from-transparent via-transparent to-[#0a2744]/40' />
+      {/* Gradient overlay */}
+      <div className='absolute inset-0 bg-linear-to-r from-[#0a2744]/80 via-[#0a2744]/50 to-[#0a3d5c]/30' />
+      <div className='absolute inset-0 bg-linear-to-b from-transparent via-transparent to-[#0a2744]/50' />
 
       {/* Content */}
       <div className='relative flex h-full items-center'>
         <div className='container mx-auto px-6 sm:px-10 lg:px-16'>
           <div className='max-w-3xl'>
             {/* Badge */}
-            <div
-              className={`mb-5 transition-all duration-500 ${isTransitioning ? 'translate-y-2 opacity-0' : 'translate-y-0 opacity-100'}`}
-            >
+            <div className='mb-5 transition-all duration-700'>
               <span className='inline-block rounded-full border border-white/30 bg-white/15 px-5 py-2 text-sm font-semibold text-white backdrop-blur-sm'>
                 {slide.badge}
               </span>
@@ -93,21 +83,24 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
 
             {/* Headline */}
             <h1
-              className={`mb-4 text-4xl leading-tight font-black text-white drop-shadow-lg transition-all duration-500 sm:text-5xl lg:text-6xl ${isTransitioning ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'}`}
+              key={`title-${current}`}
+              className='animate-in fade-in slide-in-from-bottom-4 mb-4 text-4xl leading-tight font-black text-white drop-shadow-lg duration-700 sm:text-5xl lg:text-6xl'
             >
-              {slide.title} <span className='text-[#7dd3fc]'>{slide.titleHighlight}</span>
+              {slide.title} <span style={{ color: '#7dd3fc' }}>{slide.titleHighlight}</span>
             </h1>
 
             {/* Subtitle */}
             <p
-              className={`mb-8 text-lg text-white/85 drop-shadow transition-all delay-75 duration-500 sm:text-xl lg:text-2xl ${isTransitioning ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'}`}
+              key={`sub-${current}`}
+              className='animate-in fade-in slide-in-from-bottom-4 mb-8 text-lg text-white/85 drop-shadow delay-75 duration-700 sm:text-xl lg:text-2xl'
             >
               {slide.subtitle}
             </p>
 
             {/* CTAs */}
             <div
-              className={`flex flex-col gap-3 transition-all delay-100 duration-500 sm:flex-row ${isTransitioning ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'}`}
+              key={`cta-${current}`}
+              className='animate-in fade-in slide-in-from-bottom-4 flex flex-col gap-3 delay-150 duration-700 sm:flex-row'
             >
               <Link
                 href={`/${locale}${slide.ctaHref}`}
@@ -117,19 +110,10 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
                 data-track-label={`hero_primary_${slide.ctaHref.replace(/\//g, '_')}`}
               >
                 {slide.cta}
-                <svg
-                  className='h-5 w-5'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
+                <ArrowRight
+                  size={20}
                   strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M17 8l4 4m0 0l-4 4m4-4H3'
-                  />
-                </svg>
+                />
               </Link>
               <Link
                 href={`/${locale}${slide.ctaSecondaryHref}`}
@@ -141,79 +125,61 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
                 {slide.ctaSecondary}
               </Link>
             </div>
+
+            {/* Certification trust strip */}
+            <div className='mt-6 flex items-center gap-2'>
+              {['BAP', 'HACCP', 'BRC', 'GlobalGAP'].map(cert => (
+                <span
+                  key={cert}
+                  className='rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm'
+                >
+                  {cert}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Certification trust strip — bottom left */}
-      <div className='absolute bottom-24 left-6 hidden items-center gap-2 sm:flex lg:left-16'>
-        {['BAP', 'HACCP', 'BRC', 'GlobalGAP'].map(cert => (
-          <span
-            key={cert}
-            className='rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm'
-          >
-            {cert}
-          </span>
-        ))}
-      </div>
-
-      {/* Dots navigation — bottom center */}
+      {/* Dots navigation */}
       <div className='absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-3'>
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i)}
             aria-label={`Ir a slide ${i + 1}`}
-            className={`rounded-full transition-all duration-300 ${
-              i === current ? 'h-2.5 w-8 bg-white' : 'h-2.5 w-2.5 bg-white/40 hover:bg-white/70'
+            className={`rounded-full transition-all duration-500 ${
+              i === current ? 'h-3 w-8 bg-white' : 'h-3 w-3 bg-white/40 hover:bg-white/70'
             }`}
           />
         ))}
       </div>
 
-      {/* Prev/Next arrows — sides */}
+      {/* Arrows */}
       <button
         onClick={prev}
         aria-label='Slide anterior'
         className='absolute top-1/2 left-4 -translate-y-1/2 rounded-full border border-white/20 bg-black/30 p-3 text-white backdrop-blur-sm transition-all hover:bg-black/50 lg:left-8'
       >
-        <svg
-          className='h-5 w-5'
-          fill='none'
-          viewBox='0 0 24 24'
-          stroke='currentColor'
+        <ArrowLeft
+          size={20}
           strokeWidth={2.5}
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M15 19l-7-7 7-7'
-          />
-        </svg>
+        />
       </button>
       <button
         onClick={next}
         aria-label='Siguiente slide'
         className='absolute top-1/2 right-4 -translate-y-1/2 rounded-full border border-white/20 bg-black/30 p-3 text-white backdrop-blur-sm transition-all hover:bg-black/50 lg:right-8'
       >
-        <svg
-          className='h-5 w-5'
-          fill='none'
-          viewBox='0 0 24 24'
-          stroke='currentColor'
+        <ChevronRight
+          size={20}
           strokeWidth={2.5}
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M9 5l7 7-7 7'
-          />
-        </svg>
+        />
       </button>
 
-      {/* Slide counter */}
+      {/* Counter */}
       <div className='absolute right-6 bottom-8 text-xs font-medium text-white/60 lg:right-16'>
-        {current + 1} / {slides.length}
+        {String(current + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
       </div>
     </section>
   );
