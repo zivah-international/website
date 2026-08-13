@@ -37,7 +37,7 @@ export default function WhyEcuadorSection() {
           {ITEMS.map((item, i) => (
             <div
               key={i}
-              className={`rounded-xl border ${item.border} ${item.bg} p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-black/5`}
+              className={`rounded-lg border ${item.border} ${item.bg} p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/5`}
             >
               <div className={`${item.color} mb-2 text-2xl font-black`}>{item.stat}</div>
               <div className='mb-1.5 text-sm font-bold text-foreground'>

@@ -3,10 +3,10 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 
-import { ChevronRight, ArrowRight } from '@/components/ui/icons';
+import { ArrowRight, ChevronRight, Globe, Package, QuoteIcon, Search } from '@/components/ui/icons';
 import { getAnimationClasses, useScrollAnimation } from '@/lib/hooks/use-scroll-animation';
 
-const STEPS = ['📋', '🔍', '📄', '🚢'] as const;
+const STEPS = [QuoteIcon, Search, Package, Globe] as const;
 
 export default function ProcessSection() {
   const t = useTranslations();
@@ -35,15 +35,20 @@ export default function ProcessSection() {
           ref={ref}
           className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-4 ${getAnimationClasses('fade-up', isVisible)}`}
         >
-          {STEPS.map((icon, i) => (
+          {STEPS.map((Icon, i) => (
             <div
               key={i}
-              className='relative rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-black/5'
+              className='relative rounded-lg border border-border/50 bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-black/5'
             >
               <div className='mb-2 text-5xl font-black text-primary/12 select-none'>
                 {String(i + 1).padStart(2, '0')}
               </div>
-              <div className='mb-3 text-3xl'>{icon}</div>
+              <div className='mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary'>
+                <Icon
+                  size={20}
+                  strokeWidth={2.3}
+                />
+              </div>
               <h3 className='mb-1 text-base font-bold text-foreground'>
                 {t(`process.steps.${i}.title`)}
               </h3>
@@ -62,7 +67,7 @@ export default function ProcessSection() {
         <div className='mt-10 text-center'>
           <Link
             href={`/${locale}/quote`}
-            className='inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg'
+            className='inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg'
             data-track='begin_checkout'
             data-track-category='process'
             data-track-label='home_process_quote'

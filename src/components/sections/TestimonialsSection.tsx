@@ -28,17 +28,17 @@ export default function TestimonialsSection() {
           {[0, 1, 2].map(i => (
             <div
               key={i}
-              className='flex flex-col rounded-2xl border border-border/40 bg-card p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/5'
+              className='flex flex-col rounded-lg border border-border/40 bg-card p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/5'
             >
               <TestimonialQuote
-                className='mb-4 h-8 w-8 shrink-0 text-primary/15'
-                size={32}
+                className='mb-4 h-7 w-7 shrink-0 text-primary/25'
+                size={28}
               />
               <p className='mb-6 flex-1 text-sm leading-relaxed text-muted-foreground'>
                 {t(`testimonials.items.${i}.quote`)}
               </p>
               <div className='flex items-center gap-3 border-t border-border/40 pt-4'>
-                <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg'>
+                <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-lg'>
                   {t(`testimonials.items.${i}.flag`)}
                 </div>
                 <div>

@@ -48,7 +48,7 @@ export default function CategoriesSection() {
 
   return (
     <section
-      className='bg-muted/30 py-14'
+      className='bg-[#f4f8fb] py-16 dark:bg-muted/20'
       id='products'
     >
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
@@ -56,7 +56,7 @@ export default function CategoriesSection() {
           <div className='mb-3 inline-block rounded-full bg-secondary/10 px-4 py-1.5 text-sm font-semibold text-secondary'>
             {t('products.badge')}
           </div>
-          <h2 className='mb-4 text-3xl font-bold text-foreground sm:text-4xl'>
+          <h2 className='mb-4 text-3xl font-black text-foreground sm:text-4xl'>
             {t('products.title')}
           </h2>
           <p className='mx-auto max-w-2xl text-lg text-muted-foreground'>
@@ -69,9 +69,9 @@ export default function CategoriesSection() {
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className='animate-pulse rounded-2xl border bg-card p-8'
+                className='animate-pulse rounded-lg border bg-card p-8'
               >
-                <div className='mb-4 h-12 w-12 rounded-xl bg-muted' />
+                <div className='mb-4 h-12 w-12 rounded-lg bg-muted' />
                 <div className='mb-3 h-5 rounded bg-muted' />
                 <div className='h-4 rounded bg-muted' />
               </div>
@@ -87,10 +87,12 @@ export default function CategoriesSection() {
               return (
                 <div
                   key={cat.id}
-                  className='group flex flex-col rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/5'
+                  className='group flex flex-col rounded-lg border border-border/60 bg-background p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg hover:shadow-black/5'
                 >
                   <div className='mb-4 flex items-start justify-between'>
-                    <span className='text-4xl'>{cat.icon || '📦'}</span>
+                    <span className='flex h-11 w-11 items-center justify-center rounded-lg bg-primary/8 text-lg font-black text-primary'>
+                      {cat.icon || 'MAR'}
+                    </span>
                     <span className={`${style.dot} mt-2 h-2 w-2 rounded-full`} />
                   </div>
                   <h3 className='mb-2 text-lg font-bold text-foreground'>{cat.name}</h3>
@@ -100,18 +102,18 @@ export default function CategoriesSection() {
                   <div className='flex gap-2'>
                     <Link
                       href={`/${locale}/products?category=${cat.slug}`}
-                      className={`${style.btn} flex-1 rounded-lg py-2 text-center text-xs font-semibold transition-colors`}
+                      className={`${style.btn} flex-1 rounded-md py-2 text-center text-xs font-semibold transition-colors`}
                     >
                       {t('products.viewDetail')}
                     </Link>
                     <Link
                       href={`/${locale}/quote`}
-                      className='rounded-lg border border-border px-3 py-2 text-xs font-medium transition-colors hover:border-accent/50 hover:text-accent'
+                      className='rounded-md border border-border px-3 py-2 text-xs font-medium transition-colors hover:border-accent/50 hover:text-accent'
                       data-track='begin_checkout'
                       data-track-category='category_card'
                       data-track-label='home_category_quote'
                     >
-                      {t('products.requestQuote')?.split(' ')[0]}
+                      {locale === 'es' ? 'Cotizar FOB' : 'FOB quote'}
                     </Link>
                   </div>
                 </div>
@@ -123,7 +125,7 @@ export default function CategoriesSection() {
         <div className='mt-10 text-center'>
           <Link
             href={`/${locale}/products`}
-            className='inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg'
+            className='inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg'
           >
             {t('home.viewFullCatalog')}
             <ArrowRight

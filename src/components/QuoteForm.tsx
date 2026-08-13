@@ -12,6 +12,7 @@ import { Controller, useForm } from 'react-hook-form';
 import Select from 'react-select';
 
 import { useBusinessTracking } from '@/components/BusinessIntelligence';
+import { useTheme } from '@/components/ThemeProvider';
 import { Button } from '@/components/ui/button';
 import { createQuoteSchema } from '@/lib/validations';
 
@@ -107,7 +108,8 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
   const [countriesError, setCountriesError] = useState<string | null>(null);
   const [_measuresLoading, _setMeasuresLoading] = useState(true);
   const [productsSearching, setProductsSearching] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === 'dark';
 
   // State for price conversion
   const [conversionErrors, setConversionErrors] = useState<{
@@ -130,17 +132,6 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
       }
     }
     return currency.code || currency.symbol || currency.name || '';
-  }, []);
-
-  // Detect dark mode
-  useEffect(() => {
-    const checkDarkMode = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark'));
-    };
-    checkDarkMode();
-    const observer = new MutationObserver(checkDarkMode);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
   }, []);
 
   const {

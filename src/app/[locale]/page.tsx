@@ -20,39 +20,39 @@ export default function HomePage() {
   const SLIDES = [
     {
       image:
-        'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=1920&q=90',
+        'https://images.pexels.com/photos/14062141/pexels-photo-14062141.jpeg?auto=compress&fit=crop&w=1920&q=90',
       badge: t('hero.slides.shrimp.badge'),
       title: t('hero.slides.shrimp.title'),
       titleHighlight: t('hero.slides.shrimp.titleHighlight'),
       subtitle: t('hero.slides.shrimp.subtitle'),
       cta: t('hero.slides.shrimp.cta'),
-      ctaHref: '/products?category=marinos-y-pesca',
+      ctaHref: '/quote',
       ctaSecondary: t('hero.slides.shrimp.ctaSecondary'),
-      ctaSecondaryHref: '/quote',
+      ctaSecondaryHref: '/products?category=marinos-y-pesca',
     },
     {
       image:
-        'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=90',
+        'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1920&q=90',
       badge: t('hero.slides.larvae.badge'),
       title: t('hero.slides.larvae.title'),
       titleHighlight: t('hero.slides.larvae.titleHighlight'),
       subtitle: t('hero.slides.larvae.subtitle'),
       cta: t('hero.slides.larvae.cta'),
-      ctaHref: '/products?category=larvas',
+      ctaHref: '/quote',
       ctaSecondary: t('hero.slides.larvae.ctaSecondary'),
-      ctaSecondaryHref: '/quote',
+      ctaSecondaryHref: '/products?category=larvas',
     },
     {
       image:
-        'https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&w=1920&q=90',
+        'https://images.pexels.com/photos/2714384/pexels-photo-2714384.jpeg?auto=compress&fit=crop&w=1920&q=90',
       badge: t('hero.slides.fruits.badge'),
       title: t('hero.slides.fruits.title'),
       titleHighlight: t('hero.slides.fruits.titleHighlight'),
       subtitle: t('hero.slides.fruits.subtitle'),
       cta: t('hero.slides.fruits.cta'),
-      ctaHref: '/products?category=frutas-tropicales',
+      ctaHref: '/quote',
       ctaSecondary: t('hero.slides.fruits.ctaSecondary'),
-      ctaSecondaryHref: '/quote',
+      ctaSecondaryHref: '/products?category=frutas-tropicales',
     },
   ];
 
@@ -72,10 +72,10 @@ export default function HomePage() {
             className={`grid grid-cols-2 divide-x divide-white/20 md:grid-cols-4 ${getAnimationClasses('fade-up', statsVisible)}`}
           >
             {[
-              { value: '5+', label: t('hero.stats.countriesServed') },
               { value: '24h', label: t('hero.stats.containersYear') },
-              { value: '4+', label: t('hero.stats.yearsExperience') },
-              { value: '100%', label: t('hero.stats.qualityGuaranteed') },
+              { value: 'FOB', label: t('hero.stats.countriesServed') },
+              { value: 'BAP', label: t('hero.stats.yearsExperience') },
+              { value: '5+', label: t('hero.stats.qualityGuaranteed') },
             ].map((s, i) => (
               <div
                 key={i}
@@ -102,17 +102,17 @@ export default function HomePage() {
         cta={{ label: t('home.shrimp.cta'), href: `/${locale}/products?category=marinos-y-pesca` }}
         ctaSecondary={{ label: t('home.shrimp.ctaSecondary'), href: `/${locale}/quote` }}
         image={{
-          src: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=900&q=90',
+          src: 'https://images.pexels.com/photos/14062141/pexels-photo-14062141.jpeg?auto=compress&fit=crop&w=900&q=90',
           alt: 'Camarón Vannamei IQF Premium Ecuador',
         }}
-        badge='BAP · HACCP · GlobalGAP · BRC'
+        badge='IQF · BAP · HACCP · BRC'
         trackLabels={{ primary: 'home_shrimp_products', secondary: 'home_shrimp_quote' }}
       />
 
       {/* Larvae feature */}
       <FeatureSection
         eyebrowColor='primary'
-        bgClassName='bg-primary/[0.03] py-14 lg:py-20'
+        bgClassName='bg-primary/[0.04] py-16 lg:py-24'
         eyebrow={t('home.larvae.eyebrow')}
         title={t('home.larvae.title')}
         titleHighlight={t('home.larvae.titleHighlight')}
@@ -121,10 +121,10 @@ export default function HomePage() {
         cta={{ label: t('home.larvae.cta'), href: `/${locale}/products?category=larvas` }}
         ctaSecondary={{ label: t('home.larvae.ctaSecondary'), href: `/${locale}/quote` }}
         image={{
-          src: 'https://images.unsplash.com/photo-1674962296996-b17a771d44b3?auto=format&fit=crop&w=900&q=90',
+          src: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=90',
           alt: 'Laboratorio de Larvas de Camarón Ecuador',
         }}
-        badge='🔬 SPF · Bioseguridad Nivel A'
+        badge='SPF · Bioseguridad Nivel A'
         imagePosition='right'
         trackLabels={{ primary: 'home_larvae_products', secondary: 'home_larvae_quote' }}
       />

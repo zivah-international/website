@@ -39,10 +39,10 @@
     "exploreProducts": "View Catalog",
     "requestQuote": "Request Quote",
     "stats": {
-      "countriesServed": "Export Markets",
-      "containersYear": "Guaranteed Response",
-      "yearsExperience": "Years in Market",
-      "qualityGuaranteed": "Client Satisfaction"
+      "countriesServed": "Guayaquil",
+      "containersYear": "Commercial Response",
+      "yearsExperience": "Aquaculture Certification",
+      "qualityGuaranteed": "Markets Served"
     },
     "statValues": {
       "countriesServed": "5+",
@@ -52,28 +52,28 @@
     },
     "slides": {
       "shrimp": {
-        "badge": "🦐 Vannamei Shrimp · Direct Export Ecuador",
-        "title": "Vannamei Shrimp",
-        "titleHighlight": "BAP Certified",
-        "subtitle": "IQF · Sizes 10/20 to 100/200 · Full documentation · 24h response",
-        "cta": "View Shrimp",
-        "ctaSecondary": "Request Quote"
+        "badge": "Vannamei Shrimp · Direct export from Ecuador",
+        "title": "Ecuadorian shrimp",
+        "titleHighlight": "ready to export",
+        "subtitle": "IQF and block frozen shrimp with BAP/HACCP/BRC documentation, full traceability and 24h commercial response.",
+        "cta": "Request FOB price",
+        "ctaSecondary": "View technical sheet"
       },
       "larvae": {
-        "badge": "🔬 Larvae Lab · Nauplii & PL · Ecuador",
-        "title": "Shrimp Larvae",
-        "titleHighlight": "Biosecure",
-        "subtitle": "SPF · High survival · Proven genetics · Weekly dispatch",
-        "cta": "View Larvae",
-        "ctaSecondary": "Request Quote"
+        "badge": "Shrimp larvae · Nauplii and PL · Ecuador",
+        "title": "SPF larvae",
+        "titleHighlight": "for stable cycles",
+        "subtitle": "Selected genetics, level-A biosecurity, guided acclimation and coordinated availability for aquaculture production.",
+        "cta": "Check availability",
+        "ctaSecondary": "View technical sheet"
       },
       "fruits": {
-        "badge": "🥭 Tropical Fruits · Coffee · Cacao · Ecuador",
-        "title": "Tropical",
-        "titleHighlight": "Products",
-        "subtitle": "Mango · Pineapple · Arabica Coffee · GlobalGAP · Full traceability",
-        "cta": "View Catalog",
-        "ctaSecondary": "Talk to an advisor"
+        "badge": "Tropical fruits · Coffee · Cacao · Ecuador",
+        "title": "Ecuadorian products",
+        "titleHighlight": "with traceability",
+        "subtitle": "Certified origin, clear seasonality and export documentation ready for international buyers.",
+        "cta": "Request quote",
+        "ctaSecondary": "View catalog"
       }
     },
     "gallery": {
@@ -103,53 +103,53 @@
   "home": {
     "viewFullCatalog": "View full catalog",
     "shrimp": {
-      "eyebrow": "Premium Vannamei Shrimp",
-      "title": "We Export Shrimp",
-      "titleHighlight": "IQF Certified",
-      "description": "Individually quick frozen (IQF) vannamei shrimp direct from certified farms in Guayas, Ecuador. Sizes 10/20 through 100/200. Sanitary, BRC and BAP documentation ready for any market.",
+      "eyebrow": "Main offer",
+      "title": "Source shrimp",
+      "titleHighlight": "with less operational risk",
+      "description": "We connect international buyers with certified Ecuadorian vannamei shrimp, ready sanitary documentation and FOB coordination from Guayaquil.",
       "features": [
-        "BAP · HACCP · GlobalGAP certifications current",
-        "IQF · Block Frozen · Cooked · Tail-on / Headless",
-        "Full traceability from farm to container",
-        "Shipment from Port of Guayaquil — FOB"
+        "Ready documentation to reduce customs delays",
+        "IQF, block frozen, cooked, tail-on and headless presentations",
+        "Traceability from farm to container for procurement audits",
+        "FOB Guayaquil quote with 24h commercial response"
       ],
-      "cta": "View Shrimp",
-      "ctaSecondary": "Request Quote"
+      "cta": "Request FOB price",
+      "ctaSecondary": "View technical sheet"
     },
     "larvae": {
-      "eyebrow": "Larvae Laboratory",
-      "title": "Nauplii and PL",
-      "titleHighlight": "High Survival",
-      "description": "White shrimp larvae (Litopenaeus vannamei) produced in a biosecurity level-A laboratory. Selected genetics, SPF certified, high survival rate and weekly dispatch for operations of any scale.",
+      "eyebrow": "Aquaculture",
+      "title": "Larvae for",
+      "titleHighlight": "more predictable cycles",
+      "description": "Nauplii and post-larvae supply for white shrimp operations, with selected genetics, biosecurity and technical support for aquaculture teams.",
       "features": [
-        "SPF — Specific Pathogen Free certified",
-        "PL10 · PL12 · PL15 · Nauplii — on request",
+        "Certified SPF to reduce sanitary risk",
+        "PL10, PL12, PL15 and nauplii according to production planning",
         "Guided acclimation and post-sale technical support",
-        "Weekly domestic and international air dispatch"
+        "Coordinated dispatch to maintain stocking continuity"
       ],
-      "cta": "View Larvae",
-      "ctaSecondary": "Check availability"
+      "cta": "Check availability",
+      "ctaSecondary": "View technical sheet"
     },
     "whyEcuador": {
       "eyebrow": "Why Ecuador",
-      "title": "The Ecuadorian Aquaculture Advantage",
-      "subtitle": "Ecuador is the world's 4th largest shrimp exporter. Unique tropical conditions, clean water and certified producers make Guayas the preferred origin for international buyers.",
+      "title": "Why source Ecuadorian aquaculture",
+      "subtitle": "Ecuador combines specialized production, recognized certifications and frequent maritime logistics from Guayaquil for buyers who need continuity and control.",
       "items": [
         {
-          "label": "4th Largest Exporter",
-          "desc": "Ecuador exports over 1.2 million tons of shrimp annually — the EU's top supplier and a major source for Asia."
+          "label": "Recognized origin",
+          "desc": "Ecuador is a global reference for vannamei shrimp and works with suppliers used to demanding markets."
         },
         {
-          "label": "Optimal Temperature",
-          "desc": "Water between 24–28°C year-round in Guayas. Shorter production cycles and better feed conversion than regional competitors."
+          "label": "Stable production",
+          "desc": "Tropical conditions support production continuity and year-round sourcing planning."
         },
         {
-          "label": "BAP Certification",
-          "desc": "Farms and laboratories audited under BAP, HACCP and BRC standards. Documentation ready for the EU, US and Asia without delays."
+          "label": "Verifiable certification",
+          "desc": "Processes aligned with BAP, HACCP and BRC to support document review before shipment."
         },
         {
-          "label": "Direct FOB Logistics",
-          "desc": "Port of Guayaquil with weekly sailings. Miami commercial office to streamline operations with North American buyers."
+          "label": "Direct FOB shipping",
+          "desc": "Coordination from Guayaquil and international commercial support to reduce operational uncertainty."
         }
       ]
     }
@@ -284,57 +284,57 @@
     "tagline": "Premium Ecuadorian Products Exporters"
   },
   "process": {
-    "badge": "How It Works",
-    "title": "From Your Request to Shipment in 4 Steps",
-    "description": "A clear, agile commercial process with technical support at every stage.",
+    "badge": "Sourcing path",
+    "title": "From quote to shipment without unnecessary steps",
+    "description": "A simple path so buyers understand what to send, what they receive and when they can move forward.",
     "steps": [
       {
         "number": "01",
-        "title": "Request Your Quote",
-        "description": "Select the products, indicate volume and destination country. You will receive a response within 24 hours.",
+        "title": "Send your requirement",
+        "description": "Product, volume, destination and required presentation. With those details we avoid back-and-forth.",
         "icon": "📋"
       },
       {
         "number": "02",
-        "title": "Technical & Commercial Validation",
-        "description": "Our team validates availability, required certifications and Incoterms according to your market.",
+        "title": "We validate availability",
+        "description": "We review sizes, certifications, required documentation and Incoterm according to your market.",
         "icon": "🔍"
       },
       {
         "number": "03",
-        "title": "Formal Proposal",
-        "description": "You receive a proposal with FOB price, technical specifications, certifications and export documentation.",
+        "title": "Receive FOB proposal",
+        "description": "We send price, technical specification, available documentation and commercial conditions.",
         "icon": "📄"
       },
       {
         "number": "04",
-        "title": "Dispatch & Tracking",
-        "description": "We coordinate the shipment, international logistics and follow up until the product reaches its destination.",
+        "title": "We coordinate shipment",
+        "description": "We align documentation, dispatch and commercial follow-up until product departure.",
         "icon": "🚢"
       }
     ]
   },
   "testimonials": {
-    "badge": "What Our Clients Say",
-    "title": "Results That Back Our Proposition",
+    "badge": "Commercial proof",
+    "title": "Trust based on operation, not promises",
     "description": "Importers and distributors who trust ZIVAH for their sourcing operations.",
     "items": [
       {
-        "quote": "ZIVAH's vannamei shrimp meets all the requirements of our European market. Impeccable documentation, complete traceability and competitive pricing. We have been working together since the first shipment.",
+        "quote": "The documentation arrived clearly from the beginning, which helped our internal review before moving forward with the purchase.",
         "author": "Seafood Importer",
         "role": "Wholesale Distributor",
         "country": "Spain",
         "flag": "🇪🇸"
       },
       {
-        "quote": "We were looking for a larvae supplier with proven genetics and regular dispatch capacity. ZIVAH offers exactly that, with technical support in every production cycle.",
+        "quote": "We needed stocking continuity and technical support. Availability coordination helped us plan the cycle better.",
         "author": "Aquaculture Manager",
         "role": "Shrimp Farm Operator",
         "country": "Mexico",
         "flag": "🇲🇽"
       },
       {
-        "quote": "The commercial response is fast, prices are competitive and product quality is consistent. That is the foundation of any long-term export relationship.",
+        "quote": "The commercial response was fast and concrete: price, conditions and next steps without scattered information.",
         "author": "Purchasing Director",
         "role": "Distribution Chain",
         "country": "United States",
@@ -437,7 +437,7 @@
     "title": "Cookies at ZIVAH International",
     "description": "We use cookies to improve your experience, analyze traffic, and personalize content. By continuing to browse, you accept our use of cookies according to our",
     "cookiePolicy": "Cookie Policy",
-    "managePreferences": "Manage Preferences",
+    "managePreferences": "Preferences",
     "onlyNecessary": "Only Necessary",
     "acceptAll": "Accept All",
     "preferencesTitle": "Cookie Preferences",

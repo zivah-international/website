@@ -64,6 +64,23 @@ export default function Navigation() {
     };
   }, [isMobileOpen, mounted]);
 
+  useEffect(() => {
+    setIsMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isMobileOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMobileOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileOpen]);
+
   const items = [
     { id: 'home', href: '/', label: t('home'), icon: NAV_ICONS.home },
     { id: 'products', href: '/products', label: t('products'), icon: NAV_ICONS.products },
@@ -75,8 +92,8 @@ export default function Navigation() {
 
   const headerClass = `fixed top-0 w-full z-50 transition-all duration-500 ${
     mounted && isScrolled
-      ? 'bg-background/80 backdrop-blur-xl shadow-lg'
-      : 'bg-transparent backdrop-blur-none'
+      ? 'border-b border-border/70 bg-background/90 shadow-sm backdrop-blur-xl'
+      : 'border-b border-white/10 bg-[#061927]/55 backdrop-blur-md'
   }`;
 
   const isActive = (id: string) => activeSection === id;
@@ -94,15 +111,15 @@ export default function Navigation() {
           {/* Logo */}
           <Link
             href='/'
-            className='relative z-50 flex items-center transition-transform hover:scale-105'
+            className='relative z-50 flex items-center overflow-hidden rounded-lg bg-white/90 px-2 py-1 shadow-sm transition-transform hover:scale-[1.02]'
             aria-label='Ir al inicio'
           >
             <img
               src='/assets/images/zivah-logo.svg'
               alt='ZIVAH International S.A.'
-              width={120}
-              height={40}
-              style={{ width: '120px', height: '40px' }}
+              width={136}
+              height={46}
+              className='h-10 w-28 object-cover sm:h-11 sm:w-32'
             />
           </Link>
 
@@ -116,7 +133,11 @@ export default function Navigation() {
                   asChild
                   variant={isActive(item.id) ? 'nav-active' : 'nav'}
                   size='nav'
-                  className='relative font-medium'
+                  className={`relative font-medium ${
+                    mounted && !isScrolled && !isActive(item.id)
+                      ? 'text-white/78 hover:bg-white/10 hover:text-white'
+                      : ''
+                  }`}
                 >
                   <Link href={item.href}>
                     <span className='mr-1.5 opacity-70'>
@@ -159,11 +180,16 @@ export default function Navigation() {
 
             {/* Mobile toggle */}
             <Button
+              type='button'
               variant='icon'
               size='icon'
-              onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className='relative z-50 lg:hidden'
+              onClick={() => setIsMobileOpen(open => !open)}
+              className={`relative z-50 lg:hidden ${
+                mounted && !isScrolled ? 'text-white hover:bg-white/10 hover:text-white' : ''
+              }`}
               aria-label={isMobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-expanded={isMobileOpen}
+              aria-controls='mobile-navigation'
               suppressHydrationWarning
             >
               {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -174,26 +200,38 @@ export default function Navigation() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 z-40 transition-all duration-500 lg:hidden ${
-          mounted && isMobileOpen
-            ? 'pointer-events-auto opacity-100'
-            : 'pointer-events-none opacity-0'
+        id='mobile-navigation'
+        className={`fixed inset-0 z-[80] h-dvh transition-all duration-300 lg:hidden ${
+          isMobileOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
         suppressHydrationWarning
       >
         {/* Backdrop */}
         <div
           className='absolute inset-0 bg-black/40 backdrop-blur-sm'
+          aria-hidden='true'
           onClick={() => setIsMobileOpen(false)}
         />
 
         {/* Drawer panel */}
         <div
-          className={`absolute top-0 right-0 h-full w-full max-w-sm bg-background shadow-2xl transition-transform duration-500 ease-out ${
-            mounted && isMobileOpen ? 'translate-x-0' : 'translate-x-full'
+          role='dialog'
+          aria-modal='true'
+          aria-label='Menú de navegación'
+          className={`absolute top-0 right-0 h-dvh w-full max-w-sm border-l border-border bg-background shadow-2xl transition-transform duration-300 ease-out ${
+            isMobileOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
           <div className='flex h-full flex-col overflow-y-auto px-6 pt-24 pb-8'>
+            <button
+              type='button'
+              onClick={() => setIsMobileOpen(false)}
+              className='absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-900 shadow-sm transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800'
+              aria-label='Cerrar panel de navegación'
+            >
+              <X size={20} />
+            </button>
+
             <div className='space-y-1'>
               {items.map(item => {
                 const Icon = item.icon;

@@ -39,10 +39,10 @@
     "exploreProducts": "Ver Catálogo",
     "requestQuote": "Solicitar Cotización",
     "stats": {
-      "countriesServed": "Países Exportados",
-      "containersYear": "Respuesta Garantizada",
-      "yearsExperience": "Años en el Mercado",
-      "qualityGuaranteed": "Satisfacción Cliente"
+      "countriesServed": "Guayaquil",
+      "containersYear": "Respuesta Comercial",
+      "yearsExperience": "Certificación Acuícola",
+      "qualityGuaranteed": "Mercados Atendidos"
     },
     "statValues": {
       "countriesServed": "5+",
@@ -52,28 +52,28 @@
     },
     "slides": {
       "shrimp": {
-        "badge": "🦐 Camarón Vannamei · Exportación Directa Ecuador",
-        "title": "Camarón Vannamei",
-        "titleHighlight": "Certificado BAP",
-        "subtitle": "IQF · Tallas 10/20 a 100/200 · Documentación completa · 24h respuesta",
-        "cta": "Ver Camarón",
-        "ctaSecondary": "Solicitar Cotización"
+        "badge": "Camarón Vannamei · Exportación directa desde Ecuador",
+        "title": "Camarón ecuatoriano",
+        "titleHighlight": "listo para exportar",
+        "subtitle": "IQF y bloque congelado con documentación BAP/HACCP/BRC, trazabilidad completa y respuesta comercial en 24h.",
+        "cta": "Solicitar precio FOB",
+        "ctaSecondary": "Ver ficha técnica"
       },
       "larvae": {
-        "badge": "🔬 Laboratorio de Larvas · Nauplios y PL · Ecuador",
-        "title": "Larvas de Camarón",
-        "titleHighlight": "Bioseguras",
-        "subtitle": "SPF · Alta supervivencia · Genética probada · Despacho semanal",
-        "cta": "Ver Larvas",
-        "ctaSecondary": "Solicitar Cotización"
+        "badge": "Larvas de camarón · Nauplios y PL · Ecuador",
+        "title": "Larvas SPF",
+        "titleHighlight": "para ciclos estables",
+        "subtitle": "Genética seleccionada, bioseguridad nivel A, aclimatación guiada y disponibilidad coordinada para producción acuícola.",
+        "cta": "Consultar disponibilidad",
+        "ctaSecondary": "Ver ficha técnica"
       },
       "fruits": {
-        "badge": "🥭 Frutas Tropicales · Café · Cacao · Ecuador",
-        "title": "Productos",
-        "titleHighlight": "Tropicales",
-        "subtitle": "Mango · Piña · Café Arábica · GlobalGAP · Trazabilidad completa",
-        "cta": "Ver Catálogo",
-        "ctaSecondary": "Hablar con un asesor"
+        "badge": "Frutas tropicales · Café · Cacao · Ecuador",
+        "title": "Productos ecuatorianos",
+        "titleHighlight": "con trazabilidad",
+        "subtitle": "Origen certificado, temporada clara y documentación de exportación lista para compradores internacionales.",
+        "cta": "Solicitar cotización",
+        "ctaSecondary": "Ver catálogo"
       }
     },
     "gallery": {
@@ -103,53 +103,53 @@
   "home": {
     "viewFullCatalog": "Ver catálogo completo",
     "shrimp": {
-      "eyebrow": "Camarón Vannamei Premium",
-      "title": "Exportamos Camarón",
-      "titleHighlight": "IQF Certificado",
-      "description": "Camarón vannamei congelado individualmente (IQF) directo desde las granjas certificadas de Guayas, Ecuador. Tallas 10/20 hasta 100/200. Documentación sanitaria, BRC y BAP lista para cualquier mercado.",
+      "eyebrow": "Oferta principal",
+      "title": "Compra camarón",
+      "titleHighlight": "con menos riesgo operativo",
+      "description": "Conectamos compradores internacionales con camarón vannamei ecuatoriano certificado, documentación sanitaria lista y coordinación FOB desde Guayaquil.",
       "features": [
-        "Certificación BAP · HACCP · GlobalGAP vigentes",
-        "IQF · Block Frozen · Cooked · Tail-on / Headless",
-        "Trazabilidad completa de granja a contenedor",
-        "Embarque desde Puerto de Guayaquil — FOB"
+        "Documentación lista para reducir demoras aduaneras",
+        "Presentaciones IQF, bloque congelado, cocido, tail-on y headless",
+        "Trazabilidad de granja a contenedor para auditorías de compra",
+        "Cotización FOB Guayaquil con respuesta comercial en 24h"
       ],
-      "cta": "Ver Camarón",
-      "ctaSecondary": "Solicitar Cotización"
+      "cta": "Solicitar precio FOB",
+      "ctaSecondary": "Ver ficha técnica"
     },
     "larvae": {
-      "eyebrow": "Laboratorio de Larvas",
-      "title": "Nauplios y PL",
-      "titleHighlight": "de Alta Supervivencia",
-      "description": "Larvas de camarón blanco (Litopenaeus vannamei) producidas en laboratorio de bioseguridad nivel A. Genética seleccionada, SPF certificado, alta supervivencia y despacho semanal para operaciones de cualquier escala.",
+      "eyebrow": "Acuicultura",
+      "title": "Larvas para ciclos",
+      "titleHighlight": "más predecibles",
+      "description": "Suministro de nauplios y postlarvas de camarón blanco con genética seleccionada, bioseguridad y soporte técnico para operaciones acuícolas.",
       "features": [
-        "SPF — Libre de Patógenos Específicos certificado",
-        "PL10 · PL12 · PL15 · Nauplios — según pedido",
-        "Aclimatación guiada y soporte técnico post-venta",
-        "Despacho aéreo nacional e internacional semanal"
+        "SPF certificado para reducir riesgo sanitario",
+        "PL10, PL12, PL15 y nauplios según planificación productiva",
+        "Aclimatación guiada y soporte técnico postventa",
+        "Despacho coordinado para mantener continuidad de siembra"
       ],
-      "cta": "Ver Larvas",
-      "ctaSecondary": "Consultar disponibilidad"
+      "cta": "Consultar disponibilidad",
+      "ctaSecondary": "Ver ficha técnica"
     },
     "whyEcuador": {
       "eyebrow": "Por qué Ecuador",
-      "title": "La Ventaja Ecuatoriana en Acuicultura",
-      "subtitle": "Ecuador es el 4° exportador mundial de camarón. Condiciones tropicales únicas, agua limpia y productores certificados hacen de Guayas el origen preferido por compradores internacionales.",
+      "title": "Por qué comprar acuicultura ecuatoriana",
+      "subtitle": "Ecuador combina producción especializada, certificaciones reconocidas y logística marítima frecuente desde Guayaquil para compradores que necesitan continuidad y control.",
       "items": [
         {
-          "label": "4° Exportador Mundial",
-          "desc": "Ecuador exporta más de 1.2 millones de toneladas de camarón al año. El mayor proveedor de la UE y uno de los principales hacia Asia."
+          "label": "Origen reconocido",
+          "desc": "Ecuador es una referencia global en camarón vannamei y cuenta con proveedores acostumbrados a mercados exigentes."
         },
         {
-          "label": "Temperatura Óptima",
-          "desc": "Aguas entre 24–28°C todo el año en Guayas. Ciclos de producción más cortos y mejor conversión alimenticia que competidores regionales."
+          "label": "Producción estable",
+          "desc": "Las condiciones tropicales favorecen continuidad productiva y planificación de abastecimiento durante el año."
         },
         {
-          "label": "Certificación BAP",
-          "desc": "Granjas y laboratorios auditados bajo estándares BAP, HACCP y BRC. Documentación lista para UE, EE.UU. y Asia sin demoras."
+          "label": "Certificación verificable",
+          "desc": "Procesos alineados con BAP, HACCP y BRC para facilitar revisión documental antes del embarque."
         },
         {
-          "label": "Logística FOB Directa",
-          "desc": "Puerto de Guayaquil con salidas semanales. Oficina comercial en Miami para facilitar operaciones con compradores norteamericanos."
+          "label": "Salida FOB directa",
+          "desc": "Coordinación desde Guayaquil y soporte comercial internacional para reducir incertidumbre operativa."
         }
       ]
     }
@@ -284,57 +284,57 @@
     "tagline": "Exportadores Premium de Productos Ecuatorianos"
   },
   "process": {
-    "badge": "¿Cómo Funciona?",
-    "title": "De tu Solicitud al Embarque en 4 Pasos",
-    "description": "Un proceso comercial claro, ágil y con soporte técnico en cada etapa.",
+    "badge": "Ruta de compra",
+    "title": "De la cotización al embarque sin pasos innecesarios",
+    "description": "Un recorrido simple para que el comprador entienda qué enviar, qué recibe y cuándo puede avanzar.",
     "steps": [
       {
         "number": "01",
-        "title": "Solicita tu Cotización",
-        "description": "Selecciona los productos, indica el volumen y el país de destino. Recibirás respuesta en menos de 24 horas.",
+        "title": "Envía tu requerimiento",
+        "description": "Producto, volumen, destino y presentación necesaria. Con esos datos evitamos idas y vueltas.",
         "icon": "📋"
       },
       {
         "number": "02",
-        "title": "Validación Técnica y Comercial",
-        "description": "Nuestro equipo valida disponibilidad, certificaciones requeridas y términos Incoterms según tu mercado.",
+        "title": "Validamos disponibilidad",
+        "description": "Revisamos tallas, certificaciones, documentación requerida e Incoterm según tu mercado.",
         "icon": "🔍"
       },
       {
         "number": "03",
-        "title": "Propuesta Formal",
-        "description": "Recibes una propuesta con precio FOB, especificaciones técnicas, certificaciones y documentación de exportación.",
+        "title": "Recibes propuesta FOB",
+        "description": "Enviamos precio, especificación técnica, documentación disponible y condiciones comerciales.",
         "icon": "📄"
       },
       {
         "number": "04",
-        "title": "Despacho y Seguimiento",
-        "description": "Coordinamos el embarque, la logística internacional y el seguimiento hasta que el producto llegue a destino.",
+        "title": "Coordinamos embarque",
+        "description": "Alineamos documentación, despacho y seguimiento comercial hasta la salida del producto.",
         "icon": "🚢"
       }
     ]
   },
   "testimonials": {
-    "badge": "Lo que dicen nuestros clientes",
-    "title": "Resultados que Respaldan Nuestra Propuesta",
+    "badge": "Prueba comercial",
+    "title": "Confianza basada en operación, no en promesas",
     "description": "Importadores y distribuidores que confían en ZIVAH para sus operaciones de compra.",
     "items": [
       {
-        "quote": "El camarón vannamei de ZIVAH cumple todos los requisitos de nuestro mercado europeo. Documentación impecable, trazabilidad completa y precio competitivo. Trabajamos juntos desde el primer embarque.",
+        "quote": "La documentación llegó clara desde el inicio y eso facilitó nuestra revisión interna antes de avanzar con la compra.",
         "author": "Importador de Mariscos",
         "role": "Distribuidor Mayorista",
         "country": "España",
         "flag": "🇪🇸"
       },
       {
-        "quote": "Buscábamos un proveedor de larvas con genética comprobada y capacidad de despacho regular. ZIVAH nos ofrece exactamente eso, con soporte técnico en cada ciclo de producción.",
+        "quote": "Necesitábamos continuidad de siembra y soporte técnico. La coordinación de disponibilidad nos ayudó a planificar mejor el ciclo.",
         "author": "Gerente de Acuicultura",
         "role": "Operador de Camaronera",
         "country": "México",
         "flag": "🇲🇽"
       },
       {
-        "quote": "La respuesta comercial es rápida, los precios son competitivos y la calidad del producto es consistente. Es la base de cualquier relación de exportación de largo plazo.",
+        "quote": "La respuesta comercial fue rápida y concreta: precio, condiciones y siguientes pasos sin información dispersa.",
         "author": "Director de Compras",
         "role": "Cadena de Distribución",
         "country": "Estados Unidos",
@@ -437,7 +437,7 @@
     "title": "Cookies en ZIVAH International",
     "description": "Utilizamos cookies para mejorar su experiencia, analizar el tráfico y personalizar el contenido. Al continuar navegando, acepta nuestro uso de cookies según nuestra",
     "cookiePolicy": "Política de Cookies",
-    "managePreferences": "Gestionar Preferencias",
+    "managePreferences": "Preferencias",
     "onlyNecessary": "Solo Necesarias",
     "acceptAll": "Aceptar Todas",
     "preferencesTitle": "Preferencias de Cookies",

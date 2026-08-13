@@ -134,15 +134,14 @@ export default function CookieConsent() {
   return (
     <>
       {/* Cookie Banner */}
-      <div className='fixed right-0 bottom-0 left-0 z-50 border-t border-border bg-background shadow-lg'>
-        <div className='container mx-auto px-4 py-6'>
-          <div className='flex flex-col items-start gap-4 lg:flex-row lg:items-center'>
-            <div className='flex-1'>
-              <div className='mb-3 flex items-center gap-3'>
-                <div className='text-2xl'>🍪</div>
-                <h3 className='text-lg font-semibold text-foreground'>{t('title')}</h3>
+      <div className='fixed right-3 bottom-3 left-3 z-50 rounded-lg border border-border bg-background/95 shadow-2xl shadow-black/20 backdrop-blur-md sm:right-auto sm:bottom-5 sm:left-5 sm:max-w-[390px]'>
+        <div className='px-4 py-3'>
+          <div className='flex flex-col items-start gap-3'>
+            <div>
+              <div className='mb-1.5 flex items-center gap-3'>
+                <h3 className='text-sm font-semibold text-foreground sm:text-base'>{t('title')}</h3>
               </div>
-              <p className='text-sm leading-relaxed text-muted-foreground'>
+              <p className='max-h-10 overflow-hidden text-[11px] leading-relaxed text-muted-foreground sm:max-h-none sm:text-xs'>
                 {t('description')}{' '}
                 <Link
                   href='/legal/cookie-policy'
@@ -154,11 +153,12 @@ export default function CookieConsent() {
               </p>
             </div>
 
-            <div className='flex flex-col gap-3 sm:flex-row lg:ml-6'>
+            <div className='grid w-full grid-cols-3 gap-2 sm:grid-cols-2'>
               <Button
                 onClick={() => setShowPreferences(true)}
                 variant='secondary'
                 size='sm'
+                className='h-8 w-full px-2 text-[10px] sm:h-9 sm:text-xs'
               >
                 {t('managePreferences')}
               </Button>
@@ -166,6 +166,7 @@ export default function CookieConsent() {
                 onClick={acceptNecessaryOnly}
                 variant='outline'
                 size='sm'
+                className='h-8 w-full px-2 text-[10px] sm:h-9 sm:text-xs'
               >
                 {t('onlyNecessary')}
               </Button>
@@ -173,6 +174,7 @@ export default function CookieConsent() {
                 onClick={acceptAllCookies}
                 variant='accent'
                 size='sm'
+                className='h-8 w-full px-2 text-[10px] sm:col-span-2 sm:h-9 sm:text-xs'
               >
                 {t('acceptAll')}
               </Button>

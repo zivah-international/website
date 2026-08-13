@@ -6,11 +6,11 @@ import { useMounted } from '@/lib/hooks/use-mounted';
 import { Button } from './ui/button';
 
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const mounted = useMounted();
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
   // Prevent hydration mismatch by not rendering until mounted
@@ -20,10 +20,10 @@ export default function ThemeToggle() {
         variant='ghost'
         size='icon'
         disabled
-        className='relative overflow-hidden'
+        className='relative overflow-hidden p-0'
       >
-        <div className='relative h-6 w-6'>
-          <div className='h-6 w-6 animate-pulse rounded bg-muted' />
+        <div className='relative h-5 w-5'>
+          <div className='h-5 w-5 animate-pulse rounded bg-muted' />
         </div>
       </Button>
     );
@@ -34,14 +34,16 @@ export default function ThemeToggle() {
       variant='outline'
       size='icon'
       onClick={toggleTheme}
-      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-      className='group relative overflow-hidden border-border/50 bg-background/50 backdrop-blur-sm transition-all duration-300 hover:border-accent/30 hover:bg-accent/10'
+      aria-label={`Switch to ${resolvedTheme === 'light' ? 'dark' : 'light'} mode`}
+      className='group relative overflow-hidden border-border/50 bg-background/50 p-0 backdrop-blur-sm transition-all duration-300 hover:border-accent/30 hover:bg-accent/10'
     >
-      <div className='relative h-6 w-6'>
+      <div className='relative h-5 w-5'>
         {/* Sun Icon — warm amber, reads naturally as "day" */}
         <svg
-          className={`absolute inset-0 h-6 w-6 text-amber-500 transition-all duration-500 group-hover:text-amber-400 ${
-            theme === 'dark' ? 'scale-0 rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'
+          className={`absolute inset-0 m-auto h-5 w-5 text-amber-500 transition-all duration-500 group-hover:text-amber-400 ${
+            resolvedTheme === 'dark'
+              ? 'scale-0 rotate-90 opacity-0'
+              : 'scale-100 rotate-0 opacity-100'
           }`}
           fill='currentColor'
           viewBox='0 0 20 20'
@@ -55,8 +57,10 @@ export default function ThemeToggle() {
 
         {/* Moon Icon — secondary brand blue for dark mode */}
         <svg
-          className={`absolute inset-0 h-6 w-6 text-secondary transition-all duration-500 group-hover:text-secondary/80 ${
-            theme === 'light' ? 'scale-0 -rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'
+          className={`absolute inset-0 m-auto h-5 w-5 text-secondary transition-all duration-500 group-hover:text-secondary/80 ${
+            resolvedTheme === 'light'
+              ? 'scale-0 -rotate-90 opacity-0'
+              : 'scale-100 rotate-0 opacity-100'
           }`}
           fill='currentColor'
           viewBox='0 0 20 20'

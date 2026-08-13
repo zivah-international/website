@@ -21,7 +21,8 @@ function getSystemTheme(): 'light' | 'dark' {
 function getStoredTheme(defaultTheme: Theme): Theme {
   if (typeof window === 'undefined') return defaultTheme;
   try {
-    return (localStorage.getItem('theme') as Theme) ?? defaultTheme;
+    const stored = localStorage.getItem('theme');
+    return stored === 'light' || stored === 'dark' || stored === 'system' ? stored : defaultTheme;
   } catch {
     return defaultTheme;
   }
@@ -55,11 +56,9 @@ export function ThemeProvider({
   // Apply dark/light class to <html>
   useEffect(() => {
     const root = document.documentElement;
-    if (resolvedTheme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
+    root.classList.remove('light', 'dark');
+    root.classList.add(resolvedTheme);
+    root.style.colorScheme = resolvedTheme;
   }, [resolvedTheme]);
 
   // Listen for OS preference changes

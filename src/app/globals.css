@@ -158,6 +158,7 @@ html {
 html,
 body {
   font-family: var(--font-inter, Inter), system-ui, sans-serif;
+  overflow-x: hidden;
   font-feature-settings:
     'rlig' 1,
     'calt' 1;
@@ -172,7 +173,7 @@ h5,
 h6 {
   font-family: var(--font-montserrat, Montserrat), system-ui, sans-serif;
   font-feature-settings: 'ss01' 1;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 /* ─── Utility: brand gradient text ──────────────────────────────────────── */
