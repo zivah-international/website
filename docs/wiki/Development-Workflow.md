@@ -75,20 +75,33 @@ The repository integrates automated security scanning via [`.github/workflows/sn
 - **Reports**: Generates HTML and JSON reports uploaded to GitHub Actions artifacts.
 - **Required Secret**: `SNYK_TOKEN` (configured in GitHub Repository Secrets).
 
-### 2. SonarQube Local Scanning
+### 2. SonarQube Local Scanning & API Exporter
 
-Run SonarQube static code quality analysis locally against your SonarQube server (e.g. `http://localhost:9000`):
+Run SonarQube static code quality analysis and export reports against your SonarQube server (e.g. `http://localhost:9000`).
 
-```bash
-# Run local scan using bash script
-./scripts/sonarqube-scan.sh "squ_xxxxxxxxxxxx"
+#### Configuration via `.env.local`
 
-# Or using pnpm scripts
-pnpm sonar:local "squ_xxxxxxxxxxxx"
-pnpm sonar:scan
+To avoid exposing your token in shell history, set credentials in `.env.local`:
+
+```env
+SONAR_TOKEN="squ_your_sonarqube_token_here"
+SONAR_HOST_URL="http://localhost:9000"
+SONAR_PROJECT_KEY="zivah-international-website"
 ```
 
-Configuration is defined in `sonar-project.properties`.
+#### Execution Commands
+
+```bash
+# Full local scan + interactive/automated export to .sonarqube-results
+pnpm sonar:local
+./scripts/sonarqube-scan.sh --export
+
+# Export-only mode (download metrics & issues via API without re-scanning)
+pnpm sonar:export
+./scripts/sonarqube-scan.sh --export-only
+```
+
+For full details, architecture, and exported artifact structures, see [SonarQube Quality Assurance](SonarQube-Quality-Assurance).
 
 ---
 

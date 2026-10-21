@@ -22,6 +22,7 @@
 ### 🚀 Operations & Guides
 
 - [Development Workflow](Development-Workflow)
+- [SonarQube Quality Assurance](SonarQube-Quality-Assurance)
 - [Deployment & Operations](Deployment-and-Operations)
 
 ---

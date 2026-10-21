@@ -4,9 +4,13 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
+  // React Compiler
+  reactCompiler: true,
+
   // Enable experimental features
   experimental: {
     useTypeScriptCli: true,
+    turbopackRustReactCompiler: true,
   },
 
   // Output file tracing includes
