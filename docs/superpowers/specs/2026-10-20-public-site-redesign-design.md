@@ -217,7 +217,7 @@ Removed from home: autoplay hero, side "Compra sin fricción" panel, blue stats 
 ### 6.3 Products list
 
 - `PageHeader`: breadcrumb "Inicio / Productos", eyebrow "Catálogo de exportación", H1, lead that names seafood first and agricultural lines second, one CTA "Solicitar cotización" at the right.
-- Category filter: text buttons with active underline and a discreet count. No filled pills. Seafood is the default filter; "Todos" remains available for buyers looking for other lines.
+- Category filter: text buttons with active underline and a discreet count. No filled pills. The default view is "Todos", but marine products are always ordered first; a "Productos del mar" filter is available for buyers who want only seafood.
 - Grid order: marine products first, then aquaculture, then agricultural lines. Agricultural products are never mixed ahead of seafood.
 - Grid: 3 columns desktop, 2 tablet, 1 mobile. Product cards as defined above.
 - Empty state: brief explanation that the catalog is updated periodically + "Consultar disponibilidad" CTA to Contact. No broken icon or "0 products" badge.
