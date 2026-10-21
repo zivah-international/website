@@ -1,4 +1,4 @@
-# ZIVAH Public Site Redesign — Design Spec
+# ZIVAH Public Site Redesign — Design Spec (Seafood-first)
 
 **Date:** 2026-10-20
 **Status:** Approved for implementation planning
@@ -12,7 +12,7 @@ The current public site is content-rich but visually overloaded. The home page c
 
 Internal pages are calmer but inconsistent with each other. The result is a site that reads as a collection of sections rather than one institution.
 
-The redesign keeps the business content and brand recognition while reducing noise, establishing one visual system, and making the quote request the dominant action.
+The redesign keeps the business content and brand recognition while reducing noise, establishing one visual system, making the quote request the dominant action, and re-centering the public site on seafood and aquaculture. Frutas, café, and other agricultural lines remain in the catalog as secondary offerings.
 
 ## 2. Goals and non-goals
 
@@ -24,6 +24,7 @@ The redesign keeps the business content and brand recognition while reducing noi
 4. Unify public pages under one design system (color, type, spacing, components, motion).
 5. Improve perceived and measured performance by removing the carousel, remote stock images, and decorative motion.
 6. Keep the site fully bilingual (Spanish/English) and functional in light and dark mode.
+7. Position ZIVAH primarily as a seafood and aquaculture exporter, with agricultural lines clearly secondary.
 
 ### Non-goals
 
@@ -44,6 +45,8 @@ The redesign keeps the business content and brand recognition while reducing noi
 **Content:** sections may be merged, removed, and rewritten. All key information is preserved: products, certifications, markets, process, contact.
 
 **Photography:** a curated, locally hosted stock set with one art direction.
+
+**Category focus:** seafood and aquaculture first. Camarón, larvas, and atún carry the home page, the hero, the photography, and the primary conversion path. Frutas, café, cacao, and other agricultural lines remain available in the catalog and footer as secondary lines, without equal visual weight on the home.
 
 **Modes:** light and dark, with the existing theme toggle retained.
 
@@ -158,7 +161,8 @@ Rules:
 | `SectionHeader` | Eyebrow, H2, optional lead, optional aside paragraph/action. Left-aligned by default; supports a right-aligned aside at ≥1024 px. |
 | `PageHeader` | Breadcrumbs, eyebrow, H1, lead, optional action. Replaces the current tinted icon tile. |
 | `EvidenceBar` | 4-column strip of numeral + uppercase label, separated by hairlines. Used on home and quote. |
-| `ProductCard` | Image, category eyebrow, name, one-line spec, single "Ver ficha" link. No per-card quote button. |
+| `ProductCard` | Image, category eyebrow, name, one-line spec, single "Ver ficha" link. No per-card quote button. Used for the three seafood lines on Home and for the catalog grid. |
+| `SecondaryLines` | Single line of text with inline links to agricultural lines ("También exportamos…"). No images, no cards, no CTA. |
 | `CertificationMark` | Monochrome bordered label + name + one-line description. |
 | `ProcessStep` | Number, title, one-line description. No card, no icon. |
 | `MarketRow` | Country, ISO code, status (Activo/Expansión). |
@@ -182,7 +186,7 @@ Rules:
 
 **Footer**
 
-- Four columns: brand + one-sentence description; Productos; Compañía; Contacto (Samborondón, Miami, email, phone).
+- Four columns: brand + one-sentence description; Productos (seafood and aquaculture first, agricultural lines second); Compañía; Contacto (Samborondón, Miami, email, phone).
 - Social icons in the brand column, 16 px muted.
 - Legal row: copyright left; privacy, terms, cookies, data protection right.
 - No duplicated main navigation, no certification badges, no newsletter form, no long "specialists" paragraph.
@@ -192,28 +196,29 @@ Rules:
 
 Order and purpose:
 
-1. **Hero (static).** Navy scrim over one photograph.
-   - Eyebrow: "Exportación certificada · Ecuador".
-   - H1: "Camarón ecuatoriano, listo para exportar."
-   - Lead: "IQF y bloque congelado, documentación BAP / HACCP / BRC y trazabilidad completa por lote. Cotización FOB confirmada en 24 horas."
+1. **Hero (static).** Navy scrim over one photograph of marine product.
+   - Eyebrow: "Productos del mar · Ecuador".
+   - H1: "Productos del mar ecuatorianos, listos para exportar."
+   - Lead: "Camarón, atún y larvas de acuicultura con documentación BAP / HACCP / BRC y trazabilidad completa por lote. Cotización FOB confirmada en 24 horas."
    - Primary CTA: "Solicitar cotización FOB". Secondary text link: "Ver catálogo completo".
    - Small caption bottom-right: "Guayas, Ecuador".
    - No carousel, arrows, dots, counter, side panel, or autoplay.
 2. **Evidence bar.** 6 mercados (4 activos) · 24 h respuesta comercial · 4 certificaciones internacionales · 100% trazabilidad por lote.
-3. **Product lines.** H2 "Cuatro líneas. Un mismo estándar." Four plates: Camarón Vannamei, Larvas de camarón, Frutas tropicales, Café arábica. One "Ver catálogo completo" link at the end.
-4. **Why ZIVAH.** Split layout: left heading "Menos intermediarios. Más control." + paragraph + link; right four numbered rows: Origen controlado, Documentación completa, Logística FOB, Soporte comercial directo.
-5. **Quality band (navy).** H2 "Certificación que abre mercados." Four certification marks with one-line descriptions. Link to Quality.
+3. **Seafood lines.** H2 "Productos del mar. Un mismo estándar." Three plates: Camarón Blanco Premium, Larvas de camarón Post-Larva, Atún Fresco del Pacífico. Each with a one-line specification and a single "Ver ficha" link. Below, a secondary text strip: "También exportamos frutas tropicales, café de altura y cacao" with inline links. One "Ver catálogo completo" link at the end.
+4. **Why ZIVAH.** Split layout: left heading "Menos intermediarios. Más control." + paragraph focused on marine operations + link; right four numbered rows: Origen controlado (granjas y laboratorio), Documentación completa, Cadena de frío y logística FOB, Soporte comercial directo.
+5. **Quality band (navy).** H2 "Certificación que abre mercados." Four marine-relevant certification marks (BAP, HACCP, BRC, MSC) with one-line descriptions, plus a small note that agricultural lines carry GlobalGAP. Link to Quality.
 6. **Process.** H2 "De la consulta al embarque." Four numbered steps. Single outline CTA "Iniciar cotización".
-7. **Markets.** H2 "Dónde llega el producto." Six market rows with status. Link to Markets.
-8. **Testimonial.** One quote, serif, with attribution (role + market). No cards, no carousel.
-9. **Final CTA (navy).** H2 "Recibe una cotización FOB en 24 horas." Support line + primary CTA + email/WhatsApp text links.
+7. **Markets.** H2 "Dónde llega el producto." Six market rows with status, ordered by seafood demand. Link to Markets.
+8. **Testimonial.** One quote from a seafood importer, serif, with attribution (role + market). No cards, no carousel.
+9. **Final CTA (navy).** H2 "Recibe una cotización FOB de productos del mar en 24 horas." Support line + primary CTA + email/WhatsApp text links.
 
 Removed from home: autoplay hero, side "Compra sin fricción" panel, blue stats strip, second feature section, why-Ecuador cards, newsletter, three testimonial cards, duplicated CTAs.
 
 ### 6.3 Products list
 
-- `PageHeader`: breadcrumb "Inicio / Productos", eyebrow "Catálogo de exportación", H1, lead, one CTA "Solicitar cotización" at the right.
-- Category filter: text buttons with active underline and a discreet count. No filled pills.
+- `PageHeader`: breadcrumb "Inicio / Productos", eyebrow "Catálogo de exportación", H1, lead that names seafood first and agricultural lines second, one CTA "Solicitar cotización" at the right.
+- Category filter: text buttons with active underline and a discreet count. No filled pills. Seafood is the default filter; "Todos" remains available for buyers looking for other lines.
+- Grid order: marine products first, then aquaculture, then agricultural lines. Agricultural products are never mixed ahead of seafood.
 - Grid: 3 columns desktop, 2 tablet, 1 mobile. Product cards as defined above.
 - Empty state: brief explanation that the catalog is updated periodically + "Consultar disponibilidad" CTA to Contact. No broken icon or "0 products" badge.
 - No duplicate quote CTA per card.
@@ -233,8 +238,9 @@ Removed from home: autoplay hero, side "Compra sin fricción" panel, blue stats 
 ### 6.6 Quality
 
 - `PageHeader` with H1 "Certificaciones que abren mercados".
-- Four certification rows with monochrome marks and descriptions.
-- Quality control process as a four-step horizontal timeline with hairlines, no cards.
+- Four marine-relevant certification rows with monochrome marks and descriptions: BAP, HACCP, BRC, MSC.
+- A small secondary note: "Líneas agrícolas: GlobalGAP."
+- Quality control process as a four-step horizontal timeline with hairlines, no cards. Steps cover reception, cold chain, microbiology, and shipment documentation.
 - Recognition figures in an evidence bar.
 - One navy CTA band at the end. No trophy emoji, no tinted cards.
 
@@ -268,6 +274,7 @@ Removed from home: autoplay hero, side "Compra sin fricción" panel, blue stats 
 ## 7. Content and tone
 
 - Language: Spanish neutral with "tú" in Spanish; consistent English mirror. Remove voseo ("Contanos", "buscás", "Recibí") and mixed register.
+- Positioning: a seafood and aquaculture exporter from Ecuador. Camarón, larvas, and atún lead every message. Agricultural lines are introduced as "también exportamos", never as the headline.
 - Tone: declarative, specific, no superlatives without evidence. Remove "sin fricción", "premium" as a filler, and exclamation marks.
 - One primary action per view. Secondary actions are text links.
 - Numbers always carry units and a source/context: "24 h", "6 mercados", "4 certificaciones", "100% trazabilidad por lote".
@@ -306,7 +313,7 @@ Removed from home: autoplay hero, side "Compra sin fricción" panel, blue stats 
 - Fonts: `next/font` with only the weights used; remove Montserrat.
 - Remove autoplay and unused carousel JavaScript; convert static sections to server components where translations allow.
 - Targets: LCP < 2.5 s on mobile 4G, CLS < 0.1, INP < 200 ms.
-- Preserve metadata, `hreflang`, sitemap, and JSON-LD. Update JSON-LD to the new H1 and section names.
+- Preserve metadata, `hreflang`, sitemap, and JSON-LD. Update JSON-LD to the new H1 and section names. The title and description lead with seafood and aquaculture; agricultural keywords remain secondary.
 - No layout shift from images or font swap.
 
 ## 11. Implementation map
@@ -319,13 +326,13 @@ Primary files:
 - `src/components/Navigation.tsx` — simplify links and scroll states.
 - `src/components/Footer.tsx` — rewrite to four columns.
 - `src/components/HeroSlider.tsx` — replace with a static `Hero` component (rename or delete carousel logic).
-- `src/components/sections/*` — replace `FeatureSection`, `WhyEcuadorSection`, `CategoriesSection`, `ProcessSection`, `TestimonialsSection`; delete `NewsletterSection`.
+- `src/components/sections/*` — replace `FeatureSection`, `WhyEcuadorSection`, `CategoriesSection`, `ProcessSection`, `TestimonialsSection`; delete `NewsletterSection`. Add `SeafoodLinesSection` (three marine products + secondary agricultural strip) and `SecondaryLines`.
 - `src/components/ui/button.tsx` — add the new variants and sizes.
-- New shared components: `PageHeader`, `SectionHeader`, `EvidenceBar`, `ProductCard`, `CertificationMark`, `CTABand`.
+- New shared components: `PageHeader`, `SectionHeader`, `EvidenceBar`, `ProductCard`, `SecondaryLines`, `CertificationMark`, `CTABand`.
 - `src/app/[locale]/{page,products,quality,markets,contact,quote}/page.tsx` — apply the new layout.
 - `src/messages/{es,en}.json` — rewrite copy and remove stale keys.
 - `src/lib/product-images.ts` — replace remote fallback URLs with local photo paths.
-- `public/assets/images/photos/` — curated local photography: hero product, shrimp, larvae/lab, tropical fruit, coffee, quality control, port/containers, team or office. One image per use; no repeated hero photo inside product plates.
+- `public/assets/images/photos/` — curated local photography: marine hero, camaron, larvas/lab, atún, quality control, port/containers, team or office. Tropical fruit and coffee images are used only in catalog and product detail, never on the home. One image per use; no repeated hero photo inside product plates.
 
 Constraints:
 
@@ -337,15 +344,16 @@ Constraints:
 ## 12. Acceptance criteria
 
 1. Home has no carousel, autoplay, side hero panel, blue stats strip, duplicate feature section, newsletter, or testimonial cards.
-2. Every public page has one visually dominant CTA and no duplicate quote action in the navigation.
-3. All public pages use the approved tokens, typography, and component set in light and dark mode.
-4. No emoji used as icons in the public UI.
-5. No remote Pexels/Unsplash images remain; all photography is local and optimized.
-6. Spanish and English copy are complete, consistent, and free of voseo.
-7. WCAG AA contrast and keyboard navigation verified on Home, Products, Quote, and Contact.
-8. Lighthouse mobile: LCP < 2.5 s and CLS < 0.1 on Home.
-9. `pnpm format:check`, `pnpm type-check`, `pnpm lint`, and `pnpm build` pass.
-10. Admin dashboard and API behavior are unchanged.
+2. Home leads with seafood: three marine product plates (camarón, larvas, atún), marine photography, and a seafood-first H1. Agricultural lines appear only as a secondary text strip.
+3. Every public page has one visually dominant CTA and no duplicate quote action in the navigation.
+4. All public pages use the approved tokens, typography, and component set in light and dark mode.
+5. No emoji used as icons in the public UI.
+6. No remote Pexels/Unsplash images remain; all photography is local and optimized.
+7. Spanish and English copy are complete, consistent, seafood-first, and free of voseo.
+8. WCAG AA contrast and keyboard navigation verified on Home, Products, Quote, and Contact.
+9. Lighthouse mobile: LCP < 2.5 s and CLS < 0.1 on Home.
+10. `pnpm format:check`, `pnpm type-check`, `pnpm lint`, and `pnpm build` pass.
+11. Admin dashboard and API behavior are unchanged.
 
 ## 13. Out of scope
 
