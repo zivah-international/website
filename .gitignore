@@ -103,6 +103,12 @@ temp/
 *.njsproj
 *.sln
 *.sw?
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+
 /generated/prisma
 tsconfig.tsbuildinfo
 zivah-deploy.zip

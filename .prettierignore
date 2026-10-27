@@ -48,7 +48,10 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# Test coverage
+# Test coverage & Playwright artifacts
+test-results/
+playwright-report/
+blob-report/
 coverage/
 .nyc_output/
 *.lcov

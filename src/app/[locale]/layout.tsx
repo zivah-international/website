@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Montserrat } from 'next/font/google';
+import { Inter, Newsreader } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
@@ -26,11 +26,11 @@ const inter = Inter({
   preload: true,
 });
 
-const montserrat = Montserrat({
+const newsreader = Newsreader({
   subsets: ['latin', 'latin-ext'],
-  variable: '--font-montserrat',
+  variable: '--font-newsreader',
   display: 'swap',
-  preload: true,
+  style: ['normal', 'italic'],
 });
 
 type Props = {
@@ -45,8 +45,8 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0f1419' },
+    { media: '(prefers-color-scheme: light)', color: '#F6F4EF' },
+    { media: '(prefers-color-scheme: dark)', color: '#0A1622' },
   ],
 };
 
@@ -282,24 +282,11 @@ export default async function LocaleLayout({ children, params }: Props) {
       {/* Resource hints — React 19 hoists <link>/<meta> to <head> */}
       <link
         rel='preconnect'
-        href='https://fonts.googleapis.com'
-      />
-      <link
-        rel='preconnect'
-        href='https://fonts.gstatic.com'
-        crossOrigin='anonymous'
-      />
-      <link
-        rel='preconnect'
         href='https://www.google-analytics.com'
       />
       <link
         rel='preconnect'
         href='https://www.googletagmanager.com'
-      />
-      <link
-        rel='dns-prefetch'
-        href='//fonts.googleapis.com'
       />
       <link
         rel='dns-prefetch'
@@ -392,7 +379,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           />
         </>
       )}
-      <div className={`${inter.variable} ${montserrat.variable} contents`}>
+      <div className={`public-site ${inter.variable} ${newsreader.variable} contents`}>
         <NextIntlClientProvider messages={messages}>
           <ErrorBoundary>
             <ClientThemeProvider>
