@@ -97,6 +97,12 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --font-sans: var(--font-inter), Inter, system-ui, sans-serif;
   --font-serif: var(--font-newsreader), Newsreader, Georgia, serif;
+  /* Wire the Tailwind radius scale to the single 2px token so `rounded-*`
+     utilities and hand-written `rounded-[2px]` agree. */
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
 }
 
 /* ─── Dark mode ──────────────────────────────────────────────────────────── */
@@ -187,7 +193,9 @@ h6 {
 .public-site h1,
 .public-site h2,
 .public-site h3,
-.public-site h4 {
+.public-site h4,
+.public-site h5,
+.public-site h6 {
   font-family: var(--font-newsreader), Newsreader, Georgia, serif;
   font-weight: 500;
   letter-spacing: -0.012em;

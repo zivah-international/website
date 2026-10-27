@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Newsreader } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
@@ -18,20 +17,6 @@ import WebVitals from '@/components/WebVitals';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import { type Locale, localeFullCodes, locales, localeVariants, ogLocales } from '@/i18n/config';
 import { routing } from '@/i18n/routing';
-
-const inter = Inter({
-  subsets: ['latin', 'latin-ext'],
-  variable: '--font-inter',
-  display: 'swap',
-  preload: true,
-});
-
-const newsreader = Newsreader({
-  subsets: ['latin', 'latin-ext'],
-  variable: '--font-newsreader',
-  display: 'swap',
-  style: ['normal', 'italic'],
-});
 
 type Props = {
   children: React.ReactNode;
@@ -379,7 +364,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           />
         </>
       )}
-      <div className={`public-site ${inter.variable} ${newsreader.variable} contents`}>
+      <div className='public-site contents'>
         <NextIntlClientProvider messages={messages}>
           <ErrorBoundary>
             <ClientThemeProvider>

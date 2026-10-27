@@ -24,13 +24,50 @@ test('uses the approved paper, navy, accent, and 2px radius tokens', async ({ pa
   });
   // Prettier rewrites `0.125rem` as `.125rem`, so accept both spellings of 2px.
   expect(radius).toMatch(/^0?\.125rem$/);
+
+  // The Tailwind radius scale must resolve to the same token; otherwise
+  // `rounded-md` (buttons, inputs) stays 6px while brand buttons are 2px.
+  const utilityRadius = await page.evaluate(() => {
+    const probe = document.createElement('div');
+    probe.className = 'rounded-md';
+    probe.style.position = 'absolute';
+    probe.style.visibility = 'hidden';
+    document.body.appendChild(probe);
+    const { borderRadius } = getComputedStyle(probe);
+    probe.remove();
+    return borderRadius;
+  });
+
+  expect(utilityRadius).toBe('2px');
 });
 
 test('uses Newsreader for public display headings and Inter for body', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.locator('h1').first()).toHaveCSS('font-family', /Newsreader/i);
-  await expect(page.locator('p').first()).toHaveCSS('font-family', /Inter|__Inter/i);
+  // next/font emits the family plus a metric-matched `"Inter Fallback"`
+  // companion (Next 16 keeps the unhashed name), so matching the companion
+  // proves the variable resolved instead of a locally installed Inter.
+  await expect(page.locator('.public-site h1').first()).toHaveCSS(
+    'font-family',
+    /Newsreader Fallback/
+  );
+  await expect(page.locator('.public-site p').first()).toHaveCSS('font-family', /Inter Fallback/);
+  // Radix portals (sheet, dropdown, dialogs, toasts) mount on <body>, outside
+  // `.public-site`, so the font variables must also be defined on the body.
+  await expect(page.locator('body')).toHaveCSS('font-family', /Inter Fallback/);
+
+  // h5/h6 are public display headings too, but no public page renders one yet,
+  // so probe the rule with a throwaway element inside the public wrapper.
+  const smallHeadingFamily = await page.evaluate(() => {
+    const wrapper = document.querySelector('.public-site');
+    const probe = document.createElement('h6');
+    wrapper?.appendChild(probe);
+    const { fontFamily } = getComputedStyle(probe);
+    probe.remove();
+    return fontFamily;
+  });
+
+  expect(smallHeadingFamily).toMatch(/Newsreader Fallback/);
 });
 
 test('dark mode swaps the public surface tokens', async ({ page }) => {
