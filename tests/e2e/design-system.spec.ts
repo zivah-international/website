@@ -70,6 +70,52 @@ test('uses Newsreader for public display headings and Inter for body', async ({ 
   expect(smallHeadingFamily).toMatch(/Newsreader Fallback/);
 });
 
+test('declares the scoped public font-family on .public-site', async ({ page }) => {
+  await page.goto('/');
+
+  // A computed style cannot tell the scoped rule apart from the body's
+  // `font-sans` utility — both resolve to the same family — so this test
+  // inspects the CSSOM for the declaration itself.
+  const declarations = await page.evaluate(() => {
+    const found: string[] = [];
+    // Match the scope selector itself, not `.public-site h1`-style descendants:
+    // the heading rules would otherwise satisfy the check on their own.
+    const isScopeSelector = (selectorText: string) =>
+      selectorText.split(',').some(selector => selector.trim() === '.public-site');
+
+    const visit = (rules: CSSRuleList) => {
+      for (let i = 0; i < rules.length; i++) {
+        const rule = rules.item(i);
+        if (!rule) continue;
+
+        if (rule instanceof CSSStyleRule && isScopeSelector(rule.selectorText)) {
+          const fontFamily = rule.style.fontFamily.trim();
+          if (fontFamily) found.push(`${rule.selectorText} { font-family: ${fontFamily} }`);
+        }
+
+        // @media / @supports / @layer blocks hold their rules one level down.
+        const nested = (rule as CSSGroupingRule).cssRules;
+        if (nested && nested.length > 0) visit(nested);
+      }
+    };
+
+    for (let i = 0; i < document.styleSheets.length; i++) {
+      try {
+        visit(document.styleSheets[i].cssRules);
+      } catch {
+        // Cross-origin stylesheets throw a SecurityError; skip them.
+      }
+    }
+
+    return found;
+  });
+
+  expect(
+    declarations,
+    'no CSS rule with a `.public-site` selector declares `font-family`: the scoped public body font was removed'
+  ).not.toHaveLength(0);
+});
+
 test('dark mode swaps the public surface tokens', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => document.documentElement.classList.add('dark'));
