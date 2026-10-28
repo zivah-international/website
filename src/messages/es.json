@@ -110,6 +110,44 @@
   },
   "home": {
     "viewFullCatalog": "Ver catálogo completo",
+    "hero": {
+      "eyebrow": "Ecuador · Exportación directa",
+      "title": "Productos del mar ecuatorianos, <em>listos para exportar</em>.",
+      "lead": "Camarón blanco, larvas de camarón y atún del Pacífico con documentación lista, trazabilidad por lote y respuesta comercial en 24 horas.",
+      "primaryCta": "Solicitar cotización FOB",
+      "secondaryCta": "Ver productos del mar",
+      "imageAlt": "Camarón blanco ecuatoriano listo para exportación",
+      "caption": "Camarón blanco · Guayas, Ecuador"
+    },
+    "evidence": {
+      "response": "Respuesta comercial",
+      "traceability": "Trazabilidad por lote"
+    },
+    "seafood": {
+      "title": "Tres líneas. Un mismo estándar de exportación.",
+      "lead": "Camarón, larvas y atún. Cada lote sale con documentación verificable y cadena de frío controlada.",
+      "viewSheet": "Ver ficha",
+      "cards": {
+        "camaron": {
+          "eyebrow": "Camarón",
+          "title": "Camarón Blanco Premium",
+          "description": "Camarón vannamei IQF, calibres 16/20 a 41/50. Empaque a medida para distribución y retail."
+        },
+        "larvas": {
+          "eyebrow": "Acuicultura",
+          "title": "Larvas de camarón Post-Larva",
+          "description": "Post-larvas PL10–PL15 con trazabilidad genética y soporte técnico de siembra."
+        },
+        "atun": {
+          "eyebrow": "Marinos y pesca",
+          "title": "Atún Fresco del Pacífico",
+          "description": "Lomos y steak de atún, cadena de frío desde puerto. Disponibilidad sujeta a temporada."
+        }
+      }
+    },
+    "secondary": {
+      "text": "También exportamos <a>frutas tropicales</a>, <a>café de altura</a> y <a>cacao</a>."
+    },
     "shrimp": {
       "eyebrow": "Oferta principal",
       "title": "Compra camarón",
@@ -161,6 +199,13 @@
         }
       ]
     }
+  },
+  "metrics": {
+    "markets": "{count} mercados",
+    "activeMarkets": "{count} activos",
+    "certifications": "{count} certificaciones",
+    "response": "24 h",
+    "traceability": "100%"
   },
   "products": {
     "badge": "Catálogo de Exportación",

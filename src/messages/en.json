@@ -110,6 +110,44 @@
   },
   "home": {
     "viewFullCatalog": "View full catalog",
+    "hero": {
+      "eyebrow": "Ecuador · Direct export",
+      "title": "Ecuadorian seafood, <em>ready for export</em>.",
+      "lead": "White shrimp, shrimp post-larvae, and Pacific tuna with export-ready documentation, batch traceability, and a commercial response within 24 hours.",
+      "primaryCta": "Request an FOB quote",
+      "secondaryCta": "View seafood",
+      "imageAlt": "Ecuadorian white shrimp ready for export",
+      "caption": "White shrimp · Guayas, Ecuador"
+    },
+    "evidence": {
+      "response": "Commercial response",
+      "traceability": "Batch traceability"
+    },
+    "seafood": {
+      "title": "Three lines. One export standard.",
+      "lead": "Shrimp, post-larvae and tuna. Every batch ships with verifiable documentation and a controlled cold chain.",
+      "viewSheet": "View sheet",
+      "cards": {
+        "camaron": {
+          "eyebrow": "Shrimp",
+          "title": "Premium White Shrimp",
+          "description": "vannamei IQF shrimp, grades 16/20 to 41/50. Custom packaging for distribution and retail."
+        },
+        "larvas": {
+          "eyebrow": "Aquaculture",
+          "title": "Shrimp Post-Larvae",
+          "description": "PL10–PL15 post-larvae with genetic traceability and technical stocking support."
+        },
+        "atun": {
+          "eyebrow": "Marine & Fisheries",
+          "title": "Fresh Pacific Tuna",
+          "description": "Tuna loins and steaks, cold chain from the port. Availability subject to season."
+        }
+      }
+    },
+    "secondary": {
+      "text": "We also export <a>tropical fruits</a>, <a>highland coffee</a> and <a>cacao</a>."
+    },
     "shrimp": {
       "eyebrow": "Main offer",
       "title": "Source shrimp",
@@ -161,6 +199,13 @@
         }
       ]
     }
+  },
+  "metrics": {
+    "markets": "{count} markets",
+    "activeMarkets": "{count} active",
+    "certifications": "{count} certifications",
+    "response": "24 h",
+    "traceability": "100%"
   },
   "products": {
     "badge": "Export Catalog",
