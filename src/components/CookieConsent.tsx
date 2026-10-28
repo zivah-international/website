@@ -1,8 +1,10 @@
 'use client';
 
-import Link from 'next/link';
+import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
+
+import { Link } from '@/i18n/routing';
 
 import { updateConsent } from './Analytics';
 import { Button } from './ui/button';
@@ -55,6 +57,7 @@ export default function CookieConsent() {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const acceptAllCookies = () => {
@@ -129,164 +132,148 @@ export default function CookieConsent() {
     }));
   };
 
+  const preferenceSections = [
+    {
+      key: 'analytics' as const,
+      title: t('analyticsCookies'),
+      description: t('analyticsDescription'),
+      enableLabel: t('enableAnalytics'),
+      checked: preferences.analytics,
+    },
+    {
+      key: 'functional' as const,
+      title: t('functionalCookies'),
+      description: t('functionalDescription'),
+      enableLabel: t('enableFunctional'),
+      checked: preferences.functional,
+    },
+    {
+      key: 'marketing' as const,
+      title: t('marketingCookies'),
+      description: t('marketingDescription'),
+      enableLabel: t('enableMarketing'),
+      checked: preferences.marketing,
+    },
+  ];
+
   if (!showBanner) return null;
 
   return (
     <>
       {/* Cookie Banner */}
-      <div className='fixed right-3 bottom-3 left-3 z-50 rounded-lg border border-border bg-background/95 shadow-2xl shadow-black/20 backdrop-blur-md sm:right-auto sm:bottom-5 sm:left-5 sm:max-w-[390px]'>
-        <div className='px-4 py-3'>
-          <div className='flex flex-col items-start gap-3'>
-            <div>
-              <div className='mb-1.5 flex items-center gap-3'>
-                <h3 className='text-sm font-semibold text-foreground sm:text-base'>{t('title')}</h3>
-              </div>
-              <p className='max-h-10 overflow-hidden text-[11px] leading-relaxed text-muted-foreground sm:max-h-none sm:text-xs'>
-                {t('description')}{' '}
-                <Link
-                  href='/legal/cookie-policy'
-                  className='text-accent hover:underline dark:text-accent'
-                >
-                  {t('cookiePolicy')}
-                </Link>
-                .
-              </p>
-            </div>
+      <div
+        role='dialog'
+        aria-label={t('title')}
+        className='fixed inset-x-3 bottom-3 z-50 max-w-[420px] rounded-[2px] border border-border bg-surface p-5 shadow-md sm:inset-x-auto sm:right-5 sm:bottom-5'
+      >
+        <h2 className='mb-2 text-base font-semibold text-foreground'>{t('title')}</h2>
+        <p className='mb-4 text-sm leading-relaxed text-muted-foreground'>
+          {t('description')}{' '}
+          <Link
+            href='/legal/cookie-policy'
+            className='text-accent underline-offset-4 hover:underline'
+          >
+            {t('cookiePolicy')}
+          </Link>
+          .
+        </p>
 
-            <div className='grid w-full grid-cols-3 gap-2 sm:grid-cols-2'>
-              <Button
-                onClick={() => setShowPreferences(true)}
-                variant='secondary'
-                size='sm'
-                className='h-8 w-full px-2 text-[10px] sm:h-9 sm:text-xs'
-              >
-                {t('managePreferences')}
-              </Button>
-              <Button
-                onClick={acceptNecessaryOnly}
-                variant='outline'
-                size='sm'
-                className='h-8 w-full px-2 text-[10px] sm:h-9 sm:text-xs'
-              >
-                {t('onlyNecessary')}
-              </Button>
-              <Button
-                onClick={acceptAllCookies}
-                variant='accent'
-                size='sm'
-                className='h-8 w-full px-2 text-[10px] sm:col-span-2 sm:h-9 sm:text-xs'
-              >
-                {t('acceptAll')}
-              </Button>
-            </div>
+        <div className='flex flex-col gap-2'>
+          <Button
+            onClick={acceptAllCookies}
+            variant='brand'
+            size='brand'
+            className='w-full'
+          >
+            {t('acceptAll')}
+          </Button>
+          <div className='flex flex-wrap items-center justify-between gap-2'>
+            <Button
+              onClick={() => setShowPreferences(true)}
+              variant='brand-outline'
+              size='brand'
+            >
+              {t('managePreferences')}
+            </Button>
+            <Button
+              onClick={acceptNecessaryOnly}
+              variant='brand-ghost'
+              className='min-h-11 px-2 text-sm'
+            >
+              {t('onlyNecessary')}
+            </Button>
           </div>
         </div>
       </div>
 
       {/* Preferences Modal */}
       {showPreferences && (
-        <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4'>
-          <div className='max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-border bg-background shadow-xl'>
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'>
+          <div className='max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[2px] border border-border bg-surface shadow-lg'>
             <div className='p-6'>
-              <div className='mb-6 flex items-center justify-between'>
-                <h3 className='text-xl font-semibold text-foreground'>{t('preferencesTitle')}</h3>
+              <div className='mb-6 flex items-center justify-between gap-4'>
+                <h2 className='text-xl font-semibold text-foreground'>{t('preferencesTitle')}</h2>
                 <button
+                  type='button'
                   onClick={() => setShowPreferences(false)}
-                  className='text-muted-foreground transition-colors hover:text-foreground'
+                  aria-label={t('close')}
+                  className='flex h-11 w-11 shrink-0 items-center justify-center rounded-[2px] border border-current/25 text-muted-foreground transition-colors hover:text-foreground'
                 >
-                  ✕
+                  <X
+                    aria-hidden='true'
+                    className='h-5 w-5 stroke-current'
+                  />
                 </button>
               </div>
 
-              <div className='space-y-6'>
+              <div className='space-y-4'>
                 {/* Necessary Cookies */}
-                <div className='rounded-xl border border-border p-4'>
-                  <div className='mb-3 flex items-center justify-between'>
-                    <h4 className='font-semibold text-foreground'>{t('necessaryCookies')}</h4>
-                    <span className='rounded bg-accent/10 px-2 py-1 text-xs font-semibold text-accent'>
+                <div className='rounded-[2px] border border-border p-4'>
+                  <div className='mb-2 flex items-center justify-between gap-4'>
+                    <h3 className='font-semibold text-foreground'>{t('necessaryCookies')}</h3>
+                    <span className='text-xs font-medium text-muted-foreground'>
                       {t('alwaysActive')}
                     </span>
                   </div>
-                  <p className='mb-3 text-sm text-muted-foreground'>{t('necessaryDescription')}</p>
-                  <div className='flex items-center'>
-                    <input
-                      type='checkbox'
-                      checked={preferences.necessary}
-                      disabled
-                      className='mr-3'
-                    />
-                    <span className='text-sm text-muted-foreground'>{t('necessary')}</span>
-                  </div>
+                  <p className='text-sm text-muted-foreground'>{t('necessaryDescription')}</p>
                 </div>
 
-                {/* Analytics Cookies */}
-                <div className='rounded-xl border border-border p-4'>
-                  <div className='mb-3 flex items-center justify-between'>
-                    <h4 className='font-semibold text-foreground'>{t('analyticsCookies')}</h4>
-                    <label className='relative inline-flex cursor-pointer items-center'>
-                      <span className='sr-only'>{t('enableAnalytics')}</span>
-                      <input
-                        type='checkbox'
-                        checked={preferences.analytics}
-                        onChange={e => updatePreference('analytics', e.target.checked)}
-                        className='peer sr-only'
-                      />
-                      <div className="peer h-6 w-11 rounded-full bg-muted peer-checked:bg-accent peer-focus:ring-4 peer-focus:ring-accent/30 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
-                    </label>
+                {preferenceSections.map(section => (
+                  <div
+                    key={section.key}
+                    className='rounded-[2px] border border-border p-4'
+                  >
+                    <div className='mb-2 flex items-center justify-between gap-4'>
+                      <h3 className='font-semibold text-foreground'>{section.title}</h3>
+                      <label className='relative inline-flex cursor-pointer items-center'>
+                        <span className='sr-only'>{section.enableLabel}</span>
+                        <input
+                          type='checkbox'
+                          checked={section.checked}
+                          onChange={e => updatePreference(section.key, e.target.checked)}
+                          className='peer sr-only'
+                        />
+                        <div className="peer h-6 w-11 rounded-full bg-muted peer-checked:bg-accent peer-focus:ring-4 peer-focus:ring-accent/30 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
+                      </label>
+                    </div>
+                    <p className='text-sm text-muted-foreground'>{section.description}</p>
                   </div>
-                  <p className='text-sm text-muted-foreground'>{t('analyticsDescription')}</p>
-                </div>
-
-                {/* Functional Cookies */}
-                <div className='rounded-xl border border-border p-4'>
-                  <div className='mb-3 flex items-center justify-between'>
-                    <h4 className='font-semibold text-foreground'>{t('functionalCookies')}</h4>
-                    <label className='relative inline-flex cursor-pointer items-center'>
-                      <span className='sr-only'>{t('enableFunctional')}</span>
-                      <input
-                        type='checkbox'
-                        checked={preferences.functional}
-                        onChange={e => updatePreference('functional', e.target.checked)}
-                        className='peer sr-only'
-                      />
-                      <div className="peer h-6 w-11 rounded-full bg-muted peer-checked:bg-accent peer-focus:ring-4 peer-focus:ring-accent/30 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
-                    </label>
-                  </div>
-                  <p className='text-sm text-muted-foreground'>{t('functionalDescription')}</p>
-                </div>
-
-                {/* Marketing Cookies */}
-                <div className='rounded-xl border border-border p-4'>
-                  <div className='mb-3 flex items-center justify-between'>
-                    <h4 className='font-semibold text-foreground'>{t('marketingCookies')}</h4>
-                    <label className='relative inline-flex cursor-pointer items-center'>
-                      <span className='sr-only'>{t('enableMarketing')}</span>
-                      <input
-                        type='checkbox'
-                        checked={preferences.marketing}
-                        onChange={e => updatePreference('marketing', e.target.checked)}
-                        className='peer sr-only'
-                      />
-                      <div className="peer h-6 w-11 rounded-full bg-muted peer-checked:bg-accent peer-focus:ring-4 peer-focus:ring-accent/30 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
-                    </label>
-                  </div>
-                  <p className='text-sm text-muted-foreground'>{t('marketingDescription')}</p>
-                </div>
+                ))}
               </div>
 
               <div className='mt-6 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row'>
                 <Button
                   onClick={acceptNecessaryOnly}
-                  variant='outline'
-                  size='default'
+                  variant='brand-outline'
+                  size='brand'
                   className='flex-1'
                 >
                   {t('onlyNecessary')}
                 </Button>
                 <Button
                   onClick={saveCustomPreferences}
-                  variant='accent'
-                  size='default'
+                  variant='brand'
+                  size='brand'
                   className='flex-1'
                 >
                   {t('savePreferences')}
@@ -297,7 +284,7 @@ export default function CookieConsent() {
                 {t('moreInfo')}{' '}
                 <Link
                   href='/legal/cookie-policy'
-                  className='text-accent hover:underline dark:text-accent'
+                  className='text-accent underline-offset-4 hover:underline'
                 >
                   {t('cookiePolicy')}
                 </Link>

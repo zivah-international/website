@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
-import Navigation from '@/components/Navigation';
 import { getProductImage } from '@/lib/product-images';
 
 interface Category {
@@ -100,8 +99,6 @@ export default function ProductsPage() {
 
   return (
     <div className='min-h-screen'>
-      <Navigation />
-
       {/* ── Page Header ──────────────────────────────────────────────────── */}
       <section className='bg-linear-to-b from-background to-muted/30 pt-28 pb-12'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>

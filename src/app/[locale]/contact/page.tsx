@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server';
 
-import Navigation from '@/components/Navigation';
 import { Link } from '@/i18n/routing';
 
 interface Props {
@@ -22,8 +21,6 @@ export default async function ContactPage({ params }: Props) {
 
   return (
     <div className='min-h-screen'>
-      <Navigation />
-
       {/* ── Page Header ──────────────────────────────────────────────────── */}
       <section className='bg-linear-to-b from-background to-muted/40 pt-28 pb-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>

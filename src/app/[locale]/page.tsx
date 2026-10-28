@@ -3,7 +3,6 @@
 import { useLocale, useTranslations } from 'next-intl';
 
 import HeroSlider from '@/components/HeroSlider';
-import Navigation from '@/components/Navigation';
 import CategoriesSection from '@/components/sections/CategoriesSection';
 import FeatureSection from '@/components/sections/FeatureSection';
 import NewsletterSection from '@/components/sections/NewsletterSection';
@@ -58,7 +57,6 @@ export default function HomePage() {
 
   return (
     <div className='min-h-screen bg-background'>
-      <Navigation />
       <HeroSlider
         slides={SLIDES}
         locale={locale}

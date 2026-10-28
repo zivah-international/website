@@ -13,8 +13,8 @@ import { ErrorBoundary, NetworkStatus } from '@/components/ErrorHandling';
 import Footer from '@/components/Footer';
 import ServiceWorkerRegistration from '@/components/ServiceWorker';
 import StructuredData from '@/components/StructuredData';
+import PublicShell from '@/components/site/PublicShell';
 import WebVitals from '@/components/WebVitals';
-import WhatsAppButton from '@/components/WhatsAppButton';
 import { type Locale, localeFullCodes, locales, localeVariants, ogLocales } from '@/i18n/config';
 import { routing } from '@/i18n/routing';
 
@@ -376,9 +376,8 @@ export default async function LocaleLayout({ children, params }: Props) {
               <BusinessIntelligence />
               <ServiceWorkerRegistration />
               <WebVitals />
-              {children}
+              <PublicShell>{children}</PublicShell>
               <Footer />
-              <WhatsAppButton />
             </ClientThemeProvider>
           </ErrorBoundary>
           <CookieConsent />

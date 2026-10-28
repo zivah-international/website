@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server';
 
-import Navigation from '@/components/Navigation';
 import QuoteForm from '@/components/QuoteForm';
 import { Link } from '@/i18n/routing';
 
@@ -23,8 +22,6 @@ export default async function QuotePage({ params }: Props) {
 
   return (
     <div className='min-h-screen'>
-      <Navigation />
-
       {/* ── Page Header ──────────────────────────────────────────────────── */}
       <section className='bg-linear-to-b from-background to-muted/40 pt-28 pb-14'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
