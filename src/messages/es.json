@@ -222,23 +222,30 @@
     "notFound": "Producto no encontrado"
   },
   "quote": {
-    "badge": "Solicitud de Cotización",
-    "title": "Recibe una Propuesta Comercial en 24 horas",
-    "description": "Selecciona los productos de tu interés, indica volumen y destino, y recibirás una cotización detallada con precio FOB, certificaciones y documentación de exportación incluida.",
-    "features": {
-      "smartSearch": {
-        "title": "Búsqueda Inteligente",
-        "description": "Encuentra productos rápidamente con nuestro sistema de búsqueda avanzado"
-      },
-      "multipleSelection": {
-        "title": "Selección Múltiple",
-        "description": "Combina múltiples productos en una sola cotización con cantidades personalizadas"
-      },
-      "autoSend": {
-        "title": "Envío Automático",
-        "description": "Recibe cotizaciones profesionales por email con seguimiento automático"
-      }
-    }
+    "eyebrow": "Cotización B2B",
+    "title": "Recibe una propuesta comercial en 24 horas.",
+    "description": "Cotización FOB para camarón, larvas, atún o líneas agrícolas. Incluye precio, empaque, calendario y documentos.",
+    "lead": "Cotización FOB para camarón, larvas, atún o líneas agrícolas. Incluye precio, empaque, calendario y documentos.",
+    "includesTitle": "Qué incluye tu propuesta",
+    "includes": [
+      "Precio FOB y unidad de medida",
+      "Empaque y volumen mínimo",
+      "Calendario de disponibilidad",
+      "Documentos de exportación"
+    ],
+    "contactTitle": "Contacto directo",
+    "contact": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "phone": "Teléfono"
+    },
+    "trust": ["Respuesta en 24 h", "Información confidencial", "Trazabilidad por lote"],
+    "formTitle": "Solicitud de cotización",
+    "submit": "Enviar solicitud",
+    "submitting": "Enviando…",
+    "privacy": "Usamos tus datos solo para preparar y enviar tu cotización.",
+    "success": "Solicitud enviada. Te contactaremos en 24 horas.",
+    "error": "No pudimos enviar tu solicitud. Intenta de nuevo."
   },
   "quality": {
     "eyebrow": "Calidad y trazabilidad",
@@ -403,7 +410,9 @@
     "dataProtection": "Protección de Datos"
   },
   "quoteForm": {
-    "title": "Solicitar Cotización",
+    "title": "Solicitud de cotización",
+    "contactSection": "Datos de contacto",
+    "productsSection": "Productos",
     "fullName": "Nombre Completo",
     "fullNamePlaceholder": "Tu nombre completo",
     "email": "Email",
@@ -418,8 +427,8 @@
     "searchProducts": "Buscar y Seleccionar Productos",
     "searchPlaceholder": "Escriba para buscar productos...",
     "searchingProducts": "Buscando productos...",
-    "clickToAdd": "Haga clic en los productos para agregar",
-    "added": "✓ Agregado",
+    "clickToAdd": "Selecciona los productos para agregar",
+    "added": "Agregado",
     "noDescription": "Sin descripción",
     "searchError": "Error al Buscar Productos",
     "noProductsFound": "No se encontraron productos para",
@@ -440,9 +449,12 @@
     "priceDisclaimer": "* Precio final puede variar según especificaciones y términos de envío",
     "additionalMessage": "Mensaje Adicional",
     "additionalMessagePlaceholder": "Comentarios adicionales, requerimientos especiales, fechas de entrega, etc.",
-    "submitting": "Enviando...",
-    "submitButton": "Solicitar Cotización",
-    "submitButtonWithCount": "Solicitar Cotización ({count} productos)",
+    "submitting": "Enviando…",
+    "submitButton": "Enviar solicitud",
+    "submitButtonWithCount": "Enviar solicitud ({count} productos)",
+    "privacyNote": "Usamos tus datos solo para preparar y enviar tu cotización.",
+    "reviewFields": "Revisa los campos marcados",
+    "removeProduct": "Eliminar producto",
     "autoEmailMessage": "La cotización será enviada automáticamente por email con precios actualizados y términos de envío.",
     "required": "Este campo es requerido",
     "invalidEmail": "Por favor ingrese un email válido",
@@ -472,7 +484,19 @@
     "phoneMaxChars": "El teléfono no puede exceder 20 caracteres",
     "quoteCreatedSuccess": "Cotización creada exitosamente. Email enviado a {email}.",
     "perUnitPrice": "por unidad",
-    "cannotConvert": "No se puede convertir de {from} a {to}"
+    "cannotConvert": "No se puede convertir de {from} a {to}",
+    "validation": {
+      "nameMin": "El nombre debe tener al menos 2 caracteres",
+      "nameMax": "El nombre no puede exceder 255 caracteres",
+      "emailInvalid": "Debe ser un email válido",
+      "phoneInvalid": "Debe ser un número de teléfono válido",
+      "phoneMin": "El teléfono debe tener al menos 10 dígitos",
+      "phoneMax": "El teléfono no puede exceder 20 caracteres",
+      "countryInvalid": "Debe seleccionar un país válido",
+      "recipientEmailInvalid": "Debe ser un email válido para envío",
+      "itemsMin": "Debe incluir al menos un producto",
+      "phoneCountryInvalid": "Formato de teléfono inválido para el país seleccionado"
+    }
   },
   "common": {
     "loading": "Cargando...",

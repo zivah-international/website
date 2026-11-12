@@ -1,7 +1,10 @@
+import { Mail, MessageCircle, Phone } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import QuoteForm from '@/components/QuoteForm';
-import { Link } from '@/i18n/routing';
+import ContactLine from '@/components/site/ContactLine';
+import PageHeader from '@/components/site/PageHeader';
+import { CONTACT_INFO } from '@/lib/contact-info';
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -19,126 +22,76 @@ export async function generateMetadata({ params }: Props) {
 export default async function QuotePage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'quote' });
+  const tn = await getTranslations({ locale, namespace: 'nav' });
+  const includes = t.raw('includes') as string[];
+  const trust = t.raw('trust') as string[];
 
   return (
-    <div className='min-h-screen'>
-      {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='bg-linear-to-b from-background to-muted/40 pt-28 pb-14'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          {/* Breadcrumb */}
-          <nav
-            className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'
-            aria-label='Breadcrumb'
-          >
-            <Link
-              href='/'
-              className='transition-colors hover:text-accent'
-            >
-              Inicio
-            </Link>
-            <span>/</span>
-            <span className='font-medium text-foreground'>{t('title')}</span>
-          </nav>
+    <>
+      <PageHeader
+        crumbs={[{ label: tn('home'), href: '/' }, { label: tn('quote') }]}
+        eyebrow={t('eyebrow')}
+        title={t('title')}
+        lead={t('lead')}
+      />
 
-          <div className='flex items-center gap-4 border-l-4 border-accent/30 pl-5'>
-            <div className='hidden shrink-0 rounded-xl bg-accent/10 p-3 text-accent sm:block'>
-              <svg
-                className='h-7 w-7'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-                strokeWidth={2}
+      <section className='bg-background pb-16 lg:pb-24'>
+        <div className='mx-auto grid w-full max-w-[1200px] gap-12 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.4fr] lg:gap-16 lg:px-8'>
+          <aside className='lg:sticky lg:top-28 lg:self-start'>
+            <h2 className='font-serif text-2xl leading-snug text-foreground'>
+              {t('includesTitle')}
+            </h2>
+            <ul className='mt-4 border-t border-border'>
+              {includes.map(item => (
+                <li
+                  key={item}
+                  className='border-b border-border py-3 text-[15px] leading-relaxed text-muted-foreground'
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <h2 className='mt-10 font-serif text-2xl leading-snug text-foreground'>
+              {t('contactTitle')}
+            </h2>
+            <div className='mt-4'>
+              <ContactLine
+                label={t('contact.email')}
+                href={`mailto:${CONTACT_INFO.email}`}
+                icon={<Mail className='size-3.5' />}
               >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-                />
-              </svg>
-            </div>
-            <div>
-              <p className='mb-1 text-xs font-semibold tracking-widest text-accent uppercase'>
-                Cotización B2B
-              </p>
-              <h1 className='text-3xl font-bold text-foreground sm:text-4xl'>{t('title')}</h1>
-              <p className='mt-1 text-base text-muted-foreground'>{t('description')}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Trust strip ──────────────────────────────────────────────────── */}
-      <div className='border-b border-border/40 bg-card'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex flex-wrap items-center justify-center gap-6 py-4 text-sm'>
-            {[
-              { icon: '⏱️', text: 'Respuesta en 24h' },
-              { icon: '🔒', text: 'Información confidencial' },
-              { icon: '🌎', text: 'Exportamos a 5+ países' },
-              { icon: '📋', text: 'Sin compromisos' },
-            ].map(item => (
-              <div
-                key={item.text}
-                className='flex items-center gap-2 text-muted-foreground'
+                {CONTACT_INFO.email}
+              </ContactLine>
+              <ContactLine
+                label={t('contact.whatsapp')}
+                href={CONTACT_INFO.whatsapp}
+                icon={<MessageCircle className='size-3.5' />}
+                external
               >
-                <span>{item.icon}</span>
-                <span>{item.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+                {CONTACT_INFO.phone}
+              </ContactLine>
+              <ContactLine
+                label={t('contact.phone')}
+                href={CONTACT_INFO.phoneHref}
+                icon={<Phone className='size-3.5' />}
+              >
+                {CONTACT_INFO.phone}
+              </ContactLine>
+            </div>
 
-      {/* ── Form ─────────────────────────────────────────────────────────── */}
-      <section className='bg-background py-12'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mx-auto max-w-4xl'>
+            <ul className='mt-8 flex flex-wrap gap-x-4 gap-y-2 text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase'>
+              {trust.map(item => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </aside>
+
+          <div>
             <QuoteForm />
           </div>
         </div>
       </section>
-
-      {/* ── Alternative contact ──────────────────────────────────────────── */}
-      <section className='bg-muted/30 py-12'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mx-auto max-w-2xl text-center'>
-            <p className='mb-6 text-base text-muted-foreground'>
-              ¿Preferís contacto directo? Estamos disponibles por WhatsApp o email.
-            </p>
-            <div className='flex flex-col items-center gap-3 sm:flex-row sm:justify-center'>
-              <a
-                href='https://wa.me/593999002893?text=Hola%2C%20quisiera%20solicitar%20una%20cotización.'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 font-semibold text-white shadow-md transition-all hover:bg-[#20bd5c]'
-                data-track='generate_lead'
-                data-track-source='whatsapp_quote'
-                data-track-currency='USD'
-                data-track-value='0'
-              >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  viewBox='0 0 24 24'
-                  className='h-5 w-5 fill-white'
-                >
-                  <path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z' />
-                </svg>
-                WhatsApp
-              </a>
-              <a
-                href='mailto:sales@zivahinternational.com?subject=Solicitud%20de%20Cotización'
-                className='inline-flex items-center gap-2 rounded-xl border-2 border-border px-6 py-3 font-semibold text-foreground transition-all hover:border-current/60'
-                data-track='generate_lead'
-                data-track-source='email_quote'
-                data-track-currency='USD'
-                data-track-value='0'
-              >
-                sales@zivahinternational.com
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+    </>
   );
 }

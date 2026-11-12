@@ -1,8 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 // Note: Using react-select instead of shadcn Select for advanced features:
 // - Searchable/filterable options
@@ -12,9 +13,14 @@ import { Controller, useForm } from 'react-hook-form';
 import Select from 'react-select';
 
 import { useBusinessTracking } from '@/components/BusinessIntelligence';
-import { useTheme } from '@/components/ThemeProvider';
 import { Button } from '@/components/ui/button';
 import { createQuoteSchema } from '@/lib/validations';
+
+const labelClass =
+  'mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground';
+const inputClass =
+  'h-11 w-full rounded-[2px] border border-input bg-surface px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-accent focus-visible:outline-none';
+const errorClass = 'mt-1 text-[13px] text-destructive';
 
 interface QuoteProduct {
   id: number;
@@ -108,8 +114,6 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
   const [countriesError, setCountriesError] = useState<string | null>(null);
   const [_measuresLoading, _setMeasuresLoading] = useState(true);
   const [productsSearching, setProductsSearching] = useState(false);
-  const { resolvedTheme } = useTheme();
-  const isDarkMode = resolvedTheme === 'dark';
 
   // State for price conversion
   const [conversionErrors, setConversionErrors] = useState<{
@@ -134,6 +138,23 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
     return currency.code || currency.symbol || currency.name || '';
   }, []);
 
+  const schema = useMemo(
+    () =>
+      createQuoteSchema({
+        nameMin: t('validation.nameMin'),
+        nameMax: t('validation.nameMax'),
+        emailInvalid: t('validation.emailInvalid'),
+        phoneInvalid: t('validation.phoneInvalid'),
+        phoneMin: t('validation.phoneMin'),
+        phoneMax: t('validation.phoneMax'),
+        countryInvalid: t('validation.countryInvalid'),
+        recipientEmailInvalid: t('validation.recipientEmailInvalid'),
+        itemsMin: t('validation.itemsMin'),
+        phoneCountryInvalid: t('validation.phoneCountryInvalid'),
+      }),
+    [t]
+  );
+
   const {
     register,
     handleSubmit,
@@ -143,7 +164,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
     trigger,
     formState: { errors },
   } = useForm<QuoteFormData>({
-    resolver: zodResolver(createQuoteSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       items: [],
     },
@@ -615,17 +636,35 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
   };
 
   return (
-    <div className='rounded-2xl border border-border bg-card/80 p-8 shadow-xl backdrop-blur-sm'>
+    <div className='rounded-[2px] border border-border bg-surface p-6 sm:p-8'>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='space-y-6'
       >
+        {submitMessage?.type === 'error' && (
+          <div
+            role='alert'
+            className='border border-destructive/40 bg-destructive/5 p-4 text-[13px] text-destructive'
+          >
+            <p>{submitMessage.text}</p>
+            <a
+              href='#customerName'
+              className='mt-1 inline-block underline underline-offset-4'
+            >
+              {t('reviewFields')}
+            </a>
+          </div>
+        )}
+
+        <h2 className='font-serif text-2xl leading-snug text-foreground'>{t('title')}</h2>
+
         {/* Customer Information */}
+        <h3 className='font-serif text-lg text-foreground'>{t('contactSection')}</h3>
         <div className='grid gap-6 md:grid-cols-2'>
           <div>
             <label
               htmlFor='customerName'
-              className='mb-2 block text-sm font-medium text-foreground'
+              className={labelClass}
             >
               {t('fullName')} *
             </label>
@@ -633,17 +672,15 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               {...register('customerName')}
               id='customerName'
               type='text'
-              className='w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+              className={inputClass}
               placeholder={t('fullNamePlaceholder')}
             />
-            {errors.customerName && (
-              <p className='mt-1 text-sm text-destructive'>{errors.customerName.message}</p>
-            )}
+            {errors.customerName && <p className={errorClass}>{errors.customerName.message}</p>}
           </div>
           <div>
             <label
               htmlFor='customerEmail'
-              className='mb-2 block text-sm font-medium text-foreground'
+              className={labelClass}
             >
               {t('email')} *
             </label>
@@ -651,26 +688,24 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               {...register('customerEmail')}
               id='customerEmail'
               type='email'
-              className='w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+              className={inputClass}
               placeholder={t('emailPlaceholder')}
             />
-            {errors.customerEmail && (
-              <p className='mt-1 text-sm text-destructive'>{errors.customerEmail.message}</p>
-            )}
+            {errors.customerEmail && <p className={errorClass}>{errors.customerEmail.message}</p>}
           </div>{' '}
           <div>
             <label
               htmlFor='countryId'
-              className='mb-2 block text-sm font-medium text-foreground'
+              className={labelClass}
             >
               {t('destinationCountry')} *
             </label>
             {countriesLoading ? (
-              <div className='w-full rounded-lg border border-border bg-muted px-4 py-3 text-muted-foreground backdrop-blur-sm'>
+              <div className='flex h-11 w-full items-center rounded-[2px] border border-border bg-muted px-3 text-sm text-muted-foreground'>
                 {t('loadingCountries')}
               </div>
             ) : countriesError ? (
-              <div className='w-full rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive'>
+              <div className='rounded-[2px] border border-destructive/40 bg-destructive/5 px-3 py-2 text-[13px] text-destructive'>
                 {countriesError}
               </div>
             ) : (
@@ -680,16 +715,17 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                 render={({ field }) => (
                   <Select
                     {...field}
+                    inputId='countryId'
                     options={countries.map(country => ({
                       value: country.id,
-                      label: `${country.icon || '🌍'} ${country.name} (${formatCurrency(country.currency)})`,
+                      label: `${country.name} (${formatCurrency(country.currency)})`,
                     }))}
                     onChange={option => field.onChange(option?.value)}
                     value={
                       countries.find(c => c.id === field.value)
                         ? {
                             value: field.value,
-                            label: `${countries.find(c => c.id === field.value)?.icon || '🌍'} ${countries.find(c => c.id === field.value)?.name} (${formatCurrency(countries.find(c => c.id === field.value)?.currency)})`,
+                            label: `${countries.find(c => c.id === field.value)?.name} (${formatCurrency(countries.find(c => c.id === field.value)?.currency)})`,
                           }
                         : null
                     }
@@ -700,11 +736,25 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     styles={{
                       control: base => ({
                         ...base,
-                        backgroundColor: 'hsl(var(--background))',
-                        borderColor: 'hsl(var(--border))',
-                        color: 'hsl(var(--foreground))',
-                        borderRadius: '0.5rem',
+                        minHeight: '44px',
+                        backgroundColor: 'var(--surface)',
+                        borderColor: 'var(--border)',
+                        color: 'var(--foreground)',
+                        borderRadius: '2px',
                         boxShadow: 'none',
+                      }),
+                      valueContainer: base => ({
+                        ...base,
+                        paddingLeft: '12px',
+                        paddingRight: '12px',
+                      }),
+                      placeholder: base => ({
+                        ...base,
+                        color: 'var(--muted-foreground)',
+                      }),
+                      singleValue: base => ({
+                        ...base,
+                        color: 'var(--foreground)',
                       }),
                       menuPortal: base => ({
                         ...base,
@@ -712,35 +762,27 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                       }),
                       menu: base => ({
                         ...base,
-                        backgroundColor: isDarkMode ? '#1f2937' : '#ffffff',
-                        border: `1px solid ${isDarkMode ? '#374151' : '#e5e7eb'}`,
-                        borderRadius: '0.5rem',
-                        boxShadow: isDarkMode
-                          ? '0 10px 30px rgba(0, 0, 0, 0.5)'
-                          : '0 10px 30px rgba(0, 0, 0, 0.15)',
+                        backgroundColor: 'var(--surface)',
+                        border: '1px solid var(--border)',
+                        borderRadius: '2px',
+                        boxShadow: 'none',
                         overflow: 'hidden',
                       }),
                       menuList: base => ({
                         ...base,
-                        backgroundColor: isDarkMode ? '#1f2937' : '#ffffff',
-                        borderRadius: '0.5rem',
+                        backgroundColor: 'var(--surface)',
+                        borderRadius: '2px',
                         padding: '0.25rem 0',
                         maxHeight: '300px',
                       }),
                       option: (base, state) => ({
                         ...base,
                         backgroundColor: state.isSelected
-                          ? isDarkMode
-                            ? '#3b82f6'
-                            : '#2563eb'
+                          ? 'var(--accent)'
                           : state.isFocused
-                            ? isDarkMode
-                              ? '#374151'
-                              : '#f3f4f6'
-                            : isDarkMode
-                              ? '#1f2937'
-                              : '#ffffff',
-                        color: state.isSelected ? '#ffffff' : isDarkMode ? '#f9fafb' : '#111827',
+                            ? 'var(--muted)'
+                            : 'var(--surface)',
+                        color: state.isSelected ? 'var(--accent-foreground)' : 'var(--foreground)',
                         cursor: 'pointer',
                         padding: '10px 12px',
                         transition: 'background-color 0.15s ease',
@@ -750,21 +792,20 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                 )}
               />
             )}
-            {errors.countryId && <p className='mt-1 text-sm text-destructive'>{t('required')}</p>}
+            {errors.countryId && (
+              <p className={errorClass}>{errors.countryId.message || t('required')}</p>
+            )}
           </div>
           <div>
             <label
               htmlFor='customerPhone'
-              className='mb-2 block text-sm font-medium text-foreground'
+              className={labelClass}
             >
               {t('phone')}
             </label>
             <div className='relative'>
               {watch('countryId') && countries.find(c => c.id === watch('countryId')) && (
-                <div className='pointer-events-none absolute top-1/2 left-3 flex -translate-y-1/2 transform items-center space-x-2'>
-                  <span className='text-lg'>
-                    {countries.find(c => c.id === watch('countryId'))?.icon || '🌍'}
-                  </span>
+                <div className='pointer-events-none absolute top-1/2 left-3 flex -translate-y-1/2 transform items-center'>
                   <span className='text-sm text-muted-foreground'>
                     {countries.find(c => c.id === watch('countryId'))?.callingCode || '+'}
                   </span>
@@ -778,40 +819,39 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     return error || true;
                   },
                 })}
+                id='customerPhone'
                 type='tel'
-                className={`w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none ${
-                  watch('countryId') ? 'pl-20' : ''
-                }`}
+                className={`${inputClass} ${watch('countryId') ? 'pl-16' : ''}`}
                 placeholder={
                   countries.find(c => c.id === watch('countryId'))?.phoneFormat || '+1 234 567 8900'
                 }
               />
             </div>
-            {errors.customerPhone && (
-              <p className='mt-1 text-sm text-destructive'>{errors.customerPhone.message}</p>
-            )}
+            {errors.customerPhone && <p className={errorClass}>{errors.customerPhone.message}</p>}
           </div>
           <div className='md:col-span-2'>
             <label
               htmlFor='company'
-              className='mb-2 block text-sm font-medium text-foreground'
+              className={labelClass}
             >
               {t('company')}
             </label>
             <input
               {...register('company')}
+              id='company'
               type='text'
-              className='w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+              className={inputClass}
               placeholder={t('companyPlaceholder')}
             />
           </div>
         </div>
 
         {/* Product Search with Multiple Selection */}
+        <h3 className='font-serif text-lg text-foreground'>{t('productsSection')}</h3>
         <div className='relative'>
           <label
             htmlFor='productSearch'
-            className='mb-2 block text-sm font-medium text-foreground'
+            className={labelClass}
           >
             {t('searchProducts')} *
           </label>
@@ -822,11 +862,12 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
             placeholder={t('searchPlaceholder')}
             onChange={e => searchProducts(e.target.value)}
             onFocus={() => searchQuery.length >= 2 && setShowProductList(true)}
-            className='w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+            className={inputClass}
           />
+          {errors.items && <p className={errorClass}>{errors.items.message}</p>}
 
           {productsSearching && searchQuery.length >= 2 && (
-            <div className='absolute z-10 mt-2 w-full rounded-md border border-border bg-card p-4 shadow-lg'>
+            <div className='absolute z-10 mt-2 w-full rounded-[2px] border border-border bg-surface p-4'>
               <div className='flex items-center justify-center text-muted-foreground'>
                 <svg
                   className='mr-3 -ml-1 h-5 w-5 animate-spin text-muted-foreground'
@@ -854,10 +895,10 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
           )}
 
           {showProductList && !productsSearching && searchQuery.length >= 2 && (
-            <div className='absolute z-10 mt-2 max-h-60 w-full overflow-y-auto rounded-md border border-border bg-card shadow-lg'>
+            <div className='absolute z-10 mt-2 max-h-60 w-full overflow-y-auto rounded-[2px] border border-border bg-surface'>
               {products.length > 0 ? (
                 <>
-                  <div className='border-b border-border bg-muted/50 p-2'>
+                  <div className='border-b border-border bg-muted p-2'>
                     <small className='text-muted-foreground'>{t('clickToAdd')}</small>
                   </div>
                   {products.map(product => {
@@ -866,7 +907,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                       <button
                         key={product.id}
                         type='button'
-                        className={`w-full cursor-pointer border-b border-border p-3 text-left text-foreground last:border-b-0 hover:bg-muted/50 ${isSelected ? 'border-l-4 border-l-accent bg-accent/10' : ''}`}
+                        className={`w-full cursor-pointer border-b border-border p-3 text-left text-foreground last:border-b-0 hover:bg-muted/50 ${isSelected ? 'border-l-2 border-l-accent' : ''}`}
                         onClick={() => addProduct(product)}
                       >
                         <div className='flex items-start justify-between'>
@@ -898,11 +939,11 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                   <div className='mt-1 text-xs text-muted-foreground'>{t('tryOtherTerms')}</div>
                 </div>
               )}
-              <div className='border-t border-border bg-muted/50 p-2'>
+              <div className='border-t border-border bg-muted p-2'>
                 <button
                   type='button'
                   onClick={() => setShowProductList(false)}
-                  className='text-sm text-secondary hover:text-secondary/80'
+                  className='text-sm text-foreground hover:text-accent'
                 >
                   {t('closeList')}
                 </button>
@@ -915,7 +956,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         {selectedProducts.length > 0 && (
           <div className='space-y-4'>
             <div className='flex items-center justify-between'>
-              <h3 className='font-medium text-foreground'>
+              <h3 className='font-serif text-lg text-foreground'>
                 {t('selectedProducts')} ({selectedProducts.length})
               </h3>
               <button
@@ -931,22 +972,22 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
             </div>
 
             {selectedProducts.length > 0 && (
-              <div className='rounded-lg border border-border bg-muted/50 p-3 text-sm'>
+              <div className='border-y border-border py-3 text-sm'>
                 <p className='mb-2 text-muted-foreground'>
-                  💡 <strong>{t('measureUnitsHelp')}</strong>
+                  <strong>{t('measureUnitsHelp')}</strong>
                 </p>
                 <ul className='space-y-1 text-xs text-muted-foreground'>
                   <li>
-                    • <strong>{t('weightUnits')}</strong>
+                    <strong>{t('weightUnits')}</strong>
                   </li>
                   <li>
-                    • <strong>{t('volumeUnits')}</strong>
+                    <strong>{t('volumeUnits')}</strong>
                   </li>
                   <li>
-                    • <strong>{t('containerUnits')}</strong>
+                    <strong>{t('containerUnits')}</strong>
                   </li>
                   <li>
-                    • <strong>{t('quantityUnits')}</strong>
+                    <strong>{t('quantityUnits')}</strong>
                   </li>
                 </ul>
               </div>
@@ -957,7 +998,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
               return (
                 <div
                   key={product.id}
-                  className='rounded-lg border border-border bg-card p-4 shadow-sm'
+                  className='border-t border-border pt-4'
                 >
                   <div className='flex items-start justify-between'>
                     <div className='flex-1 text-foreground'>
@@ -972,9 +1013,13 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     <button
                       type='button'
                       onClick={() => removeProduct(product.id)}
-                      className='ml-4 text-destructive hover:text-destructive/80'
+                      aria-label={t('removeProduct')}
+                      className='ml-4 text-muted-foreground transition-colors hover:text-destructive'
                     >
-                      ✕
+                      <X
+                        aria-hidden='true'
+                        className='size-4'
+                      />
                     </button>
                   </div>
 
@@ -982,7 +1027,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     <div>
                       <label
                         htmlFor={`quantity-${product.id}`}
-                        className='mb-1 block text-xs text-muted-foreground'
+                        className={labelClass}
                       >
                         {t('quantity')}
                       </label>
@@ -992,14 +1037,14 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                         min='1'
                         value={item?.quantity || 1}
                         onChange={e => updateQuantity(product.id, parseInt(e.target.value) || 1)}
-                        className='w-full rounded-md border border-border bg-background px-3 py-2 text-center text-foreground'
+                        className={`${inputClass} text-center`}
                       />
                     </div>
 
                     <div>
                       <label
                         htmlFor={`measure-${product.id}`}
-                        className='mb-1 block text-xs text-muted-foreground'
+                        className={labelClass}
                       >
                         {t('measureUnit')}
                       </label>
@@ -1007,7 +1052,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                         id={`measure-${product.id}`}
                         value={item?.measureId || ''}
                         onChange={e => updateMeasure(product.id, parseInt(e.target.value))}
-                        className='w-full rounded-md border border-border bg-background px-3 py-2 text-foreground'
+                        className={inputClass}
                         title={
                           item?.measureId
                             ? measures.find(m => m.id === item.measureId)?.description
@@ -1051,7 +1096,6 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                                       key={measure.id}
                                       value={measure.id}
                                       disabled={!isAvailable}
-                                      className={isAvailable ? 'text-gray-900' : 'text-gray-400'}
                                     >
                                       {measure.name} ({measure.shortName})
                                       {measure.symbol && ` - ${measure.symbol}`}
@@ -1068,7 +1112,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                     </div>
 
                     <div>
-                      <label className='mb-1 block text-xs text-muted-foreground'>
+                      <span className={labelClass}>
                         {t('unitPrice')}
                         {item?.measureId && (
                           <span className='ml-1'>
@@ -1079,17 +1123,15 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                             )
                           </span>
                         )}
-                      </label>
-                      <div className='rounded-md bg-muted px-3 py-2 text-center text-foreground'>
+                      </span>
+                      <div className='flex h-11 items-center justify-center border border-border bg-transparent px-3 text-sm text-foreground'>
                         ${item?.unitPrice ? item.unitPrice.toFixed(2) : product.basePrice || 0}
                       </div>
                     </div>
 
                     <div>
-                      <span className='mb-1 block text-xs text-muted-foreground'>
-                        {t('subtotal')}
-                      </span>
-                      <div className='rounded-md bg-muted px-3 py-2 text-center font-medium text-foreground'>
+                      <span className={labelClass}>{t('subtotal')}</span>
+                      <div className='flex h-11 items-center justify-center border border-border bg-transparent px-3 text-sm font-medium text-foreground'>
                         $
                         {(
                           calculatedPrices[product.id] ||
@@ -1102,7 +1144,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                   <div>
                     <label
                       htmlFor={`notes-${product.id}`}
-                      className='mb-1 block text-xs text-muted-foreground'
+                      className={labelClass}
                     >
                       {t('specialNotes')}
                     </label>
@@ -1111,14 +1153,14 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
                       placeholder={t('specialNotesPlaceholder')}
                       value={item?.notes || ''}
                       onChange={e => updateNotes(product.id, e.target.value)}
-                      className='w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground'
+                      className={`${inputClass} h-auto min-h-[72px] py-2`}
                       rows={2}
                     />
                   </div>
 
                   {conversionErrors[product.id] && (
-                    <div className='mt-2 rounded-md border border-destructive/30 bg-destructive/10 p-2 text-destructive'>
-                      <p className='text-sm'>⚠️ {conversionErrors[product.id]}</p>
+                    <div className='mt-2 border border-destructive/40 p-3 text-[13px] text-destructive'>
+                      <p>{conversionErrors[product.id]}</p>
                     </div>
                   )}
                 </div>
@@ -1126,7 +1168,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
             })}
 
             <div className='text-right'>
-              <div className='inline-block rounded-lg bg-accent/10 px-4 py-2 text-xl font-bold text-accent'>
+              <div className='font-serif text-2xl text-foreground'>
                 {t('estimatedTotal')}: ${calculateTotal().toFixed(2)} USD
               </div>
               <div className='mt-1 text-xs text-muted-foreground'>{t('priceDisclaimer')}</div>
@@ -1138,7 +1180,7 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
         <div>
           <label
             htmlFor='message'
-            className='mb-2 block text-sm font-medium text-foreground'
+            className={labelClass}
           >
             {t('additionalMessage')}
           </label>
@@ -1146,33 +1188,29 @@ export default function QuoteForm({ initialProducts }: QuoteFormProps = {}) {
             {...register('message')}
             id='message'
             rows={4}
-            className='w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground backdrop-blur-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+            className={`${inputClass} h-auto min-h-[96px] py-2`}
             placeholder={t('additionalMessagePlaceholder')}
           />
         </div>
 
         {/* Submit */}
-        <div className='flex justify-end'>
+        <div className='space-y-2'>
           <Button
             type='submit'
-            disabled={isSubmitting || selectedProducts.length === 0}
-            className='rounded-lg bg-primary px-8 py-3 font-bold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50'
+            variant='brand'
+            size='full'
+            disabled={isSubmitting}
           >
-            {isSubmitting
-              ? t('submitting')
-              : selectedProducts.length > 0
-                ? t('submitButtonWithCount', { count: selectedProducts.length })
-                : t('submitButton')}
+            {isSubmitting ? t('submitting') : t('submitButton')}
           </Button>
+          <p className='text-[13px] leading-relaxed text-muted-foreground'>{t('privacyNote')}</p>
         </div>
 
-        {/* Info Message */}
-        <div className='text-center text-sm text-muted-foreground'>{t('autoEmailMessage')}</div>
-
         {/* Submit Message */}
-        {submitMessage && (
+        {submitMessage?.type === 'success' && (
           <div
-            className={`rounded-md p-4 ${submitMessage.type === 'success' ? 'bg-accent/20 text-accent' : 'bg-destructive/20 text-destructive'}`}
+            role='status'
+            className='border border-accent/40 p-4 text-[13px] text-accent'
           >
             {submitMessage.text}
           </div>

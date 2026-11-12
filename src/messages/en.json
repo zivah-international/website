@@ -222,23 +222,30 @@
     "notFound": "Product not found"
   },
   "quote": {
-    "badge": "Request a Quote",
-    "title": "Receive a Commercial Proposal within 24 Hours",
-    "description": "Select the products you need, specify volume and destination, and receive a detailed quote with FOB price, certifications and export documentation included.",
-    "features": {
-      "smartSearch": {
-        "title": "Smart Search",
-        "description": "Find products quickly with our advanced search system"
-      },
-      "multipleSelection": {
-        "title": "Multiple Selection",
-        "description": "Combine multiple products in a single quote with customized quantities"
-      },
-      "autoSend": {
-        "title": "Automatic Delivery",
-        "description": "Receive professional quotes by email with automatic tracking"
-      }
-    }
+    "eyebrow": "B2B quote",
+    "title": "Receive a commercial proposal within 24 hours.",
+    "description": "FOB quote for shrimp, post-larvae, tuna, or agricultural lines. Includes price, packaging, schedule, and documents.",
+    "lead": "FOB quote for shrimp, post-larvae, tuna, or agricultural lines. Includes price, packaging, schedule, and documents.",
+    "includesTitle": "What your proposal includes",
+    "includes": [
+      "FOB price and unit of measure",
+      "Packaging and minimum volume",
+      "Availability schedule",
+      "Export documents"
+    ],
+    "contactTitle": "Direct contact",
+    "contact": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "phone": "Phone"
+    },
+    "trust": ["Response within 24 h", "Confidential information", "Batch traceability"],
+    "formTitle": "Quote request",
+    "submit": "Send request",
+    "submitting": "Sending…",
+    "privacy": "We use your data only to prepare and send your quote.",
+    "success": "Request sent. We will contact you within 24 hours.",
+    "error": "We could not send your request. Please try again."
   },
   "quality": {
     "eyebrow": "Quality and traceability",
@@ -403,7 +410,9 @@
     "dataProtection": "Data Protection"
   },
   "quoteForm": {
-    "title": "Request Quote",
+    "title": "Quote request",
+    "contactSection": "Contact details",
+    "productsSection": "Products",
     "fullName": "Full Name",
     "fullNamePlaceholder": "Your full name",
     "email": "Email",
@@ -418,8 +427,8 @@
     "searchProducts": "Search and Select Products",
     "searchPlaceholder": "Type to search products...",
     "searchingProducts": "Searching products...",
-    "clickToAdd": "Click on products to add",
-    "added": "✓ Added",
+    "clickToAdd": "Select the products to add",
+    "added": "Added",
     "noDescription": "No description",
     "searchError": "Error Searching Products",
     "noProductsFound": "No products found for",
@@ -440,9 +449,12 @@
     "priceDisclaimer": "* Final price may vary according to specifications and shipping terms",
     "additionalMessage": "Additional Message",
     "additionalMessagePlaceholder": "Additional comments, special requirements, delivery dates, etc.",
-    "submitting": "Sending...",
-    "submitButton": "Request Quote",
-    "submitButtonWithCount": "Request Quote ({count} products)",
+    "submitting": "Sending…",
+    "submitButton": "Send request",
+    "submitButtonWithCount": "Send request ({count} products)",
+    "privacyNote": "We use your data only to prepare and send your quote.",
+    "reviewFields": "Review the highlighted fields",
+    "removeProduct": "Remove product",
     "autoEmailMessage": "The quote will be automatically sent by email with updated prices and shipping terms.",
     "required": "This field is required",
     "invalidEmail": "Please enter a valid email",
@@ -472,7 +484,19 @@
     "phoneMaxChars": "Phone cannot exceed 20 characters",
     "quoteCreatedSuccess": "Quote created successfully. Email sent to {email}.",
     "perUnitPrice": "per unit",
-    "cannotConvert": "Cannot convert from {from} to {to}"
+    "cannotConvert": "Cannot convert from {from} to {to}",
+    "validation": {
+      "nameMin": "Name must be at least 2 characters",
+      "nameMax": "Name cannot exceed 255 characters",
+      "emailInvalid": "Enter a valid email address",
+      "phoneInvalid": "Enter a valid phone number",
+      "phoneMin": "Phone must have at least 10 digits",
+      "phoneMax": "Phone cannot exceed 20 characters",
+      "countryInvalid": "Select a valid country",
+      "recipientEmailInvalid": "Enter a valid recipient email",
+      "itemsMin": "Add at least one product",
+      "phoneCountryInvalid": "Invalid phone format for the selected country"
+    }
   },
   "common": {
     "loading": "Loading...",

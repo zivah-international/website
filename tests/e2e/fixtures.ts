@@ -64,3 +64,25 @@ export async function mockCatalog(page: Page) {
   await page.route('**/api/categories*', route => route.fulfill({ json: { data: CATEGORIES } }));
   await page.route('**/api/products*', route => route.fulfill({ json: { data: PRODUCTS } }));
 }
+
+export async function mockQuoteApis(page: Page) {
+  await page.route('**/api/quotes/countries', route =>
+    route.fulfill({
+      json: {
+        error: false,
+        data: [{ id: 1, name: 'Estados Unidos', code: 'US' }],
+      },
+    })
+  );
+  await page.route('**/api/quotes/measures', route =>
+    route.fulfill({
+      json: {
+        error: false,
+        data: [{ id: 1, name: 'Kilogramo', shortName: 'kg', type: 'weight', family: 'weight' }],
+      },
+    })
+  );
+  await page.route('**/api/quotes/products/search*', route =>
+    route.fulfill({ json: { error: false, data: [] } })
+  );
+}
