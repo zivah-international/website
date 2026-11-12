@@ -12,8 +12,8 @@ import CookieConsent from '@/components/CookieConsent';
 import { ErrorBoundary, NetworkStatus } from '@/components/ErrorHandling';
 import Footer from '@/components/Footer';
 import ServiceWorkerRegistration from '@/components/ServiceWorker';
-import StructuredData from '@/components/StructuredData';
 import PublicShell from '@/components/site/PublicShell';
+import StructuredData from '@/components/StructuredData';
 import WebVitals from '@/components/WebVitals';
 import { type Locale, localeFullCodes, locales, localeVariants, ogLocales } from '@/i18n/config';
 import { routing } from '@/i18n/routing';
@@ -48,20 +48,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Localized content
   const content: Record<Locale, { title: string; description: string; keywords: string }> = {
     es: {
-      title:
-        'ZIVAH International S.A. - Exportadores de Productos Ecuatorianos Premium | Ecuador hacia el Mundo',
+      title: 'ZIVAH International — Camarón, larvas y atún de Ecuador',
       description:
-        'ZIVAH International S.A. - Exportadores líderes de productos ecuatorianos premium desde Ecuador hacia el mundo. Frutas tropicales, camarón, café arábica y larvas de acuicultura. Sede en Samborondón, Guayas con oficina en Miami.',
+        'Exportamos camarón blanco, larvas de camarón y atún del Pacífico desde Ecuador. Documentación, trazabilidad y cotización FOB en 24 horas.',
       keywords:
-        'exportación ecuador, frutas tropicales, camarón ecuatoriano, larvas acuicultura, cafe arabica, productos marinos, miami exportadores, exportar desde ecuador, comercio internacional ecuador',
+        'camarón ecuatoriano, larvas de camarón, atún del Pacífico, exportación de productos del mar, acuicultura, frutas tropicales, café, cacao',
     },
     en: {
-      title:
-        'ZIVAH International S.A. - Premium Ecuadorian Products Exporters | Ecuador to the World',
+      title: 'ZIVAH International — Shrimp, post-larvae and tuna from Ecuador',
       description:
-        'ZIVAH International S.A. - Leading exporters of premium Ecuadorian products from Ecuador to the world. Tropical fruits, shrimp, arabica coffee and aquaculture larvae. Headquartered in Samborondón, Guayas with Miami office.',
+        'We export white shrimp, shrimp post-larvae and Pacific tuna from Ecuador. Documentation, traceability and an FOB quote within 24 hours.',
       keywords:
-        'ecuador export, tropical fruits, ecuadorian shrimp, aquaculture larvae, arabica coffee, seafood products, miami exporters, ecuador trade, international commerce',
+        'Ecuadorian shrimp, shrimp post-larvae, Pacific tuna, seafood export, aquaculture, tropical fruit, coffee, cacao',
     },
   };
 
@@ -117,17 +115,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       images: [
         {
-          url: `${baseUrl}/assets/images/zivah-og-image.jpg`,
-          width: 1200,
-          height: 630,
-          alt: 'ZIVAH International - Premium Ecuadorian Products',
-          type: 'image/jpeg',
-        },
-        {
-          url: `${baseUrl}/assets/images/zivah-og-square.jpg`,
-          width: 600,
-          height: 600,
-          alt: 'ZIVAH International Logo',
+          url: `${baseUrl}/assets/images/photos/hero-marine.jpg`,
+          width: 1920,
+          height: 1280,
+          alt: 'Ecuadorian seafood prepared for export',
           type: 'image/jpeg',
         },
       ],
@@ -140,8 +131,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       images: {
-        url: `${baseUrl}/assets/images/zivah-twitter-image.jpg`,
-        alt: 'ZIVAH International - Premium Ecuadorian Products',
+        url: `${baseUrl}/assets/images/photos/hero-marine.jpg`,
+        alt: 'Ecuadorian seafood prepared for export',
       },
     },
     verification: {

@@ -30,13 +30,13 @@ export function OrganizationSchema({ locale = 'es' }: { locale?: string }) {
     },
     image: {
       '@type': 'ImageObject',
-      url: `${BASE_URL}/assets/images/zivah-og-image.jpg`,
-      width: 1200,
-      height: 630,
+      url: `${BASE_URL}/assets/images/photos/hero-marine.jpg`,
+      width: 1920,
+      height: 1280,
     },
     description: isSpanish
-      ? 'Exportadores líderes de productos ecuatorianos premium desde Ecuador hacia el mundo. Especialistas en frutas tropicales, camarón, café arábica y larvas de acuicultura.'
-      : 'Leading exporters of premium Ecuadorian products from Ecuador to the world. Specialists in tropical fruits, shrimp, arabica coffee, and aquaculture larvae.',
+      ? 'Exportamos camarón blanco, larvas de camarón y atún del Pacífico desde Ecuador, con documentación y trazabilidad por lote.'
+      : 'We export white shrimp, shrimp post-larvae and Pacific tuna from Ecuador, with documentation and batch traceability.',
     foundingDate: '2020',
     foundingLocation: {
       '@type': 'Place',
@@ -114,13 +114,14 @@ export function OrganizationSchema({ locale = 'es' }: { locale?: string }) {
       'https://www.facebook.com/zivahinternational',
     ],
     knowsAbout: [
-      'Ecuadorian Product Export',
+      'White Shrimp Export',
+      'Shrimp Post-Larvae',
+      'Pacific Tuna',
+      'Seafood and Aquaculture Export',
       'Tropical Fruits',
-      'Shrimp Export',
-      'Aquaculture Larvae',
       'Arabica Coffee',
+      'Cacao',
       'International Trade',
-      'Food Export',
       'B2B Export',
     ],
     hasCredential: [
@@ -141,6 +142,12 @@ export function OrganizationSchema({ locale = 'es' }: { locale?: string }) {
         credentialCategory: 'certification',
         name: 'BAP',
         description: 'Best Aquaculture Practices',
+      },
+      {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'certification',
+        name: 'MSC',
+        description: 'Marine Stewardship Council',
       },
       {
         '@type': 'EducationalOccupationalCredential',
@@ -192,14 +199,14 @@ export function LocalBusinessSchema({ locale = 'es' }: { locale?: string }) {
     '@type': 'LocalBusiness',
     '@id': `${BASE_URL}/#localbusiness`,
     name: 'ZIVAH International S.A.',
-    image: `${BASE_URL}/assets/images/zivah-og-image.jpg`,
+    image: `${BASE_URL}/assets/images/photos/hero-marine.jpg`,
     url: BASE_URL,
     telephone: '+593999002893',
     email: 'info@zivahinternational.com',
     priceRange: '$$$',
     description: isSpanish
-      ? 'Exportadores de productos ecuatorianos premium: frutas tropicales, camarón, café y larvas de acuicultura.'
-      : 'Premium Ecuadorian product exporters: tropical fruits, shrimp, coffee and aquaculture larvae.',
+      ? 'Exportamos camarón blanco, larvas de camarón y atún del Pacífico desde Ecuador.'
+      : 'We export white shrimp, shrimp post-larvae and Pacific tuna from Ecuador.',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Casa Matriz Mz 10 S L 31',
@@ -221,13 +228,6 @@ export function LocalBusinessSchema({ locale = 'es' }: { locale?: string }) {
         closes: '18:00',
       },
     ],
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      reviewCount: '127',
-      bestRating: '5',
-      worstRating: '1',
-    },
     paymentAccepted: ['Cash', 'Credit Card', 'Wire Transfer', 'Letter of Credit'],
     currenciesAccepted: 'USD, EUR',
   };

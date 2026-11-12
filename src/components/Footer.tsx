@@ -97,7 +97,7 @@ export default async function Footer() {
                 </li>
               ))}
             </ul>
-            <p className='mt-4 text-xs text-muted-foreground/80'>{t('agriculturalLine')}</p>
+            <p className='mt-4 text-xs text-muted-foreground'>{t('agriculturalLine')}</p>
           </div>
 
           {/* Compañía */}

@@ -9,6 +9,8 @@ dist/
 build/
 .next/
 .astro/
+test-results/
+playwright-report/
 
 # Next.js auto-generated files
 next-env.d.ts

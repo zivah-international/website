@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 
 async function prepare(page: Page) {
   await page.addInitScript(() => {
@@ -63,7 +63,9 @@ test('hero uses a local image and no remote hosts', async ({ page }) => {
   await expect(image).toHaveAttribute('src', /hero-marine\.jpg/);
 });
 
-test('home presents proof, process, markets, and one testimonial', async ({ page }) => {
+test('home presents proof, process, and markets without an unverified testimonial', async ({
+  page,
+}) => {
   await prepare(page);
   await page.goto('/');
 
@@ -75,7 +77,7 @@ test('home presents proof, process, markets, and one testimonial', async ({ page
   await expect(page.getByTestId('quality-band')).toContainText('GlobalGAP');
   await expect(page.getByTestId('process-step')).toHaveCount(4);
   await expect(page.getByTestId('market-row')).toHaveCount(6);
-  await expect(page.getByTestId('testimonial')).toHaveCount(1);
+  await expect(page.getByTestId('testimonial')).toHaveCount(0);
   await expect(
     page.getByText('Recibe una cotización FOB de productos del mar en 24 horas.')
   ).toBeVisible();

@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "ZIVAH International S.A. - Premium Ecuadorian Products Exporters | Ecuador to the World",
-    "description": "ZIVAH International S.A. - Leading exporters of premium Ecuadorian products from Ecuador to the world. Headquartered in Samborondón, Guayas with distribution office in Miami.",
-    "keywords": "ecuador export, tropical fruits, ecuadorian shrimp, aquaculture larvae, arabica coffee, seafood products"
+    "title": "ZIVAH International — Shrimp, post-larvae and tuna from Ecuador",
+    "description": "We export white shrimp, shrimp post-larvae and Pacific tuna from Ecuador. Documentation, traceability and an FOB quote within 24 hours.",
+    "keywords": "Ecuadorian shrimp, shrimp post-larvae, Pacific tuna, seafood export, aquaculture, tropical fruit, coffee, cacao"
   },
   "seo": {
-    "industry": "Ecuadorian products export",
+    "industry": "Seafood and aquaculture export",
     "catalogName": "Premium Ecuadorian Products",
     "tropicalFruits": "Tropical Fruits",
     "tropicalFruitsDesc": "Mango, pineapple, banana, papaya and exotic Ecuadorian fruits",
@@ -171,11 +171,6 @@
           "note": "Expanding market."
         }
       }
-    },
-    "testimonial": {
-      "label": "Importer testimonial",
-      "quote": "The documentation arrived clearly from the beginning, which made our internal review easier before moving forward with the purchase.",
-      "attribution": "Seafood importer · Wholesale distributor · United States"
     },
     "finalCta": {
       "title": "Receive an FOB quote for seafood within 24 hours.",

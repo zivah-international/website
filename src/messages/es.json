@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "ZIVAH International S.A. - Exportadores de Productos Ecuatorianos Premium | Ecuador hacia el Mundo",
-    "description": "ZIVAH International S.A. - Exportadores líderes de productos ecuatorianos premium desde Ecuador hacia el mundo. Con sede principal en Samborondón, Guayas y oficina de distribución en Miami.",
-    "keywords": "exportación ecuador, frutas tropicales, camarón ecuatoriano, larvas acuicultura, cafe arabica, productos marinos"
+    "title": "ZIVAH International — Camarón, larvas y atún de Ecuador",
+    "description": "Exportamos camarón blanco, larvas de camarón y atún del Pacífico desde Ecuador. Documentación, trazabilidad y cotización FOB en 24 horas.",
+    "keywords": "camarón ecuatoriano, larvas de camarón, atún del Pacífico, exportación de productos del mar, acuicultura, frutas tropicales, café, cacao"
   },
   "seo": {
-    "industry": "Exportación de productos ecuatorianos",
+    "industry": "Exportación de productos del mar y acuicultura",
     "catalogName": "Productos Ecuatorianos Premium",
     "tropicalFruits": "Frutas Tropicales",
     "tropicalFruitsDesc": "Mango, piña, banano, papaya y frutas exóticas ecuatorianas",
@@ -171,11 +171,6 @@
           "note": "Mercado en expansión."
         }
       }
-    },
-    "testimonial": {
-      "label": "Testimonio de importador",
-      "quote": "La documentación llegó clara desde el inicio y eso facilitó nuestra revisión interna antes de avanzar con la compra.",
-      "attribution": "Importador de mariscos · Distribuidor mayorista · Estados Unidos"
     },
     "finalCta": {
       "title": "Recibe una cotización FOB de productos del mar en 24 horas.",

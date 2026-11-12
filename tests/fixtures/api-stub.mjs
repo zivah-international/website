@@ -11,6 +11,7 @@ const products = [
     name: 'Camarón Blanco Premium',
     slug: 'camaron-blanco-premium',
     shortDescription: 'Camarón vannamei IQF.',
+    imageUrl: 'https://images.unsplash.com/broken-stored-image.jpg',
     description: 'Camarón blanco ecuatoriano para exportación.',
     origin: 'Guayas, Ecuador',
     stockQuantity: 1000,

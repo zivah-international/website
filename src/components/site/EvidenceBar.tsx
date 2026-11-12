@@ -30,23 +30,21 @@ export default async function EvidenceBar() {
   return (
     <dl
       data-testid='evidence-bar'
-      className='border-y border-border bg-surface'
+      className='mx-auto grid max-w-[1200px] grid-cols-2 border-y border-border bg-surface px-4 sm:px-6 md:grid-cols-4 lg:px-8'
     >
-      <div className='mx-auto grid max-w-[1200px] grid-cols-2 px-4 sm:px-6 md:grid-cols-4 lg:px-8'>
-        {items.map((item, index) => (
-          <div
-            key={item.label}
-            className={`flex flex-col justify-center gap-1.5 border-border px-4 py-7 sm:px-6 ${dividerClass(index)}`}
-          >
-            <dt className='font-serif text-[32px] leading-none text-foreground lg:text-[40px]'>
-              {item.value}
-            </dt>
-            <dd className='text-[11px] font-medium tracking-[0.12em] text-muted-foreground uppercase'>
-              {item.label}
-            </dd>
-          </div>
-        ))}
-      </div>
+      {items.map((item, index) => (
+        <div
+          key={item.label}
+          className={`flex flex-col justify-center gap-1.5 border-border px-4 py-7 sm:px-6 ${dividerClass(index)}`}
+        >
+          <dt className='font-serif text-[32px] leading-none text-foreground lg:text-[40px]'>
+            {item.value}
+          </dt>
+          <dd className='text-[11px] font-medium tracking-[0.12em] text-muted-foreground uppercase'>
+            {item.label}
+          </dd>
+        </div>
+      ))}
     </dl>
   );
 }

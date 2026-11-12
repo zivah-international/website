@@ -20,7 +20,6 @@ interface Product {
   sku?: string;
   specifications?: Record<string, string>;
   stockQuantity: number;
-  imageUrl?: string;
   origin: string;
   certifications?: string[];
   isFeatured: boolean;
@@ -82,7 +81,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     openGraph: {
       title: `${product.name} | ZIVAH International`,
       description: product.shortDescription || product.description,
-      images: [getProductImage(product.slug, product.category?.slug, product.imageUrl)],
+      images: [getProductImage(product.slug, product.category?.slug)],
     },
   };
 }
@@ -104,7 +103,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const ficha = getFichaTecnica(product.slug);
   const certifications = product.certifications ?? [];
-  const imageSrc = getProductImage(product.slug, product.category?.slug, product.imageUrl);
+  const imageSrc = getProductImage(product.slug, product.category?.slug);
 
   const specs = [
     { label: t('origin'), value: product.origin },
@@ -265,7 +264,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   key={item.id}
                   testId='related-product'
                   href={`/products/${item.slug}`}
-                  imageSrc={getProductImage(item.slug, item.category?.slug, item.imageUrl)}
+                  imageSrc={getProductImage(item.slug, item.category?.slug)}
                   imageAlt={item.name}
                   eyebrow={item.category?.name ?? ''}
                   title={item.name}

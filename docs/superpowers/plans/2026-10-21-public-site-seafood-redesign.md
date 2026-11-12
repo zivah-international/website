@@ -24,6 +24,7 @@
 - One primary action per view. The only solid accent button on a screen is the conversion action.
 - For link-shaped buttons, use `<Button asChild><Link …>…</Link></Button>`; never nest a `<button>` inside an `<a>`.
 - Business metrics must come from `src/lib/public-data.ts` and the `metrics` translation namespace. Never hardcode a different market or certification count.
+- Publish testimonials or ratings only when an approved customer source exists. Omit them when no approved source is available; never invent customer statements or review counts.
 - Do not stage `.next/`, `node_modules/`, `.env*`, `test-results/`, or `playwright-report/`.
 
 ### Test environment
@@ -877,7 +878,9 @@ git commit -m "feat(home): lead with seafood hero and product plates"
 
 ---
 
-## Task 4: Home proof, quality band, process, markets, testimonial, final CTA
+## Task 4: Home proof, quality band, process, markets, customer proof, final CTA
+
+No approved testimonial source was available during implementation. Omit the testimonial component, message keys, and quote assertion unless an approved customer statement and attribution are supplied.
 
 **Files:**
 
@@ -885,7 +888,6 @@ git commit -m "feat(home): lead with seafood hero and product plates"
 - Create: `src/components/sections/QualityBand.tsx`
 - Create: `src/components/sections/ProcessSection.tsx` (replace old file)
 - Create: `src/components/sections/MarketsSection.tsx`
-- Create: `src/components/sections/TestimonialSection.tsx`
 - Create: `src/components/sections/FinalCta.tsx`
 - Create: `src/components/site/CTABand.tsx`
 - Create: `src/components/site/CertificationMark.tsx`
@@ -905,7 +907,9 @@ git commit -m "feat(home): lead with seafood hero and product plates"
 Add to `tests/e2e/home.spec.ts`:
 
 ```ts
-test('home presents proof, process, markets, and one testimonial', async ({ page }) => {
+test('home presents proof, process, and markets without unapproved customer proof', async ({
+  page,
+}) => {
   await prepare(page);
   await page.goto('/');
 
@@ -917,7 +921,7 @@ test('home presents proof, process, markets, and one testimonial', async ({ page
   await expect(page.getByTestId('quality-band')).toContainText('GlobalGAP');
   await expect(page.getByTestId('process-step')).toHaveCount(4);
   await expect(page.getByTestId('market-row')).toHaveCount(6);
-  await expect(page.getByTestId('testimonial')).toHaveCount(1);
+  await expect(page.getByTestId('testimonial')).toHaveCount(0);
   await expect(
     page.getByText('Recibe una cotización FOB de productos del mar en 24 horas.')
   ).toBeVisible();
@@ -984,13 +988,6 @@ Expected: FAIL on the new sections.
 - Text link “Ver mercados” → `/markets`.
 - Map can be a simple inline route diagram in this task; the real map arrives in Task 8. Mark it `aria-hidden='true'` here.
 
-`TestimonialSection.tsx`:
-
-- One `data-testid='testimonial'`, no card, no carousel.
-- Quote in Newsreader 28–36px: “La documentación llegó clara desde el inicio y eso facilitó nuestra revisión interna antes de avanzar con la compra.”
-- Attribution: “Importador de mariscos · Distribuidor mayorista · Estados Unidos”.
-- Hairline above and below.
-
 `FinalCta.tsx`:
 
 - Navy `CTABand`.
@@ -1031,7 +1028,6 @@ type CertificationMarkProps = { code: string; name: string; description?: string
   <QualityBand />
   <ProcessSection />
   <MarketsSection />
-  <TestimonialSection />
   <FinalCta />
 </PublicShell>
 ```

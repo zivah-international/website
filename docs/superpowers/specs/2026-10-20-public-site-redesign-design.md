@@ -209,7 +209,7 @@ Order and purpose:
 5. **Quality band (navy).** H2 "Certificación que abre mercados." Four marine-relevant certification marks (BAP, HACCP, BRC, MSC) with one-line descriptions, plus a small note that agricultural lines carry GlobalGAP. Link to Quality.
 6. **Process.** H2 "De la consulta al embarque." Four numbered steps. Single outline CTA "Iniciar cotización".
 7. **Markets.** H2 "Dónde llega el producto." Six market rows with status, ordered by seafood demand. Link to Markets.
-8. **Testimonial.** One quote from a seafood importer, serif, with attribution (role + market). No cards, no carousel.
+8. **Customer proof (only when approved).** Show one approved quote from a seafood importer in serif type, with attribution (role + market). If no approved customer quote is available, omit this section; never invent a testimonial or customer identity. No cards, no carousel.
 9. **Final CTA (navy).** H2 "Recibe una cotización FOB de productos del mar en 24 horas." Support line + primary CTA + email/WhatsApp text links.
 
 Removed from home: autoplay hero, side "Compra sin fricción" panel, blue stats strip, second feature section, why-Ecuador cards, newsletter, three testimonial cards, duplicated CTAs.

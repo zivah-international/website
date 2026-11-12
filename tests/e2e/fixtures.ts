@@ -23,6 +23,7 @@ export const PRODUCTS = [
     name: 'Camarón Blanco Premium',
     slug: 'camaron-blanco-premium',
     shortDescription: 'Camarón vannamei IQF.',
+    imageUrl: 'https://images.unsplash.com/broken-stored-image.jpg',
     origin: 'Guayas, Ecuador',
     certifications: ['BAP', 'HACCP'],
     isFeatured: true,

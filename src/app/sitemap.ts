@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 import { defaultLocale, localeFullCodes, locales } from '@/i18n/config';
+import { PRODUCT_SLUGS } from '@/lib/product-images';
 
 // Base URL for the website
 const BASE_URL = 'https://zivahinternational.com';
@@ -20,33 +21,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/legal/terms-of-service', changeFreq: 'yearly' as const, priority: 0.3 },
     { path: '/legal/cookie-policy', changeFreq: 'yearly' as const, priority: 0.3 },
     { path: '/legal/data-protection', changeFreq: 'yearly' as const, priority: 0.3 },
-  ];
-
-  // Product pages (these would typically come from your database)
-  const productSlugs = [
-    'tropical-fruits',
-    'shrimp',
-    'coffee',
-    'aquaculture-larvae',
-    'nuts',
-    'marine-products',
-    'mango',
-    'pineapple',
-    'banana',
-    'papaya',
-    'vannamei-shrimp',
-    'arabica-coffee',
-    'shrimp-larvae',
-  ];
-
-  // Category pages
-  const categorySlugs = [
-    'fruits',
-    'seafood',
-    'coffee-beans',
-    'aquaculture',
-    'tropical-fruits',
-    'premium-seafood',
   ];
 
   // Generate URLs for all locales
@@ -89,13 +63,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   });
 
   // Add product pages for all locales
-  productSlugs.forEach(slug => {
+  PRODUCT_SLUGS.forEach(slug => {
     sitemapEntries.push(...generateLocalizedUrls(`/products/${slug}`, 'weekly', 0.8));
-  });
-
-  // Add category pages for all locales
-  categorySlugs.forEach(slug => {
-    sitemapEntries.push(...generateLocalizedUrls(`/categories/${slug}`, 'weekly', 0.7));
   });
 
   return sitemapEntries;

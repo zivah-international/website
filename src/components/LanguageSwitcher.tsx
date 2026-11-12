@@ -51,6 +51,10 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Intentionally runs only on mount to apply stored preference once
 
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   const handleLocaleChange = (newLocale: Locale) => {
     if (newLocale !== locale) {
       // Save preference to localStorage and cookie

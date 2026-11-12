@@ -22,7 +22,6 @@ interface Product {
   harvestSeason?: string;
   certifications?: string[];
   category?: { name: string; slug: string };
-  imageUrl?: string;
   isFeatured: boolean;
 }
 
@@ -106,7 +105,7 @@ export default async function FichaTecnicaPage({ params }: PageProps) {
 
   if (!product || !ficha) notFound();
 
-  const imageUrl = getProductImage(slug, product.category?.slug, product.imageUrl);
+  const imageSrc = getProductImage(slug, product.category?.slug);
   const certifications = ficha.certificaciones ?? [];
   const today = new Date().toLocaleDateString(currentLocale === 'en' ? 'en-US' : 'es-EC', {
     day: '2-digit',
@@ -166,7 +165,7 @@ export default async function FichaTecnicaPage({ params }: PageProps) {
             <div className='mb-8 flex break-inside-avoid gap-6'>
               <div className='relative hidden aspect-[4/3] w-44 shrink-0 overflow-hidden border border-neutral-200 sm:block'>
                 <Image
-                  src={imageUrl}
+                  src={imageSrc}
                   alt={product.name}
                   fill
                   sizes='176px'

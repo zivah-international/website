@@ -23,8 +23,8 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: 'ZIVAH International S.A.',
-  description: 'Premium Ecuadorian Products Exporters',
+  title: 'ZIVAH International — Ecuadorian seafood and aquaculture',
+  description: 'Shrimp, post-larvae and Pacific tuna from Ecuador.',
   icons: {
     icon: '/favicon.svg',
   },

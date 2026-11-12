@@ -4,6 +4,11 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+
+const inputClass =
+  'mt-1 h-11 w-full rounded-[2px] border border-input bg-background px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none';
+
 function SignUpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -45,12 +50,13 @@ function SignUpForm() {
 
   return (
     <div>
-      <h2 className='mb-6 text-center text-2xl font-semibold text-gray-800 dark:text-white'>
-        Create Account
-      </h2>
+      <h2 className='mb-6 font-serif text-2xl text-foreground'>Crear cuenta</h2>
 
       {error && (
-        <div className='mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/50 dark:text-red-300'>
+        <div
+          role='alert'
+          className='mb-4 rounded-[2px] border border-destructive/25 bg-destructive/10 p-3 text-sm text-destructive'
+        >
           {error}
         </div>
       )}
@@ -62,9 +68,9 @@ function SignUpForm() {
         <div>
           <label
             htmlFor='fullName'
-            className='block text-sm font-medium text-gray-700 dark:text-gray-300'
+            className='block text-sm font-medium text-foreground'
           >
-            Full Name
+            Nombre completo
           </label>
           <input
             id='fullName'
@@ -72,17 +78,18 @@ function SignUpForm() {
             value={fullName}
             onChange={e => setFullName(e.target.value)}
             required
-            className='mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white'
-            placeholder='John Doe'
+            className={inputClass}
+            autoComplete='name'
+            placeholder='Nombre y apellido'
           />
         </div>
 
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-gray-700 dark:text-gray-300'
+            className='block text-sm font-medium text-foreground'
           >
-            Email
+            Correo electrónico
           </label>
           <input
             id='email'
@@ -90,17 +97,18 @@ function SignUpForm() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-            className='mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white'
-            placeholder='you@example.com'
+            className={inputClass}
+            autoComplete='email'
+            placeholder='nombre@empresa.com'
           />
         </div>
 
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-gray-700 dark:text-gray-300'
+            className='block text-sm font-medium text-foreground'
           >
-            Password
+            Contraseña
           </label>
           <input
             id='password'
@@ -109,45 +117,48 @@ function SignUpForm() {
             onChange={e => setPassword(e.target.value)}
             required
             minLength={8}
-            className='mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            className={inputClass}
+            autoComplete='new-password'
             placeholder='••••••••'
           />
-          <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>Minimum 8 characters</p>
+          <p className='mt-1 text-xs text-muted-foreground'>Mínimo 8 caracteres.</p>
         </div>
 
-        <button
+        <Button
           type='submit'
           disabled={loading}
-          className='w-full rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50'
+          variant='brand'
+          size='brand'
+          className='w-full'
         >
-          {loading ? 'Creating account...' : 'Create Account'}
-        </button>
+          {loading ? 'Creando cuenta…' : 'Crear cuenta'}
+        </Button>
       </form>
 
-      <p className='mt-6 text-center text-sm text-gray-600 dark:text-gray-400'>
-        Already have an account?{' '}
+      <p className='mt-6 text-center text-sm text-muted-foreground'>
+        ¿Ya tienes una cuenta?{' '}
         <Link
           href={`/sign-in${redirectTo !== '/admin' ? `?redirectTo=${redirectTo}` : ''}`}
-          className='font-medium text-green-600 hover:text-green-500 dark:text-green-400'
+          className='font-medium text-foreground underline underline-offset-4 transition-colors hover:text-accent'
         >
-          Sign in
+          Inicia sesión
         </Link>
       </p>
 
-      <p className='mt-4 text-center text-xs text-gray-500 dark:text-gray-400'>
-        By signing up, you agree to our{' '}
+      <p className='mt-4 text-center text-xs leading-relaxed text-muted-foreground'>
+        Al crear una cuenta, aceptas nuestros{' '}
         <Link
           href='/legal/terms-of-service'
-          className='underline hover:no-underline'
+          className='underline underline-offset-4 hover:text-accent'
         >
-          Terms of Service
+          Términos del servicio
         </Link>{' '}
-        and{' '}
+        y nuestra{' '}
         <Link
           href='/legal/privacy-policy'
-          className='underline hover:no-underline'
+          className='underline underline-offset-4 hover:text-accent'
         >
-          Privacy Policy
+          Política de privacidad
         </Link>
       </p>
     </div>
@@ -157,11 +168,7 @@ function SignUpForm() {
 export default function SignUpPage() {
   return (
     <Suspense
-      fallback={
-        <div className='flex justify-center py-8'>
-          <div className='animate-pulse'>Loading...</div>
-        </div>
-      }
+      fallback={<div className='py-8 text-center text-sm text-muted-foreground'>Cargando…</div>}
     >
       <SignUpForm />
     </Suspense>
