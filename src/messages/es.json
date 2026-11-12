@@ -193,25 +193,20 @@
     "traceability": "100%"
   },
   "products": {
-    "badge": "Catálogo de Exportación",
-    "title": "Productos Certificados para Mercados Exigentes",
-    "loading": "Cargando productos...",
-    "description": "Desde camarón vannamei hasta frutas tropicales y larvas de acuicultura: cada producto cuenta con certificación internacional, trazabilidad completa y documentación de exportación lista.",
-    "requestQuote": "Cotizar este producto",
-    "viewProducts": "Ver {count} productos",
-    "viewDetail": "Ver ficha técnica",
-    "moreProducts": "+{count} más disponibles",
-    "catalog": {
-      "badge": "Catálogo Completo",
-      "title": "Todos Nuestros Productos con Ficha Técnica",
-      "description": "{count} productos disponibles para exportación · Con certificación, origen y precio base referencial",
-      "all": "Todos",
-      "premiumQuality": "Calidad premium",
-      "noProducts": {
-        "title": "No se encontraron productos",
-        "description": "Intenta seleccionar una categoría diferente"
-      }
-    }
+    "eyebrow": "Catálogo de exportación",
+    "title": "Productos del mar y líneas agrícolas",
+    "lead": "Camarón, larvas y atún primero. Frutas tropicales, café y cacao como líneas complementarias.",
+    "requestQuote": "Solicitar cotización",
+    "all": "Todos",
+    "seafood": "Productos del mar",
+    "agricultural": "Agrícolas",
+    "other": "Otros productos",
+    "viewDetail": "Ver ficha",
+    "emptyTitle": "Catálogo en actualización",
+    "emptyBody": "El catálogo se actualiza periódicamente. Escríbenos y confirmamos disponibilidad para tu mercado.",
+    "emptyCta": "Consultar disponibilidad",
+    "filterEmpty": "No hay productos en esta categoría.",
+    "clearFilter": "Ver todos"
   },
   "quote": {
     "badge": "Solicitud de Cotización",

@@ -11,6 +11,8 @@ type ProductCardProps = {
   title: string;
   description: string;
   linkLabel: string;
+  origin?: string;
+  certifications?: string[];
   testId?: string;
 };
 
@@ -22,6 +24,8 @@ export default function ProductCard({
   title,
   description,
   linkLabel,
+  origin,
+  certifications,
   testId = 'product-card',
 }: ProductCardProps) {
   return (
@@ -35,13 +39,23 @@ export default function ProductCard({
           alt={imageAlt}
           fill
           sizes='(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
-          className='object-cover transition-transform duration-500 group-hover:scale-[1.03]'
+          className='object-cover'
         />
       </div>
       <div className='flex flex-1 flex-col p-5 sm:p-6'>
-        <p className='text-[11px] font-medium tracking-[0.18em] text-accent uppercase'>{eyebrow}</p>
+        <p className='text-[11px] font-medium tracking-[0.18em] text-muted-foreground uppercase'>
+          {eyebrow}
+        </p>
         <h3 className='mt-2 text-xl text-foreground'>{title}</h3>
-        <p className='mt-2 text-sm leading-relaxed text-muted-foreground'>{description}</p>
+        <p className='mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground'>
+          {description}
+        </p>
+        {origin && <p className='mt-3 text-[13px] text-muted-foreground'>{origin}</p>}
+        {certifications && certifications.length > 0 && (
+          <p className='mt-1 text-[11px] font-medium tracking-[0.12em] text-muted-foreground uppercase'>
+            {certifications.join(' · ')}
+          </p>
+        )}
         <Link
           href={href}
           className='mt-5 inline-flex items-center gap-1.5 self-start text-[11px] font-semibold tracking-[0.14em] text-foreground uppercase transition-colors hover:text-accent'

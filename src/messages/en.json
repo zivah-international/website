@@ -193,25 +193,20 @@
     "traceability": "100%"
   },
   "products": {
-    "badge": "Export Catalog",
-    "title": "Certified Products for Demanding Markets",
-    "loading": "Loading products...",
-    "description": "From vannamei shrimp to tropical fruits and aquaculture larvae: every product carries international certification, full traceability and export documentation ready for shipment.",
-    "requestQuote": "Quote this product",
-    "viewProducts": "View {count} products",
-    "viewDetail": "View technical sheet",
-    "moreProducts": "+{count} more available",
-    "catalog": {
-      "badge": "Complete Catalog",
-      "title": "All Our Products with Technical Sheet",
-      "description": "{count} products available for export · With certification, origin and reference base price",
-      "all": "All",
-      "premiumQuality": "Premium quality",
-      "noProducts": {
-        "title": "No products found",
-        "description": "Try selecting a different category"
-      }
-    }
+    "eyebrow": "Export catalog",
+    "title": "Seafood and agricultural lines",
+    "lead": "Shrimp, larvae and tuna first. Tropical fruits, coffee and cacao as complementary lines.",
+    "requestQuote": "Request a quote",
+    "all": "All",
+    "seafood": "Seafood",
+    "agricultural": "Agricultural",
+    "other": "Other products",
+    "viewDetail": "View sheet",
+    "emptyTitle": "Catalog being updated",
+    "emptyBody": "The catalog is updated periodically. Write to us and we will confirm availability for your market.",
+    "emptyCta": "Check availability",
+    "filterEmpty": "No products in this category.",
+    "clearFilter": "View all"
   },
   "quote": {
     "badge": "Request a Quote",
