@@ -62,3 +62,32 @@ test('hero uses a local image and no remote hosts', async ({ page }) => {
   const image = hero.locator('img');
   await expect(image).toHaveAttribute('src', /hero-marine\.jpg/);
 });
+
+test('home presents proof, process, markets, and one testimonial', async ({ page }) => {
+  await prepare(page);
+  await page.goto('/');
+
+  await expect(page.getByRole('heading', { name: 'Por qué ZIVAH' })).toBeVisible();
+  await expect(page.getByTestId('quality-band')).toContainText('BAP');
+  await expect(page.getByTestId('quality-band')).toContainText('HACCP');
+  await expect(page.getByTestId('quality-band')).toContainText('BRC');
+  await expect(page.getByTestId('quality-band')).toContainText('MSC');
+  await expect(page.getByTestId('quality-band')).toContainText('GlobalGAP');
+  await expect(page.getByTestId('process-step')).toHaveCount(4);
+  await expect(page.getByTestId('market-row')).toHaveCount(6);
+  await expect(page.getByTestId('testimonial')).toHaveCount(1);
+  await expect(
+    page.getByText('Recibe una cotización FOB de productos del mar en 24 horas.')
+  ).toBeVisible();
+});
+
+test('home has no newsletter, carousel, or duplicate quote CTA', async ({ page }) => {
+  await prepare(page);
+  await page.goto('/');
+
+  await expect(page.getByText(/newsletter|suscríbete|suscribete/i)).toHaveCount(0);
+  await expect(page.locator('[aria-label*="anterior" i], [aria-label*="siguiente" i]')).toHaveCount(
+    0
+  );
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+});

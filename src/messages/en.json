@@ -38,78 +38,7 @@
     "switchToLight": "Switch to light mode",
     "quoteCta": "Request a quote"
   },
-  "hero": {
-    "badge": "🇪🇨 From Ecuador to the World · Samborondón, Guayas · Miami, Florida",
-    "title": "Shrimp · Larvae",
-    "titleHighlight": "Premium Aquaculture",
-    "titleEnd": "Direct Export from Ecuador",
-    "description": "We export vannamei shrimp, aquaculture larvae, tropical fruits and arabica coffee directly from Ecuador. BAP, HACCP, BRC and GlobalGAP certified. Documentation ready. Response within 24h.",
-    "exploreProducts": "View Catalog",
-    "requestQuote": "Request Quote",
-    "stats": {
-      "countriesServed": "Guayaquil",
-      "containersYear": "Commercial Response",
-      "yearsExperience": "Aquaculture Certification",
-      "qualityGuaranteed": "Markets Served"
-    },
-    "statValues": {
-      "countriesServed": "5+",
-      "containersYear": "24h",
-      "yearsExperience": "4+",
-      "qualityGuaranteed": "100%"
-    },
-    "slides": {
-      "shrimp": {
-        "badge": "Vannamei Shrimp · Direct export from Ecuador",
-        "title": "Ecuadorian shrimp",
-        "titleHighlight": "ready to export",
-        "subtitle": "IQF and block frozen shrimp with BAP/HACCP/BRC documentation, full traceability and 24h commercial response.",
-        "cta": "Request FOB price",
-        "ctaSecondary": "View technical sheet"
-      },
-      "larvae": {
-        "badge": "Shrimp larvae · Nauplii and PL · Ecuador",
-        "title": "SPF larvae",
-        "titleHighlight": "for stable cycles",
-        "subtitle": "Selected genetics, level-A biosecurity, guided acclimation and coordinated availability for aquaculture production.",
-        "cta": "Check availability",
-        "ctaSecondary": "View technical sheet"
-      },
-      "fruits": {
-        "badge": "Tropical fruits · Coffee · Cacao · Ecuador",
-        "title": "Ecuadorian products",
-        "titleHighlight": "with traceability",
-        "subtitle": "Certified origin, clear seasonality and export documentation ready for international buyers.",
-        "cta": "Request quote",
-        "ctaSecondary": "View catalog"
-      }
-    },
-    "gallery": {
-      "badge": "Featured Products",
-      "title": "From Ecuadorian fields to the world",
-      "subtitle": "+30 certified fresh products · Direct FOB export",
-      "viewAll": "View all 30+ products →",
-      "products": {
-        "shrimp": "Vannamei Shrimp",
-        "cacao": "Fine Cacao of Aroma",
-        "roses": "Premium Roses",
-        "mango": "Tommy Atkins Mango",
-        "avocado": "Hass Avocado",
-        "coffee": "Arabica Coffee",
-        "banana": "Premium Banana",
-        "pineapple": "Golden Pineapple"
-      }
-    },
-    "premiumProducts": "What We Export",
-    "productTypes": {
-      "tropicalFruits": "Tropical Fruits · Mango, Pineapple, Banana",
-      "premiumSeafood": "Certified Vannamei Shrimp",
-      "highlandCoffee": "High-Altitude Arabica Coffee",
-      "aquaculture": "Aquaculture Larvae & Nauplii"
-    }
-  },
   "home": {
-    "viewFullCatalog": "View full catalog",
     "hero": {
       "eyebrow": "Ecuador · Direct export",
       "title": "Ecuadorian seafood, <em>ready for export</em>.",
@@ -148,56 +77,112 @@
     "secondary": {
       "text": "We also export <a>tropical fruits</a>, <a>highland coffee</a> and <a>cacao</a>."
     },
-    "shrimp": {
-      "eyebrow": "Main offer",
-      "title": "Source shrimp",
-      "titleHighlight": "with less operational risk",
-      "description": "We connect international buyers with certified Ecuadorian vannamei shrimp, ready sanitary documentation and FOB coordination from Guayaquil.",
-      "features": [
-        "Ready documentation to reduce customs delays",
-        "IQF, block frozen, cooked, tail-on and headless presentations",
-        "Traceability from farm to container for procurement audits",
-        "FOB Guayaquil quote with 24h commercial response"
-      ],
-      "cta": "Request FOB price",
-      "ctaSecondary": "View technical sheet"
-    },
-    "larvae": {
-      "eyebrow": "Aquaculture",
-      "title": "Larvae for",
-      "titleHighlight": "more predictable cycles",
-      "description": "Nauplii and post-larvae supply for white shrimp operations, with selected genetics, biosecurity and technical support for aquaculture teams.",
-      "features": [
-        "Certified SPF to reduce sanitary risk",
-        "PL10, PL12, PL15 and nauplii according to production planning",
-        "Guided acclimation and post-sale technical support",
-        "Coordinated dispatch to maintain stocking continuity"
-      ],
-      "cta": "Check availability",
-      "ctaSecondary": "View technical sheet"
-    },
-    "whyEcuador": {
-      "eyebrow": "Why Ecuador",
-      "title": "Why source Ecuadorian aquaculture",
-      "subtitle": "Ecuador combines specialized production, recognized certifications and frequent maritime logistics from Guayaquil for buyers who need continuity and control.",
-      "items": [
+    "whyZivah": {
+      "title": "Why ZIVAH",
+      "rows": [
         {
-          "label": "Recognized origin",
-          "desc": "Ecuador is a global reference for vannamei shrimp and works with suppliers used to demanding markets."
+          "title": "Our own operation at origin and destination.",
+          "description": "Samborondón and Miami. Commercial and logistics coordination without intermediaries."
         },
         {
-          "label": "Stable production",
-          "desc": "Tropical conditions support production continuity and year-round sourcing planning."
+          "title": "Documentation reviewed before shipment.",
+          "description": "Sanitary, origin and batch traceability ready for the importer's review."
         },
         {
-          "label": "Verifiable certification",
-          "desc": "Processes aligned with BAP, HACCP and BRC to support document review before shipment."
+          "title": "Cold chain coordinated from origin to destination.",
+          "description": "Temperature and timing control at every stage, with defined owners."
         },
         {
-          "label": "Direct FOB shipping",
-          "desc": "Coordination from Guayaquil and international commercial support to reduce operational uncertainty."
+          "title": "A single commercial contact.",
+          "description": "The same person follows the quote, production and shipment tracking."
         }
       ]
+    },
+    "quality": {
+      "title": "The standard is proven in every batch.",
+      "lead": "Four certifications support access to the markets where we sell.",
+      "note": "Agricultural lines: GlobalGAP.",
+      "link": "View quality and certifications",
+      "certifications": {
+        "bap": "Responsible aquaculture",
+        "haccp": "Food safety and process control",
+        "brc": "Global retail standard",
+        "msc": "Certified sustainable fishing"
+      }
+    },
+    "process": {
+      "title": "From inquiry to shipment.",
+      "cta": "Start a quote",
+      "steps": [
+        {
+          "title": "Inquiry",
+          "description": "We receive product, volume, destination and frequency."
+        },
+        {
+          "title": "FOB proposal",
+          "description": "Price, packaging, schedule and documents within 24 h."
+        },
+        {
+          "title": "Approval and production",
+          "description": "We reserve the lot and coordinate quality control."
+        },
+        {
+          "title": "Shipment and tracking",
+          "description": "Documents, transit and arrival confirmation."
+        }
+      ]
+    },
+    "markets": {
+      "title": "Where the product arrives.",
+      "link": "View markets",
+      "status": {
+        "active": "Active",
+        "expansion": "Expansion"
+      },
+      "list": {
+        "US": {
+          "country": "United States",
+          "hub": "Miami",
+          "note": "Wholesale and retail distribution."
+        },
+        "JP": {
+          "country": "Japan",
+          "hub": "Tokyo",
+          "note": "Seafood importers."
+        },
+        "NL": {
+          "country": "Netherlands",
+          "hub": "Rotterdam",
+          "note": "Gateway to the European Union."
+        },
+        "CN": {
+          "country": "China",
+          "hub": "Shanghai",
+          "note": "Wholesale distribution."
+        },
+        "CA": {
+          "country": "Canada",
+          "hub": "Toronto",
+          "note": "Expanding market."
+        },
+        "AE": {
+          "country": "United Arab Emirates",
+          "hub": "Dubai",
+          "note": "Expanding market."
+        }
+      }
+    },
+    "testimonial": {
+      "label": "Importer testimonial",
+      "quote": "The documentation arrived clearly from the beginning, which made our internal review easier before moving forward with the purchase.",
+      "attribution": "Seafood importer · Wholesale distributor · United States"
+    },
+    "finalCta": {
+      "title": "Receive an FOB quote for seafood within 24 hours.",
+      "body": "Tell us the product, volume and destination. We reply with price, packaging and next steps.",
+      "primary": "Request a quote",
+      "email": "Email us",
+      "whatsapp": "Message us on WhatsApp"
     }
   },
   "metrics": {
@@ -304,13 +289,6 @@
     "message": "Message",
     "send": "Send Message"
   },
-  "newsletter": {
-    "title": "Export Updates Straight to Your Inbox",
-    "description": "Availability updates, harvest seasons, FOB prices and new certifications. For importers and distributors only.",
-    "placeholder": "you@company.com",
-    "cta": "Subscribe",
-    "privacy": "No spam. You can unsubscribe at any time."
-  },
   "footer": {
     "brandLine": "Exporter of seafood and aquaculture products from Ecuador.",
     "productsHeading": "Products",
@@ -330,65 +308,6 @@
     "termsConditions": "Terms & Conditions",
     "cookiePolicy": "Cookie Policy",
     "dataProtection": "Data Protection"
-  },
-  "process": {
-    "badge": "Sourcing path",
-    "title": "From quote to shipment without unnecessary steps",
-    "description": "A simple path so buyers understand what to send, what they receive and when they can move forward.",
-    "steps": [
-      {
-        "number": "01",
-        "title": "Send your requirement",
-        "description": "Product, volume, destination and required presentation. With those details we avoid back-and-forth.",
-        "icon": "📋"
-      },
-      {
-        "number": "02",
-        "title": "We validate availability",
-        "description": "We review sizes, certifications, required documentation and Incoterm according to your market.",
-        "icon": "🔍"
-      },
-      {
-        "number": "03",
-        "title": "Receive FOB proposal",
-        "description": "We send price, technical specification, available documentation and commercial conditions.",
-        "icon": "📄"
-      },
-      {
-        "number": "04",
-        "title": "We coordinate shipment",
-        "description": "We align documentation, dispatch and commercial follow-up until product departure.",
-        "icon": "🚢"
-      }
-    ]
-  },
-  "testimonials": {
-    "badge": "Commercial proof",
-    "title": "Trust based on operation, not promises",
-    "description": "Importers and distributors who trust ZIVAH for their sourcing operations.",
-    "items": [
-      {
-        "quote": "The documentation arrived clearly from the beginning, which helped our internal review before moving forward with the purchase.",
-        "author": "Seafood Importer",
-        "role": "Wholesale Distributor",
-        "country": "Spain",
-        "flag": "🇪🇸"
-      },
-      {
-        "quote": "We needed stocking continuity and technical support. Availability coordination helped us plan the cycle better.",
-        "author": "Aquaculture Manager",
-        "role": "Shrimp Farm Operator",
-        "country": "Mexico",
-        "flag": "🇲🇽"
-      },
-      {
-        "quote": "The commercial response was fast and concrete: price, conditions and next steps without scattered information.",
-        "author": "Purchasing Director",
-        "role": "Distribution Chain",
-        "country": "United States",
-        "flag": "🇺🇸"
-      }
-    ]
   },
   "quoteForm": {
     "title": "Request Quote",
