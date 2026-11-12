@@ -1,10 +1,16 @@
 import { getTranslations } from 'next-intl/server';
 
-import { Link } from '@/i18n/routing';
+import CTABand from '@/components/site/CTABand';
+import EvidenceBar from '@/components/site/EvidenceBar';
+import PageHeader from '@/components/site/PageHeader';
+import SectionHeader from '@/components/site/SectionHeader';
+import { CERTIFICATIONS } from '@/lib/public-data';
 
 interface Props {
   params: Promise<{ locale: string }>;
 }
+
+type QualityStep = { title: string; description: string };
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
@@ -15,278 +21,100 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-const CERTS = [
-  {
-    code: 'BAP',
-    name: 'Best Aquaculture Practices',
-    descKey: 'bap' as const,
-    color: 'border-secondary/30 bg-secondary/5',
-    badge: 'bg-secondary text-secondary-foreground',
-    icon: '🦐',
-  },
-  {
-    code: 'HACCP',
-    name: 'Hazard Analysis Critical Control Points',
-    descKey: 'haccp' as const,
-    color: 'border-accent/30 bg-accent/5',
-    badge: 'bg-accent text-accent-foreground',
-    icon: '🔬',
-  },
-  {
-    code: 'BRC',
-    name: 'British Retail Consortium',
-    descKey: 'brc' as const,
-    color: 'border-primary/30 bg-primary/5',
-    badge: 'bg-primary text-primary-foreground',
-    icon: '🏷️',
-  },
-  {
-    code: 'GlobalGAP',
-    name: 'Global Good Agricultural Practices',
-    descKey: 'globalGap' as const,
-    color: 'border-accent/20 bg-accent/8',
-    badge: 'bg-accent/80 text-accent-foreground',
-    icon: '🌱',
-  },
-];
-
-const PROCESS_STEPS = [
-  {
-    icon: '🌊',
-    title: 'Origen controlado',
-    desc: 'Granjas auditadas en Guayas, Ecuador. Trazabilidad desde la larva hasta el empaque.',
-  },
-  {
-    icon: '🧪',
-    title: 'Control de calidad',
-    desc: 'Análisis microbiológico y fisicoquímico en laboratorios certificados antes de cada despacho.',
-  },
-  {
-    icon: '❄️',
-    title: 'Cadena de frío',
-    desc: 'Empaque IQF / congelado en temperatura controlada. Cumplimiento HACCP en toda la cadena.',
-  },
-  {
-    icon: '📄',
-    title: 'Documentación lista',
-    desc: 'Certificados sanitarios, fitosanitarios, COO y phytosanitary listo para el embarque.',
-  },
-];
-
 export default async function QualityPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'quality' });
+  const tn = await getTranslations({ locale, namespace: 'nav' });
+  const steps = t.raw('process.steps') as QualityStep[];
 
   return (
-    <div className='min-h-screen'>
-      {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='bg-linear-to-b from-background to-muted/40 pt-28 pb-14'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <nav
-            className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'
-            aria-label='Breadcrumb'
+    <>
+      <PageHeader
+        crumbs={[{ label: tn('home'), href: '/' }, { label: tn('quality') }]}
+        eyebrow={t('eyebrow')}
+        title={t('title')}
+        lead={t('lead')}
+      />
+
+      <section
+        aria-labelledby='certifications-title'
+        className='bg-background pb-16 lg:pb-24'
+      >
+        <div className='mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8'>
+          <h2
+            id='certifications-title'
+            className='sr-only'
           >
-            <Link
-              href='/'
-              className='transition-colors hover:text-accent'
-            >
-              Inicio
-            </Link>
-            <span>/</span>
-            <span className='font-medium text-foreground'>Calidad y Certificaciones</span>
-          </nav>
+            {t('certificationsTitle')}
+          </h2>
 
-          <div className='flex items-center gap-4 border-l-4 border-primary/30 pl-5'>
-            <div className='hidden shrink-0 rounded-xl bg-primary/10 p-3 text-primary sm:block'>
-              <svg
-                className='h-7 w-7'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-                strokeWidth={2}
+          <ul className='border-t border-border'>
+            {CERTIFICATIONS.map(certification => (
+              <li
+                key={certification.code}
+                data-testid='certification-row'
+                className='grid gap-4 border-b border-border py-6 sm:grid-cols-[96px_1fr] sm:items-baseline sm:gap-8 lg:grid-cols-[96px_1.1fr_1fr]'
               >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'
-                />
-              </svg>
-            </div>
-            <div>
-              <p className='mb-1 text-xs font-semibold tracking-widest text-primary uppercase'>
-                Calidad y Certificaciones
-              </p>
-              <h1 className='text-3xl font-bold text-foreground sm:text-4xl'>{t('title')}</h1>
-              <p className='mt-1 max-w-2xl text-base text-muted-foreground'>{t('description')}</p>
-            </div>
-          </div>
+                <span className='flex h-10 w-24 items-center justify-center border border-border text-[11px] font-semibold tracking-[0.18em] text-foreground uppercase'>
+                  {certification.code}
+                </span>
+                <h3 className='font-serif text-xl leading-snug text-foreground'>
+                  {certification.name}
+                </h3>
+                <div>
+                  <p className='text-[15px] leading-relaxed text-muted-foreground'>
+                    {t(`certifications.${certification.code.toLowerCase()}`)}
+                  </p>
+                  <p className='mt-2 text-[11px] font-medium tracking-[0.12em] text-muted-foreground uppercase'>
+                    {t(`scope.${certification.scope}`)}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <p className='mt-4 text-[13px] text-muted-foreground'>{t('note')}</p>
         </div>
       </section>
 
-      {/* ── Cert badges strip ─────────────────────────────────────────────── */}
-      <div className='border-b border-border/40 bg-card'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex flex-wrap items-center justify-center gap-4 py-5'>
-            {CERTS.map(cert => (
-              <span
-                key={cert.code}
-                className={`${cert.badge} rounded-full px-4 py-1.5 text-sm font-bold tracking-wide shadow-sm`}
-              >
-                {cert.icon} {cert.code}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
+      <section
+        aria-labelledby='quality-process-title'
+        className='border-y border-border bg-surface py-16 lg:py-24'
+      >
+        <div className='mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8'>
+          <SectionHeader
+            eyebrow={t('process.eyebrow')}
+            title={t('process.title')}
+            lead={t('process.lead')}
+          />
 
-      {/* ── Certifications detail ─────────────────────────────────────────── */}
-      <section className='bg-background py-16'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mb-12 text-center'>
-            <div className='mb-3 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary'>
-              Estándares Internacionales
-            </div>
-            <h2 className='text-3xl font-bold text-foreground sm:text-4xl'>
-              Nuestras Certificaciones
-            </h2>
-            <p className='mt-3 text-base text-muted-foreground'>
-              Cada certificación nos permite acceder a mercados más exigentes y dar a nuestros
-              clientes la garantía que necesitan.
-            </p>
-          </div>
-
-          <div className='grid gap-6 sm:grid-cols-2'>
-            {CERTS.map(cert => (
-              <div
-                key={cert.code}
-                className={`rounded-2xl border-2 p-7 ${cert.color} transition-all hover:shadow-md`}
+          <ol className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4'>
+            {steps.map((step, index) => (
+              <li
+                key={step.title}
+                data-testid='quality-step'
+                className='border-t border-border pt-6'
               >
-                <div className='mb-4 flex items-start gap-4'>
-                  <div className='text-4xl'>{cert.icon}</div>
-                  <div>
-                    <div
-                      className={`${cert.badge} mb-1 inline-block rounded-full px-3 py-0.5 text-xs font-bold`}
-                    >
-                      {cert.code}
-                    </div>
-                    <h3 className='text-lg font-bold text-foreground'>{cert.name}</h3>
-                  </div>
-                </div>
-                <p className='text-sm leading-relaxed text-muted-foreground'>
-                  {t(`certifications.${cert.descKey}`)}
+                <span className='text-[11px] font-semibold tracking-[0.18em] text-accent uppercase'>
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3 className='mt-3 text-xl leading-snug text-foreground'>{step.title}</h3>
+                <p className='mt-2 text-sm leading-relaxed text-muted-foreground'>
+                  {step.description}
                 </p>
-              </div>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
-      {/* ── Quality Process ───────────────────────────────────────────────── */}
-      <section className='bg-muted/30 py-16'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mb-12 text-center'>
-            <h2 className='mb-3 text-3xl font-bold text-foreground sm:text-4xl'>
-              Proceso de Control de Calidad
-            </h2>
-            <p className='text-base text-muted-foreground'>
-              De la granja al contenedor, cada paso está documentado y auditado.
-            </p>
-          </div>
+      <EvidenceBar />
 
-          <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
-            {PROCESS_STEPS.map((step, i) => (
-              <div
-                key={i}
-                className='relative rounded-2xl border bg-card p-6 shadow-sm'
-              >
-                <div className='mb-2 text-5xl font-black text-primary/15'>
-                  {String(i + 1).padStart(2, '0')}
-                </div>
-                <div className='mb-3 text-3xl'>{step.icon}</div>
-                <h3 className='mb-1 text-base font-bold text-foreground'>{step.title}</h3>
-                <p className='text-sm leading-relaxed text-muted-foreground'>{step.desc}</p>
-                {i < PROCESS_STEPS.length - 1 && (
-                  <div className='absolute top-1/2 -right-4 hidden -translate-y-1/2 text-primary/30 lg:block'>
-                    <svg
-                      className='h-6 w-6'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M9 5l7 7-7 7'
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Recognition ───────────────────────────────────────────────────── */}
-      <section className='bg-background py-16'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mx-auto max-w-3xl'>
-            <div className='rounded-2xl border-2 border-primary/20 bg-card p-8 text-center shadow-sm'>
-              <div className='mb-4 text-4xl'>🏆</div>
-              <h2 className='mb-3 text-2xl font-bold text-foreground'>{t('awards.title')}</h2>
-              <p className='text-base leading-relaxed text-muted-foreground'>
-                {t('awards.description')}
-              </p>
-              <div className='mt-8 grid gap-6 sm:grid-cols-3'>
-                {[
-                  { value: '5+', label: 'Países destino' },
-                  { value: '4+', label: 'Años exportando' },
-                  { value: '100%', label: 'Productos certificados' },
-                ].map(stat => (
-                  <div key={stat.label}>
-                    <div className='text-3xl font-black text-primary'>{stat.value}</div>
-                    <div className='text-sm text-muted-foreground'>{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ───────────────────────────────────────────────────────────── */}
-      <section className='bg-primary py-14 text-white'>
-        <div className='container mx-auto px-4 text-center sm:px-6 lg:px-8'>
-          <h2 className='mb-3 text-2xl font-bold'>¿Necesitás documentación específica?</h2>
-          <p className='mb-6 text-white/80'>
-            Te enviamos certificados, fichas técnicas y análisis de laboratorio antes del pedido.
-          </p>
-          <div className='flex flex-col items-center gap-3 sm:flex-row sm:justify-center'>
-            <Link
-              href='/quote'
-              className='inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-primary shadow-md transition-all hover:bg-white/90'
-              data-track='begin_checkout'
-              data-track-label='solicitar_cotizacion_quality'
-              data-track-category='cta'
-            >
-              Solicitar Cotización
-            </Link>
-            <a
-              href='https://wa.me/593999002893?text=Hola%2C%20necesito%20documentación%20de%20certificaciones.'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline-flex items-center gap-2 rounded-xl border-2 border-white/40 px-6 py-3 font-semibold text-white transition-all hover:border-white hover:bg-white/10'
-              data-track='generate_lead'
-              data-track-source='whatsapp_quality'
-              data-track-currency='USD'
-              data-track-value='0'
-            >
-              Consultar por WhatsApp
-            </a>
-          </div>
-        </div>
-      </section>
-    </div>
+      <CTABand
+        title={t('cta.title')}
+        body={t('cta.body')}
+        action={{ label: t('cta.action'), href: '/quote' }}
+      />
+    </>
   );
 }

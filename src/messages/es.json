@@ -241,17 +241,50 @@
     }
   },
   "quality": {
-    "title": "Certificaciones que Abren Mercados",
-    "description": "Cada producto que exportamos cumple estándares internacionales de inocuidad y trazabilidad. Trabajamos con compradores en EE. UU., Europa y Asia que exigen documentación rigurosa, y la tenemos lista para cada embarque.",
+    "eyebrow": "Calidad y trazabilidad",
+    "title": "Certificaciones que abren mercados.",
+    "description": "BAP, HACCP, BRC y MSC sostienen el acceso a los mercados donde vendemos. GlobalGAP aplica a nuestras líneas agrícolas.",
+    "lead": "BAP, HACCP, BRC y MSC sostienen el acceso a los mercados donde vendemos. GlobalGAP aplica a nuestras líneas agrícolas.",
+    "certificationsTitle": "Certificaciones",
+    "note": "Líneas agrícolas: GlobalGAP.",
     "certifications": {
-      "haccp": "Control de Puntos Críticos",
-      "brc": "Estándar Retail Global",
-      "bap": "Acuicultura Responsable",
-      "globalGap": "Buenas Prácticas Agrícolas"
+      "bap": "Acuicultura responsable verificada en origen.",
+      "haccp": "Inocuidad y control de puntos críticos en cada etapa.",
+      "brc": "Estándar global para acceso a retail.",
+      "msc": "Pesca sostenible certificada.",
+      "globalGap": "Buenas prácticas agrícolas para nuestras líneas agrícolas."
     },
-    "awards": {
-      "title": "Reconocimiento Internacional",
-      "description": "Exportadores activos hacia EE. UU. y en expansión a nuevos mercados. Más de 4 años de trayectoria con procesos auditados y relaciones de largo plazo con nuestros clientes."
+    "scope": {
+      "seafood": "Productos del mar",
+      "both": "Productos del mar y líneas agrícolas"
+    },
+    "process": {
+      "eyebrow": "Control por lote",
+      "title": "De la recepción al embarque.",
+      "lead": "Cada lote recorre el mismo control documentado antes de salir.",
+      "steps": [
+        {
+          "title": "Recepción y verificación",
+          "description": "Revisión documental y física por lote."
+        },
+        {
+          "title": "Cadena de frío",
+          "description": "Temperatura y tiempos registrados por etapa."
+        },
+        {
+          "title": "Análisis microbiológico",
+          "description": "Controles por lote según destino."
+        },
+        {
+          "title": "Documentación de embarque",
+          "description": "Sanidad, origen y trazabilidad listos para revisión."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Solicita la documentación de tu próximo lote.",
+      "body": "Te enviamos certificados, fichas técnicas y análisis de laboratorio antes de confirmar el pedido.",
+      "action": "Solicitar cotización"
     }
   },
   "markets": {

@@ -241,17 +241,50 @@
     }
   },
   "quality": {
-    "title": "Certifications That Open Markets",
-    "description": "Every product we export meets international food safety and traceability standards. We work with buyers in the US, Europe and Asia who demand rigorous documentation—and we have it ready for every shipment.",
+    "eyebrow": "Quality and traceability",
+    "title": "Certifications that open markets.",
+    "description": "BAP, HACCP, BRC and MSC support access to the markets where we sell. GlobalGAP applies to our agricultural lines.",
+    "lead": "BAP, HACCP, BRC and MSC support access to the markets where we sell. GlobalGAP applies to our agricultural lines.",
+    "certificationsTitle": "Certifications",
+    "note": "Agricultural lines: GlobalGAP.",
     "certifications": {
-      "haccp": "Critical Control Points",
-      "brc": "Global Retail Standard",
-      "bap": "Responsible Aquaculture",
-      "globalGap": "Good Agricultural Practices"
+      "bap": "Responsible aquaculture verified at origin.",
+      "haccp": "Food safety and critical control points at every stage.",
+      "brc": "Global standard for retail access.",
+      "msc": "Certified sustainable fishing.",
+      "globalGap": "Good agricultural practices for our agricultural lines."
     },
-    "awards": {
-      "title": "International Track Record",
-      "description": "Active exporters to the US and expanding to new markets. Over 4 years of experience with audited processes and long-term client relationships."
+    "scope": {
+      "seafood": "Seafood",
+      "both": "Seafood and agricultural lines"
+    },
+    "process": {
+      "eyebrow": "Batch control",
+      "title": "From reception to shipment.",
+      "lead": "Every batch goes through the same documented control before it leaves.",
+      "steps": [
+        {
+          "title": "Reception and verification",
+          "description": "Documentary and physical review per batch."
+        },
+        {
+          "title": "Cold chain",
+          "description": "Temperature and timing recorded at every stage."
+        },
+        {
+          "title": "Microbiological analysis",
+          "description": "Controls per batch according to destination."
+        },
+        {
+          "title": "Shipment documentation",
+          "description": "Sanitary, origin and traceability ready for review."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Request the documentation for your next batch.",
+      "body": "We send certificates, technical sheets and laboratory analyses before you confirm the order.",
+      "action": "Request a quote"
     }
   },
   "markets": {
