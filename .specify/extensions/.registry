@@ -15,41 +15,6 @@
           "speckit.bug.assess",
           "speckit.bug.fix",
           "speckit.bug.test"
-        ],
-        "cursor-agent": [
-          "speckit.bug.assess",
-          "speckit.bug.fix",
-          "speckit.bug.test"
-        ],
-        "cline": [
-          "speckit.bug.assess",
-          "speckit.bug.fix",
-          "speckit.bug.test"
-        ],
-        "claude": [
-          "speckit.bug.assess",
-          "speckit.bug.fix",
-          "speckit.bug.test"
-        ],
-        "codex": [
-          "speckit.bug.assess",
-          "speckit.bug.fix",
-          "speckit.bug.test"
-        ],
-        "kiro-cli": [
-          "speckit.bug.assess",
-          "speckit.bug.fix",
-          "speckit.bug.test"
-        ],
-        "opencode": [
-          "speckit.bug.assess",
-          "speckit.bug.fix",
-          "speckit.bug.test"
-        ],
-        "gemini": [
-          "speckit.bug.assess",
-          "speckit.bug.fix",
-          "speckit.bug.test"
         ]
       },
       "registered_skills": [
@@ -75,55 +40,6 @@
       "priority": 10,
       "registered_commands": {
         "generic": [
-          "speckit.assess.intake",
-          "speckit.assess.research",
-          "speckit.assess.define",
-          "speckit.assess.shape",
-          "speckit.assess.decide"
-        ],
-        "cursor-agent": [
-          "speckit.assess.intake",
-          "speckit.assess.research",
-          "speckit.assess.define",
-          "speckit.assess.shape",
-          "speckit.assess.decide"
-        ],
-        "cline": [
-          "speckit.assess.intake",
-          "speckit.assess.research",
-          "speckit.assess.define",
-          "speckit.assess.shape",
-          "speckit.assess.decide"
-        ],
-        "claude": [
-          "speckit.assess.intake",
-          "speckit.assess.research",
-          "speckit.assess.define",
-          "speckit.assess.shape",
-          "speckit.assess.decide"
-        ],
-        "codex": [
-          "speckit.assess.intake",
-          "speckit.assess.research",
-          "speckit.assess.define",
-          "speckit.assess.shape",
-          "speckit.assess.decide"
-        ],
-        "kiro-cli": [
-          "speckit.assess.intake",
-          "speckit.assess.research",
-          "speckit.assess.define",
-          "speckit.assess.shape",
-          "speckit.assess.decide"
-        ],
-        "opencode": [
-          "speckit.assess.intake",
-          "speckit.assess.research",
-          "speckit.assess.define",
-          "speckit.assess.shape",
-          "speckit.assess.decide"
-        ],
-        "gemini": [
           "speckit.assess.intake",
           "speckit.assess.research",
           "speckit.assess.define",

@@ -2,58 +2,14 @@
   "version": "1.4.0",
   "integration_state_schema": 1,
   "installed_integrations": [
-    "generic",
-    "copilot",
-    "cursor-agent",
-    "cline",
-    "claude",
-    "codex",
-    "kiro-cli",
-    "opencode",
-    "gemini"
+    "copilot"
   ],
   "integration_settings": {
-    "generic": {
-      "script": "sh",
-      "raw_options": "--commands-dir .ide/prompts",
-      "parsed_options": {
-        "commands_dir": ".ide/prompts"
-      },
-      "invoke_separator": "."
-    },
     "copilot": {
       "script": "sh",
       "invoke_separator": "-"
-    },
-    "cursor-agent": {
-      "script": "sh",
-      "invoke_separator": "-"
-    },
-    "cline": {
-      "script": "sh",
-      "invoke_separator": "-"
-    },
-    "claude": {
-      "script": "sh",
-      "invoke_separator": "-"
-    },
-    "codex": {
-      "script": "sh",
-      "invoke_separator": "-"
-    },
-    "kiro-cli": {
-      "script": "sh",
-      "invoke_separator": "."
-    },
-    "opencode": {
-      "script": "sh",
-      "invoke_separator": "."
-    },
-    "gemini": {
-      "script": "sh",
-      "invoke_separator": "."
     }
   },
-  "integration": "generic",
-  "default_integration": "generic"
+  "integration": "copilot",
+  "default_integration": "copilot"
 }
