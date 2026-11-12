@@ -10,7 +10,6 @@ const nextConfig: NextConfig = {
   // Enable experimental features
   experimental: {
     useTypeScriptCli: true,
-    turbopackRustReactCompiler: true,
   },
 
   // Output file tracing includes
