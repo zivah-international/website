@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Link, usePathname } from '@/i18n/routing';
 import { useMounted } from '@/lib/hooks/use-mounted';
 
+import BrandLogo from './BrandLogo';
 import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
 import { Button } from './ui/button';
@@ -82,11 +83,9 @@ export default function Navigation() {
             aria-label='ZIVAH International'
             className='flex shrink-0 items-center'
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src='/assets/images/zivah-logo.svg'
-              alt='ZIVAH International S.A.'
-              className={`h-9 w-auto transition-[filter] duration-300${isTransparent ? 'brightness-0 invert' : ''}`}
+            <BrandLogo
+              inverse={isTransparent}
+              decorative
             />
           </Link>
 

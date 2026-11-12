@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { CONTACT_INFO } from '@/lib/contact-info';
 
+import BrandLogo from './BrandLogo';
 import { Facebook, Instagram, Linkedin } from './ui/icons';
 
 const PRODUCT_LINKS = [
@@ -56,12 +57,7 @@ export default async function Footer() {
           {/* Brand */}
           <div>
             <div className='mb-4'>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src='/assets/images/zivah-logo.svg'
-                alt='ZIVAH International'
-                className='h-9 w-auto'
-              />
+              <BrandLogo />
             </div>
             <p className='max-w-xs text-sm text-muted-foreground'>{t('brandLine')}</p>
             <div className='mt-6 flex items-center gap-1'>

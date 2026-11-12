@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
+
+import BrandLogo from '@/components/BrandLogo';
 
 export const metadata: Metadata = {
   title: 'Acceso administrativo | ZIVAH International',
@@ -11,14 +12,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     <div className='public-site flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12'>
       <div className='w-full max-w-[420px]'>
         <header className='mb-8 text-center'>
-          <Image
-            src='/assets/images/zivah-logo.svg'
-            alt='ZIVAH International'
-            width={400}
-            height={100}
-            priority
-            className='mx-auto h-10 w-auto'
-          />
+          <BrandLogo />
           <h1 className='mt-5 font-serif text-3xl text-foreground'>Acceso administrativo</h1>
         </header>
 
