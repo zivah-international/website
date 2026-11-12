@@ -1,7 +1,7 @@
 # ZIVAH Public Site Redesign — Design Spec (Seafood-first)
 
 **Date:** 2026-10-20
-**Status:** Approved for implementation planning
+**Status:** Implemented; plan closed on `develop` (2026-11-12)
 **Scope:** Public marketing site (Home, Products, Quality, Markets, Contact, Quote, Legal, Auth). Admin dashboard is out of scope.
 
 ---

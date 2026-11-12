@@ -1,6 +1,17 @@
 # Public Site Seafood-First Redesign — Implementation Plan
 
-> **For the implementing engineer:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. Do not batch tasks: each task ends with a green test run and a commit.
+**Status:** Complete on `develop`
+
+**Closed:** 2026-11-12
+**Implementation commits:** `00eafe7` (public site redesign), `dda664d` (theme-aware logo)
+
+The planned public-site redesign is implemented and committed. The follow-up logo work replaced the oversized wrapped image with a compact SVG master and a `BrandLogo` component that adapts to light and dark surfaces.
+
+**Verification record:** The redesign passed 65/65 mocked Playwright E2E tests, build, formatting, type-check, lint, and `git diff --check` (four existing lint warnings). The logo follow-up passed type-check, lint (five warnings, zero errors), targeted Prettier checks, rendered light/dark desktop and mobile checks, and `git diff --check`. The repository-wide `pnpm format:check` after the logo change reports the pre-existing formatting issue in `.impeccable/hook.cache.json`; all changed source files passed targeted Prettier.
+
+**Verification caveat:** No Lighthouse LCP/CLS measurement was retained in the closeout evidence, so the performance targets in the acceptance mapping are not reported as measured results.
+
+> This plan is closed. Reopen it only for new scope or follow-up defects.
 
 **Goal:** Rebuild the ZIVAH public marketing site so it reads as an institutional seafood and aquaculture exporter, with one conversion path: an FOB quote request. The result must feel editorial, calm, and modern, not like a product marketplace template.
 
@@ -2642,6 +2653,6 @@ If axe fixes touched components, stage those explicit files in the same commit o
 - **Stored product image paths are broken.** `getProductImage` must ignore `storedUrl`; otherwise the catalog shows `public/assets/images/products/*.jpg` paths that do not exist.
 - **Legal body copy stays in Spanish.** The `/en` legal pages show a localized notice. Translating legal documents is out of scope and would create unofficial legal text.
 - **`AGENTS.md` is intentionally dirty.** Never stage it. Explicit-path commits are mandatory.
-- **The logo SVG is large** and out of scope to redesign. Do not replace it; keep the existing asset and dimensions.
+- The logo is delivered as a compact SVG master plus a theme-aware `BrandLogo` component; see `dda664d`.
 - **Dark mode and print** must both be checked because the technical sheet is a white document inside the dark public shell.
 - **No new dependencies except `@axe-core/playwright`**, which is test-only. Do not add a carousel, animation, icon, or UI library.
