@@ -208,6 +208,19 @@
     "filterEmpty": "No hay productos en esta categoría.",
     "clearFilter": "Ver todos"
   },
+  "productDetail": {
+    "requestQuote": "Solicitar cotización para este producto",
+    "downloadSheet": "Descargar ficha técnica",
+    "specsTitle": "Especificaciones del producto",
+    "origin": "Origen",
+    "size": "Calibre",
+    "packaging": "Empaque",
+    "certifications": "Certificaciones",
+    "season": "Temporada",
+    "relatedTitle": "Productos relacionados",
+    "backToCatalog": "Volver al catálogo",
+    "notFound": "Producto no encontrado"
+  },
   "quote": {
     "badge": "Solicitud de Cotización",
     "title": "Recibe una Propuesta Comercial en 24 horas",

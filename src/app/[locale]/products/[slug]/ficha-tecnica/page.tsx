@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
+import type { ReactNode } from 'react';
 
+import { Link } from '@/i18n/routing';
+import { CONTACT_INFO } from '@/lib/contact-info';
 import { getProductImage } from '@/lib/product-images';
 import { getFichaTecnica } from '@/lib/product-specs';
 
@@ -18,7 +21,7 @@ interface Product {
   origin: string;
   harvestSeason?: string;
   certifications?: string[];
-  category?: { name: string; slug: string; icon?: string };
+  category?: { name: string; slug: string };
   imageUrl?: string;
   isFeatured: boolean;
 }
@@ -36,7 +39,7 @@ async function getProductBySlug(slug: string, locale: string): Promise<Product |
     if (!res.ok) return null;
     const json = await res.json();
     const products: Product[] = json.data || [];
-    return products.find(p => p.slug === slug) ?? null;
+    return products.find(product => product.slug === slug) ?? null;
   } catch {
     return null;
   }
@@ -48,8 +51,15 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug, locale } = await params;
-  const product = await getProductBySlug(slug, locale ?? 'es');
-  if (!product) return { title: 'Ficha Técnica | ZIVAH International' };
+  const [product, t] = await Promise.all([
+    getProductBySlug(slug, locale ?? 'es'),
+    getTranslations({ locale: locale ?? 'es', namespace: 'productDetail' }),
+  ]);
+
+  if (!product) {
+    return { title: `${t('notFound')} | ZIVAH International` };
+  }
+
   return {
     title: `Ficha Técnica – ${product.name} | ZIVAH International`,
     description: `Especificaciones técnicas de exportación para ${product.name} de Ecuador.`,
@@ -57,140 +67,141 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-/* ─── helpers ─────────────────────────────────────── */
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className='mb-6 break-inside-avoid overflow-hidden rounded-xl border border-gray-200'>
-      <h2 className='border-b border-gray-200 bg-primary/10 px-5 py-2.5 text-sm font-bold tracking-wider text-gray-800 uppercase'>
+    <section className='mt-8 break-inside-avoid first:mt-0'>
+      <h2 className='border-b border-neutral-900 pb-2 text-[11px] font-semibold tracking-[0.18em] text-neutral-900 uppercase'>
         {title}
       </h2>
-      <div className='px-5 py-4'>{children}</div>
+      <div className='pt-3'>{children}</div>
     </section>
   );
 }
 
 function Table({ rows }: { rows: Record<string, string> | undefined }) {
-  if (!rows) return null;
+  if (!rows || Object.keys(rows).length === 0) return null;
+
   return (
-    <table className='w-full text-sm'>
-      <tbody>
-        {Object.entries(rows).map(([key, val]) => (
-          <tr
-            key={key}
-            className='border-b border-gray-100 last:border-0'
-          >
-            <td className='w-1/2 py-1.5 pr-4 align-top font-semibold whitespace-nowrap text-gray-700'>
-              {key}
-            </td>
-            <td className='py-1.5 align-top text-gray-600'>{val}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <dl>
+      {Object.entries(rows).map(([key, value]) => (
+        <div
+          key={key}
+          className='grid grid-cols-[minmax(0,9rem)_1fr] gap-4 border-b border-neutral-200 py-2 text-[13px] last:border-0 sm:grid-cols-[minmax(0,14rem)_1fr]'
+        >
+          <dt className='font-medium text-neutral-500'>{key}</dt>
+          <dd className='text-neutral-900'>{value}</dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 
-/* ─── page ─────────────────────────────────────────── */
-
 export default async function FichaTecnicaPage({ params }: PageProps) {
   const { slug, locale } = await params;
+  const currentLocale = locale ?? 'es';
   const [product, ficha] = await Promise.all([
-    getProductBySlug(slug, locale ?? 'es'),
+    getProductBySlug(slug, currentLocale),
     Promise.resolve(getFichaTecnica(slug)),
   ]);
 
   if (!product || !ficha) notFound();
 
   const imageUrl = getProductImage(slug, product.category?.slug, product.imageUrl);
-  const certifications: string[] = ficha.certificaciones ?? [];
-  const today = new Date().toLocaleDateString('es-EC', {
+  const certifications = ficha.certificaciones ?? [];
+  const today = new Date().toLocaleDateString(currentLocale === 'en' ? 'en-US' : 'es-EC', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
   });
 
   return (
-    <>
-      <PrintButton />
-
-      <div className='min-h-screen bg-gray-100 py-8 print:bg-white print:py-0'>
-        {/* Back link – hidden on print */}
-        <div className='no-print mx-auto mb-4 max-w-4xl px-4'>
+    <div className='bg-background pt-24 pb-16 print:bg-white print:p-0'>
+      <div className='mx-auto w-full max-w-[800px] px-4 sm:px-6 print:max-w-none print:px-0'>
+        <div className='no-print mb-6 flex items-center justify-between gap-4'>
           <Link
-            href={`/${locale ?? 'es'}/products/${slug}`}
-            className='text-sm text-primary underline hover:opacity-80'
+            href={`/products/${slug}`}
+            className='text-[13px] font-semibold text-foreground transition-colors hover:text-accent'
           >
-            ← Volver al producto
+            ← {currentLocale === 'en' ? 'Back to product' : 'Volver al producto'}
           </Link>
+          <PrintButton />
         </div>
 
-        {/* ── DOCUMENT ── */}
-        <div className='mx-auto max-w-4xl bg-white shadow-lg print:shadow-none'>
-          {/* Header band */}
-          <header className='flex items-center justify-between bg-primary px-8 py-4 text-primary-foreground'>
-            <div>
-              <p className='text-xs font-semibold tracking-widest uppercase opacity-80'>
-                ZIVAH International S.A.
-              </p>
-              <h1 className='text-xl font-black'>Ficha Técnica de Exportación</h1>
-            </div>
-            <div className='text-right text-xs opacity-80'>
-              <p>Fecha: {today}</p>
-              {product.sku && <p>SKU: {product.sku}</p>}
-              <p>Origen: 🇪🇨 Ecuador</p>
+        <article className='bg-white text-neutral-900 shadow-[0_1px_0_rgba(0,0,0,0.06),0_24px_60px_-40px_rgba(0,0,0,0.35)] print:shadow-none'>
+          <header className='border-b-2 border-neutral-900 px-6 py-7 sm:px-10'>
+            <div className='flex flex-wrap items-start justify-between gap-6'>
+              <div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src='/assets/images/zivah-logo.svg'
+                  alt='ZIVAH International S.A.'
+                  className='h-8 w-auto'
+                />
+                <h1 className='mt-5 font-serif text-[clamp(1.5rem,3vw,2rem)] leading-tight text-neutral-900'>
+                  Ficha Técnica de Exportación
+                </h1>
+                <p className='mt-1 text-[15px] font-semibold text-neutral-700'>{product.name}</p>
+              </div>
+
+              <dl className='grid gap-1 text-[11px] text-neutral-600'>
+                <div className='flex justify-end gap-2'>
+                  <dt className='tracking-[0.12em] uppercase'>Fecha</dt>
+                  <dd className='font-medium text-neutral-900'>{today}</dd>
+                </div>
+                {product.sku && (
+                  <div className='flex justify-end gap-2'>
+                    <dt className='tracking-[0.12em] uppercase'>SKU</dt>
+                    <dd className='font-medium text-neutral-900'>{product.sku}</dd>
+                  </div>
+                )}
+                <div className='flex justify-end gap-2'>
+                  <dt className='tracking-[0.12em] uppercase'>Origen</dt>
+                  <dd className='font-medium text-neutral-900'>Ecuador</dd>
+                </div>
+              </dl>
             </div>
           </header>
 
-          <div className='p-6 sm:p-8'>
-            {/* ── Product hero ── */}
-            <div className='mb-6 flex break-inside-avoid gap-6 overflow-hidden rounded-xl border border-gray-200'>
-              {/* Image */}
-              <div className='relative hidden min-h-48 w-48 shrink-0 sm:block'>
+          <div className='px-6 py-8 sm:px-10'>
+            <div className='mb-8 flex break-inside-avoid gap-6'>
+              <div className='relative hidden aspect-[4/3] w-44 shrink-0 overflow-hidden border border-neutral-200 sm:block'>
                 <Image
                   src={imageUrl}
                   alt={product.name}
                   fill
+                  sizes='176px'
                   className='object-cover'
-                  sizes='192px'
                   priority
                 />
               </div>
-              {/* Identity */}
-              <div className='flex-1 p-5'>
+              <div className='flex-1'>
                 {product.category && (
-                  <p className='mb-1 text-xs font-semibold tracking-widest text-primary uppercase'>
-                    {product.category.icon} {product.category.name}
+                  <p className='text-[11px] font-semibold tracking-[0.16em] text-neutral-500 uppercase'>
+                    {product.category.name}
                   </p>
                 )}
-                <h2 className='mb-1 text-2xl font-black text-gray-900'>{product.name}</h2>
                 {ficha.nombreCientifico && (
-                  <p className='mb-2 text-sm text-gray-500 italic'>{ficha.nombreCientifico}</p>
+                  <p className='mt-2 text-[13px] text-neutral-600 italic'>
+                    {ficha.nombreCientifico}
+                  </p>
                 )}
                 {product.shortDescription && (
-                  <p className='mb-3 text-sm leading-relaxed text-gray-600'>
+                  <p className='mt-3 text-[13px] leading-relaxed text-neutral-700'>
                     {product.shortDescription}
                   </p>
                 )}
-
-                {/* Cert badges */}
-                <div className='flex flex-wrap gap-1.5'>
-                  {certifications.map(cert => (
-                    <span
-                      key={cert}
-                      className='rounded-full bg-accent/15 px-2.5 py-0.5 text-xs font-semibold text-accent-foreground'
-                    >
-                      ✓ {cert}
-                    </span>
-                  ))}
-                </div>
+                {product.description && (
+                  <p className='mt-2 text-[13px] leading-relaxed text-neutral-600'>
+                    {product.description}
+                  </p>
+                )}
               </div>
             </div>
 
-            {/* ── Info general ── */}
-            <Section title='📋 Información General'>
+            <Section title='Identificación del producto'>
               <Table
                 rows={{
+                  Categoría: product.category?.name ?? '—',
                   ...(ficha.nombreCientifico
                     ? { 'Nombre científico': ficha.nombreCientifico }
                     : {}),
@@ -204,87 +215,88 @@ export default async function FichaTecnicaPage({ params }: PageProps) {
               />
             </Section>
 
-            {/* ── Specs + Packaging (two-col on wide) ── */}
-            <div className='grid gap-6 sm:grid-cols-2'>
-              <Section title='🔬 Especificaciones Técnicas'>
-                <Table rows={ficha.especificaciones} />
-              </Section>
+            <Section title='Especificaciones técnicas'>
+              <Table rows={ficha.especificaciones} />
+            </Section>
 
-              <div className='space-y-6'>
-                <Section title='📦 Empaque y Presentación'>
-                  <Table rows={ficha.empaque} />
-                </Section>
+            <Section title='Empaque y presentación'>
+              <Table rows={ficha.empaque} />
+            </Section>
 
-                <Section title='❄️ Almacenamiento y Transporte'>
-                  <Table rows={ficha.almacenamiento} />
-                </Section>
-              </div>
-            </div>
+            <Section title='Almacenamiento y transporte'>
+              <Table rows={ficha.almacenamiento} />
+            </Section>
 
-            {/* ── Nutritional info (optional) ── */}
             {ficha.infoNutricional && (
-              <Section title='📊 Información Nutricional (por 100 g / según indicado)'>
-                <div className='grid grid-cols-2 gap-x-8 sm:grid-cols-3'>
-                  {Object.entries(ficha.infoNutricional).map(([k, v]) => (
+              <Section title='Información nutricional (por 100 g / según indicado)'>
+                <dl className='grid grid-cols-1 gap-x-8 sm:grid-cols-2'>
+                  {Object.entries(ficha.infoNutricional).map(([key, value]) => (
                     <div
-                      key={k}
-                      className='flex items-center justify-between border-b border-gray-100 py-1.5 text-sm'
+                      key={key}
+                      className='flex items-baseline justify-between gap-4 border-b border-neutral-200 py-2 text-[13px]'
                     >
-                      <span className='text-gray-600'>{k}</span>
-                      <span className='font-semibold text-gray-800'>{v}</span>
+                      <dt className='text-neutral-500'>{key}</dt>
+                      <dd className='text-right font-medium text-neutral-900'>{value}</dd>
                     </div>
                   ))}
-                </div>
+                </dl>
               </Section>
             )}
 
-            {/* ── Description ── */}
-            {product.description && (
-              <Section title='📝 Descripción del Producto'>
-                <p className='text-sm leading-relaxed text-gray-700'>{product.description}</p>
-              </Section>
-            )}
-
-            {/* ── Observations ── */}
             {ficha.observaciones && (
-              <Section title='ℹ️ Observaciones'>
-                <p className='text-sm leading-relaxed text-gray-700'>{ficha.observaciones}</p>
+              <Section title='Observaciones'>
+                <p className='text-[13px] leading-relaxed text-neutral-700'>
+                  {ficha.observaciones}
+                </p>
               </Section>
             )}
 
-            {/* ── Certifications block ── */}
-            <Section title='🏅 Certificaciones y Cumplimiento Normativo'>
-              <div className='flex flex-wrap gap-3'>
-                {certifications.map(cert => (
+            <Section title='Certificaciones y cumplimiento'>
+              <div className='grid grid-cols-2 gap-px border border-neutral-200 bg-neutral-200 sm:grid-cols-3'>
+                {certifications.map(certification => (
                   <div
-                    key={cert}
-                    className='rounded-lg border border-accent/30 bg-accent/5 px-4 py-2 text-center'
+                    key={certification}
+                    className='bg-white px-4 py-3 text-[13px] font-semibold text-neutral-900'
                   >
-                    <p className='text-sm font-bold text-accent'>{cert}</p>
-                    <p className='text-xs text-gray-500'>Certificado vigente</p>
+                    {certification}
                   </div>
                 ))}
               </div>
             </Section>
 
-            {/* ── Footer ── */}
-            <footer className='mt-6 border-t border-gray-200 pt-5 text-xs text-gray-400'>
-              <div className='flex flex-col gap-2 sm:flex-row sm:justify-between'>
-                <div>
-                  <p className='font-semibold text-gray-600'>ZIVAH International S.A.</p>
-                  <p>Guayaquil, Ecuador · contacto@zivah.international</p>
-                  <p>www.zivah.international</p>
+            <Section title='Contacto comercial'>
+              <dl className='grid grid-cols-1 gap-x-8 gap-y-2 text-[13px] sm:grid-cols-2'>
+                <div className='flex justify-between gap-4 border-b border-neutral-200 py-1.5 sm:border-0 sm:py-0'>
+                  <dt className='text-neutral-500'>Email</dt>
+                  <dd className='font-medium text-neutral-900'>{CONTACT_INFO.email}</dd>
                 </div>
-                <div className='text-right'>
-                  <p>Este documento es de carácter informativo.</p>
-                  <p>Las especificaciones pueden variar según lote y temporada.</p>
-                  <p>Datos sujetos a certificación por embarque.</p>
+                <div className='flex justify-between gap-4 border-b border-neutral-200 py-1.5 sm:border-0 sm:py-0'>
+                  <dt className='text-neutral-500'>Teléfono</dt>
+                  <dd className='font-medium text-neutral-900'>{CONTACT_INFO.phone}</dd>
                 </div>
-              </div>
+                <div className='flex justify-between gap-4 py-1.5 sm:border-0 sm:py-0'>
+                  <dt className='text-neutral-500'>Oficina</dt>
+                  <dd className='text-right font-medium text-neutral-900'>
+                    {CONTACT_INFO.ecuador}, Ecuador
+                  </dd>
+                </div>
+                <div className='flex justify-between gap-4 py-1.5 sm:border-0 sm:py-0'>
+                  <dt className='text-neutral-500'>Web</dt>
+                  <dd className='font-medium text-neutral-900'>www.zivahinternational.com</dd>
+                </div>
+              </dl>
+            </Section>
+
+            <footer className='mt-10 border-t border-neutral-300 pt-4 text-[11px] leading-relaxed text-neutral-500'>
+              <p className='font-semibold text-neutral-700'>ZIVAH International S.A.</p>
+              <p>
+                Documento informativo. Las especificaciones pueden variar según lote y temporada.
+                Datos sujetos a certificación por embarque.
+              </p>
             </footer>
           </div>
-        </div>
+        </article>
       </div>
-    </>
+    </div>
   );
 }

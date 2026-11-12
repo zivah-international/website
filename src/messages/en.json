@@ -208,6 +208,19 @@
     "filterEmpty": "No products in this category.",
     "clearFilter": "View all"
   },
+  "productDetail": {
+    "requestQuote": "Request a quote for this product",
+    "downloadSheet": "Download technical sheet",
+    "specsTitle": "Product specifications",
+    "origin": "Origin",
+    "size": "Size",
+    "packaging": "Packaging",
+    "certifications": "Certifications",
+    "season": "Season",
+    "relatedTitle": "Related products",
+    "backToCatalog": "Back to catalog",
+    "notFound": "Product not found"
+  },
   "quote": {
     "badge": "Request a Quote",
     "title": "Receive a Commercial Proposal within 24 Hours",
