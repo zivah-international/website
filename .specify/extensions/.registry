@@ -15,6 +15,21 @@
           "speckit.bug.assess",
           "speckit.bug.fix",
           "speckit.bug.test"
+        ],
+        "agy": [
+          "speckit.bug.assess",
+          "speckit.bug.fix",
+          "speckit.bug.test"
+        ],
+        "codex": [
+          "speckit.bug.assess",
+          "speckit.bug.fix",
+          "speckit.bug.test"
+        ],
+        "kiro-cli": [
+          "speckit.bug.assess",
+          "speckit.bug.fix",
+          "speckit.bug.test"
         ]
       },
       "registered_skills": [
@@ -40,6 +55,27 @@
       "priority": 10,
       "registered_commands": {
         "generic": [
+          "speckit.assess.intake",
+          "speckit.assess.research",
+          "speckit.assess.define",
+          "speckit.assess.shape",
+          "speckit.assess.decide"
+        ],
+        "agy": [
+          "speckit.assess.intake",
+          "speckit.assess.research",
+          "speckit.assess.define",
+          "speckit.assess.shape",
+          "speckit.assess.decide"
+        ],
+        "codex": [
+          "speckit.assess.intake",
+          "speckit.assess.research",
+          "speckit.assess.define",
+          "speckit.assess.shape",
+          "speckit.assess.decide"
+        ],
+        "kiro-cli": [
           "speckit.assess.intake",
           "speckit.assess.research",
           "speckit.assess.define",
@@ -71,6 +107,15 @@
       "priority": 10,
       "registered_commands": {
         "generic": [
+          "speckit.github.taskstoissues"
+        ],
+        "agy": [
+          "speckit.github.taskstoissues"
+        ],
+        "codex": [
+          "speckit.github.taskstoissues"
+        ],
+        "kiro-cli": [
           "speckit.github.taskstoissues"
         ]
       },

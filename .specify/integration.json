@@ -2,12 +2,27 @@
   "version": "1.4.0",
   "integration_state_schema": 1,
   "installed_integrations": [
-    "copilot"
+    "copilot",
+    "agy",
+    "codex",
+    "kiro-cli"
   ],
   "integration_settings": {
     "copilot": {
       "script": "sh",
       "invoke_separator": "-"
+    },
+    "agy": {
+      "script": "sh",
+      "invoke_separator": "-"
+    },
+    "codex": {
+      "script": "sh",
+      "invoke_separator": "-"
+    },
+    "kiro-cli": {
+      "script": "sh",
+      "invoke_separator": "."
     }
   },
   "integration": "copilot",
