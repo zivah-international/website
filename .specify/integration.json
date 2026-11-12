@@ -6,7 +6,6 @@
     "copilot",
     "cursor-agent",
     "cline",
-    "agy",
     "claude",
     "codex",
     "kiro-cli",
@@ -31,10 +30,6 @@
       "invoke_separator": "-"
     },
     "cline": {
-      "script": "sh",
-      "invoke_separator": "-"
-    },
-    "agy": {
       "script": "sh",
       "invoke_separator": "-"
     },

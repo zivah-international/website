@@ -26,11 +26,6 @@
           "speckit.bug.fix",
           "speckit.bug.test"
         ],
-        "agy": [
-          "speckit.bug.assess",
-          "speckit.bug.fix",
-          "speckit.bug.test"
-        ],
         "claude": [
           "speckit.bug.assess",
           "speckit.bug.fix",
@@ -94,13 +89,6 @@
           "speckit.assess.decide"
         ],
         "cline": [
-          "speckit.assess.intake",
-          "speckit.assess.research",
-          "speckit.assess.define",
-          "speckit.assess.shape",
-          "speckit.assess.decide"
-        ],
-        "agy": [
           "speckit.assess.intake",
           "speckit.assess.research",
           "speckit.assess.define",
