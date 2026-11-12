@@ -4,6 +4,11 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+
+const inputClass =
+  'mt-1 h-11 w-full rounded-[2px] border border-input bg-background px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none';
+
 function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,12 +49,13 @@ function SignInForm() {
 
   return (
     <div>
-      <h2 className='mb-6 text-center text-2xl font-semibold text-gray-800 dark:text-white'>
-        Welcome Back
-      </h2>
+      <h2 className='mb-6 font-serif text-2xl text-foreground'>Iniciar sesión</h2>
 
       {error && (
-        <div className='mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/50 dark:text-red-300'>
+        <div
+          role='alert'
+          className='mb-4 rounded-[2px] border border-destructive/25 bg-destructive/10 p-3 text-sm text-destructive'
+        >
           {error}
         </div>
       )}
@@ -61,9 +67,9 @@ function SignInForm() {
         <div>
           <label
             htmlFor='email'
-            className='block text-sm font-medium text-gray-700 dark:text-gray-300'
+            className='block text-sm font-medium text-foreground'
           >
-            Email
+            Correo electrónico
           </label>
           <input
             id='email'
@@ -71,17 +77,18 @@ function SignInForm() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-            className='mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white'
-            placeholder='you@example.com'
+            className={inputClass}
+            autoComplete='email'
+            placeholder='nombre@empresa.com'
           />
         </div>
 
         <div>
           <label
             htmlFor='password'
-            className='block text-sm font-medium text-gray-700 dark:text-gray-300'
+            className='block text-sm font-medium text-foreground'
           >
-            Password
+            Contraseña
           </label>
           <input
             id='password'
@@ -89,27 +96,30 @@ function SignInForm() {
             value={password}
             onChange={e => setPassword(e.target.value)}
             required
-            className='mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            className={inputClass}
+            autoComplete='current-password'
             placeholder='••••••••'
           />
         </div>
 
-        <button
+        <Button
           type='submit'
           disabled={loading}
-          className='w-full rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50'
+          variant='brand'
+          size='brand'
+          className='w-full'
         >
-          {loading ? 'Signing in...' : 'Sign In'}
-        </button>
+          {loading ? 'Iniciando sesión…' : 'Iniciar sesión'}
+        </Button>
       </form>
 
-      <p className='mt-6 text-center text-sm text-gray-600 dark:text-gray-400'>
-        Don&apos;t have an account?{' '}
+      <p className='mt-6 text-center text-sm text-muted-foreground'>
+        ¿No tienes una cuenta?{' '}
         <Link
           href={`/sign-up${redirectTo !== '/admin' ? `?redirectTo=${redirectTo}` : ''}`}
-          className='font-medium text-green-600 hover:text-green-500 dark:text-green-400'
+          className='font-medium text-foreground underline underline-offset-4 transition-colors hover:text-accent'
         >
-          Sign up
+          Regístrate
         </Link>
       </p>
     </div>
@@ -119,11 +129,7 @@ function SignInForm() {
 export default function SignInPage() {
   return (
     <Suspense
-      fallback={
-        <div className='flex justify-center py-8'>
-          <div className='animate-pulse'>Loading...</div>
-        </div>
-      }
+      fallback={<div className='py-8 text-center text-sm text-muted-foreground'>Cargando…</div>}
     >
       <SignInForm />
     </Suspense>

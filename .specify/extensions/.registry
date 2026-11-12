@@ -2,24 +2,130 @@
   "schema_version": "1.0",
   "extensions": {
     "bug": {
-      "version": "1.0.0",
-      "source": "local",
-      "manifest_hash": "sha256:1d0da5458f3c18ff08cf1602d88cecc33fad07068208951fb7128090cfa90c90",
+      "version": "1.0.2",
+      "source": {
+        "kind": "catalog",
+        "catalog": "default"
+      },
+      "manifest_hash": "sha256:00ec851a8e57713e9d65401e4c7fa5b4fa4a689decacb0b654ba5411c653b647",
       "enabled": true,
       "priority": 10,
-      "registered_commands": {},
-      "registered_skills": [],
+      "registered_commands": {
+        "generic": [
+          "speckit.bug.assess",
+          "speckit.bug.fix",
+          "speckit.bug.test"
+        ],
+        "agy": [
+          "speckit.bug.assess",
+          "speckit.bug.fix",
+          "speckit.bug.test"
+        ],
+        "codex": [
+          "speckit.bug.assess",
+          "speckit.bug.fix",
+          "speckit.bug.test"
+        ],
+        "kiro-cli": [
+          "speckit.bug.assess",
+          "speckit.bug.fix",
+          "speckit.bug.test"
+        ]
+      },
+      "registered_skills": [
+        "speckit-bug-assess",
+        "speckit-bug-fix",
+        "speckit-bug-test"
+      ],
+      "generic_artifact_hashes": {
+        ".ide/prompts/speckit.bug.assess.md": "60abc1355017e8ff7dba288a2f42f45aa1f71c56e386159dc3b8ca1e0ed084cf",
+        ".ide/prompts/speckit.bug.fix.md": "f366e9ade794a95945f4e9956e224df43b941a25985191be41a74559a7ea7be8",
+        ".ide/prompts/speckit.bug.test.md": "57781240a2ca6e3aa42d40799aa0d69139e3b72a8e225a8d36634117c7e0df95"
+      },
       "installed_at": "2026-09-07T01:31:15.405724+00:00"
     },
     "assess": {
-      "version": "1.0.0",
-      "source": "local",
-      "manifest_hash": "sha256:6eba1ffbc264c7aa43e31b34303a8312ddad5b979772d2785c808179b402d9f2",
+      "version": "1.0.2",
+      "source": {
+        "kind": "catalog",
+        "catalog": "default"
+      },
+      "manifest_hash": "sha256:c446e95c0cfc9482eb794fa90d428c5da3257162515db2cebd9ae3ec534d1919",
       "enabled": true,
       "priority": 10,
-      "registered_commands": {},
-      "registered_skills": [],
+      "registered_commands": {
+        "generic": [
+          "speckit.assess.intake",
+          "speckit.assess.research",
+          "speckit.assess.define",
+          "speckit.assess.shape",
+          "speckit.assess.decide"
+        ],
+        "agy": [
+          "speckit.assess.intake",
+          "speckit.assess.research",
+          "speckit.assess.define",
+          "speckit.assess.shape",
+          "speckit.assess.decide"
+        ],
+        "codex": [
+          "speckit.assess.intake",
+          "speckit.assess.research",
+          "speckit.assess.define",
+          "speckit.assess.shape",
+          "speckit.assess.decide"
+        ],
+        "kiro-cli": [
+          "speckit.assess.intake",
+          "speckit.assess.research",
+          "speckit.assess.define",
+          "speckit.assess.shape",
+          "speckit.assess.decide"
+        ]
+      },
+      "registered_skills": [
+        "speckit-assess-intake",
+        "speckit-assess-research",
+        "speckit-assess-define",
+        "speckit-assess-shape",
+        "speckit-assess-decide"
+      ],
+      "generic_artifact_hashes": {
+        ".ide/prompts/speckit.assess.intake.md": "8d46539656eff9e5e67659c470a1810af7ddad01fe0ad75e30db98397ac16d11",
+        ".ide/prompts/speckit.assess.research.md": "f3c0f6efef5f5a9aba9c4af4535fe15a3bfeefbab4f3be6135c7cef2c520cf73",
+        ".ide/prompts/speckit.assess.define.md": "9a98901ee44dfb383e584461c97c441fbf1efe9e86a0988390508fdc86ed3d10",
+        ".ide/prompts/speckit.assess.shape.md": "5b6af8ec227cf81e0b4f507e9d48e91090b30f6fc33efbc6de3f79eb2d87eaf8",
+        ".ide/prompts/speckit.assess.decide.md": "b3b703212df3e1c4d2f7ea3d88cb509063de0bd4dde28c28f889752ff96ce9a7"
+      },
       "installed_at": "2026-09-07T01:31:15.653068+00:00"
+    },
+    "github": {
+      "version": "1.0.5",
+      "source": "local",
+      "manifest_hash": "sha256:72a5e53c586714c757db44ab4e1c89a915b15dd05baf7e272e37fc3c84e5afae",
+      "enabled": true,
+      "priority": 10,
+      "registered_commands": {
+        "generic": [
+          "speckit.github.taskstoissues"
+        ],
+        "agy": [
+          "speckit.github.taskstoissues"
+        ],
+        "codex": [
+          "speckit.github.taskstoissues"
+        ],
+        "kiro-cli": [
+          "speckit.github.taskstoissues"
+        ]
+      },
+      "registered_skills": [
+        "speckit-github-taskstoissues"
+      ],
+      "installed_at": "2026-11-12T05:21:22.252215+00:00",
+      "generic_artifact_hashes": {
+        ".ide/prompts/speckit.github.taskstoissues.md": "cd6c865115d6c7f43be2c3a5bc422ae928cb2a531c40c7700560f813fa7fcb85"
+      }
     }
   }
 }

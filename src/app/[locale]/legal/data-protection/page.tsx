@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+
+import { Link } from '@/i18n/routing';
 
 export const metadata: Metadata = {
   title: 'Protección de Datos | ZIVAH International S.A.',
@@ -22,405 +23,407 @@ export const metadata: Metadata = {
   },
 };
 
+const SECTIONS = [
+  { id: 'responsable', label: '1. Responsable del Tratamiento' },
+  { id: 'marco-legal', label: '2. Marco Legal' },
+  { id: 'principios', label: '3. Principios de Tratamiento de Datos' },
+  { id: 'categorias', label: '4. Categorías de Datos Personales' },
+  { id: 'base-legal', label: '5. Base Legal para el Tratamiento' },
+  { id: 'conservacion', label: '6. Plazos de Conservación' },
+  { id: 'derechos', label: '7. Sus Derechos como Titular de Datos' },
+  { id: 'ejercer-derechos', label: '8. Cómo Ejercer sus Derechos' },
+  { id: 'seguridad', label: '9. Medidas de Seguridad' },
+  { id: 'transferencias', label: '10. Transferencias Internacionales' },
+  { id: 'reclamaciones', label: '11. Reclamaciones' },
+  { id: 'actualizaciones', label: '12. Actualizaciones' },
+];
+
+const sectionClass = 'scroll-mt-28 border-t border-border pt-8 first:border-t-0 first:pt-0';
+const h2Class = 'mb-4 font-serif text-2xl leading-snug text-foreground';
+const h3Class = 'mt-6 mb-3 text-[17px] font-semibold text-foreground';
+const h4Class = 'mb-2 text-[15px] font-semibold text-foreground';
+const listClass = 'list-inside list-disc space-y-2';
+const cardClass = 'rounded-[2px] border border-border bg-surface p-4';
+
+const PRINCIPLES = [
+  {
+    title: 'Transparencia Total',
+    description: 'Tratamos sus datos de forma legal, leal y transparente',
+  },
+  {
+    title: 'Limitación de la Finalidad',
+    description: 'Recopilamos datos para fines específicos y legítimos',
+  },
+  {
+    title: 'Minimización de Datos',
+    description: 'Solo recopilamos los datos necesarios para nuestros fines',
+  },
+  {
+    title: 'Exactitud',
+    description: 'Mantenemos sus datos precisos y actualizados',
+  },
+  {
+    title: 'Limitación del Plazo de Conservación',
+    description: 'Conservamos sus datos solo durante el tiempo necesario',
+  },
+  {
+    title: 'Integridad y Confidencialidad',
+    description: 'Proteger sus datos contra el acceso no autorizado',
+  },
+];
+
+const RIGHTS = [
+  {
+    title: 'Derecho de Acceso',
+    description: 'Solicitar copia de sus datos personales que tratamos',
+  },
+  {
+    title: 'Derecho de Rectificación',
+    description: 'Corregir datos inexactos o incompletos',
+  },
+  {
+    title: 'Derecho de Supresión',
+    description: 'Solicitar eliminación de sus datos ("Derecho al olvido")',
+  },
+  {
+    title: 'Derecho de Portabilidad',
+    description: 'Obtener sus datos en formato estructurado',
+  },
+  {
+    title: 'Derecho de Oposición',
+    description: 'Oponerse al tratamiento de sus datos',
+  },
+  {
+    title: 'Derecho de Limitación',
+    description: 'Limitar el tratamiento de sus datos',
+  },
+];
+
 export default function DataProtectionPage() {
   return (
-    <div className='min-h-screen bg-background py-16'>
-      <div className='container mx-auto max-w-4xl px-4'>
-        {/* Header */}
-        <div className='mb-12 text-center'>
-          <h1 className='mb-4 text-4xl font-bold text-foreground'>
-            Protección de Datos Personales
-          </h1>
-          <p className='text-lg text-muted-foreground'>
-            Última actualización:{' '}
-            {new Date().toLocaleDateString('es-ES', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
+    <article>
+      <div>
+        <h1 className='font-serif text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.1] text-foreground'>
+          Protección de Datos Personales
+        </h1>
+        <p className='mt-4 text-[14px] text-muted-foreground'>
+          Última actualización: 21 de octubre de 2026
+        </p>
+
+        <nav
+          aria-label='Índice de secciones'
+          className='mt-8 border-y border-border py-5'
+        >
+          <p className='text-[11px] font-semibold tracking-[0.18em] text-muted-foreground uppercase'>
+            Contenido
           </p>
-        </div>
-
-        {/* Content */}
-        <div className='space-y-8 rounded-xl bg-card p-8 shadow-lg'>
-          {/* Introduction */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
-              1. Responsable del Tratamiento
-            </h2>
-            <div className='rounded-lg bg-gray-50 p-6 dark:bg-gray-700'>
-              <h3 className='mb-2 text-lg font-semibold text-foreground'>
-                ZIVAH International S.A.
-              </h3>
-              <p className='mb-2 text-muted-foreground'>
-                <strong>Domicilio:</strong> Casa Matriz Mz 10 S L 31, Samborondón, Guayas, Ecuador
-              </p>
-              <p className='mb-2 text-muted-foreground'>
-                <strong>RUC:</strong> [Número de RUC]
-              </p>
-              <p className='mb-2 text-muted-foreground'>
-                <strong>Email:</strong> privacy@zivahinternational.com
-              </p>
-              <p className='text-muted-foreground'>
-                <strong>Delegado de Protección de Datos:</strong> dpo@zivahinternational.com
-              </p>
-            </div>
-          </section>
-
-          {/* Legal Framework */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>2. Marco Legal</h2>
-            <p className='mb-4 leading-relaxed text-muted-foreground'>
-              Esta política de protección de datos se basa en las siguientes normativas:
-            </p>
-            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
-              <li>
-                <strong>Reglamento (UE) 2016/679 (RGPD):</strong> Para residentes de la Unión
-                Europea
+          <ol className='mt-3 grid gap-x-8 gap-y-1.5 sm:grid-cols-2'>
+            {SECTIONS.map(section => (
+              <li key={section.id}>
+                <a
+                  href={`#${section.id}`}
+                  className='text-[14px] leading-relaxed text-muted-foreground transition-colors hover:text-accent'
+                >
+                  {section.label}
+                </a>
               </li>
-              <li>
-                <strong>Ley Orgánica de Protección de Datos Personales (LOPD):</strong> Ecuador
-              </li>
-              <li>
-                <strong>California Consumer Privacy Act (CCPA):</strong> Para residentes de
-                California
-              </li>
-              <li>
-                <strong>Normativas sectoriales:</strong> Aplicables al comercio internacional de
-                alimentos
-              </li>
-            </ul>
-          </section>
-
-          {/* Data Processing Principles */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
-              3. Principios de Tratamiento de Datos
-            </h2>
-            <p className='mb-4 leading-relaxed text-muted-foreground'>
-              Tratamos sus datos personales de acuerdo con los siguientes principios:
-            </p>
-            <div className='grid gap-6 md:grid-cols-2'>
-              <div className='rounded-lg bg-accent/10 p-4'>
-                <h4 className='text-dark-accent mb-2 font-semibold'>Transparencia Total</h4>
-                <p className='text-sm text-accent'>
-                  Tratamos sus datos de forma legal, leal y transparente
-                </p>
-              </div>
-              <div className='rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20'>
-                <h4 className='mb-2 font-semibold text-blue-900 dark:text-blue-100'>
-                  Limitación de la Finalidad
-                </h4>
-                <p className='text-sm text-blue-800 dark:text-blue-200'>
-                  Recopilamos datos para fines específicos y legítimos
-                </p>
-              </div>
-              <div className='rounded-lg bg-purple-50 p-4 dark:bg-purple-900/20'>
-                <h4 className='mb-2 font-semibold text-purple-900 dark:text-purple-100'>
-                  Minimización de Datos
-                </h4>
-                <p className='text-sm text-purple-800 dark:text-purple-200'>
-                  Solo recopilamos los datos necesarios para nuestros fines
-                </p>
-              </div>
-              <div className='rounded-lg bg-orange-50 p-4 dark:bg-orange-900/20'>
-                <h4 className='mb-2 font-semibold text-orange-900 dark:text-orange-100'>
-                  Exactitud
-                </h4>
-                <p className='text-sm text-orange-800 dark:text-orange-200'>
-                  Mantenemos sus datos precisos y actualizados
-                </p>
-              </div>
-              <div className='rounded-lg bg-red-50 p-4 dark:bg-red-900/20'>
-                <h4 className='mb-2 font-semibold text-red-900 dark:text-red-100'>
-                  Limitación del Plazo de Conservación
-                </h4>
-                <p className='text-sm text-red-800 dark:text-red-200'>
-                  Conservamos sus datos solo durante el tiempo necesario
-                </p>
-              </div>
-              <div className='rounded-lg bg-indigo-50 p-4 dark:bg-indigo-900/20'>
-                <h4 className='mb-2 font-semibold text-indigo-900 dark:text-indigo-100'>
-                  Integridad y Confidencialidad
-                </h4>
-                <p className='text-sm text-indigo-800 dark:text-indigo-200'>
-                  Proteger sus datos contra el acceso no autorizado
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* Data Categories */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
-              4. Categorías de Datos Personales
-            </h2>
-
-            <h3 className='mb-3 text-xl font-medium text-foreground'>
-              4.1 Datos de Identificación
-            </h3>
-            <ul className='mb-4 list-inside list-disc space-y-2 text-muted-foreground'>
-              <li>Nombre y apellidos</li>
-              <li>Dirección de correo electrónico</li>
-              <li>Número de teléfono</li>
-              <li>Nombre de la empresa</li>
-            </ul>
-
-            <h3 className='mb-3 text-xl font-medium text-foreground'>
-              4.2 Datos de Contacto y Ubicación
-            </h3>
-            <ul className='mb-4 list-inside list-disc space-y-2 text-muted-foreground'>
-              <li>Dirección postal</li>
-              <li>País y ciudad de residencia</li>
-              <li>Dirección IP</li>
-            </ul>
-
-            <h3 className='mb-3 text-xl font-medium text-foreground'>4.3 Datos de Navegación</h3>
-            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
-              <li>Páginas visitadas</li>
-              <li>Tiempo de permanencia</li>
-              <li>Preferencias de idioma</li>
-              <li>Dispositivo y navegador utilizado</li>
-            </ul>
-          </section>
-
-          {/* Legal Basis */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
-              5. Base Legal para el Tratamiento
-            </h2>
-            <p className='mb-4 leading-relaxed text-muted-foreground'>
-              Tratamos sus datos personales basándonos en las siguientes bases legales:
-            </p>
-            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
-              <li>
-                <strong>Consentimiento:</strong> Para comunicaciones comerciales y cookies no
-                esenciales
-              </li>
-              <li>
-                <strong>Ejecución de contrato:</strong> Para procesar pedidos y cotizaciones
-              </li>
-              <li>
-                <strong>Interés legítimo:</strong> Para mejorar nuestros servicios y prevenir
-                fraudes
-              </li>
-              <li>
-                <strong>Cumplimiento de obligaciones legales:</strong> Para cumplir con regulaciones
-                aplicables
-              </li>
-            </ul>
-          </section>
-
-          {/* Data Retention */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
-              6. Plazos de Conservación
-            </h2>
-            <p className='mb-4 leading-relaxed text-muted-foreground'>
-              Conservamos sus datos personales durante los siguientes períodos:
-            </p>
-            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
-              <li>
-                <strong>Datos de clientes activos:</strong> Durante la relación comercial y 5 años
-                después
-              </li>
-              <li>
-                <strong>Datos de cotizaciones:</strong> 3 años desde la última actividad
-              </li>
-              <li>
-                <strong>Datos de marketing:</strong> Hasta que retire su consentimiento
-              </li>
-              <li>
-                <strong>Datos de navegación:</strong> 2 años para análisis estadísticos
-              </li>
-            </ul>
-          </section>
-
-          {/* Your Rights */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
-              7. Sus Derechos como Titular de Datos
-            </h2>
-
-            <div className='grid gap-6 md:grid-cols-2'>
-              <div className='space-y-4'>
-                <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='mb-2 font-semibold text-foreground'>✅ Derecho de Acceso</h4>
-                  <p className='text-sm text-muted-foreground'>
-                    Solicitar copia de sus datos personales que tratamos
-                  </p>
-                </div>
-
-                <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='mb-2 font-semibold text-foreground'>
-                    ✏️ Derecho de Rectificación
-                  </h4>
-                  <p className='text-sm text-muted-foreground'>
-                    Corregir datos inexactos o incompletos
-                  </p>
-                </div>
-
-                <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='mb-2 font-semibold text-foreground'>🗑️ Derecho de Supresión</h4>
-                  <p className='text-sm text-muted-foreground'>
-                    Solicitar eliminación de sus datos (&quot;Derecho al olvido&quot;)
-                  </p>
-                </div>
-              </div>
-
-              <div className='space-y-4'>
-                <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='mb-2 font-semibold text-foreground'>📤 Derecho de Portabilidad</h4>
-                  <p className='text-sm text-muted-foreground'>
-                    Obtener sus datos en formato estructurado
-                  </p>
-                </div>
-
-                <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='mb-2 font-semibold text-foreground'>🚫 Derecho de Oposición</h4>
-                  <p className='text-sm text-muted-foreground'>
-                    Oponerse al tratamiento de sus datos
-                  </p>
-                </div>
-
-                <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-700'>
-                  <h4 className='mb-2 font-semibold text-foreground'>⏸️ Derecho de Limitación</h4>
-                  <p className='text-sm text-muted-foreground'>
-                    Limitar el tratamiento de sus datos
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* How to Exercise Rights */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
-              8. Cómo Ejercer sus Derechos
-            </h2>
-            <p className='mb-4 leading-relaxed text-muted-foreground'>
-              Para ejercer cualquiera de sus derechos, puede contactarnos a través de:
-            </p>
-
-            <div className='rounded-lg border border-blue-200 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-900/20'>
-              <h4 className='mb-4 font-semibold text-blue-900 dark:text-blue-100'>
-                Formas de Contacto
-              </h4>
-              <div className='grid gap-6 md:grid-cols-2'>
-                <div>
-                  <h5 className='mb-2 font-medium text-blue-900 dark:text-blue-100'>Por Email</h5>
-                  <p className='mb-2 text-sm text-blue-800 dark:text-blue-200'>
-                    privacy@zivahinternational.com
-                  </p>
-                  <p className='text-sm text-blue-800 dark:text-blue-200'>
-                    Responderemos en un plazo máximo de 30 días
-                  </p>
-                </div>
-                <div>
-                  <h5 className='mb-2 font-medium text-blue-900 dark:text-blue-100'>
-                    Por Correo Postal
-                  </h5>
-                  <p className='text-sm text-blue-800 dark:text-blue-200'>
-                    ZIVAH International S.A.
-                    <br />
-                    Casa Matriz Mz 10 S L 31
-                    <br />
-                    Samborondón, Guayas, Ecuador
-                    <br />
-                    Teléfono: +593999002893
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <p className='mt-4 leading-relaxed text-muted-foreground'>
-              Para verificar su identidad, podremos solicitarle información adicional. Todos los
-              derechos se ejercen de forma gratuita, salvo que las solicitudes sean manifiestamente
-              infundadas o excesivas.
-            </p>
-          </section>
-
-          {/* Data Security */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>9. Medidas de Seguridad</h2>
-            <p className='mb-4 leading-relaxed text-muted-foreground'>
-              Implementamos medidas técnicas y organizativas apropiadas para proteger sus datos:
-            </p>
-            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
-              <li>
-                <strong>Encriptación:</strong> Datos en tránsito y en reposo
-              </li>
-              <li>
-                <strong>Control de acceso:</strong> Principio de mínimo privilegio
-              </li>
-              <li>
-                <strong>Monitoreo continuo:</strong> Detección de amenazas y vulnerabilidades
-              </li>
-              <li>
-                <strong>Copias de seguridad:</strong> Regulares y seguras
-              </li>
-              <li>
-                <strong>Capacitación:</strong> Personal formado en protección de datos
-              </li>
-            </ul>
-          </section>
-
-          {/* International Data Transfers */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>
-              10. Transferencias Internacionales
-            </h2>
-            <p className='leading-relaxed text-muted-foreground'>
-              Sus datos pueden transferirse a países fuera del Espacio Económico Europeo (EEE). En
-              estos casos, garantizamos que las transferencias cumplan con las garantías adecuadas
-              establecidas por la legislación aplicable, incluyendo cláusulas contractuales tipo o
-              decisiones de adecuación de la Comisión Europea.
-            </p>
-          </section>
-
-          {/* Complaints */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>11. Reclamaciones</h2>
-            <p className='mb-4 leading-relaxed text-muted-foreground'>
-              Si considera que el tratamiento de sus datos personales no cumple con la normativa
-              aplicable, tiene derecho a presentar una reclamación ante la autoridad de control
-              competente:
-            </p>
-            <ul className='list-inside list-disc space-y-2 text-muted-foreground'>
-              <li>
-                <strong>En Ecuador:</strong> Agencia de Regulación y Control de las
-                Telecomunicaciones (ARCOTEL)
-              </li>
-              <li>
-                <strong>En la UE:</strong> Autoridad de Protección de Datos de su país de residencia
-              </li>
-              <li>
-                <strong>En España:</strong> Agencia Española de Protección de Datos (AEPD)
-              </li>
-            </ul>
-          </section>
-
-          {/* Updates */}
-          <section>
-            <h2 className='mb-4 text-2xl font-semibold text-foreground'>12. Actualizaciones</h2>
-            <p className='leading-relaxed text-muted-foreground'>
-              Esta política puede actualizarse para reflejar cambios en nuestras prácticas o en la
-              legislación aplicable. Le informaremos sobre cambios significativos mediante un aviso
-              destacado en nuestro sitio web o enviando una comunicación directa.
-            </p>
-          </section>
-        </div>
-
-        {/* Back to Home */}
-        <div className='mt-8 text-center'>
-          <Link
-            href='/'
-            className='inline-flex items-center text-accent transition-colors hover:text-accent/90 dark:text-accent dark:hover:text-accent/90'
-          >
-            ← Volver al Inicio
-          </Link>
-        </div>
+            ))}
+          </ol>
+        </nav>
       </div>
-    </div>
+
+      <div className='mt-10 space-y-10 text-[16px] leading-[1.7] text-muted-foreground'>
+        <section
+          id='responsable'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>1. Responsable del Tratamiento</h2>
+          <div className='rounded-[2px] border border-border bg-surface p-6'>
+            <h3 className='mb-2 text-[17px] font-semibold text-foreground'>
+              ZIVAH International S.A.
+            </h3>
+            <p className='mb-2'>
+              <strong>Domicilio:</strong> Casa Matriz Mz 10 S L 31, Samborondón, Guayas, Ecuador
+            </p>
+            <p className='mb-2'>
+              <strong>RUC:</strong> [Número de RUC]
+            </p>
+            <p className='mb-2'>
+              <strong>Email:</strong> privacy@zivahinternational.com
+            </p>
+            <p>
+              <strong>Delegado de Protección de Datos:</strong> dpo@zivahinternational.com
+            </p>
+          </div>
+        </section>
+
+        <section
+          id='marco-legal'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>2. Marco Legal</h2>
+          <p className='mb-4'>
+            Esta política de protección de datos se basa en las siguientes normativas:
+          </p>
+          <ul className={listClass}>
+            <li>
+              <strong>Reglamento (UE) 2016/679 (RGPD):</strong> Para residentes de la Unión Europea
+            </li>
+            <li>
+              <strong>Ley Orgánica de Protección de Datos Personales (LOPD):</strong> Ecuador
+            </li>
+            <li>
+              <strong>California Consumer Privacy Act (CCPA):</strong> Para residentes de California
+            </li>
+            <li>
+              <strong>Normativas sectoriales:</strong> Aplicables al comercio internacional de
+              alimentos
+            </li>
+          </ul>
+        </section>
+
+        <section
+          id='principios'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>3. Principios de Tratamiento de Datos</h2>
+          <p className='mb-4'>
+            Tratamos sus datos personales de acuerdo con los siguientes principios:
+          </p>
+          <div className='grid gap-4 sm:grid-cols-2'>
+            {PRINCIPLES.map(principle => (
+              <div
+                key={principle.title}
+                className={cardClass}
+              >
+                <h3 className={h4Class}>{principle.title}</h3>
+                <p className='text-[14px]'>{principle.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id='categorias'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>4. Categorías de Datos Personales</h2>
+
+          <h3 className={h3Class}>4.1 Datos de Identificación</h3>
+          <ul className={`${listClass} mb-4`}>
+            <li>Nombre y apellidos</li>
+            <li>Dirección de correo electrónico</li>
+            <li>Número de teléfono</li>
+            <li>Nombre de la empresa</li>
+          </ul>
+
+          <h3 className={h3Class}>4.2 Datos de Contacto y Ubicación</h3>
+          <ul className={`${listClass} mb-4`}>
+            <li>Dirección postal</li>
+            <li>País y ciudad de residencia</li>
+            <li>Dirección IP</li>
+          </ul>
+
+          <h3 className={h3Class}>4.3 Datos de Navegación</h3>
+          <ul className={listClass}>
+            <li>Páginas visitadas</li>
+            <li>Tiempo de permanencia</li>
+            <li>Preferencias de idioma</li>
+            <li>Dispositivo y navegador utilizado</li>
+          </ul>
+        </section>
+
+        <section
+          id='base-legal'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>5. Base Legal para el Tratamiento</h2>
+          <p className='mb-4'>
+            Tratamos sus datos personales basándonos en las siguientes bases legales:
+          </p>
+          <ul className={listClass}>
+            <li>
+              <strong>Consentimiento:</strong> Para comunicaciones comerciales y cookies no
+              esenciales
+            </li>
+            <li>
+              <strong>Ejecución de contrato:</strong> Para procesar pedidos y cotizaciones
+            </li>
+            <li>
+              <strong>Interés legítimo:</strong> Para mejorar nuestros servicios y prevenir fraudes
+            </li>
+            <li>
+              <strong>Cumplimiento de obligaciones legales:</strong> Para cumplir con regulaciones
+              aplicables
+            </li>
+          </ul>
+        </section>
+
+        <section
+          id='conservacion'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>6. Plazos de Conservación</h2>
+          <p className='mb-4'>Conservamos sus datos personales durante los siguientes períodos:</p>
+          <ul className={listClass}>
+            <li>
+              <strong>Datos de clientes activos:</strong> Durante la relación comercial y 5 años
+              después
+            </li>
+            <li>
+              <strong>Datos de cotizaciones:</strong> 3 años desde la última actividad
+            </li>
+            <li>
+              <strong>Datos de marketing:</strong> Hasta que retire su consentimiento
+            </li>
+            <li>
+              <strong>Datos de navegación:</strong> 2 años para análisis estadísticos
+            </li>
+          </ul>
+        </section>
+
+        <section
+          id='derechos'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>7. Sus Derechos como Titular de Datos</h2>
+          <div className='grid gap-4 sm:grid-cols-2'>
+            {RIGHTS.map(right => (
+              <div
+                key={right.title}
+                className={cardClass}
+              >
+                <h3 className={h4Class}>{right.title}</h3>
+                <p className='text-[14px]'>{right.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id='ejercer-derechos'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>8. Cómo Ejercer sus Derechos</h2>
+          <p className='mb-4'>
+            Para ejercer cualquiera de sus derechos, puede contactarnos a través de:
+          </p>
+
+          <div className='rounded-[2px] border border-border bg-surface p-6'>
+            <h3 className='mb-4 text-[17px] font-semibold text-foreground'>Formas de Contacto</h3>
+            <div className='grid gap-6 sm:grid-cols-2'>
+              <div>
+                <h4 className={h4Class}>Por Email</h4>
+                <p className='mb-2 text-[14px]'>privacy@zivahinternational.com</p>
+                <p className='text-[14px]'>Responderemos en un plazo máximo de 30 días</p>
+              </div>
+              <div>
+                <h4 className={h4Class}>Por Correo Postal</h4>
+                <p className='text-[14px]'>
+                  ZIVAH International S.A.
+                  <br />
+                  Casa Matriz Mz 10 S L 31
+                  <br />
+                  Samborondón, Guayas, Ecuador
+                  <br />
+                  Teléfono: +593999002893
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <p className='mt-4'>
+            Para verificar su identidad, podremos solicitarle información adicional. Todos los
+            derechos se ejercen de forma gratuita, salvo que las solicitudes sean manifiestamente
+            infundadas o excesivas.
+          </p>
+        </section>
+
+        <section
+          id='seguridad'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>9. Medidas de Seguridad</h2>
+          <p className='mb-4'>
+            Implementamos medidas técnicas y organizativas apropiadas para proteger sus datos:
+          </p>
+          <ul className={listClass}>
+            <li>
+              <strong>Encriptación:</strong> Datos en tránsito y en reposo
+            </li>
+            <li>
+              <strong>Control de acceso:</strong> Principio de mínimo privilegio
+            </li>
+            <li>
+              <strong>Monitoreo continuo:</strong> Detección de amenazas y vulnerabilidades
+            </li>
+            <li>
+              <strong>Copias de seguridad:</strong> Regulares y seguras
+            </li>
+            <li>
+              <strong>Capacitación:</strong> Personal formado en protección de datos
+            </li>
+          </ul>
+        </section>
+
+        <section
+          id='transferencias'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>10. Transferencias Internacionales</h2>
+          <p>
+            Sus datos pueden transferirse a países fuera del Espacio Económico Europeo (EEE). En
+            estos casos, garantizamos que las transferencias cumplan con las garantías adecuadas
+            establecidas por la legislación aplicable, incluyendo cláusulas contractuales tipo o
+            decisiones de adecuación de la Comisión Europea.
+          </p>
+        </section>
+
+        <section
+          id='reclamaciones'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>11. Reclamaciones</h2>
+          <p className='mb-4'>
+            Si considera que el tratamiento de sus datos personales no cumple con la normativa
+            aplicable, tiene derecho a presentar una reclamación ante la autoridad de control
+            competente:
+          </p>
+          <ul className={listClass}>
+            <li>
+              <strong>En Ecuador:</strong> Agencia de Regulación y Control de las Telecomunicaciones
+              (ARCOTEL)
+            </li>
+            <li>
+              <strong>En la UE:</strong> Autoridad de Protección de Datos de su país de residencia
+            </li>
+            <li>
+              <strong>En España:</strong> Agencia Española de Protección de Datos (AEPD)
+            </li>
+          </ul>
+        </section>
+
+        <section
+          id='actualizaciones'
+          className={sectionClass}
+        >
+          <h2 className={h2Class}>12. Actualizaciones</h2>
+          <p>
+            Esta política puede actualizarse para reflejar cambios en nuestras prácticas o en la
+            legislación aplicable. Le informaremos sobre cambios significativos mediante un aviso
+            destacado en nuestro sitio web o enviando una comunicación directa.
+          </p>
+        </section>
+      </div>
+
+      <footer className='mt-12 border-t border-border pt-6'>
+        <Link
+          href='/'
+          className='inline-flex items-center gap-2 text-[14px] font-medium text-foreground underline-offset-4 transition-colors hover:text-accent hover:underline'
+        >
+          ← Volver al Inicio
+        </Link>
+      </footer>
+    </article>
   );
 }

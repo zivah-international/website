@@ -1,9 +1,9 @@
 'use client';
 
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
-import { defaultLocale, type Locale, localeFlags, localeNames, locales } from '@/i18n/config';
+import { defaultLocale, type Locale, locales } from '@/i18n/config';
 import { usePathname, useRouter } from '@/i18n/routing';
 
 const LOCALE_STORAGE_KEY = 'ZIVAH_PREFERRED_LOCALE';
@@ -28,14 +28,11 @@ function setStoredLocale(locale: Locale): void {
 
 interface LanguageSwitcherProps {
   className?: string;
-  variant?: 'dropdown' | 'buttons' | 'select';
 }
 
-export default function LanguageSwitcher({
-  className = '',
-  variant = 'select',
-}: LanguageSwitcherProps) {
+export default function LanguageSwitcher({ className = '' }: LanguageSwitcherProps) {
   const locale = useLocale() as Locale;
+  const t = useTranslations('nav');
   const router = useRouter();
   const pathname = usePathname();
 
@@ -54,6 +51,10 @@ export default function LanguageSwitcher({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Intentionally runs only on mount to apply stored preference once
 
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   const handleLocaleChange = (newLocale: Locale) => {
     if (newLocale !== locale) {
       // Save preference to localStorage and cookie
@@ -62,73 +63,19 @@ export default function LanguageSwitcher({
     }
   };
 
-  if (variant === 'buttons') {
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        {locales.map(loc => (
-          <button
-            key={loc}
-            onClick={() => handleLocaleChange(loc)}
-            className={`flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
-              locale === loc
-                ? 'bg-accent text-accent-foreground shadow-md'
-                : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
-            }`}
-            aria-label={`Switch to ${localeNames[loc]}`}
-            aria-current={locale === loc ? 'true' : undefined}
-          >
-            <span>{localeFlags[loc]}</span>
-            <span className='hidden sm:inline'>{loc.toUpperCase()}</span>
-          </button>
-        ))}
-      </div>
-    );
-  }
-
-  if (variant === 'dropdown') {
-    return (
-      <div className={`relative ${className}`}>
-        <select
-          value={locale}
-          onChange={e => handleLocaleChange(e.target.value as Locale)}
-          className='cursor-pointer appearance-none rounded-lg border border-border bg-background px-4 py-2 pr-8 text-sm font-medium text-foreground focus:border-transparent focus:ring-2 focus:ring-accent focus:outline-none'
-          aria-label='Select language'
-        >
-          {locales.map(loc => (
-            <option
-              key={loc}
-              value={loc}
-            >
-              {localeFlags[loc]} {localeNames[loc]}
-            </option>
-          ))}
-        </select>
-        <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground'>
-          <svg
-            className='h-4 w-4 fill-current'
-            viewBox='0 0 20 20'
-          >
-            <path d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z' />
-          </svg>
-        </div>
-      </div>
-    );
-  }
-
-  // Default: select variant (compact)
   return (
     <select
       value={locale}
       onChange={e => handleLocaleChange(e.target.value as Locale)}
-      className={`cursor-pointer rounded-lg border border-border bg-background px-3 py-1 text-sm text-foreground focus:ring-2 focus:ring-accent focus:outline-none ${className}`}
-      aria-label='Select language'
+      className={`h-11 cursor-pointer rounded-[2px] border border-current/25 bg-transparent px-3 text-sm font-medium text-current focus:outline-none ${className}`}
+      aria-label={t('language')}
     >
       {locales.map(loc => (
         <option
           key={loc}
           value={loc}
         >
-          {localeFlags[loc]} {loc.toUpperCase()}
+          {loc.toUpperCase()}
         </option>
       ))}
     </select>

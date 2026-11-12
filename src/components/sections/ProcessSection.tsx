@@ -1,83 +1,54 @@
-'use client';
+import { getTranslations } from 'next-intl/server';
 
-import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import ProcessStep from '@/components/site/ProcessStep';
+import { Button } from '@/components/ui/button';
+import { Link } from '@/i18n/routing';
 
-import { ArrowRight, ChevronRight, Globe, Package, QuoteIcon, Search } from '@/components/ui/icons';
-import { getAnimationClasses, useScrollAnimation } from '@/lib/hooks/use-scroll-animation';
+type Step = { title: string; description: string };
 
-const STEPS = [QuoteIcon, Search, Package, Globe] as const;
-
-export default function ProcessSection() {
-  const t = useTranslations();
-  const locale = useLocale();
-  const { ref, isVisible } = useScrollAnimation();
+export default async function ProcessSection() {
+  const t = await getTranslations('home.process');
+  const steps = t.raw('steps') as Step[];
 
   return (
     <section
-      className='bg-background py-14'
-      id='process'
+      aria-labelledby='process-title'
+      className='bg-surface py-16 lg:py-24'
     >
-      <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-        <div className='mb-8 text-center'>
-          <div className='mb-3 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary'>
-            {t('process.badge')}
-          </div>
-          <h2 className='mb-4 text-3xl font-bold text-foreground sm:text-4xl'>
-            {t('process.title')}
-          </h2>
-          <p className='mx-auto max-w-2xl text-lg text-muted-foreground'>
-            {t('process.description')}
-          </p>
-        </div>
-
-        <div
-          ref={ref}
-          className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-4 ${getAnimationClasses('fade-up', isVisible)}`}
+      <div className='mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8'>
+        <h2
+          id='process-title'
+          className='max-w-[20ch] text-[clamp(2rem,3.6vw,2.75rem)] text-foreground'
         >
-          {STEPS.map((Icon, i) => (
-            <div
-              key={i}
-              className='relative rounded-lg border border-border/50 bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-black/5'
-            >
-              <div className='mb-2 text-5xl font-black text-primary/12 select-none'>
-                {String(i + 1).padStart(2, '0')}
-              </div>
-              <div className='mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary'>
-                <Icon
-                  size={20}
-                  strokeWidth={2.3}
-                />
-              </div>
-              <h3 className='mb-1 text-base font-bold text-foreground'>
-                {t(`process.steps.${i}.title`)}
-              </h3>
-              <p className='text-sm leading-relaxed text-muted-foreground'>
-                {t(`process.steps.${i}.description`)}
-              </p>
-              {i < 3 && (
-                <div className='absolute top-1/2 -right-4 hidden -translate-y-1/2 text-primary/25 lg:block'>
-                  <ChevronRight size={24} />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+          {t('title')}
+        </h2>
 
-        <div className='mt-10 text-center'>
-          <Link
-            href={`/${locale}/quote`}
-            className='inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 font-semibold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg'
-            data-track='begin_checkout'
-            data-track-category='process'
-            data-track-label='home_process_quote'
-          >
-            {t('hero.requestQuote')}
-            <ArrowRight
-              size={16}
-              strokeWidth={2.5}
+        <ol className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4'>
+          {steps.map((step, index) => (
+            <ProcessStep
+              key={step.title}
+              index={String(index + 1).padStart(2, '0')}
+              title={step.title}
+              description={step.description}
             />
-          </Link>
+          ))}
+        </ol>
+
+        <div className='mt-12'>
+          <Button
+            asChild
+            variant='brand-outline'
+            size='brand'
+          >
+            <Link
+              href='/quote'
+              data-track='begin_checkout'
+              data-track-category='cta'
+              data-track-label='home_process_quote'
+            >
+              {t('cta')}
+            </Link>
+          </Button>
         </div>
       </div>
     </section>

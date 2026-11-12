@@ -9,6 +9,8 @@ dist/
 build/
 .next/
 .astro/
+test-results/
+playwright-report/
 
 # Next.js auto-generated files
 next-env.d.ts
@@ -103,6 +105,12 @@ temp/
 *.njsproj
 *.sln
 *.sw?
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+
 /generated/prisma
 tsconfig.tsbuildinfo
 zivah-deploy.zip

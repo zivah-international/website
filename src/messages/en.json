@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "ZIVAH International S.A. - Premium Ecuadorian Products Exporters | Ecuador to the World",
-    "description": "ZIVAH International S.A. - Leading exporters of premium Ecuadorian products from Ecuador to the world. Headquartered in Samborondón, Guayas with distribution office in Miami.",
-    "keywords": "ecuador export, tropical fruits, ecuadorian shrimp, aquaculture larvae, arabica coffee, seafood products"
+    "title": "ZIVAH International — Shrimp, post-larvae and tuna from Ecuador",
+    "description": "We export white shrimp, shrimp post-larvae and Pacific tuna from Ecuador. Documentation, traceability and an FOB quote within 24 hours.",
+    "keywords": "Ecuadorian shrimp, shrimp post-larvae, Pacific tuna, seafood export, aquaculture, tropical fruit, coffee, cacao"
   },
   "seo": {
-    "industry": "Ecuadorian products export",
+    "industry": "Seafood and aquaculture export",
     "catalogName": "Premium Ecuadorian Products",
     "tropicalFruits": "Tropical Fruits",
     "tropicalFruitsDesc": "Mango, pineapple, banana, papaya and exotic Ecuadorian fruits",
@@ -28,322 +28,403 @@
     "terms": "Terms",
     "cookies": "Cookies",
     "dataProtection": "Data Protection",
-    "language": "Language:"
-  },
-  "hero": {
-    "badge": "🇪🇨 From Ecuador to the World · Samborondón, Guayas · Miami, Florida",
-    "title": "Shrimp · Larvae",
-    "titleHighlight": "Premium Aquaculture",
-    "titleEnd": "Direct Export from Ecuador",
-    "description": "We export vannamei shrimp, aquaculture larvae, tropical fruits and arabica coffee directly from Ecuador. BAP, HACCP, BRC and GlobalGAP certified. Documentation ready. Response within 24h.",
-    "exploreProducts": "View Catalog",
-    "requestQuote": "Request Quote",
-    "stats": {
-      "countriesServed": "Guayaquil",
-      "containersYear": "Commercial Response",
-      "yearsExperience": "Aquaculture Certification",
-      "qualityGuaranteed": "Markets Served"
-    },
-    "statValues": {
-      "countriesServed": "5+",
-      "containersYear": "24h",
-      "yearsExperience": "4+",
-      "qualityGuaranteed": "100%"
-    },
-    "slides": {
-      "shrimp": {
-        "badge": "Vannamei Shrimp · Direct export from Ecuador",
-        "title": "Ecuadorian shrimp",
-        "titleHighlight": "ready to export",
-        "subtitle": "IQF and block frozen shrimp with BAP/HACCP/BRC documentation, full traceability and 24h commercial response.",
-        "cta": "Request FOB price",
-        "ctaSecondary": "View technical sheet"
-      },
-      "larvae": {
-        "badge": "Shrimp larvae · Nauplii and PL · Ecuador",
-        "title": "SPF larvae",
-        "titleHighlight": "for stable cycles",
-        "subtitle": "Selected genetics, level-A biosecurity, guided acclimation and coordinated availability for aquaculture production.",
-        "cta": "Check availability",
-        "ctaSecondary": "View technical sheet"
-      },
-      "fruits": {
-        "badge": "Tropical fruits · Coffee · Cacao · Ecuador",
-        "title": "Ecuadorian products",
-        "titleHighlight": "with traceability",
-        "subtitle": "Certified origin, clear seasonality and export documentation ready for international buyers.",
-        "cta": "Request quote",
-        "ctaSecondary": "View catalog"
-      }
-    },
-    "gallery": {
-      "badge": "Featured Products",
-      "title": "From Ecuadorian fields to the world",
-      "subtitle": "+30 certified fresh products · Direct FOB export",
-      "viewAll": "View all 30+ products →",
-      "products": {
-        "shrimp": "Vannamei Shrimp",
-        "cacao": "Fine Cacao of Aroma",
-        "roses": "Premium Roses",
-        "mango": "Tommy Atkins Mango",
-        "avocado": "Hass Avocado",
-        "coffee": "Arabica Coffee",
-        "banana": "Premium Banana",
-        "pineapple": "Golden Pineapple"
-      }
-    },
-    "premiumProducts": "What We Export",
-    "productTypes": {
-      "tropicalFruits": "Tropical Fruits · Mango, Pineapple, Banana",
-      "premiumSeafood": "Certified Vannamei Shrimp",
-      "highlandCoffee": "High-Altitude Arabica Coffee",
-      "aquaculture": "Aquaculture Larvae & Nauplii"
-    }
+    "language": "Language",
+    "mainLabel": "Main navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menuTitle": "Menu",
+    "skipToContent": "Skip to content",
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode",
+    "quoteCta": "Request a quote"
   },
   "home": {
-    "viewFullCatalog": "View full catalog",
-    "shrimp": {
-      "eyebrow": "Main offer",
-      "title": "Source shrimp",
-      "titleHighlight": "with less operational risk",
-      "description": "We connect international buyers with certified Ecuadorian vannamei shrimp, ready sanitary documentation and FOB coordination from Guayaquil.",
-      "features": [
-        "Ready documentation to reduce customs delays",
-        "IQF, block frozen, cooked, tail-on and headless presentations",
-        "Traceability from farm to container for procurement audits",
-        "FOB Guayaquil quote with 24h commercial response"
-      ],
-      "cta": "Request FOB price",
-      "ctaSecondary": "View technical sheet"
+    "hero": {
+      "eyebrow": "Ecuador · Direct export",
+      "title": "Ecuadorian seafood, <em>ready for export</em>.",
+      "lead": "White shrimp, shrimp post-larvae, and Pacific tuna with export-ready documentation, batch traceability, and a commercial response within 24 hours.",
+      "primaryCta": "Request an FOB quote",
+      "secondaryCta": "View seafood",
+      "imageAlt": "Ecuadorian white shrimp ready for export",
+      "caption": "White shrimp · Guayas, Ecuador"
     },
-    "larvae": {
-      "eyebrow": "Aquaculture",
-      "title": "Larvae for",
-      "titleHighlight": "more predictable cycles",
-      "description": "Nauplii and post-larvae supply for white shrimp operations, with selected genetics, biosecurity and technical support for aquaculture teams.",
-      "features": [
-        "Certified SPF to reduce sanitary risk",
-        "PL10, PL12, PL15 and nauplii according to production planning",
-        "Guided acclimation and post-sale technical support",
-        "Coordinated dispatch to maintain stocking continuity"
-      ],
-      "cta": "Check availability",
-      "ctaSecondary": "View technical sheet"
+    "evidence": {
+      "response": "Commercial response",
+      "traceability": "Batch traceability"
     },
-    "whyEcuador": {
-      "eyebrow": "Why Ecuador",
-      "title": "Why source Ecuadorian aquaculture",
-      "subtitle": "Ecuador combines specialized production, recognized certifications and frequent maritime logistics from Guayaquil for buyers who need continuity and control.",
-      "items": [
+    "seafood": {
+      "title": "Three lines. One export standard.",
+      "lead": "Shrimp, post-larvae and tuna. Every batch ships with verifiable documentation and a controlled cold chain.",
+      "viewSheet": "View sheet",
+      "cards": {
+        "camaron": {
+          "eyebrow": "Shrimp",
+          "title": "Premium White Shrimp",
+          "description": "vannamei IQF shrimp, grades 16/20 to 41/50. Custom packaging for distribution and retail."
+        },
+        "larvas": {
+          "eyebrow": "Aquaculture",
+          "title": "Shrimp Post-Larvae",
+          "description": "PL10–PL15 post-larvae with genetic traceability and technical stocking support."
+        },
+        "atun": {
+          "eyebrow": "Marine & Fisheries",
+          "title": "Fresh Pacific Tuna",
+          "description": "Tuna loins and steaks, cold chain from the port. Availability subject to season."
+        }
+      }
+    },
+    "secondary": {
+      "text": "We also export <a>tropical fruits</a>, <a>highland coffee</a> and <a>cacao</a>."
+    },
+    "whyZivah": {
+      "title": "Why ZIVAH",
+      "rows": [
         {
-          "label": "Recognized origin",
-          "desc": "Ecuador is a global reference for vannamei shrimp and works with suppliers used to demanding markets."
+          "title": "Our own operation at origin and destination.",
+          "description": "Samborondón and Miami. Commercial and logistics coordination without intermediaries."
         },
         {
-          "label": "Stable production",
-          "desc": "Tropical conditions support production continuity and year-round sourcing planning."
+          "title": "Documentation reviewed before shipment.",
+          "description": "Sanitary, origin and batch traceability ready for the importer's review."
         },
         {
-          "label": "Verifiable certification",
-          "desc": "Processes aligned with BAP, HACCP and BRC to support document review before shipment."
+          "title": "Cold chain coordinated from origin to destination.",
+          "description": "Temperature and timing control at every stage, with defined owners."
         },
         {
-          "label": "Direct FOB shipping",
-          "desc": "Coordination from Guayaquil and international commercial support to reduce operational uncertainty."
+          "title": "A single commercial contact.",
+          "description": "The same person follows the quote, production and shipment tracking."
         }
       ]
+    },
+    "quality": {
+      "title": "The standard is proven in every batch.",
+      "lead": "Four certifications support access to the markets where we sell.",
+      "note": "Agricultural lines: GlobalGAP.",
+      "link": "View quality and certifications",
+      "certifications": {
+        "bap": "Responsible aquaculture",
+        "haccp": "Food safety and process control",
+        "brc": "Global retail standard",
+        "msc": "Certified sustainable fishing"
+      }
+    },
+    "process": {
+      "title": "From inquiry to shipment.",
+      "cta": "Start a quote",
+      "steps": [
+        {
+          "title": "Inquiry",
+          "description": "We receive product, volume, destination and frequency."
+        },
+        {
+          "title": "FOB proposal",
+          "description": "Price, packaging, schedule and documents within 24 h."
+        },
+        {
+          "title": "Approval and production",
+          "description": "We reserve the lot and coordinate quality control."
+        },
+        {
+          "title": "Shipment and tracking",
+          "description": "Documents, transit and arrival confirmation."
+        }
+      ]
+    },
+    "markets": {
+      "title": "Where the product arrives.",
+      "link": "View markets",
+      "status": {
+        "active": "Active",
+        "expansion": "Expansion"
+      },
+      "list": {
+        "US": {
+          "country": "United States",
+          "hub": "Miami",
+          "note": "Wholesale and retail distribution."
+        },
+        "JP": {
+          "country": "Japan",
+          "hub": "Tokyo",
+          "note": "Seafood importers."
+        },
+        "NL": {
+          "country": "Netherlands",
+          "hub": "Rotterdam",
+          "note": "Gateway to the European Union."
+        },
+        "CN": {
+          "country": "China",
+          "hub": "Shanghai",
+          "note": "Wholesale distribution."
+        },
+        "CA": {
+          "country": "Canada",
+          "hub": "Toronto",
+          "note": "Expanding market."
+        },
+        "AE": {
+          "country": "United Arab Emirates",
+          "hub": "Dubai",
+          "note": "Expanding market."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Receive an FOB quote for seafood within 24 hours.",
+      "body": "Tell us the product, volume and destination. We reply with price, packaging and next steps.",
+      "primary": "Request a quote",
+      "email": "Email us",
+      "whatsapp": "Message us on WhatsApp"
     }
+  },
+  "metrics": {
+    "markets": "{count} markets",
+    "activeMarkets": "{count} active",
+    "certifications": "{count} certifications",
+    "response": "24 h",
+    "traceability": "100%"
   },
   "products": {
-    "badge": "Export Catalog",
-    "title": "Certified Products for Demanding Markets",
-    "loading": "Loading products...",
-    "description": "From vannamei shrimp to tropical fruits and aquaculture larvae: every product carries international certification, full traceability and export documentation ready for shipment.",
-    "requestQuote": "Quote this product",
-    "viewProducts": "View {count} products",
-    "viewDetail": "View technical sheet",
-    "moreProducts": "+{count} more available",
-    "catalog": {
-      "badge": "Complete Catalog",
-      "title": "All Our Products with Technical Sheet",
-      "description": "{count} products available for export · With certification, origin and reference base price",
-      "all": "All",
-      "premiumQuality": "Premium quality",
-      "noProducts": {
-        "title": "No products found",
-        "description": "Try selecting a different category"
-      }
-    }
+    "eyebrow": "Export catalog",
+    "title": "Seafood and agricultural lines",
+    "lead": "Shrimp, larvae and tuna first. Tropical fruits, coffee and cacao as complementary lines.",
+    "requestQuote": "Request a quote",
+    "all": "All",
+    "seafood": "Seafood",
+    "agricultural": "Agricultural",
+    "other": "Other products",
+    "viewDetail": "View sheet",
+    "emptyTitle": "Catalog being updated",
+    "emptyBody": "The catalog is updated periodically. Write to us and we will confirm availability for your market.",
+    "emptyCta": "Check availability",
+    "filterEmpty": "No products in this category.",
+    "clearFilter": "View all"
+  },
+  "productDetail": {
+    "requestQuote": "Request a quote for this product",
+    "downloadSheet": "Download technical sheet",
+    "specsTitle": "Product specifications",
+    "origin": "Origin",
+    "size": "Size",
+    "packaging": "Packaging",
+    "certifications": "Certifications",
+    "season": "Season",
+    "relatedTitle": "Related products",
+    "backToCatalog": "Back to catalog",
+    "notFound": "Product not found"
   },
   "quote": {
-    "badge": "Request a Quote",
-    "title": "Receive a Commercial Proposal within 24 Hours",
-    "description": "Select the products you need, specify volume and destination, and receive a detailed quote with FOB price, certifications and export documentation included.",
-    "features": {
-      "smartSearch": {
-        "title": "Smart Search",
-        "description": "Find products quickly with our advanced search system"
-      },
-      "multipleSelection": {
-        "title": "Multiple Selection",
-        "description": "Combine multiple products in a single quote with customized quantities"
-      },
-      "autoSend": {
-        "title": "Automatic Delivery",
-        "description": "Receive professional quotes by email with automatic tracking"
-      }
-    }
+    "eyebrow": "B2B quote",
+    "title": "Receive a commercial proposal within 24 hours.",
+    "description": "FOB quote for shrimp, post-larvae, tuna, or agricultural lines. Includes price, packaging, schedule, and documents.",
+    "lead": "FOB quote for shrimp, post-larvae, tuna, or agricultural lines. Includes price, packaging, schedule, and documents.",
+    "includesTitle": "What your proposal includes",
+    "includes": [
+      "FOB price and unit of measure",
+      "Packaging and minimum volume",
+      "Availability schedule",
+      "Export documents"
+    ],
+    "contactTitle": "Direct contact",
+    "contact": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "phone": "Phone"
+    },
+    "trust": ["Response within 24 h", "Confidential information", "Batch traceability"],
+    "formTitle": "Quote request",
+    "submit": "Send request",
+    "submitting": "Sending…",
+    "privacy": "We use your data only to prepare and send your quote.",
+    "success": "Request sent. We will contact you within 24 hours.",
+    "error": "We could not send your request. Please try again."
   },
   "quality": {
-    "title": "Certifications That Open Markets",
-    "description": "Every product we export meets international food safety and traceability standards. We work with buyers in the US, Europe and Asia who demand rigorous documentation—and we have it ready for every shipment.",
+    "eyebrow": "Quality and traceability",
+    "title": "Certifications that open markets.",
+    "description": "BAP, HACCP, BRC and MSC support access to the markets where we sell. GlobalGAP applies to our agricultural lines.",
+    "lead": "BAP, HACCP, BRC and MSC support access to the markets where we sell. GlobalGAP applies to our agricultural lines.",
+    "certificationsTitle": "Certifications",
+    "note": "Agricultural lines: GlobalGAP.",
     "certifications": {
-      "haccp": "Critical Control Points",
-      "brc": "Global Retail Standard",
-      "bap": "Responsible Aquaculture",
-      "globalGap": "Good Agricultural Practices"
+      "bap": "Responsible aquaculture verified at origin.",
+      "haccp": "Food safety and critical control points at every stage.",
+      "brc": "Global standard for retail access.",
+      "msc": "Certified sustainable fishing.",
+      "globalGap": "Good agricultural practices for our agricultural lines."
     },
-    "awards": {
-      "title": "International Track Record",
-      "description": "Active exporters to the US and expanding to new markets. Over 4 years of experience with audited processes and long-term client relationships."
+    "scope": {
+      "seafood": "Seafood",
+      "both": "Seafood and agricultural lines"
+    },
+    "process": {
+      "eyebrow": "Batch control",
+      "title": "From reception to shipment.",
+      "lead": "Every batch goes through the same documented control before it leaves.",
+      "steps": [
+        {
+          "title": "Reception and verification",
+          "description": "Documentary and physical review per batch."
+        },
+        {
+          "title": "Cold chain",
+          "description": "Temperature and timing recorded at every stage."
+        },
+        {
+          "title": "Microbiological analysis",
+          "description": "Controls per batch according to destination."
+        },
+        {
+          "title": "Shipment documentation",
+          "description": "Sanitary, origin and traceability ready for review."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Request the documentation for your next batch.",
+      "body": "We send certificates, technical sheets and laboratory analyses before you confirm the order.",
+      "action": "Request a quote"
     }
   },
   "markets": {
-    "badge": "Global Reach",
-    "title": "From Guayas and Miami to the World",
-    "description": "Our dual presence in Samborondón (Ecuador) and Miami (USA) allows us to close deals quickly, coordinate international logistics and offer commercial support in your time zone.",
-    "stats": {
-      "countriesServed": "Countries with Active Exports",
-      "containersYear": "Dispatch Capacity",
-      "yearsExperience": "Years of Experience",
-      "certifiedProducts": "Certified Products",
-      "customerSatisfaction": "Customer Satisfaction",
-      "specializedSupport": "Commercial Support"
+    "eyebrow": "Commercial presence",
+    "title": "From Guayas and Miami to the world.",
+    "description": "Six markets, four active, and commercial and logistics operations coordinated from origin.",
+    "lead": "Six markets. Four active. One commercial and logistics operation coordinated from origin.",
+    "map": {
+      "ariaLabel": "ZIVAH markets map"
     },
-    "statValues": {
-      "countriesServed": "5+",
-      "containersYear": "Scalable",
-      "yearsExperience": "4+",
-      "certifiedProducts": "100%",
-      "customerSatisfaction": "100%",
-      "specializedSupport": "24/7"
+    "status": {
+      "active": "Active",
+      "expansion": "Expansion"
+    },
+    "list": {
+      "US": {
+        "country": "United States",
+        "hub": "Miami",
+        "note": "Wholesale and retail distribution."
+      },
+      "JP": {
+        "country": "Japan",
+        "hub": "Tokyo",
+        "note": "Seafood importers."
+      },
+      "NL": {
+        "country": "Netherlands",
+        "hub": "Rotterdam",
+        "note": "Gateway to the European Union."
+      },
+      "CN": {
+        "country": "China",
+        "hub": "Shanghai",
+        "note": "Wholesale distribution."
+      },
+      "CA": {
+        "country": "Canada",
+        "hub": "Toronto",
+        "note": "Expansion market."
+      },
+      "AE": {
+        "country": "United Arab Emirates",
+        "hub": "Dubai",
+        "note": "Expansion market."
+      }
+    },
+    "evidence": {
+      "eyebrow": "Commercial operation",
+      "title": "Why choose ZIVAH",
+      "lead": "Four concrete reasons to coordinate your next shipment.",
+      "rows": [
+        {
+          "title": "Origin and destination of our own",
+          "description": "Commercial operations in Samborondón and Miami."
+        },
+        {
+          "title": "Documented transit",
+          "description": "Sanitary, origin and batch traceability on every shipment."
+        },
+        {
+          "title": "A team in your time zone",
+          "description": "Commercial support in Spanish and English."
+        },
+        {
+          "title": "Batch traceability",
+          "description": "Every batch keeps its origin and control history."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Check availability for your market.",
+      "body": "Tell us the product, volume and destination. We respond within 24 hours.",
+      "action": "Request a quote"
     }
   },
   "contact": {
-    "badge": "Commercial Contact",
-    "title": "Let's Talk About Your Next Order",
-    "description": "Our commercial team responds within 24 hours. Whether you need an urgent quote, technical information or export documentation, we are ready to help.",
-    "mainOffice": "Main Office",
-    "distributionOffice": "Distribution Office",
-    "commercialEmail": "Commercial Email",
-    "phone": "Phone",
-    "businessHours": "Business Hours",
-    "mainHQ": "Main Headquarters (Ecuador):",
-    "miamiOffice": "Miami Office:",
-    "weekdays": "Monday - Friday",
-    "unitedStates": "United States",
-    "contactChannels": "Contact Channels",
-    "sendMessage": "Send Us a Message",
-    "name": "Name",
-    "company": "Company",
-    "email": "Email",
-    "subject": "Subject",
-    "message": "Message",
-    "send": "Send Message"
-  },
-  "newsletter": {
-    "title": "Export Updates Straight to Your Inbox",
-    "description": "Availability updates, harvest seasons, FOB prices and new certifications. For importers and distributors only.",
-    "placeholder": "you@company.com",
-    "cta": "Subscribe",
-    "privacy": "No spam. You can unsubscribe at any time."
+    "eyebrow": "Commercial contact",
+    "title": "Let's talk about your next purchase.",
+    "lead": "Write to us with the product, volume and destination. We reply within 24 business hours.",
+    "officesTitle": "Offices",
+    "ecuador": {
+      "country": "Ecuador",
+      "role": "Main logistics operation"
+    },
+    "miami": {
+      "country": "United States",
+      "role": "Commercial operation"
+    },
+    "channelsTitle": "Direct contact",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "whatsappLabel": "WhatsApp",
+    "whatsappAction": "Message us on WhatsApp",
+    "hoursLabel": "Hours",
+    "hours": "Mon–Fri · 09:00–18:00 GMT-5",
+    "directions": "View directions",
+    "noMap": "We do not use embedded maps.",
+    "formTitle": "Send us a message",
+    "form": {
+      "name": "Name",
+      "company": "Company",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "namePlaceholder": "Your name",
+      "companyPlaceholder": "Your company",
+      "emailPlaceholder": "you@company.com",
+      "phonePlaceholder": "+593 99 900 2893",
+      "messagePlaceholder": "Product, volume and destination",
+      "submit": "Send message",
+      "privacy": "We use your data only to reply to your inquiry."
+    },
+    "quotePrompt": "Need an FOB quote? Request it here"
   },
   "footer": {
-    "companyDescription": "Premium Ecuadorian product exporters with 4+ years of experience. HACCP, BRC, BAP and GlobalGAP certifications. HQ in Samborondón and commercial office in Miami.",
-    "specialists": "Specialists in:",
-    "specialistsList": "Aquaculture, Shrimp Larvae, Tropical Fruits, Seafood, and Highland Coffee.",
-    "mainProducts": "Main Products",
-    "tropicalFruits": "Tropical Fruits",
-    "seafood": "Seafood",
-    "arabicaCoffee": "Arabica Coffee",
-    "premiumShrimp": "Premium Shrimp",
-    "shrimpLarvae": "Shrimp Larvae",
-    "viewFullCatalog": "View Full Catalog",
-    "services": "Services",
-    "certifications": "Certifications",
-    "quotes": "Quotes",
-    "globalDistribution": "Global Distribution",
-    "technicalAdvice": "Technical Advice",
-    "support247": "24/7 Support",
-    "legal": "Legal",
+    "brandLine": "Exporter of seafood and aquaculture products from Ecuador.",
+    "productsHeading": "Products",
+    "whiteShrimp": "White shrimp",
+    "shrimpLarvae": "Shrimp larvae",
+    "freshTuna": "Fresh tuna",
+    "viewCatalog": "View catalog",
+    "agriculturalLine": "Tropical fruits, coffee and cacao",
+    "companyHeading": "Company",
+    "quality": "Quality",
+    "markets": "Markets",
+    "contact": "Contact",
+    "quoteCta": "Request a quote",
+    "contactHeading": "Contact",
+    "hours": "Mon–Fri · 09:00–18:00 GMT-5",
     "privacyPolicy": "Privacy Policy",
     "termsConditions": "Terms & Conditions",
     "cookiePolicy": "Cookie Policy",
-    "dataProtection": "Data Protection",
-    "copyright": "© {year} ZIVAH International S.A. All rights reserved.",
-    "tagline": "Premium Ecuadorian Products Exporters"
-  },
-  "process": {
-    "badge": "Sourcing path",
-    "title": "From quote to shipment without unnecessary steps",
-    "description": "A simple path so buyers understand what to send, what they receive and when they can move forward.",
-    "steps": [
-      {
-        "number": "01",
-        "title": "Send your requirement",
-        "description": "Product, volume, destination and required presentation. With those details we avoid back-and-forth.",
-        "icon": "📋"
-      },
-      {
-        "number": "02",
-        "title": "We validate availability",
-        "description": "We review sizes, certifications, required documentation and Incoterm according to your market.",
-        "icon": "🔍"
-      },
-      {
-        "number": "03",
-        "title": "Receive FOB proposal",
-        "description": "We send price, technical specification, available documentation and commercial conditions.",
-        "icon": "📄"
-      },
-      {
-        "number": "04",
-        "title": "We coordinate shipment",
-        "description": "We align documentation, dispatch and commercial follow-up until product departure.",
-        "icon": "🚢"
-      }
-    ]
-  },
-  "testimonials": {
-    "badge": "Commercial proof",
-    "title": "Trust based on operation, not promises",
-    "description": "Importers and distributors who trust ZIVAH for their sourcing operations.",
-    "items": [
-      {
-        "quote": "The documentation arrived clearly from the beginning, which helped our internal review before moving forward with the purchase.",
-        "author": "Seafood Importer",
-        "role": "Wholesale Distributor",
-        "country": "Spain",
-        "flag": "🇪🇸"
-      },
-      {
-        "quote": "We needed stocking continuity and technical support. Availability coordination helped us plan the cycle better.",
-        "author": "Aquaculture Manager",
-        "role": "Shrimp Farm Operator",
-        "country": "Mexico",
-        "flag": "🇲🇽"
-      },
-      {
-        "quote": "The commercial response was fast and concrete: price, conditions and next steps without scattered information.",
-        "author": "Purchasing Director",
-        "role": "Distribution Chain",
-        "country": "United States",
-        "flag": "🇺🇸"
-      }
-    ]
+    "dataProtection": "Data Protection"
   },
   "quoteForm": {
-    "title": "Request Quote",
+    "title": "Quote request",
+    "contactSection": "Contact details",
+    "productsSection": "Products",
     "fullName": "Full Name",
     "fullNamePlaceholder": "Your full name",
     "email": "Email",
@@ -358,8 +439,8 @@
     "searchProducts": "Search and Select Products",
     "searchPlaceholder": "Type to search products...",
     "searchingProducts": "Searching products...",
-    "clickToAdd": "Click on products to add",
-    "added": "✓ Added",
+    "clickToAdd": "Select the products to add",
+    "added": "Added",
     "noDescription": "No description",
     "searchError": "Error Searching Products",
     "noProductsFound": "No products found for",
@@ -380,9 +461,12 @@
     "priceDisclaimer": "* Final price may vary according to specifications and shipping terms",
     "additionalMessage": "Additional Message",
     "additionalMessagePlaceholder": "Additional comments, special requirements, delivery dates, etc.",
-    "submitting": "Sending...",
-    "submitButton": "Request Quote",
-    "submitButtonWithCount": "Request Quote ({count} products)",
+    "submitting": "Sending…",
+    "submitButton": "Send request",
+    "submitButtonWithCount": "Send request ({count} products)",
+    "privacyNote": "We use your data only to prepare and send your quote.",
+    "reviewFields": "Review the highlighted fields",
+    "removeProduct": "Remove product",
     "autoEmailMessage": "The quote will be automatically sent by email with updated prices and shipping terms.",
     "required": "This field is required",
     "invalidEmail": "Please enter a valid email",
@@ -412,7 +496,19 @@
     "phoneMaxChars": "Phone cannot exceed 20 characters",
     "quoteCreatedSuccess": "Quote created successfully. Email sent to {email}.",
     "perUnitPrice": "per unit",
-    "cannotConvert": "Cannot convert from {from} to {to}"
+    "cannotConvert": "Cannot convert from {from} to {to}",
+    "validation": {
+      "nameMin": "Name must be at least 2 characters",
+      "nameMax": "Name cannot exceed 255 characters",
+      "emailInvalid": "Enter a valid email address",
+      "phoneInvalid": "Enter a valid phone number",
+      "phoneMin": "Phone must have at least 10 digits",
+      "phoneMax": "Phone cannot exceed 20 characters",
+      "countryInvalid": "Select a valid country",
+      "recipientEmailInvalid": "Enter a valid recipient email",
+      "itemsMin": "Add at least one product",
+      "phoneCountryInvalid": "Invalid phone format for the selected country"
+    }
   },
   "common": {
     "loading": "Loading...",
@@ -434,27 +530,28 @@
     "offline": "Offline"
   },
   "cookies": {
-    "title": "Cookies at ZIVAH International",
-    "description": "We use cookies to improve your experience, analyze traffic, and personalize content. By continuing to browse, you accept our use of cookies according to our",
+    "title": "Cookies",
+    "description": "We use cookies to measure traffic and improve your experience. By continuing, you accept our",
     "cookiePolicy": "Cookie Policy",
-    "managePreferences": "Preferences",
-    "onlyNecessary": "Only Necessary",
-    "acceptAll": "Accept All",
-    "preferencesTitle": "Cookie Preferences",
-    "necessaryCookies": "Necessary Cookies",
+    "managePreferences": "Manage",
+    "onlyNecessary": "Only necessary",
+    "acceptAll": "Accept all",
+    "close": "Close",
+    "preferencesTitle": "Cookie preferences",
+    "necessaryCookies": "Necessary",
     "alwaysActive": "Always active",
-    "necessaryDescription": "These cookies are essential for the website to function and cannot be disabled.",
+    "necessaryDescription": "Required for the site to work. They cannot be disabled.",
     "necessary": "Necessary",
-    "analyticsCookies": "Analytics Cookies",
+    "analyticsCookies": "Analytics",
     "enableAnalytics": "Enable analytics cookies",
-    "analyticsDescription": "Help us understand how visitors interact with our website by collecting information anonymously.",
-    "functionalCookies": "Functional Cookies",
+    "analyticsDescription": "Let us understand anonymously how the site is used.",
+    "functionalCookies": "Functional",
     "enableFunctional": "Enable functional cookies",
-    "functionalDescription": "Allow us to remember your preferences and settings to improve your browsing experience.",
-    "marketingCookies": "Marketing Cookies",
+    "functionalDescription": "Remember your preferences, such as language or theme.",
+    "marketingCookies": "Marketing",
     "enableMarketing": "Enable marketing cookies",
-    "marketingDescription": "Used to display relevant ads and measure the effectiveness of our advertising campaigns.",
-    "savePreferences": "Save Preferences",
-    "moreInfo": "For more information, check our"
+    "marketingDescription": "Measure how effective our advertising campaigns are.",
+    "savePreferences": "Save preferences",
+    "moreInfo": "For more information, visit our"
   }
 }

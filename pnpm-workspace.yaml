@@ -6,3 +6,7 @@ allowBuilds:
   prisma: true
   sharp: true
   unrs-resolver: true
+
+ignoredBuiltDependencies:
+  - '@swc/core'
+  - esbuild

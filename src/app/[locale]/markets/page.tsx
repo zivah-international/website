@@ -1,11 +1,16 @@
 import { getTranslations } from 'next-intl/server';
 
-import Navigation from '@/components/Navigation';
-import { Link } from '@/i18n/routing';
+import CTABand from '@/components/site/CTABand';
+import MarketMap from '@/components/site/MarketMap';
+import PageHeader from '@/components/site/PageHeader';
+import SectionHeader from '@/components/site/SectionHeader';
+import { MARKETS } from '@/lib/public-data';
 
 interface Props {
   params: Promise<{ locale: string }>;
 }
+
+type EvidenceRow = { title: string; description: string };
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
@@ -16,247 +21,100 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-const MARKETS = [
-  {
-    flag: '🇺🇸',
-    country: 'Estados Unidos',
-    city: 'Miami, Florida',
-    desc: 'Oficina comercial propia. Hub de distribución para toda Norteamérica. Tiempo de tránsito: 3-5 días desde Guayaquil.',
-    active: true,
-  },
-  {
-    flag: '🇳🇱',
-    country: 'Países Bajos',
-    city: 'Rotterdam (gateway Europa)',
-    desc: 'Acceso a toda la Unión Europea a través del puerto de Rotterdam. Certificación BRC requerida.',
-    active: true,
-  },
-  {
-    flag: '🇯🇵',
-    country: 'Japón',
-    city: 'Tokio · Osaka',
-    desc: 'Mercado premium para camarón vannamei IQF de alta calidad. Estándares HACCP estrictos.',
-    active: true,
-  },
-  {
-    flag: '🇨🇳',
-    country: 'China',
-    city: 'Shanghai · Guangzhou',
-    desc: 'Volúmenes grandes de camarón y frutas tropicales. Documentación sanitaria completa.',
-    active: true,
-  },
-  {
-    flag: '🇨🇦',
-    country: 'Canadá',
-    city: 'Toronto · Vancouver',
-    desc: 'Acceso desde nuestra oficina en Miami. Mercado orgánico en crecimiento para café arábica.',
-    active: false,
-  },
-  {
-    flag: '🇦🇪',
-    country: 'Emiratos Árabes',
-    city: 'Dubái',
-    desc: 'Hub de redistribución hacia Medio Oriente y África. Alta demanda de mariscos premium.',
-    active: false,
-  },
-];
-
-const ADVANTAGES = [
-  {
-    icon: '🏢',
-    title: 'Doble presencia',
-    desc: 'Sede en Samborondón, Ecuador + oficina comercial en Miami, FL. Negociamos en tu zona horaria.',
-  },
-  {
-    icon: '📋',
-    title: 'Documentación completa',
-    desc: 'Certificados sanitarios, fitosanitarios, origen, HACCP y BRC listos antes del embarque.',
-  },
-  {
-    icon: '🚢',
-    title: 'Logística FOB',
-    desc: 'Embarque desde Puerto de Guayaquil. Coordinamos transporte, seguro y aduana.',
-  },
-  {
-    icon: '💬',
-    title: 'Soporte 24/7',
-    desc: 'Atención comercial disponible en español e inglés. Respuesta garantizada en 24h.',
-  },
-];
-
 export default async function MarketsPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'markets' });
+  const tn = await getTranslations({ locale, namespace: 'nav' });
+  const rows = t.raw('evidence.rows') as EvidenceRow[];
 
   return (
-    <div className='min-h-screen'>
-      <Navigation />
+    <>
+      <PageHeader
+        crumbs={[{ label: tn('home'), href: '/' }, { label: tn('markets') }]}
+        eyebrow={t('eyebrow')}
+        title={t('title')}
+        lead={t('lead')}
+      />
 
-      {/* ── Page Header ──────────────────────────────────────────────────── */}
-      <section className='bg-linear-to-b from-background to-muted/40 pt-28 pb-14'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <nav
-            className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'
-            aria-label='Breadcrumb'
-          >
-            <Link
-              href='/'
-              className='transition-colors hover:text-accent'
-            >
-              Inicio
-            </Link>
-            <span>/</span>
-            <span className='font-medium text-foreground'>Mercados</span>
-          </nav>
+      <section
+        aria-label={t('map.ariaLabel')}
+        className='bg-background pb-16 lg:pb-24'
+      >
+        <div className='mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8'>
+          <MarketMap />
 
-          <div className='flex items-center gap-4 border-l-4 border-secondary/30 pl-5'>
-            <div className='hidden shrink-0 rounded-xl bg-secondary/10 p-3 text-secondary sm:block'>
-              <svg
-                className='h-7 w-7'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 004 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                />
-              </svg>
-            </div>
-            <div>
-              <p className='mb-1 text-xs font-semibold tracking-widest text-secondary uppercase'>
-                {t('badge')}
-              </p>
-              <h1 className='text-3xl font-bold text-foreground sm:text-4xl'>{t('title')}</h1>
-              <p className='mt-1 max-w-2xl text-base text-muted-foreground'>{t('description')}</p>
-            </div>
-          </div>
+          <ul className='mt-12 border-t border-border'>
+            {MARKETS.map(market => {
+              const active = market.status === 'active';
+
+              return (
+                <li
+                  key={market.code}
+                  data-testid='market-row'
+                  className='grid grid-cols-[auto_1fr_auto] items-start gap-4 border-b border-border py-4'
+                >
+                  <span className='flex size-9 items-center justify-center border border-border text-[11px] font-semibold tracking-[0.12em] text-foreground'>
+                    {market.code}
+                  </span>
+                  <div className='min-w-0'>
+                    <div className='flex flex-wrap items-baseline gap-x-2'>
+                      <p className='text-[15px] font-medium text-foreground'>
+                        {t(`list.${market.code}.country`)}
+                      </p>
+                      <p className='text-[13px] text-muted-foreground'>
+                        {t(`list.${market.code}.hub`)}
+                      </p>
+                    </div>
+                    <p className='mt-0.5 text-[13px] leading-relaxed text-muted-foreground'>
+                      {t(`list.${market.code}.note`)}
+                    </p>
+                  </div>
+                  <span
+                    className={`text-[11px] font-semibold tracking-[0.14em] uppercase ${
+                      active ? 'text-accent' : 'text-muted-foreground'
+                    }`}
+                  >
+                    {t(`status.${market.status}`)}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </section>
 
-      {/* ── Stats strip ───────────────────────────────────────────────────── */}
-      <div className='border-b border-border/40 bg-card'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='grid grid-cols-3 divide-x divide-border/30 py-1'>
-            {[
-              { value: t('statValues.countriesServed'), label: t('stats.countriesServed') },
-              { value: t('statValues.yearsExperience'), label: t('stats.yearsExperience') },
-              { value: t('statValues.specializedSupport'), label: t('stats.specializedSupport') },
-            ].map((stat, i) => (
-              <div
-                key={i}
-                className='py-5 text-center'
+      <section
+        aria-labelledby='markets-evidence-title'
+        className='border-y border-border bg-surface py-16 lg:py-24'
+      >
+        <div className='mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8'>
+          <SectionHeader
+            eyebrow={t('evidence.eyebrow')}
+            title={t('evidence.title')}
+            lead={t('evidence.lead')}
+          />
+
+          <ul className='mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4'>
+            {rows.map(row => (
+              <li
+                key={row.title}
+                className='border-t border-border pt-6'
               >
-                <div className='text-2xl font-black text-accent sm:text-3xl'>{stat.value}</div>
-                <div className='mt-1 text-xs font-medium text-muted-foreground'>{stat.label}</div>
-              </div>
+                <h3 className='text-xl leading-snug text-foreground'>{row.title}</h3>
+                <p className='mt-2 text-sm leading-relaxed text-muted-foreground'>
+                  {row.description}
+                </p>
+              </li>
             ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Markets grid ──────────────────────────────────────────────────── */}
-      <section className='bg-background py-16'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mb-12 text-center'>
-            <h2 className='mb-3 text-3xl font-bold text-foreground sm:text-4xl'>
-              Destinos de Exportación
-            </h2>
-            <p className='text-base text-muted-foreground'>
-              Exportamos activamente a 5+ países y expandiéndonos continuamente.
-            </p>
-          </div>
-
-          <div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-3'>
-            {MARKETS.map(market => (
-              <div
-                key={market.country}
-                className={`rounded-2xl border bg-card p-6 shadow-sm transition-all hover:shadow-md ${
-                  market.active
-                    ? 'border-primary/20 hover:border-primary/40'
-                    : 'border-border/50 opacity-75'
-                }`}
-              >
-                <div className='mb-3 flex items-start justify-between'>
-                  <span className='text-4xl'>{market.flag}</span>
-                  {market.active ? (
-                    <span className='rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent'>
-                      Activo
-                    </span>
-                  ) : (
-                    <span className='rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground'>
-                      Expansión
-                    </span>
-                  )}
-                </div>
-                <h3 className='mb-0.5 text-lg font-bold text-foreground'>{market.country}</h3>
-                <p className='mb-3 text-xs font-medium text-accent'>{market.city}</p>
-                <p className='text-sm leading-relaxed text-muted-foreground'>{market.desc}</p>
-              </div>
-            ))}
-          </div>
+          </ul>
         </div>
       </section>
 
-      {/* ── Why us ────────────────────────────────────────────────────────── */}
-      <section className='bg-muted/30 py-16'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='mb-12 text-center'>
-            <h2 className='mb-3 text-3xl font-bold text-foreground sm:text-4xl'>
-              ¿Por qué elegir ZIVAH?
-            </h2>
-            <p className='text-base text-muted-foreground'>
-              Ventajas competitivas para importadores exigentes.
-            </p>
-          </div>
-
-          <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
-            {ADVANTAGES.map((adv, i) => (
-              <div
-                key={i}
-                className='rounded-2xl border bg-card p-6 shadow-sm transition-all hover:shadow-md'
-              >
-                <div className='mb-4 text-3xl'>{adv.icon}</div>
-                <h3 className='mb-2 text-base font-bold text-foreground'>{adv.title}</h3>
-                <p className='text-sm leading-relaxed text-muted-foreground'>{adv.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ───────────────────────────────────────────────────────────── */}
-      <section className='bg-primary py-14 text-white'>
-        <div className='container mx-auto px-4 text-center sm:px-6 lg:px-8'>
-          <h2 className='mb-3 text-2xl font-bold'>¿Estás en alguno de estos mercados?</h2>
-          <p className='mb-6 text-white/80'>
-            Hablemos sobre cómo podemos abastecer tu operación con productos certificados de
-            Ecuador.
-          </p>
-          <div className='flex flex-col items-center gap-3 sm:flex-row sm:justify-center'>
-            <Link
-              href='/quote'
-              className='inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-primary shadow-md transition-all hover:bg-white/90'
-              data-track='begin_checkout'
-              data-track-label='solicitar_cotizacion_markets'
-              data-track-category='cta'
-            >
-              Solicitar Cotización
-            </Link>
-            <Link
-              href='/contact'
-              className='inline-flex items-center gap-2 rounded-xl border-2 border-white/40 px-6 py-3 font-semibold text-white transition-all hover:border-white hover:bg-white/10'
-              data-track='cta_click'
-              data-track-label='contactar_asesor_markets'
-              data-track-category='cta'
-            >
-              Contactar asesor
-            </Link>
-          </div>
-        </div>
-      </section>
-    </div>
+      <CTABand
+        title={t('cta.title')}
+        body={t('cta.body')}
+        action={{ label: t('cta.action'), href: '/quote' }}
+      />
+    </>
   );
 }

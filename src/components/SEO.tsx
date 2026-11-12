@@ -25,7 +25,7 @@ export default function SEO({
   title,
   description,
   keywords,
-  image = 'https://zivahinternational.com/assets/images/zivah-og-image.jpg',
+  image = 'https://zivahinternational.com/assets/images/photos/hero-marine.jpg',
   url = 'https://zivahinternational.com/',
   type = 'website',
   publishedTime,

@@ -5,7 +5,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap ring-offset-background transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap ring-offset-background transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -25,6 +25,12 @@ const buttonVariants = cva(
           'bg-primary text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl',
         'cta-secondary':
           'bg-secondary text-secondary-foreground shadow-lg transition-all hover:bg-secondary/90 hover:shadow-xl',
+        brand: 'rounded-[2px] bg-accent text-accent-foreground hover:bg-[var(--accent-hover)]',
+        'brand-outline':
+          'rounded-[2px] border border-primary/30 bg-transparent text-primary hover:border-primary hover:bg-primary/[0.04] dark:border-primary-foreground/30 dark:text-primary-foreground dark:hover:bg-white/[0.06]',
+        'brand-inverse': 'rounded-[2px] bg-[#F6F4EF] text-[#0B2239] hover:bg-white',
+        'brand-ghost':
+          'rounded-none px-0 text-primary underline-offset-4 hover:text-accent hover:underline dark:text-primary-foreground',
       },
       size: {
         default: 'h-10 px-4 py-2',
@@ -36,6 +42,8 @@ const buttonVariants = cva(
         'nav-mobile': 'h-12 px-4',
         full: 'h-12 w-full',
         'full-lg': 'h-14 w-full',
+        brand: 'h-11 px-6 text-[11.5px] font-semibold tracking-[0.1em] uppercase',
+        'brand-sm': 'h-9 px-4 text-[10.5px] font-semibold tracking-[0.1em] uppercase',
       },
     },
     defaultVariants: {

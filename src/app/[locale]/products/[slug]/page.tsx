@@ -1,10 +1,15 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 
+import CertificationMark from '@/components/site/CertificationMark';
+import ProductCard from '@/components/site/ProductCard';
 import { Button } from '@/components/ui/button';
+import { Link } from '@/i18n/routing';
+import { getProductImage } from '@/lib/product-images';
 import { getFichaTecnica } from '@/lib/product-specs';
+import { CERTIFICATIONS } from '@/lib/public-data';
 
 interface Product {
   id: number;
@@ -14,19 +19,11 @@ interface Product {
   shortDescription?: string;
   sku?: string;
   specifications?: Record<string, string>;
-  basePrice?: number;
-  priceUnit?: string;
   stockQuantity: number;
-  minOrderQty?: number;
-  imageUrl?: string;
   origin: string;
-  harvestSeason?: string;
   certifications?: string[];
-  nutritionalInfo?: Record<string, string>;
   isFeatured: boolean;
-  seoTitle?: string;
-  seoDescription?: string;
-  category?: { name: string; slug: string; icon?: string };
+  category?: { name: string; slug: string };
 }
 
 const BASE_URL =
@@ -42,9 +39,25 @@ async function getProductBySlug(slug: string, locale: string): Promise<Product |
     if (!res.ok) return null;
     const json = await res.json();
     const products: Product[] = json.data || [];
-    return products.find(p => p.slug === slug) ?? null;
+    return products.find(product => product.slug === slug) ?? null;
   } catch {
     return null;
+  }
+}
+
+async function getCatalog(locale: string): Promise<Product[]> {
+  try {
+    const res = await fetch(
+      `${BASE_URL}/api/products?locale=${locale}&isActive=true&pageSize=200`,
+      {
+        next: { revalidate: 300 },
+      }
+    );
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.data || [];
+  } catch {
+    return [];
   }
 }
 
@@ -57,457 +70,220 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const product = await getProductBySlug(slug, locale ?? 'es');
 
   if (!product) {
-    return { title: 'Producto no encontrado | ZIVAH International' };
+    const t = await getTranslations({ locale: locale ?? 'es', namespace: 'productDetail' });
+    return { title: `${t('notFound')} | ZIVAH International` };
   }
 
   return {
-    title: product.seoTitle || `${product.name} | ZIVAH International`,
-    description: product.seoDescription || product.shortDescription,
-    keywords: `${product.name}, ${product.category?.name ?? ''}, Ecuador, exportación, premium`,
+    title: `${product.name} | ZIVAH International`,
+    description: product.shortDescription || product.description,
+    keywords: `${product.name}, ${product.category?.name ?? ''}, Ecuador, exportación`,
     openGraph: {
-      title: product.seoTitle || `${product.name} | ZIVAH International`,
-      description: product.seoDescription || product.shortDescription,
-      images: product.imageUrl ? [product.imageUrl] : [],
+      title: `${product.name} | ZIVAH International`,
+      description: product.shortDescription || product.description,
+      images: [getProductImage(product.slug, product.category?.slug)],
     },
   };
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug, locale } = await params;
-  const product = await getProductBySlug(slug, locale ?? 'es');
+  const currentLocale = locale ?? 'es';
+  const [product, catalog, t, tNav, tProducts] = await Promise.all([
+    getProductBySlug(slug, currentLocale),
+    getCatalog(currentLocale),
+    getTranslations({ locale: currentLocale, namespace: 'productDetail' }),
+    getTranslations({ locale: currentLocale, namespace: 'nav' }),
+    getTranslations({ locale: currentLocale, namespace: 'products' }),
+  ]);
 
   if (!product) {
     notFound();
   }
 
   const ficha = getFichaTecnica(product.slug);
+  const certifications = product.certifications ?? [];
+  const imageSrc = getProductImage(product.slug, product.category?.slug);
 
-  const certBadgeColors: Record<string, string> = {
-    HACCP: 'bg-secondary/10 text-secondary',
-    BRC: 'bg-accent/10 text-accent',
-    BAP: 'bg-secondary/15 text-secondary',
-    GlobalGAP: 'bg-accent/15 text-accent',
-    Orgánico: 'bg-accent/20 text-accent',
-    'Comercio Justo': 'bg-primary/10 text-primary',
-  };
+  const specs = [
+    { label: t('origin'), value: product.origin },
+    {
+      label: t('size'),
+      value:
+        ficha?.especificaciones['Calibre'] ??
+        ficha?.especificaciones['Calibre (mm)'] ??
+        Object.values(ficha?.especificaciones ?? {})[0] ??
+        '—',
+    },
+    {
+      label: t('packaging'),
+      value: Object.values(ficha?.empaque ?? {})[0] ?? '—',
+    },
+    { label: t('certifications'), value: certifications.join(' · ') || '—' },
+    { label: t('season'), value: ficha?.temporadaDisponible ?? '—' },
+  ];
 
-  const quoteUrl = `/${locale ?? 'es'}/#quote`;
+  // Same category first, current product excluded, capped at three.
+  const related = catalog
+    .filter(item => item.slug !== product.slug)
+    .sort((a, b) => {
+      const sameCategoryA = a.category?.slug === product.category?.slug ? 0 : 1;
+      const sameCategoryB = b.category?.slug === product.category?.slug ? 0 : 1;
+      return sameCategoryA - sameCategoryB;
+    })
+    .slice(0, 3);
 
   return (
-    <div className='min-h-screen bg-background'>
-      {/* Sticky CTA bar for mobile */}
-      <div className='fixed right-0 bottom-0 left-0 z-40 border-t border-border bg-background p-3 shadow-lg sm:hidden'>
-        <Link
-          href={quoteUrl}
-          data-track='begin_checkout'
-          data-track-label='solicitar_cotizacion_mobile'
-          data-track-category='cta'
-        >
-          <Button
-            variant='accent'
-            size='full'
-            className='w-full font-semibold'
-          >
-            📋 Solicitar Cotización
-          </Button>
-        </Link>
-      </div>
-
-      <div className='container mx-auto max-w-6xl px-4 py-16 pb-24 sm:pb-16'>
-        {/* Breadcrumb */}
+    <div className='bg-background pt-28 pb-16 lg:pb-24'>
+      <div className='mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8'>
         <nav
-          className='mb-8'
           aria-label='Breadcrumb'
+          className='mb-8 flex flex-wrap items-center gap-2 text-[12px] text-muted-foreground'
         >
-          <ol className='flex flex-wrap items-center gap-1 text-sm text-muted-foreground'>
-            <li>
-              <Link
-                href={`/${locale ?? 'es'}`}
-                className='transition-colors hover:text-accent'
-              >
-                Inicio
-              </Link>
-            </li>
-            <li aria-hidden='true'>/</li>
-            <li>
-              <Link
-                href={`/${locale ?? 'es'}/#products`}
-                className='transition-colors hover:text-accent'
-              >
-                Productos
-              </Link>
-            </li>
-            {product.category && (
-              <>
-                <li aria-hidden='true'>/</li>
-                <li>
-                  <Link
-                    href={`/${locale ?? 'es'}/#${product.category.slug}`}
-                    className='transition-colors hover:text-accent'
-                  >
-                    {product.category.name}
-                  </Link>
-                </li>
-              </>
-            )}
-            <li aria-hidden='true'>/</li>
-            <li className='font-medium text-foreground'>{product.name}</li>
-          </ol>
+          <Link
+            href='/'
+            className='transition-colors hover:text-accent'
+          >
+            {tNav('home')}
+          </Link>
+          <span aria-hidden='true'>/</span>
+          <Link
+            href='/products'
+            className='transition-colors hover:text-accent'
+          >
+            {tNav('products')}
+          </Link>
+          <span aria-hidden='true'>/</span>
+          <span className='text-foreground'>{product.name}</span>
         </nav>
 
-        {/* Product Header */}
-        <div className='mb-8 overflow-hidden rounded-2xl bg-card shadow-lg'>
-          <div className='grid gap-0 md:grid-cols-2'>
-            {/* Product Image */}
-            <div className='relative flex min-h-64 items-center justify-center bg-muted/30 p-8 md:min-h-80'>
-              {product.imageUrl ? (
-                <Image
-                  src={product.imageUrl}
-                  alt={product.name}
-                  width={480}
-                  height={480}
-                  className='max-h-80 w-auto rounded-xl object-cover shadow-md'
-                  priority
-                />
-              ) : (
-                <div className='flex flex-col items-center gap-3'>
-                  <span className='text-8xl'>{product.category?.icon ?? '📦'}</span>
-                  <span className='text-sm text-muted-foreground'>Imagen no disponible</span>
-                </div>
-              )}
-              {product.isFeatured && (
-                <div className='absolute top-4 left-4 rounded-full bg-primary/80 px-3 py-1 text-xs font-bold text-primary-foreground shadow'>
-                  ⭐ Destacado
-                </div>
-              )}
+        <div className='grid gap-10 lg:grid-cols-12 lg:gap-12'>
+          <div className='order-2 lg:order-1 lg:col-span-7'>
+            <div className='relative aspect-[4/3] overflow-hidden rounded-[2px] border border-border bg-muted'>
+              <Image
+                data-testid='product-hero-image'
+                src={imageSrc}
+                alt={product.name}
+                fill
+                priority
+                sizes='(min-width: 1024px) 58vw, 100vw'
+                className='object-cover'
+              />
             </div>
+          </div>
 
-            {/* Product Info */}
-            <div className='flex flex-col gap-6 p-8'>
-              {/* Category + Name */}
-              <div>
-                {product.category && (
-                  <p className='mb-2 text-sm font-semibold tracking-wider text-accent uppercase'>
-                    {product.category.name}
-                  </p>
-                )}
-                <h1 className='mb-3 text-2xl font-bold text-foreground sm:text-3xl'>
-                  {product.name}
-                </h1>
-                {product.shortDescription && (
-                  <p className='text-base leading-relaxed text-muted-foreground'>
-                    {product.shortDescription}
-                  </p>
-                )}
-              </div>
+          <div className='order-1 lg:order-2 lg:col-span-5'>
+            {product.category && (
+              <p className='text-[11px] font-semibold tracking-[0.18em] text-accent uppercase'>
+                {product.category.name}
+              </p>
+            )}
+            <h1 className='mt-3 text-[clamp(2.25rem,4vw,3.5rem)] text-foreground'>
+              {product.name}
+            </h1>
+            {product.shortDescription && (
+              <p className='mt-3 text-[17px] leading-relaxed text-muted-foreground'>
+                {product.shortDescription}
+              </p>
+            )}
 
-              {/* Certifications */}
-              {product.certifications && product.certifications.length > 0 && (
-                <div className='flex flex-wrap gap-2'>
-                  {product.certifications.map((cert, i) => (
-                    <span
-                      key={i}
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${certBadgeColors[cert] ?? 'bg-muted text-muted-foreground'}`}
-                    >
-                      ✓ {cert}
-                    </span>
-                  ))}
+            <dl
+              data-testid='product-specs'
+              aria-label={t('specsTitle')}
+              className='mt-8 divide-y divide-border border-y border-border'
+            >
+              {specs.map(spec => (
+                <div
+                  key={spec.label}
+                  className='grid grid-cols-[7.5rem_1fr] gap-4 py-3'
+                >
+                  <dt className='text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase'>
+                    {spec.label}
+                  </dt>
+                  <dd className='text-[15px] text-foreground'>{spec.value}</dd>
                 </div>
-              )}
+              ))}
+            </dl>
 
-              {/* Commercial Info */}
-              <div className='rounded-xl bg-muted/50 p-5'>
-                <div className='mb-3 flex items-center justify-between'>
-                  <span className='text-sm text-muted-foreground'>Precio base FOB:</span>
-                  {product.basePrice ? (
-                    <span className='text-2xl font-bold text-accent'>
-                      ${product.basePrice.toFixed(2)}{' '}
-                      <span className='text-sm font-normal text-muted-foreground'>
-                        {product.priceUnit}
-                      </span>
-                    </span>
-                  ) : (
-                    <span className='text-sm font-medium text-muted-foreground'>
-                      Consultar cotización
-                    </span>
-                  )}
-                </div>
-                <div className='grid grid-cols-2 gap-3 text-sm'>
-                  <div>
-                    <span className='block text-muted-foreground'>Pedido mínimo:</span>
-                    <span className='font-semibold text-foreground'>
-                      {product.minOrderQty
-                        ? `${product.minOrderQty.toLocaleString()} ${product.priceUnit?.split('/')[1] ?? ''}`
-                        : 'A convenir'}
-                    </span>
-                  </div>
-                  <div>
-                    <span className='block text-muted-foreground'>Origen:</span>
-                    <span className='font-semibold text-foreground'>🇪🇨 {product.origin}</span>
-                  </div>
-                  {product.harvestSeason && (
-                    <div>
-                      <span className='block text-muted-foreground'>Temporada:</span>
-                      <span className='font-semibold text-foreground'>{product.harvestSeason}</span>
-                    </div>
-                  )}
-                  {product.sku && (
-                    <div>
-                      <span className='block text-muted-foreground'>SKU:</span>
-                      <span className='font-mono text-xs font-semibold text-foreground'>
-                        {product.sku}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Primary CTAs */}
-              <div className='hidden flex-col gap-3 sm:flex sm:flex-row'>
+            <div className='mt-8 flex flex-col items-start gap-4'>
+              <Button
+                asChild
+                variant='brand'
+                size='brand'
+              >
                 <Link
-                  href={quoteUrl}
-                  className='flex-1'
+                  href={`/quote?product=${product.slug}`}
                   data-track='begin_checkout'
-                  data-track-label='solicitar_cotizacion_product'
                   data-track-category='cta'
+                  data-track-label='product_detail_quote'
                 >
-                  <Button
-                    variant='accent'
-                    size='lg'
-                    className='w-full font-semibold shadow-md hover:shadow-lg'
-                  >
-                    📋 Solicitar Cotización
-                  </Button>
+                  {t('requestQuote')}
                 </Link>
-                <Link
-                  href={`/${locale ?? 'es'}/#contact`}
-                  data-track='cta_click'
-                  data-track-label='contactar_product'
-                  data-track-category='cta'
-                >
-                  <Button
-                    variant='outline'
-                    size='lg'
-                    className='w-full border-2 font-medium hover:bg-muted'
-                  >
-                    💬 Contactar
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Ficha Técnica link */}
-              {ficha && (
-                <Link
-                  href={`/${locale ?? 'es'}/products/${product.slug}/ficha-tecnica`}
-                  className='hidden items-center gap-2 text-sm font-medium text-primary hover:underline sm:flex'
-                  target='_blank'
-                  rel='noopener'
-                >
-                  📄 Ver Ficha Técnica de Exportación →
-                </Link>
-              )}
-
-              <p className='text-xs text-muted-foreground/60'>
-                * Precio referencial FOB Ecuador. El precio final puede variar según Incoterms,
-                volumen y destino.
-              </p>
+              </Button>
+              <Link
+                href={`/products/${product.slug}/ficha-tecnica`}
+                className='prose-link text-[13px] font-semibold text-foreground transition-colors hover:text-accent'
+              >
+                {t('downloadSheet')}
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* Product Details */}
-        <div className='grid gap-8 lg:grid-cols-3'>
-          {/* Main Content */}
-          <div className='space-y-8 lg:col-span-2'>
-            {/* Full Description */}
+        {(product.description || certifications.length > 0) && (
+          <section className='mt-16 border-t border-border pt-10'>
             {product.description && (
-              <div className='rounded-2xl bg-card p-8 shadow-sm'>
-                <h2 className='mb-4 text-xl font-bold text-foreground'>Descripción del Producto</h2>
-                <p className='leading-relaxed text-muted-foreground'>{product.description}</p>
-              </div>
-            )}
-
-            {/* Technical Specifications */}
-            {product.specifications && Object.keys(product.specifications).length > 0 && (
-              <div className='rounded-2xl bg-card p-8 shadow-sm'>
-                <h2 className='mb-6 text-xl font-bold text-foreground'>
-                  🔬 Especificaciones Técnicas
-                </h2>
-                <div className='divide-y divide-border'>
-                  {Object.entries(product.specifications).map(([key, value]) => (
-                    <div
-                      key={key}
-                      className='flex items-start justify-between gap-4 py-3'
-                    >
-                      <span className='min-w-0 shrink-0 font-medium text-foreground capitalize'>
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                      </span>
-                      <span className='text-right text-muted-foreground'>{value as string}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Nutritional / Additional Info */}
-            {product.nutritionalInfo && Object.keys(product.nutritionalInfo).length > 0 && (
-              <div className='rounded-2xl bg-card p-8 shadow-sm'>
-                <h2 className='mb-6 text-xl font-bold text-foreground'>
-                  📊 Información Nutricional
-                </h2>
-                <div className='grid grid-cols-2 gap-3 sm:grid-cols-3'>
-                  {Object.entries(product.nutritionalInfo).map(([key, value]) => (
-                    <div
-                      key={key}
-                      className='rounded-xl bg-muted/40 p-3 text-center'
-                    >
-                      <div className='text-sm font-bold text-accent'>{value as string}</div>
-                      <div className='mt-1 text-xs text-muted-foreground capitalize'>
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Trust Signals */}
-            <div className='rounded-2xl border border-accent/20 bg-accent/5 p-8'>
-              <h2 className='mb-4 text-xl font-bold text-accent'>✅ Por qué comprar con ZIVAH</h2>
-              <ul className='space-y-3 text-sm text-accent/80'>
-                <li className='flex items-start gap-2'>
-                  <span className='mt-0.5 shrink-0'>🏆</span>
-                  <span>Certificaciones HACCP, BRC, BAP y GlobalGAP vigentes en cada embarque</span>
-                </li>
-                <li className='flex items-start gap-2'>
-                  <span className='mt-0.5 shrink-0'>📄</span>
-                  <span>
-                    Documentación de exportación completa: Certificados de Origen, Sanitario e
-                    Inspección
-                  </span>
-                </li>
-                <li className='flex items-start gap-2'>
-                  <span className='mt-0.5 shrink-0'>🌎</span>
-                  <span>Logística coordinada desde Guayas, Ecuador y Miami, Florida</span>
-                </li>
-                <li className='flex items-start gap-2'>
-                  <span className='mt-0.5 shrink-0'>⚡</span>
-                  <span>Respuesta comercial en menos de 24 horas hábiles</span>
-                </li>
-                <li className='flex items-start gap-2'>
-                  <span className='mt-0.5 shrink-0'>🔍</span>
-                  <span>Trazabilidad completa desde origen hasta destino final</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className='space-y-6'>
-            {/* Quote CTA Card */}
-            <div className='rounded-2xl bg-card p-6 shadow-sm'>
-              <h3 className='mb-1 text-lg font-bold text-foreground'>
-                ¿Interesado en este producto?
-              </h3>
-              <p className='mb-5 text-sm text-muted-foreground'>
-                Recibe una cotización FOB con especificaciones técnicas y documentación de
-                exportación en menos de 24 horas.
+              <p className='max-w-[68ch] text-[16px] leading-relaxed text-muted-foreground'>
+                {product.description}
               </p>
-              <Link
-                href={quoteUrl}
-                data-track='begin_checkout'
-                data-track-label='solicitar_cotizacion_sidebar'
-                data-track-category='cta'
-              >
-                <Button
-                  variant='accent'
-                  size='full'
-                  className='mb-3 w-full font-semibold shadow-md hover:shadow-lg'
-                >
-                  📋 Solicitar Cotización Ahora
-                </Button>
-              </Link>
-              <Link
-                href={`/${locale ?? 'es'}/#contact`}
-                data-track='cta_click'
-                data-track-label='hablar_asesor_sidebar'
-                data-track-category='cta'
-              >
-                <Button
-                  variant='outline'
-                  size='full'
-                  className='w-full border-2 font-medium hover:bg-muted'
-                >
-                  💬 Hablar con un Asesor
-                </Button>
-              </Link>
-              {ficha && (
-                <Link
-                  href={`/${locale ?? 'es'}/products/${product.slug}/ficha-tecnica`}
-                  target='_blank'
-                  rel='noopener'
-                  className='mt-3 flex items-center justify-center gap-2 text-sm font-medium text-primary hover:underline'
-                >
-                  📄 Ver Ficha Técnica de Exportación
-                </Link>
-              )}
-            </div>
+            )}
+            {certifications.length > 0 && (
+              <div className='mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4'>
+                {certifications.map(code => {
+                  const certification = CERTIFICATIONS.find(item => item.code === code);
 
-            {/* Quick Contact */}
-            <div className='rounded-2xl border border-accent/20 bg-accent/5 p-6 dark:border-accent/30 dark:bg-accent/10'>
-              <h3 className='mb-4 text-base font-semibold text-accent'>Contacto Directo</h3>
-              <div className='space-y-2 text-sm'>
-                <a
-                  href='mailto:sales@zivahinternational.com'
-                  className='flex items-center gap-2 text-muted-foreground transition-colors hover:text-accent'
-                  data-track='generate_lead'
-                  data-track-source='email_product'
-                  data-track-currency='USD'
-                  data-track-value='0'
-                >
-                  <span>📧</span>
-                  <span>sales@zivahinternational.com</span>
-                </a>
-                <a
-                  href='tel:+593999002893'
-                  className='flex items-center gap-2 text-muted-foreground transition-colors hover:text-accent'
-                >
-                  <span>📱</span>
-                  <span>+593 99 900 2893</span>
-                </a>
-                <div className='flex items-center gap-2 text-muted-foreground'>
-                  <span>🏢</span>
-                  <span>Samborondón, Guayas · Miami, FL</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Certifications display */}
-            {product.certifications && product.certifications.length > 0 && (
-              <div className='rounded-2xl bg-card p-6 shadow-sm'>
-                <h3 className='mb-4 text-base font-bold text-foreground'>Certificaciones</h3>
-                <div className='flex flex-wrap gap-2'>
-                  {product.certifications.map((cert, i) => (
-                    <span
-                      key={i}
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${certBadgeColors[cert] ?? 'bg-muted text-muted-foreground'}`}
-                    >
-                      ✓ {cert}
-                    </span>
-                  ))}
-                </div>
+                  return (
+                    <CertificationMark
+                      key={code}
+                      code={code}
+                      name={certification?.name ?? code}
+                    />
+                  );
+                })}
               </div>
             )}
-          </div>
-        </div>
+          </section>
+        )}
 
-        {/* Back to Products */}
-        <div className='mt-12 text-center'>
+        {related.length > 0 && (
+          <section className='mt-16 border-t border-border pt-10'>
+            <h2 className='text-2xl text-foreground'>{t('relatedTitle')}</h2>
+            <div className='mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+              {related.map(item => (
+                <ProductCard
+                  key={item.id}
+                  testId='related-product'
+                  href={`/products/${item.slug}`}
+                  imageSrc={getProductImage(item.slug, item.category?.slug)}
+                  imageAlt={item.name}
+                  eyebrow={item.category?.name ?? ''}
+                  title={item.name}
+                  description={item.shortDescription || item.description || ''}
+                  origin={item.origin}
+                  certifications={item.certifications}
+                  linkLabel={tProducts('viewDetail')}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        <div className='mt-12'>
           <Link
-            href={`/${locale ?? 'es'}/#products`}
-            className='inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-accent/80'
+            href='/products'
+            className='prose-link text-[13px] font-semibold text-foreground transition-colors hover:text-accent'
           >
-            ← Ver todos los productos
+            {t('backToCatalog')}
           </Link>
         </div>
       </div>

@@ -1,55 +1,53 @@
 @import '../../styles.css';
 
-/* Zivah International Brand System - shadcn/ui OKLCH Variables */
+/* Zivah International Brand System — editorial paper/navy/accent palette. */
 :root {
-  /* Border radius — refined for premium B2B feel */
-  --radius: 0.75rem;
+  /* Border radius — squared editorial corners (2px) */
+  --radius: 0.125rem;
 
   /* ─── Surface colors ─────────────────────────────────────────────────── */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.13 0.035 262);
+  --surface: #ffffff;
+  --background: #f6f4ef;
+  --foreground: #14202b;
 
-  --card: oklch(0.99 0.002 247);
-  --card-foreground: oklch(0.13 0.035 262);
+  --card: var(--surface);
+  --card-foreground: #14202b;
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.13 0.035 262);
+  --popover: var(--surface);
+  --popover-foreground: #14202b;
 
   /* ─── Zivah Brand Colors ─────────────────────────────────────────────
    *
-   *  primary  → Deep Ocean Blue  #1a5fa8  — sea, trust, aquaculture
-   *  secondary → Teal-Cyan       #0d8fa0  — water, freshness, Ecuador coast
-   *  accent   → Coral-Orange     #e8541e  — Ecuador sun, energy, warmth CTA
-   *
-   * Ocean blue primary makes immediate visual sense for a seafood &
-   * aquaculture export brand. Orange becomes the CTA accent — high
-   * contrast on blue, draws the eye to conversion actions.
+   *  primary  → Deep navy    #0b2239 — trust, institutional weight
+   *  accent   → Burnt coral  #c0451f — CTA and emphasis only
+   *  neutrals → Warm paper   #f6f4ef / #ede9e1 — uncoated stock feel
    * ──────────────────────────────────────────────────────────────────── */
-  --primary: oklch(0.42 0.16 255); /* Deep Ocean Blue ≈ #1a5fa8 */
-  --primary-foreground: oklch(1 0 0);
+  --primary: #0b2239;
+  --primary-foreground: #f6f4ef;
 
-  --secondary: oklch(0.54 0.12 210); /* Teal-Cyan       ≈ #0d8fa0 */
-  --secondary-foreground: oklch(1 0 0);
+  --secondary: #5c6a75;
+  --secondary-foreground: #ffffff;
 
-  --muted: oklch(0.965 0.006 248);
-  --muted-foreground: oklch(0.5 0.04 258);
+  --muted: #ede9e1;
+  --muted-foreground: #5c6a75;
 
-  --accent: oklch(0.6 0.22 30); /* Coral-Orange    ≈ #e8541e — CTA color */
-  --accent-foreground: oklch(1 0 0);
+  --accent: #c0451f;
+  --accent-foreground: #ffffff;
+  --accent-hover: #a93a18;
 
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(1 0 0);
+  --destructive: #a8261a;
+  --destructive-foreground: #ffffff;
 
-  --border: oklch(0.92 0.01 256);
-  --input: oklch(0.92 0.01 256);
-  --ring: oklch(0.42 0.16 255);
+  --border: #d8d3c8;
+  --input: #d8d3c8;
+  --ring: #c0451f;
 
-  /* ─── Chart palette ──────────────────────────────────────────────────── */
-  --chart-1: oklch(0.42 0.16 255); /* Deep Ocean Blue */
-  --chart-2: oklch(0.54 0.12 210); /* Teal-Cyan       */
-  --chart-3: oklch(0.6 0.22 30); /* Coral-Orange    */
-  --chart-4: oklch(0.75 0.18 88); /* Warm Yellow     */
-  --chart-5: oklch(0.68 0.2 15); /* Deep Red        */
+  /* ─── Chart palette — monochrome navy/slate/accent only ───────────────── */
+  --chart-1: #0b2239;
+  --chart-2: #274b66;
+  --chart-3: #5c6a75;
+  --chart-4: #c0451f;
+  --chart-5: #a9b6c0;
 
   /* ─── Sidebar ────────────────────────────────────────────────────────── */
   --sidebar: oklch(0.984 0.003 247.858);
@@ -65,6 +63,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -77,6 +76,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-hover: var(--accent-hover);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
@@ -95,49 +95,55 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --font-sans: var(--font-inter), Inter, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), Newsreader, Georgia, serif;
+  /* Wire the Tailwind radius scale to the single 2px token so `rounded-*`
+     utilities and hand-written `rounded-[2px]` agree. */
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
 }
 
 /* ─── Dark mode ──────────────────────────────────────────────────────────── */
 .dark {
-  /* Deep navy-slate — more refined than pure black for premium feel */
-  --background: oklch(0.13 0.03 260);
-  --foreground: oklch(0.97 0.005 248);
+  /* Deep navy — keeps the paper/navy relationship after dark */
+  --surface: #0f1e2c;
+  --background: #0a1622;
+  --foreground: #ece8df;
 
-  --card: oklch(0.18 0.03 262);
-  --card-foreground: oklch(0.97 0.005 248);
+  --card: var(--surface);
+  --card-foreground: #ece8df;
 
-  --popover: oklch(0.18 0.03 262);
-  --popover-foreground: oklch(0.97 0.005 248);
+  --popover: var(--surface);
+  --popover-foreground: #ece8df;
 
-  /* ─── Zivah Brand Colors - Dark Mode ─────────────────────────────────
-   *  Lighten each brand color enough for contrast on dark backgrounds.
-   *  All three colors stay distinct — orange, blue, green.
-   * ──────────────────────────────────────────────────────────────────── */
-  --primary: oklch(0.6 0.15 250); /* Lighter ocean blue */
-  --primary-foreground: oklch(1 0 0);
+  --primary: #071829;
+  --primary-foreground: #ece8df;
 
-  --secondary: oklch(0.68 0.11 205); /* Lighter teal-cyan */
-  --secondary-foreground: oklch(1 0 0);
+  --secondary: #a9b6c0;
+  --secondary-foreground: #0a1622;
 
-  --muted: oklch(0.22 0.025 260);
-  --muted-foreground: oklch(0.65 0.035 258);
+  --muted: #152838;
+  --muted-foreground: #a9b6c0;
 
-  --accent: oklch(0.72 0.2 32); /* Lighter coral-orange */
-  --accent-foreground: oklch(0.12 0.03 260);
+  --accent: #f07048;
+  --accent-foreground: #0a1622;
+  --accent-hover: #f58a68;
 
-  --destructive: oklch(0.7 0.19 22);
-  --destructive-foreground: oklch(1 0 0);
+  --destructive: #f07048;
+  --destructive-foreground: #0a1622;
 
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.6 0.15 250);
+  --border: rgba(255, 255, 255, 0.14);
+  --input: rgba(255, 255, 255, 0.18);
+  --ring: #f07048;
 
-  /* ─── Chart palette - Dark mode ─────────────────────────────────────── */
-  --chart-1: oklch(0.6 0.15 250); /* Ocean Blue    */
-  --chart-2: oklch(0.68 0.11 205); /* Teal-Cyan     */
-  --chart-3: oklch(0.72 0.2 32); /* Coral-Orange  */
-  --chart-4: oklch(0.78 0.18 88); /* Warm Yellow   */
-  --chart-5: oklch(0.68 0.2 15); /* Deep Red      */
+  /* ─── Chart palette — monochrome navy/slate/accent only ───────────────── */
+  --chart-1: #ece8df;
+  --chart-2: #a9b6c0;
+  --chart-3: #5c6a75;
+  --chart-4: #f07048;
+  --chart-5: #274b66;
 
   /* ─── Sidebar - Dark mode ────────────────────────────────────────────── */
   --sidebar: oklch(0.18 0.03 262);
@@ -164,7 +170,7 @@ body {
     'calt' 1;
 }
 
-/* Montserrat for all headings — premium display presence */
+/* Admin keeps the Montserrat display fallback (the public wrapper overrides). */
 h1,
 h2,
 h3,
@@ -176,12 +182,39 @@ h6 {
   letter-spacing: 0;
 }
 
-/* ─── Utility: brand gradient text ──────────────────────────────────────── */
-.text-brand-gradient {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ─── Public site typography ──────────────────────────────────────────────
+ * Scoped to `.public-site` so the admin dashboard is untouched. The wrapper
+ * uses `display: contents`, so inheritance still reaches every public child.
+ */
+.public-site {
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+}
+
+.public-site h1,
+.public-site h2,
+.public-site h3,
+.public-site h4,
+.public-site h5,
+.public-site h6 {
+  font-family: var(--font-newsreader), Newsreader, Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+}
+
+.public-site h1 {
+  letter-spacing: -0.018em;
+  line-height: 1.02;
+}
+
+.public-site :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.public-site .prose-link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
 /* ─── Smooth color transitions on theme switch ───────────────────────────── */
@@ -203,12 +236,18 @@ h6 {
   }
 }
 
-/* ─── Ficha técnica print support ────────────────────────────────────────── */
+/* ─── Print support ────────────────────────────────────────────────────────
+ * Only the site chrome is hidden: the technical sheet has its own document
+ * header, so a blanket `header` rule would erase it.
+ */
 @media print {
+  .site-header,
+  .site-footer,
   .no-print {
     display: none !important;
   }
-  body {
-    background: white !important;
+  .public-site {
+    background: #fff !important;
+    color: #000 !important;
   }
 }

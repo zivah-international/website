@@ -97,75 +97,100 @@ export const quoteItemSchema = z.object({
   specifications: z.record(z.string(), z.any()).optional(),
 });
 
-export const createQuoteSchema = z
-  .object({
-    customerName: z
-      .string()
-      .min(2, 'El nombre debe tener al menos 2 caracteres')
-      .max(255, 'El nombre no puede exceder 255 caracteres'),
-    customerEmail: z.string().email('Debe ser un email válido'),
-    customerPhone: z
-      .string()
-      .regex(/^\+?[\d\s\-\(\)]+$/, 'Debe ser un número de teléfono válido')
-      .min(10, 'El teléfono debe tener al menos 10 dígitos')
-      .max(20, 'El teléfono no puede exceder 20 caracteres')
-      .optional()
-      .or(z.literal('')),
-    company: z.string().max(255).optional(),
-    countryId: z.number().int().positive('Debe seleccionar un país válido').optional(),
-    recipientEmail: z.string().email('Debe ser un email válido para envío').optional(),
-    shippingAddress: addressSchema.optional(),
-    message: z.string().optional(),
-    items: z.array(quoteItemSchema).min(1, 'Debe incluir al menos un producto'),
-  })
-  .refine(
-    data => {
-      // Enhanced phone validation based on country calling code
-      if (data.customerPhone && data.customerPhone.trim() !== '') {
-        const phone = data.customerPhone.replace(/\s|-|\(|\)/g, '');
+export type QuoteSchemaMessages = {
+  nameMin: string;
+  nameMax: string;
+  emailInvalid: string;
+  phoneInvalid: string;
+  phoneMin: string;
+  phoneMax: string;
+  countryInvalid: string;
+  recipientEmailInvalid: string;
+  itemsMin: string;
+  phoneCountryInvalid: string;
+};
 
-        // Must start with + and have at least country code + 7 digits
-        if (!phone.match(/^\+\d{8,}$/)) {
-          return false;
-        }
+const DEFAULT_QUOTE_MESSAGES: QuoteSchemaMessages = {
+  nameMin: 'El nombre debe tener al menos 2 caracteres',
+  nameMax: 'El nombre no puede exceder 255 caracteres',
+  emailInvalid: 'Debe ser un email válido',
+  phoneInvalid: 'Debe ser un número de teléfono válido',
+  phoneMin: 'El teléfono debe tener al menos 10 dígitos',
+  phoneMax: 'El teléfono no puede exceder 20 caracteres',
+  countryInvalid: 'Debe seleccionar un país válido',
+  recipientEmailInvalid: 'Debe ser un email válido para envío',
+  itemsMin: 'Debe incluir al menos un producto',
+  phoneCountryInvalid: 'Formato de teléfono inválido para el país seleccionado',
+};
 
-        // Validate specific country formats
-        // Ecuador (+593): 12 digits total (+593 + 9 digits)
-        if (phone.startsWith('+593') && !phone.match(/^\+593\d{9}$/)) {
-          return false;
+export function createQuoteSchema(messages: QuoteSchemaMessages = DEFAULT_QUOTE_MESSAGES) {
+  return z
+    .object({
+      customerName: z.string().min(2, messages.nameMin).max(255, messages.nameMax),
+      customerEmail: z.string().email(messages.emailInvalid),
+      customerPhone: z
+        .string()
+        .regex(/^\+?[\d\s\-\(\)]+$/, messages.phoneInvalid)
+        .min(10, messages.phoneMin)
+        .max(20, messages.phoneMax)
+        .optional()
+        .or(z.literal('')),
+      company: z.string().max(255).optional(),
+      countryId: z.number().int().positive(messages.countryInvalid).optional(),
+      recipientEmail: z.string().email(messages.recipientEmailInvalid).optional(),
+      shippingAddress: addressSchema.optional(),
+      message: z.string().optional(),
+      items: z.array(quoteItemSchema).min(1, messages.itemsMin),
+    })
+    .refine(
+      data => {
+        // Enhanced phone validation based on country calling code
+        if (data.customerPhone && data.customerPhone.trim() !== '') {
+          const phone = data.customerPhone.replace(/\s|-|\(|\)/g, '');
+
+          // Must start with + and have at least country code + 7 digits
+          if (!phone.match(/^\+\d{8,}$/)) {
+            return false;
+          }
+
+          // Validate specific country formats
+          // Ecuador (+593): 12 digits total (+593 + 9 digits)
+          if (phone.startsWith('+593') && !phone.match(/^\+593\d{9}$/)) {
+            return false;
+          }
+          // USA/Canada (+1): 11 digits total (+1 + 10 digits)
+          if (phone.startsWith('+1') && !phone.match(/^\+1\d{10}$/)) {
+            return false;
+          }
+          // Colombia (+57): 12 digits total (+57 + 10 digits)
+          if (phone.startsWith('+57') && !phone.match(/^\+57\d{10}$/)) {
+            return false;
+          }
+          // Peru (+51): 11 digits total (+51 + 9 digits)
+          if (phone.startsWith('+51') && !phone.match(/^\+51\d{9}$/)) {
+            return false;
+          }
+          // Chile (+56): 11 digits total (+56 + 9 digits)
+          if (phone.startsWith('+56') && !phone.match(/^\+56\d{9}$/)) {
+            return false;
+          }
+          // Mexico (+52): 12 digits total (+52 + 10 digits)
+          if (phone.startsWith('+52') && !phone.match(/^\+52\d{10}$/)) {
+            return false;
+          }
+          // Spain (+34): 11 digits total (+34 + 9 digits)
+          if (phone.startsWith('+34') && !phone.match(/^\+34\d{9}$/)) {
+            return false;
+          }
         }
-        // USA/Canada (+1): 11 digits total (+1 + 10 digits)
-        if (phone.startsWith('+1') && !phone.match(/^\+1\d{10}$/)) {
-          return false;
-        }
-        // Colombia (+57): 12 digits total (+57 + 10 digits)
-        if (phone.startsWith('+57') && !phone.match(/^\+57\d{10}$/)) {
-          return false;
-        }
-        // Peru (+51): 11 digits total (+51 + 9 digits)
-        if (phone.startsWith('+51') && !phone.match(/^\+51\d{9}$/)) {
-          return false;
-        }
-        // Chile (+56): 11 digits total (+56 + 9 digits)
-        if (phone.startsWith('+56') && !phone.match(/^\+56\d{9}$/)) {
-          return false;
-        }
-        // Mexico (+52): 12 digits total (+52 + 10 digits)
-        if (phone.startsWith('+52') && !phone.match(/^\+52\d{10}$/)) {
-          return false;
-        }
-        // Spain (+34): 11 digits total (+34 + 9 digits)
-        if (phone.startsWith('+34') && !phone.match(/^\+34\d{9}$/)) {
-          return false;
-        }
+        return true;
+      },
+      {
+        message: messages.phoneCountryInvalid,
+        path: ['customerPhone'],
       }
-      return true;
-    },
-    {
-      message: 'Formato de teléfono inválido para el país seleccionado',
-      path: ['customerPhone'],
-    }
-  );
+    );
+}
 
 export const updateQuoteSchema = z.object({
   status: z.nativeEnum(QuoteStatus).optional(),
@@ -413,7 +438,7 @@ export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;
 export type ProductFiltersInput = z.infer<typeof productFiltersSchema>;
-export type CreateQuoteInput = z.infer<typeof createQuoteSchema>;
+export type CreateQuoteInput = z.infer<ReturnType<typeof createQuoteSchema>>;
 export type UpdateQuoteInput = z.infer<typeof updateQuoteSchema>;
 export type QuoteFiltersInput = z.infer<typeof quoteFiltersSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;

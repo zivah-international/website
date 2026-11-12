@@ -1,35 +1,17 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import { useMounted } from '@/lib/hooks/use-mounted';
 
+import BrandLogo from './BrandLogo';
 import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
 import { Button } from './ui/button';
-import {
-  Home,
-  Package,
-  QuoteIcon as Quote,
-  Shield,
-  Globe,
-  Mail,
-  Menu,
-  X,
-  ArrowRight,
-} from './ui/icons';
-
-const NAV_ICONS = {
-  home: Home,
-  products: Package,
-  quote: Quote,
-  quality: Shield,
-  markets: Globe,
-  contact: Mail,
-} as const;
+import { Menu } from './ui/icons';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from './ui/sheet';
 
 export default function Navigation() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -38,15 +20,12 @@ export default function Navigation() {
   const t = useTranslations('nav');
   const pathname = usePathname();
 
-  const getActiveSection = () => {
-    if (pathname.match(/\/products/)) return 'products';
-    if (pathname.match(/\/quote/)) return 'quote';
-    if (pathname.match(/\/quality/)) return 'quality';
-    if (pathname.match(/\/markets/)) return 'markets';
-    if (pathname.match(/\/contact/)) return 'contact';
-    return 'home';
-  };
-  const activeSection = getActiveSection();
+  const isHome = pathname === '/';
+  const onQuotePage = pathname.startsWith('/quote');
+  // Transparent over the home hero only; solid on every internal page.
+  // `isHome` is known during SSR (usePathname), so the server already renders
+  // the transparent hero state — no flash of a solid header on first paint.
+  const isTransparent = isHome && !isScrolled;
 
   useEffect(() => {
     if (!mounted) return;
@@ -57,265 +36,188 @@ export default function Navigation() {
   }, [mounted]);
 
   useEffect(() => {
-    if (!mounted) return;
-    document.body.style.overflow = isMobileOpen ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isMobileOpen, mounted]);
-
-  useEffect(() => {
     setIsMobileOpen(false);
   }, [pathname]);
 
-  useEffect(() => {
-    if (!isMobileOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsMobileOpen(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isMobileOpen]);
-
   const items = [
-    { id: 'home', href: '/', label: t('home'), icon: NAV_ICONS.home },
-    { id: 'products', href: '/products', label: t('products'), icon: NAV_ICONS.products },
-    { id: 'quote', href: '/quote', label: t('quote'), icon: NAV_ICONS.quote },
-    { id: 'quality', href: '/quality', label: t('quality'), icon: NAV_ICONS.quality },
-    { id: 'markets', href: '/markets', label: t('markets'), icon: NAV_ICONS.markets },
-    { id: 'contact', href: '/contact', label: t('contact'), icon: NAV_ICONS.contact },
+    { id: 'products', href: '/products', label: t('products') },
+    { id: 'quality', href: '/quality', label: t('quality') },
+    { id: 'markets', href: '/markets', label: t('markets') },
+    { id: 'contact', href: '/contact', label: t('contact') },
   ];
 
-  const headerClass = `fixed top-0 w-full z-50 transition-all duration-500 ${
-    mounted && isScrolled
-      ? 'border-b border-border/70 bg-background/90 shadow-sm backdrop-blur-xl'
-      : 'border-b border-white/10 bg-[#061927]/55 backdrop-blur-md'
+  const legalLinks = [
+    { href: '/legal/privacy-policy', label: t('privacy') },
+    { href: '/legal/terms-of-service', label: t('terms') },
+    { href: '/legal/cookie-policy', label: t('cookies') },
+    { href: '/legal/data-protection', label: t('dataProtection') },
+  ];
+
+  const headerClass = `site-header fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+    isTransparent
+      ? 'bg-transparent text-primary-foreground'
+      : 'border-b border-border bg-background/95 text-foreground backdrop-blur'
   }`;
 
-  const isActive = (id: string) => activeSection === id;
-
   return (
-    <header
-      className={headerClass}
-      suppressHydrationWarning
-    >
-      <nav
-        className='container mx-auto px-4 py-3'
+    <>
+      {/* Skip link — first focusable element on the page */}
+      <a
+        href='#main'
+        className='sr-only fixed top-2 left-2 z-[100] rounded-[2px] bg-accent px-4 py-3 text-sm font-medium text-accent-foreground focus:not-sr-only focus:outline-none'
+      >
+        {t('skipToContent')}
+      </a>
+
+      <header
+        className={headerClass}
         suppressHydrationWarning
       >
-        <div className='flex items-center justify-between'>
+        <nav
+          aria-label={t('mainLabel')}
+          className='mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-[76px] lg:px-8'
+        >
           {/* Logo */}
           <Link
             href='/'
-            className='relative z-50 flex items-center overflow-hidden rounded-lg bg-white/90 px-2 py-1 shadow-sm transition-transform hover:scale-[1.02]'
-            aria-label='Ir al inicio'
+            aria-label='ZIVAH International'
+            className='flex shrink-0 items-center'
           >
-            <img
-              src='/assets/images/zivah-logo.svg'
-              alt='ZIVAH International S.A.'
-              width={136}
-              height={46}
-              className='h-10 w-28 object-cover sm:h-11 sm:w-32'
+            <BrandLogo
+              inverse={isTransparent}
+              decorative
             />
           </Link>
 
-          {/* Desktop nav */}
-          <div className='hidden items-center space-x-1 lg:flex'>
+          {/* Desktop links */}
+          <div className='hidden items-center gap-7 lg:flex'>
             {items.map(item => {
-              const Icon = item.icon;
+              const isActive = pathname.startsWith(item.href);
               return (
-                <Button
+                <Link
                   key={item.id}
-                  asChild
-                  variant={isActive(item.id) ? 'nav-active' : 'nav'}
-                  size='nav'
-                  className={`relative font-medium ${
-                    mounted && !isScrolled && !isActive(item.id)
-                      ? 'text-white/78 hover:bg-white/10 hover:text-white'
-                      : ''
+                  href={item.href}
+                  className={`border-b-2 py-1 text-[13px] font-medium tracking-[0.12em] uppercase transition-colors ${
+                    isActive ? 'border-accent' : 'border-transparent hover:border-current/50'
                   }`}
                 >
-                  <Link href={item.href}>
-                    <span className='mr-1.5 opacity-70'>
-                      <Icon size={16} />
-                    </span>
-                    {item.label}
-                    <div
-                      className={`absolute bottom-0 left-1/2 h-0.5 w-4/5 -translate-x-1/2 transform rounded-full transition-all duration-300 ${
-                        isActive(item.id) ? 'bg-primary' : 'bg-transparent'
-                      }`}
-                    />
-                  </Link>
-                </Button>
+                  {item.label}
+                </Link>
               );
             })}
           </div>
 
-          {/* Desktop actions */}
-          <div className='flex items-center space-x-3'>
-            <div className='hidden md:block'>
+          {/* Right cluster */}
+          <div className='flex items-center gap-2 sm:gap-3'>
+            <div className='hidden sm:block'>
               <LanguageSwitcher />
             </div>
             <ThemeToggle />
-            <Button
-              asChild
-              variant='default'
-              size='default'
-              className='hidden items-center gap-2 shadow-md hover:shadow-lg md:inline-flex'
-            >
-              <Link
-                href='/quote'
-                data-track='begin_checkout'
-                data-track-category='nav'
-                data-track-label='nav_quote_desktop'
-              >
-                <Quote size={16} />
-                {t('quote')}
-              </Link>
-            </Button>
-
-            {/* Mobile toggle */}
-            <Button
-              type='button'
-              variant='icon'
-              size='icon'
-              onClick={() => setIsMobileOpen(open => !open)}
-              className={`relative z-50 lg:hidden ${
-                mounted && !isScrolled ? 'text-white hover:bg-white/10 hover:text-white' : ''
-              }`}
-              aria-label={isMobileOpen ? 'Cerrar menú' : 'Abrir menú'}
-              aria-expanded={isMobileOpen}
-              aria-controls='mobile-navigation'
-              suppressHydrationWarning
-            >
-              {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
-            </Button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile drawer */}
-      <div
-        id='mobile-navigation'
-        className={`fixed inset-0 z-[80] h-dvh transition-all duration-300 lg:hidden ${
-          isMobileOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
-        }`}
-        suppressHydrationWarning
-      >
-        {/* Backdrop */}
-        <div
-          className='absolute inset-0 bg-black/40 backdrop-blur-sm'
-          aria-hidden='true'
-          onClick={() => setIsMobileOpen(false)}
-        />
-
-        {/* Drawer panel */}
-        <div
-          role='dialog'
-          aria-modal='true'
-          aria-label='Menú de navegación'
-          className={`absolute top-0 right-0 h-dvh w-full max-w-sm border-l border-border bg-background shadow-2xl transition-transform duration-300 ease-out ${
-            isMobileOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
-        >
-          <div className='flex h-full flex-col overflow-y-auto px-6 pt-24 pb-8'>
-            <button
-              type='button'
-              onClick={() => setIsMobileOpen(false)}
-              className='absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-900 shadow-sm transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800'
-              aria-label='Cerrar panel de navegación'
-            >
-              <X size={20} />
-            </button>
-
-            <div className='space-y-1'>
-              {items.map(item => {
-                const Icon = item.icon;
-                return (
-                  <Button
-                    key={item.id}
-                    asChild
-                    variant={isActive(item.id) ? 'nav-active' : 'nav-mobile'}
-                    size='nav-mobile'
-                    className='w-full font-medium'
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={() => setIsMobileOpen(false)}
-                    >
-                      <span className='mr-3 opacity-70'>
-                        <Icon size={18} />
-                      </span>
-                      {item.label}
-                    </Link>
-                  </Button>
-                );
-              })}
-            </div>
-
-            <div className='mt-8 border-t border-border pt-6'>
-              <div className='mb-6 flex items-center justify-between'>
-                <span className='text-sm font-medium text-foreground'>{t('language')}</span>
-                <LanguageSwitcher />
-              </div>
-
+            {!onQuotePage && (
               <Button
                 asChild
-                variant='accent'
-                size='lg'
-                className='w-full shadow-md'
-                onClick={() => setIsMobileOpen(false)}
+                variant='brand'
+                size='brand'
+                className='hidden md:inline-flex'
               >
                 <Link
                   href='/quote'
                   data-track='begin_checkout'
                   data-track-category='nav'
-                  data-track-label='nav_quote_mobile'
+                  data-track-label='nav_quote_desktop'
                 >
-                  {t('quote')}
-                  <ArrowRight
-                    size={16}
-                    className='ml-2'
-                  />
+                  {t('quoteCta')}
                 </Link>
               </Button>
-            </div>
+            )}
 
-            <div className='mt-8 border-t border-border pt-6'>
-              <div className='grid grid-cols-2 gap-3'>
-                <Link
-                  href='/legal/privacy-policy'
-                  className='text-sm text-muted-foreground transition-colors hover:text-accent'
+            {/* Mobile drawer trigger */}
+            <Sheet
+              open={isMobileOpen}
+              onOpenChange={setIsMobileOpen}
+            >
+              <SheetTrigger asChild>
+                <Button
+                  type='button'
+                  variant='icon'
+                  size='icon'
+                  aria-label={t('openMenu')}
+                  className='lg:hidden'
                 >
-                  {t('privacy')}
-                </Link>
-                <Link
-                  href='/legal/terms-of-service'
-                  className='text-sm text-muted-foreground transition-colors hover:text-accent'
-                >
-                  {t('terms')}
-                </Link>
-                <Link
-                  href='/legal/cookie-policy'
-                  className='text-sm text-muted-foreground transition-colors hover:text-accent'
-                >
-                  {t('cookies')}
-                </Link>
-                <Link
-                  href='/legal/data-protection'
-                  className='text-sm text-muted-foreground transition-colors hover:text-accent'
-                >
-                  {t('dataProtection')}
-                </Link>
-              </div>
-            </div>
+                  <Menu size={20} />
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side='right'
+                className='w-full border-l border-border bg-background p-0 sm:max-w-sm'
+              >
+                <SheetTitle className='border-b border-border px-6 pt-6 pb-4 text-base font-semibold text-foreground'>
+                  {t('menuTitle')}
+                </SheetTitle>
+
+                <div className='flex h-full flex-col overflow-y-auto px-6 pt-6 pb-10'>
+                  <div className='flex flex-col gap-1'>
+                    {items.map(item => {
+                      const isActive = pathname.startsWith(item.href);
+                      return (
+                        <Link
+                          key={item.id}
+                          href={item.href}
+                          onClick={() => setIsMobileOpen(false)}
+                          className={`border-l-2 py-3 pl-4 text-base font-medium tracking-[0.08em] uppercase transition-colors ${
+                            isActive
+                              ? 'border-accent text-foreground'
+                              : 'border-transparent text-muted-foreground hover:text-foreground'
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+
+                  <div className='mt-6 flex items-center justify-between border-t border-border pt-6'>
+                    <LanguageSwitcher />
+                    <ThemeToggle />
+                  </div>
+
+                  {!onQuotePage && (
+                    <Button
+                      asChild
+                      variant='brand'
+                      size='brand'
+                      className='mt-6 w-full'
+                    >
+                      <Link
+                        href='/quote'
+                        onClick={() => setIsMobileOpen(false)}
+                        data-track='begin_checkout'
+                        data-track-category='nav'
+                        data-track-label='nav_quote_mobile'
+                      >
+                        {t('quoteCta')}
+                      </Link>
+                    </Button>
+                  )}
+
+                  <div className='mt-8 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-border pt-6'>
+                    {legalLinks.map(legal => (
+                      <Link
+                        key={legal.href}
+                        href={legal.href}
+                        onClick={() => setIsMobileOpen(false)}
+                        className='text-sm text-muted-foreground transition-colors hover:text-foreground'
+                      >
+                        {legal.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
-        </div>
-      </div>
-    </header>
+        </nav>
+      </header>
+    </>
   );
 }

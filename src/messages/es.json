@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "ZIVAH International S.A. - Exportadores de Productos Ecuatorianos Premium | Ecuador hacia el Mundo",
-    "description": "ZIVAH International S.A. - Exportadores líderes de productos ecuatorianos premium desde Ecuador hacia el mundo. Con sede principal en Samborondón, Guayas y oficina de distribución en Miami.",
-    "keywords": "exportación ecuador, frutas tropicales, camarón ecuatoriano, larvas acuicultura, cafe arabica, productos marinos"
+    "title": "ZIVAH International — Camarón, larvas y atún de Ecuador",
+    "description": "Exportamos camarón blanco, larvas de camarón y atún del Pacífico desde Ecuador. Documentación, trazabilidad y cotización FOB en 24 horas.",
+    "keywords": "camarón ecuatoriano, larvas de camarón, atún del Pacífico, exportación de productos del mar, acuicultura, frutas tropicales, café, cacao"
   },
   "seo": {
-    "industry": "Exportación de productos ecuatorianos",
+    "industry": "Exportación de productos del mar y acuicultura",
     "catalogName": "Productos Ecuatorianos Premium",
     "tropicalFruits": "Frutas Tropicales",
     "tropicalFruitsDesc": "Mango, piña, banano, papaya y frutas exóticas ecuatorianas",
@@ -27,323 +27,404 @@
     "privacy": "Privacidad",
     "terms": "Términos",
     "cookies": "Cookies",
-    "dataProtection": "Protección Datos",
-    "language": "Idioma:"
-  },
-  "hero": {
-    "badge": "🇪🇨 Desde Ecuador Hacia el Mundo · Samborondón, Guayas · Miami, Florida",
-    "title": "Camarón · Larvas",
-    "titleHighlight": "Acuicultura Premium",
-    "titleEnd": "Exportación Directa desde Ecuador",
-    "description": "Exportamos camarón vannamei, larvas de acuicultura, frutas tropicales y café arábica directamente desde Ecuador. Certificaciones BAP, HACCP, BRC y GlobalGAP. Documentación lista. Respuesta en 24h.",
-    "exploreProducts": "Ver Catálogo",
-    "requestQuote": "Solicitar Cotización",
-    "stats": {
-      "countriesServed": "Guayaquil",
-      "containersYear": "Respuesta Comercial",
-      "yearsExperience": "Certificación Acuícola",
-      "qualityGuaranteed": "Mercados Atendidos"
-    },
-    "statValues": {
-      "countriesServed": "5+",
-      "containersYear": "24h",
-      "yearsExperience": "4+",
-      "qualityGuaranteed": "100%"
-    },
-    "slides": {
-      "shrimp": {
-        "badge": "Camarón Vannamei · Exportación directa desde Ecuador",
-        "title": "Camarón ecuatoriano",
-        "titleHighlight": "listo para exportar",
-        "subtitle": "IQF y bloque congelado con documentación BAP/HACCP/BRC, trazabilidad completa y respuesta comercial en 24h.",
-        "cta": "Solicitar precio FOB",
-        "ctaSecondary": "Ver ficha técnica"
-      },
-      "larvae": {
-        "badge": "Larvas de camarón · Nauplios y PL · Ecuador",
-        "title": "Larvas SPF",
-        "titleHighlight": "para ciclos estables",
-        "subtitle": "Genética seleccionada, bioseguridad nivel A, aclimatación guiada y disponibilidad coordinada para producción acuícola.",
-        "cta": "Consultar disponibilidad",
-        "ctaSecondary": "Ver ficha técnica"
-      },
-      "fruits": {
-        "badge": "Frutas tropicales · Café · Cacao · Ecuador",
-        "title": "Productos ecuatorianos",
-        "titleHighlight": "con trazabilidad",
-        "subtitle": "Origen certificado, temporada clara y documentación de exportación lista para compradores internacionales.",
-        "cta": "Solicitar cotización",
-        "ctaSecondary": "Ver catálogo"
-      }
-    },
-    "gallery": {
-      "badge": "Productos Destacados",
-      "title": "Del campo ecuatoriano al mundo",
-      "subtitle": "+30 productos frescos certificados · Exportación FOB directa",
-      "viewAll": "Ver los 30+ productos →",
-      "products": {
-        "shrimp": "Camarón Vannamei",
-        "cacao": "Cacao Fino de Aroma",
-        "roses": "Rosas Premium",
-        "mango": "Mango Tommy Atkins",
-        "avocado": "Aguacate Hass",
-        "coffee": "Café Arábica",
-        "banana": "Banano Premium",
-        "pineapple": "Piña Golden"
-      }
-    },
-    "premiumProducts": "Lo que exportamos",
-    "productTypes": {
-      "tropicalFruits": "Frutas Tropicales · Mango, Piña, Banano",
-      "premiumSeafood": "Camarón Vannamei Certificado",
-      "highlandCoffee": "Café Arábica de Altura",
-      "aquaculture": "Larvas y Nauplios de Acuicultura"
-    }
+    "dataProtection": "Protección de Datos",
+    "language": "Idioma",
+    "mainLabel": "Navegación principal",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "menuTitle": "Menú",
+    "skipToContent": "Saltar al contenido",
+    "switchToDark": "Cambiar a modo oscuro",
+    "switchToLight": "Cambiar a modo claro",
+    "quoteCta": "Solicitar cotización"
   },
   "home": {
-    "viewFullCatalog": "Ver catálogo completo",
-    "shrimp": {
-      "eyebrow": "Oferta principal",
-      "title": "Compra camarón",
-      "titleHighlight": "con menos riesgo operativo",
-      "description": "Conectamos compradores internacionales con camarón vannamei ecuatoriano certificado, documentación sanitaria lista y coordinación FOB desde Guayaquil.",
-      "features": [
-        "Documentación lista para reducir demoras aduaneras",
-        "Presentaciones IQF, bloque congelado, cocido, tail-on y headless",
-        "Trazabilidad de granja a contenedor para auditorías de compra",
-        "Cotización FOB Guayaquil con respuesta comercial en 24h"
-      ],
-      "cta": "Solicitar precio FOB",
-      "ctaSecondary": "Ver ficha técnica"
+    "hero": {
+      "eyebrow": "Ecuador · Exportación directa",
+      "title": "Productos del mar ecuatorianos, <em>listos para exportar</em>.",
+      "lead": "Camarón blanco, larvas de camarón y atún del Pacífico con documentación lista, trazabilidad por lote y respuesta comercial en 24 horas.",
+      "primaryCta": "Solicitar cotización FOB",
+      "secondaryCta": "Ver productos del mar",
+      "imageAlt": "Camarón blanco ecuatoriano listo para exportación",
+      "caption": "Camarón blanco · Guayas, Ecuador"
     },
-    "larvae": {
-      "eyebrow": "Acuicultura",
-      "title": "Larvas para ciclos",
-      "titleHighlight": "más predecibles",
-      "description": "Suministro de nauplios y postlarvas de camarón blanco con genética seleccionada, bioseguridad y soporte técnico para operaciones acuícolas.",
-      "features": [
-        "SPF certificado para reducir riesgo sanitario",
-        "PL10, PL12, PL15 y nauplios según planificación productiva",
-        "Aclimatación guiada y soporte técnico postventa",
-        "Despacho coordinado para mantener continuidad de siembra"
-      ],
-      "cta": "Consultar disponibilidad",
-      "ctaSecondary": "Ver ficha técnica"
+    "evidence": {
+      "response": "Respuesta comercial",
+      "traceability": "Trazabilidad por lote"
     },
-    "whyEcuador": {
-      "eyebrow": "Por qué Ecuador",
-      "title": "Por qué comprar acuicultura ecuatoriana",
-      "subtitle": "Ecuador combina producción especializada, certificaciones reconocidas y logística marítima frecuente desde Guayaquil para compradores que necesitan continuidad y control.",
-      "items": [
+    "seafood": {
+      "title": "Tres líneas. Un mismo estándar de exportación.",
+      "lead": "Camarón, larvas y atún. Cada lote sale con documentación verificable y cadena de frío controlada.",
+      "viewSheet": "Ver ficha",
+      "cards": {
+        "camaron": {
+          "eyebrow": "Camarón",
+          "title": "Camarón Blanco Premium",
+          "description": "Camarón vannamei IQF, calibres 16/20 a 41/50. Empaque a medida para distribución y retail."
+        },
+        "larvas": {
+          "eyebrow": "Acuicultura",
+          "title": "Larvas de camarón Post-Larva",
+          "description": "Post-larvas PL10–PL15 con trazabilidad genética y soporte técnico de siembra."
+        },
+        "atun": {
+          "eyebrow": "Marinos y pesca",
+          "title": "Atún Fresco del Pacífico",
+          "description": "Lomos y steak de atún, cadena de frío desde puerto. Disponibilidad sujeta a temporada."
+        }
+      }
+    },
+    "secondary": {
+      "text": "También exportamos <a>frutas tropicales</a>, <a>café de altura</a> y <a>cacao</a>."
+    },
+    "whyZivah": {
+      "title": "Por qué ZIVAH",
+      "rows": [
         {
-          "label": "Origen reconocido",
-          "desc": "Ecuador es una referencia global en camarón vannamei y cuenta con proveedores acostumbrados a mercados exigentes."
+          "title": "Operación propia en origen y destino.",
+          "description": "Samborondón y Miami. Coordinación comercial y logística sin intermediarios."
         },
         {
-          "label": "Producción estable",
-          "desc": "Las condiciones tropicales favorecen continuidad productiva y planificación de abastecimiento durante el año."
+          "title": "Documentación revisada antes del embarque.",
+          "description": "Sanidad, origen y trazabilidad por lote listos para revisión del importador."
         },
         {
-          "label": "Certificación verificable",
-          "desc": "Procesos alineados con BAP, HACCP y BRC para facilitar revisión documental antes del embarque."
+          "title": "Cadena de frío coordinada de origen a destino.",
+          "description": "Control de temperatura y tiempos por etapa, con responsables definidos."
         },
         {
-          "label": "Salida FOB directa",
-          "desc": "Coordinación desde Guayaquil y soporte comercial internacional para reducir incertidumbre operativa."
+          "title": "Un solo interlocutor comercial.",
+          "description": "La misma persona acompaña la cotización, la producción y el seguimiento del embarque."
         }
       ]
+    },
+    "quality": {
+      "title": "El estándar se demuestra en cada lote.",
+      "lead": "Cuatro certificaciones sostienen el acceso a los mercados donde vendemos.",
+      "note": "Líneas agrícolas: GlobalGAP.",
+      "link": "Ver calidad y certificaciones",
+      "certifications": {
+        "bap": "Acuicultura responsable",
+        "haccp": "Inocuidad y control de procesos",
+        "brc": "Estándar global para retail",
+        "msc": "Pesca sostenible certificada"
+      }
+    },
+    "process": {
+      "title": "De la consulta al embarque.",
+      "cta": "Iniciar cotización",
+      "steps": [
+        {
+          "title": "Consulta",
+          "description": "Recibimos producto, volumen, destino y frecuencia."
+        },
+        {
+          "title": "Propuesta FOB",
+          "description": "Precio, empaque, calendario y documentos en 24 h."
+        },
+        {
+          "title": "Aprobación y producción",
+          "description": "Reservamos lote y coordinamos control de calidad."
+        },
+        {
+          "title": "Embarque y seguimiento",
+          "description": "Documentos, tránsito y confirmación de llegada."
+        }
+      ]
+    },
+    "markets": {
+      "title": "Dónde llega el producto.",
+      "link": "Ver mercados",
+      "status": {
+        "active": "Activo",
+        "expansion": "Expansión"
+      },
+      "list": {
+        "US": {
+          "country": "Estados Unidos",
+          "hub": "Miami",
+          "note": "Distribución mayorista y retail."
+        },
+        "JP": {
+          "country": "Japón",
+          "hub": "Tokio",
+          "note": "Importadores de productos del mar."
+        },
+        "NL": {
+          "country": "Países Bajos",
+          "hub": "Róterdam",
+          "note": "Entrada a la Unión Europea."
+        },
+        "CN": {
+          "country": "China",
+          "hub": "Shanghái",
+          "note": "Distribución mayorista."
+        },
+        "CA": {
+          "country": "Canadá",
+          "hub": "Toronto",
+          "note": "Mercado en expansión."
+        },
+        "AE": {
+          "country": "Emiratos Árabes Unidos",
+          "hub": "Dubái",
+          "note": "Mercado en expansión."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Recibe una cotización FOB de productos del mar en 24 horas.",
+      "body": "Cuéntanos producto, volumen y destino. Respondemos con precio, empaque y próximos pasos.",
+      "primary": "Solicitar cotización",
+      "email": "Escríbenos por email",
+      "whatsapp": "Escríbenos por WhatsApp"
     }
+  },
+  "metrics": {
+    "markets": "{count} mercados",
+    "activeMarkets": "{count} activos",
+    "certifications": "{count} certificaciones",
+    "response": "24 h",
+    "traceability": "100%"
   },
   "products": {
-    "badge": "Catálogo de Exportación",
-    "title": "Productos Certificados para Mercados Exigentes",
-    "loading": "Cargando productos...",
-    "description": "Desde camarón vannamei hasta frutas tropicales y larvas de acuicultura: cada producto cuenta con certificación internacional, trazabilidad completa y documentación de exportación lista.",
-    "requestQuote": "Cotizar este producto",
-    "viewProducts": "Ver {count} productos",
-    "viewDetail": "Ver ficha técnica",
-    "moreProducts": "+{count} más disponibles",
-    "catalog": {
-      "badge": "Catálogo Completo",
-      "title": "Todos Nuestros Productos con Ficha Técnica",
-      "description": "{count} productos disponibles para exportación · Con certificación, origen y precio base referencial",
-      "all": "Todos",
-      "premiumQuality": "Calidad premium",
-      "noProducts": {
-        "title": "No se encontraron productos",
-        "description": "Intenta seleccionar una categoría diferente"
-      }
-    }
+    "eyebrow": "Catálogo de exportación",
+    "title": "Productos del mar y líneas agrícolas",
+    "lead": "Camarón, larvas y atún primero. Frutas tropicales, café y cacao como líneas complementarias.",
+    "requestQuote": "Solicitar cotización",
+    "all": "Todos",
+    "seafood": "Productos del mar",
+    "agricultural": "Agrícolas",
+    "other": "Otros productos",
+    "viewDetail": "Ver ficha",
+    "emptyTitle": "Catálogo en actualización",
+    "emptyBody": "El catálogo se actualiza periódicamente. Escríbenos y confirmamos disponibilidad para tu mercado.",
+    "emptyCta": "Consultar disponibilidad",
+    "filterEmpty": "No hay productos en esta categoría.",
+    "clearFilter": "Ver todos"
+  },
+  "productDetail": {
+    "requestQuote": "Solicitar cotización para este producto",
+    "downloadSheet": "Descargar ficha técnica",
+    "specsTitle": "Especificaciones del producto",
+    "origin": "Origen",
+    "size": "Calibre",
+    "packaging": "Empaque",
+    "certifications": "Certificaciones",
+    "season": "Temporada",
+    "relatedTitle": "Productos relacionados",
+    "backToCatalog": "Volver al catálogo",
+    "notFound": "Producto no encontrado"
   },
   "quote": {
-    "badge": "Solicitud de Cotización",
-    "title": "Recibe una Propuesta Comercial en 24 horas",
-    "description": "Selecciona los productos de tu interés, indica volumen y destino, y recibirás una cotización detallada con precio FOB, certificaciones y documentación de exportación incluida.",
-    "features": {
-      "smartSearch": {
-        "title": "Búsqueda Inteligente",
-        "description": "Encuentra productos rápidamente con nuestro sistema de búsqueda avanzado"
-      },
-      "multipleSelection": {
-        "title": "Selección Múltiple",
-        "description": "Combina múltiples productos en una sola cotización con cantidades personalizadas"
-      },
-      "autoSend": {
-        "title": "Envío Automático",
-        "description": "Recibe cotizaciones profesionales por email con seguimiento automático"
-      }
-    }
+    "eyebrow": "Cotización B2B",
+    "title": "Recibe una propuesta comercial en 24 horas.",
+    "description": "Cotización FOB para camarón, larvas, atún o líneas agrícolas. Incluye precio, empaque, calendario y documentos.",
+    "lead": "Cotización FOB para camarón, larvas, atún o líneas agrícolas. Incluye precio, empaque, calendario y documentos.",
+    "includesTitle": "Qué incluye tu propuesta",
+    "includes": [
+      "Precio FOB y unidad de medida",
+      "Empaque y volumen mínimo",
+      "Calendario de disponibilidad",
+      "Documentos de exportación"
+    ],
+    "contactTitle": "Contacto directo",
+    "contact": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "phone": "Teléfono"
+    },
+    "trust": ["Respuesta en 24 h", "Información confidencial", "Trazabilidad por lote"],
+    "formTitle": "Solicitud de cotización",
+    "submit": "Enviar solicitud",
+    "submitting": "Enviando…",
+    "privacy": "Usamos tus datos solo para preparar y enviar tu cotización.",
+    "success": "Solicitud enviada. Te contactaremos en 24 horas.",
+    "error": "No pudimos enviar tu solicitud. Intenta de nuevo."
   },
   "quality": {
-    "title": "Certificaciones que Abren Mercados",
-    "description": "Cada producto que exportamos cumple estándares internacionales de inocuidad y trazabilidad. Trabajamos con compradores en EE. UU., Europa y Asia que exigen documentación rigurosa, y la tenemos lista para cada embarque.",
+    "eyebrow": "Calidad y trazabilidad",
+    "title": "Certificaciones que abren mercados.",
+    "description": "BAP, HACCP, BRC y MSC sostienen el acceso a los mercados donde vendemos. GlobalGAP aplica a nuestras líneas agrícolas.",
+    "lead": "BAP, HACCP, BRC y MSC sostienen el acceso a los mercados donde vendemos. GlobalGAP aplica a nuestras líneas agrícolas.",
+    "certificationsTitle": "Certificaciones",
+    "note": "Líneas agrícolas: GlobalGAP.",
     "certifications": {
-      "haccp": "Control de Puntos Críticos",
-      "brc": "Estándar Retail Global",
-      "bap": "Acuicultura Responsable",
-      "globalGap": "Buenas Prácticas Agrícolas"
+      "bap": "Acuicultura responsable verificada en origen.",
+      "haccp": "Inocuidad y control de puntos críticos en cada etapa.",
+      "brc": "Estándar global para acceso a retail.",
+      "msc": "Pesca sostenible certificada.",
+      "globalGap": "Buenas prácticas agrícolas para nuestras líneas agrícolas."
     },
-    "awards": {
-      "title": "Reconocimiento Internacional",
-      "description": "Exportadores activos hacia EE. UU. y en expansión a nuevos mercados. Más de 4 años de trayectoria con procesos auditados y relaciones de largo plazo con nuestros clientes."
+    "scope": {
+      "seafood": "Productos del mar",
+      "both": "Productos del mar y líneas agrícolas"
+    },
+    "process": {
+      "eyebrow": "Control por lote",
+      "title": "De la recepción al embarque.",
+      "lead": "Cada lote recorre el mismo control documentado antes de salir.",
+      "steps": [
+        {
+          "title": "Recepción y verificación",
+          "description": "Revisión documental y física por lote."
+        },
+        {
+          "title": "Cadena de frío",
+          "description": "Temperatura y tiempos registrados por etapa."
+        },
+        {
+          "title": "Análisis microbiológico",
+          "description": "Controles por lote según destino."
+        },
+        {
+          "title": "Documentación de embarque",
+          "description": "Sanidad, origen y trazabilidad listos para revisión."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Solicita la documentación de tu próximo lote.",
+      "body": "Te enviamos certificados, fichas técnicas y análisis de laboratorio antes de confirmar el pedido.",
+      "action": "Solicitar cotización"
     }
   },
   "markets": {
-    "badge": "Alcance Global",
-    "title": "Desde Guayas y Miami al Mundo",
-    "description": "Nuestra doble presencia en Samborondón (Ecuador) y Miami (EE. UU.) nos permite cerrar negocios ágilmente, coordinar logística internacional y ofrecer soporte comercial en tu zona horaria.",
-    "stats": {
-      "countriesServed": "Países con Exportaciones Activas",
-      "containersYear": "Capacidad de Despacho",
-      "yearsExperience": "Años de Experiencia",
-      "certifiedProducts": "Productos con Certificación",
-      "customerSatisfaction": "Satisfacción del Cliente",
-      "specializedSupport": "Soporte Comercial"
+    "eyebrow": "Presencia comercial",
+    "title": "Desde Guayas y Miami al mundo.",
+    "description": "Seis mercados, cuatro activos y una operación comercial y logística coordinada desde origen.",
+    "lead": "Seis mercados. Cuatro activos. Una operación comercial y logística coordinada desde origen.",
+    "map": {
+      "ariaLabel": "Mapa de mercados de ZIVAH"
     },
-    "statValues": {
-      "countriesServed": "5+",
-      "containersYear": "Escalable",
-      "yearsExperience": "4+",
-      "certifiedProducts": "100%",
-      "customerSatisfaction": "100%",
-      "specializedSupport": "24/7"
+    "status": {
+      "active": "Activo",
+      "expansion": "Expansión"
+    },
+    "list": {
+      "US": {
+        "country": "Estados Unidos",
+        "hub": "Miami",
+        "note": "Distribución mayorista y retail."
+      },
+      "JP": {
+        "country": "Japón",
+        "hub": "Tokio",
+        "note": "Importadores de productos del mar."
+      },
+      "NL": {
+        "country": "Países Bajos",
+        "hub": "Róterdam",
+        "note": "Entrada a la Unión Europea."
+      },
+      "CN": {
+        "country": "China",
+        "hub": "Shanghái",
+        "note": "Distribución mayorista."
+      },
+      "CA": {
+        "country": "Canadá",
+        "hub": "Toronto",
+        "note": "Mercado en expansión."
+      },
+      "AE": {
+        "country": "Emiratos Árabes Unidos",
+        "hub": "Dubái",
+        "note": "Mercado en expansión."
+      }
+    },
+    "evidence": {
+      "eyebrow": "Operación comercial",
+      "title": "Por qué elegir ZIVAH",
+      "lead": "Cuatro razones concretas para coordinar tu próximo embarque.",
+      "rows": [
+        {
+          "title": "Origen y destino propios",
+          "description": "Operación comercial en Samborondón y Miami."
+        },
+        {
+          "title": "Tránsitos documentados",
+          "description": "Sanidad, origen y trazabilidad por lote en cada embarque."
+        },
+        {
+          "title": "Equipo en tu zona horaria",
+          "description": "Atención comercial en español e inglés."
+        },
+        {
+          "title": "Trazabilidad por lote",
+          "description": "Cada lote conserva su historial de origen y control."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Consulta disponibilidad para tu mercado.",
+      "body": "Indícanos producto, volumen y destino. Respondemos en 24 horas.",
+      "action": "Solicitar cotización"
     }
   },
   "contact": {
-    "badge": "Contacto Comercial",
-    "title": "Hablemos de tu Próximo Pedido",
-    "description": "Nuestro equipo comercial responde en menos de 24 horas. Ya sea que necesites una cotización urgente, información técnica o documentación de exportación, estamos listos para ayudarte.",
-    "mainOffice": "Oficina Principal",
-    "distributionOffice": "Oficina de Distribución",
-    "commercialEmail": "Email Comercial",
-    "phone": "Teléfono",
-    "businessHours": "Horario de Atención",
-    "mainHQ": "Sede Principal (Ecuador):",
-    "miamiOffice": "Oficina Miami:",
-    "weekdays": "Lunes - Viernes",
-    "unitedStates": "Estados Unidos",
-    "contactChannels": "Canales de Contacto",
-    "sendMessage": "Envíanos un Mensaje",
-    "name": "Nombre",
-    "company": "Empresa",
-    "email": "Email",
-    "subject": "Asunto",
-    "message": "Mensaje",
-    "send": "Enviar Mensaje"
-  },
-  "newsletter": {
-    "title": "Novedades de Exportación Directo a tu Correo",
-    "description": "Actualizaciones de disponibilidad, temporadas de cosecha, precios FOB y nuevas certificaciones. Solo para importadores y distribuidores.",
-    "placeholder": "tu@empresa.com",
-    "cta": "Suscribirme",
-    "privacy": "Sin spam. Puedes cancelar en cualquier momento."
+    "eyebrow": "Contacto comercial",
+    "title": "Hablemos de tu próxima compra.",
+    "lead": "Escríbenos con producto, volumen y destino. Respondemos en 24 horas hábiles.",
+    "officesTitle": "Oficinas",
+    "ecuador": {
+      "country": "Ecuador",
+      "role": "Operación logística principal"
+    },
+    "miami": {
+      "country": "Estados Unidos",
+      "role": "Operación comercial"
+    },
+    "channelsTitle": "Contacto directo",
+    "emailLabel": "Email",
+    "phoneLabel": "Teléfono",
+    "whatsappLabel": "WhatsApp",
+    "whatsappAction": "Escríbenos por WhatsApp",
+    "hoursLabel": "Horario",
+    "hours": "Lun–Vie · 09:00–18:00 GMT-5",
+    "directions": "Ver indicaciones",
+    "noMap": "No usamos mapas embebidos.",
+    "formTitle": "Envíanos un mensaje",
+    "form": {
+      "name": "Nombre",
+      "company": "Empresa",
+      "email": "Email",
+      "phone": "Teléfono",
+      "message": "Mensaje",
+      "namePlaceholder": "Tu nombre",
+      "companyPlaceholder": "Tu empresa",
+      "emailPlaceholder": "tu@empresa.com",
+      "phonePlaceholder": "+593 99 900 2893",
+      "messagePlaceholder": "Producto, volumen y destino",
+      "submit": "Enviar mensaje",
+      "privacy": "Usamos tus datos solo para responder a tu consulta."
+    },
+    "quotePrompt": "¿Necesitas una cotización FOB? Solicítala aquí"
   },
   "footer": {
-    "companyDescription": "Exportadores de productos ecuatorianos premium con 4+ años de trayectoria. Certificaciones HACCP, BRC, BAP y GlobalGAP. Sede en Samborondón y oficina comercial en Miami.",
-    "specialists": "Especialistas en:",
-    "specialistsList": "Acuicultura, Larvas de Camarón, Frutas Tropicales, Productos del Mar y Café de Altura.",
-    "mainProducts": "Productos Principales",
-    "tropicalFruits": "Frutas Tropicales",
-    "seafood": "Productos del Mar",
-    "arabicaCoffee": "Café Arábica",
-    "premiumShrimp": "Camarón Premium",
-    "shrimpLarvae": "Larvas de Camarón",
-    "viewFullCatalog": "Ver Catálogo Completo",
-    "services": "Servicios",
-    "certifications": "Certificaciones",
-    "quotes": "Cotizaciones",
-    "globalDistribution": "Distribución Global",
-    "technicalAdvice": "Asesoría Técnica",
-    "support247": "Soporte 24/7",
-    "legal": "Legal",
+    "brandLine": "Exportador de productos del mar y acuicultura desde Ecuador.",
+    "productsHeading": "Productos",
+    "whiteShrimp": "Camarón blanco",
+    "shrimpLarvae": "Larvas de camarón",
+    "freshTuna": "Atún fresco",
+    "viewCatalog": "Ver catálogo",
+    "agriculturalLine": "Frutas tropicales, café y cacao",
+    "companyHeading": "Compañía",
+    "quality": "Calidad",
+    "markets": "Mercados",
+    "contact": "Contacto",
+    "quoteCta": "Solicitar cotización",
+    "contactHeading": "Contacto",
+    "hours": "Lun–Vie · 09:00–18:00 GMT-5",
     "privacyPolicy": "Política de Privacidad",
     "termsConditions": "Términos y Condiciones",
     "cookiePolicy": "Política de Cookies",
-    "dataProtection": "Protección de Datos",
-    "copyright": "© {year} ZIVAH International S.A. Todos los derechos reservados.",
-    "tagline": "Exportadores Premium de Productos Ecuatorianos"
-  },
-  "process": {
-    "badge": "Ruta de compra",
-    "title": "De la cotización al embarque sin pasos innecesarios",
-    "description": "Un recorrido simple para que el comprador entienda qué enviar, qué recibe y cuándo puede avanzar.",
-    "steps": [
-      {
-        "number": "01",
-        "title": "Envía tu requerimiento",
-        "description": "Producto, volumen, destino y presentación necesaria. Con esos datos evitamos idas y vueltas.",
-        "icon": "📋"
-      },
-      {
-        "number": "02",
-        "title": "Validamos disponibilidad",
-        "description": "Revisamos tallas, certificaciones, documentación requerida e Incoterm según tu mercado.",
-        "icon": "🔍"
-      },
-      {
-        "number": "03",
-        "title": "Recibes propuesta FOB",
-        "description": "Enviamos precio, especificación técnica, documentación disponible y condiciones comerciales.",
-        "icon": "📄"
-      },
-      {
-        "number": "04",
-        "title": "Coordinamos embarque",
-        "description": "Alineamos documentación, despacho y seguimiento comercial hasta la salida del producto.",
-        "icon": "🚢"
-      }
-    ]
-  },
-  "testimonials": {
-    "badge": "Prueba comercial",
-    "title": "Confianza basada en operación, no en promesas",
-    "description": "Importadores y distribuidores que confían en ZIVAH para sus operaciones de compra.",
-    "items": [
-      {
-        "quote": "La documentación llegó clara desde el inicio y eso facilitó nuestra revisión interna antes de avanzar con la compra.",
-        "author": "Importador de Mariscos",
-        "role": "Distribuidor Mayorista",
-        "country": "España",
-        "flag": "🇪🇸"
-      },
-      {
-        "quote": "Necesitábamos continuidad de siembra y soporte técnico. La coordinación de disponibilidad nos ayudó a planificar mejor el ciclo.",
-        "author": "Gerente de Acuicultura",
-        "role": "Operador de Camaronera",
-        "country": "México",
-        "flag": "🇲🇽"
-      },
-      {
-        "quote": "La respuesta comercial fue rápida y concreta: precio, condiciones y siguientes pasos sin información dispersa.",
-        "author": "Director de Compras",
-        "role": "Cadena de Distribución",
-        "country": "Estados Unidos",
-        "flag": "🇺🇸"
-      }
-    ]
+    "dataProtection": "Protección de Datos"
   },
   "quoteForm": {
-    "title": "Solicitar Cotización",
+    "title": "Solicitud de cotización",
+    "contactSection": "Datos de contacto",
+    "productsSection": "Productos",
     "fullName": "Nombre Completo",
     "fullNamePlaceholder": "Tu nombre completo",
     "email": "Email",
@@ -358,8 +439,8 @@
     "searchProducts": "Buscar y Seleccionar Productos",
     "searchPlaceholder": "Escriba para buscar productos...",
     "searchingProducts": "Buscando productos...",
-    "clickToAdd": "Haga clic en los productos para agregar",
-    "added": "✓ Agregado",
+    "clickToAdd": "Selecciona los productos para agregar",
+    "added": "Agregado",
     "noDescription": "Sin descripción",
     "searchError": "Error al Buscar Productos",
     "noProductsFound": "No se encontraron productos para",
@@ -380,9 +461,12 @@
     "priceDisclaimer": "* Precio final puede variar según especificaciones y términos de envío",
     "additionalMessage": "Mensaje Adicional",
     "additionalMessagePlaceholder": "Comentarios adicionales, requerimientos especiales, fechas de entrega, etc.",
-    "submitting": "Enviando...",
-    "submitButton": "Solicitar Cotización",
-    "submitButtonWithCount": "Solicitar Cotización ({count} productos)",
+    "submitting": "Enviando…",
+    "submitButton": "Enviar solicitud",
+    "submitButtonWithCount": "Enviar solicitud ({count} productos)",
+    "privacyNote": "Usamos tus datos solo para preparar y enviar tu cotización.",
+    "reviewFields": "Revisa los campos marcados",
+    "removeProduct": "Eliminar producto",
     "autoEmailMessage": "La cotización será enviada automáticamente por email con precios actualizados y términos de envío.",
     "required": "Este campo es requerido",
     "invalidEmail": "Por favor ingrese un email válido",
@@ -412,7 +496,19 @@
     "phoneMaxChars": "El teléfono no puede exceder 20 caracteres",
     "quoteCreatedSuccess": "Cotización creada exitosamente. Email enviado a {email}.",
     "perUnitPrice": "por unidad",
-    "cannotConvert": "No se puede convertir de {from} a {to}"
+    "cannotConvert": "No se puede convertir de {from} a {to}",
+    "validation": {
+      "nameMin": "El nombre debe tener al menos 2 caracteres",
+      "nameMax": "El nombre no puede exceder 255 caracteres",
+      "emailInvalid": "Debe ser un email válido",
+      "phoneInvalid": "Debe ser un número de teléfono válido",
+      "phoneMin": "El teléfono debe tener al menos 10 dígitos",
+      "phoneMax": "El teléfono no puede exceder 20 caracteres",
+      "countryInvalid": "Debe seleccionar un país válido",
+      "recipientEmailInvalid": "Debe ser un email válido para envío",
+      "itemsMin": "Debe incluir al menos un producto",
+      "phoneCountryInvalid": "Formato de teléfono inválido para el país seleccionado"
+    }
   },
   "common": {
     "loading": "Cargando...",
@@ -434,27 +530,28 @@
     "offline": "Sin conexión"
   },
   "cookies": {
-    "title": "Cookies en ZIVAH International",
-    "description": "Utilizamos cookies para mejorar su experiencia, analizar el tráfico y personalizar el contenido. Al continuar navegando, acepta nuestro uso de cookies según nuestra",
+    "title": "Cookies",
+    "description": "Usamos cookies para medir el tráfico y mejorar tu experiencia. Al continuar, aceptas nuestra",
     "cookiePolicy": "Política de Cookies",
-    "managePreferences": "Preferencias",
-    "onlyNecessary": "Solo Necesarias",
-    "acceptAll": "Aceptar Todas",
-    "preferencesTitle": "Preferencias de Cookies",
-    "necessaryCookies": "Cookies Necesarias",
+    "managePreferences": "Configurar",
+    "onlyNecessary": "Solo necesarias",
+    "acceptAll": "Aceptar todas",
+    "close": "Cerrar",
+    "preferencesTitle": "Preferencias de cookies",
+    "necessaryCookies": "Necesarias",
     "alwaysActive": "Siempre activas",
-    "necessaryDescription": "Estas cookies son esenciales para el funcionamiento del sitio web y no pueden ser desactivadas.",
+    "necessaryDescription": "Imprescindibles para que el sitio funcione. No se pueden desactivar.",
     "necessary": "Necesarias",
-    "analyticsCookies": "Cookies de Análisis",
-    "enableAnalytics": "Habilitar cookies de análisis",
-    "analyticsDescription": "Nos ayudan a entender cómo los visitantes interactúan con nuestro sitio web mediante la recopilación de información de forma anónima.",
-    "functionalCookies": "Cookies Funcionales",
-    "enableFunctional": "Habilitar cookies funcionales",
-    "functionalDescription": "Permiten recordar sus preferencias y configuraciones para mejorar su experiencia de navegación.",
-    "marketingCookies": "Cookies de Marketing",
-    "enableMarketing": "Habilitar cookies de marketing",
-    "marketingDescription": "Se utilizan para mostrar anuncios relevantes y medir la efectividad de nuestras campañas publicitarias.",
-    "savePreferences": "Guardar Preferencias",
-    "moreInfo": "Para más información, consulte nuestra"
+    "analyticsCookies": "Análisis",
+    "enableAnalytics": "Activar cookies de análisis",
+    "analyticsDescription": "Nos permiten entender de forma anónima cómo se usa el sitio.",
+    "functionalCookies": "Funcionales",
+    "enableFunctional": "Activar cookies funcionales",
+    "functionalDescription": "Recuerdan tus preferencias, como el idioma o el tema.",
+    "marketingCookies": "Marketing",
+    "enableMarketing": "Activar cookies de marketing",
+    "marketingDescription": "Miden la efectividad de nuestras campañas publicitarias.",
+    "savePreferences": "Guardar preferencias",
+    "moreInfo": "Para más información, visita nuestra"
   }
 }
