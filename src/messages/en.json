@@ -368,26 +368,43 @@
     }
   },
   "contact": {
-    "badge": "Commercial Contact",
-    "title": "Let's Talk About Your Next Order",
-    "description": "Our commercial team responds within 24 hours. Whether you need an urgent quote, technical information or export documentation, we are ready to help.",
-    "mainOffice": "Main Office",
-    "distributionOffice": "Distribution Office",
-    "commercialEmail": "Commercial Email",
-    "phone": "Phone",
-    "businessHours": "Business Hours",
-    "mainHQ": "Main Headquarters (Ecuador):",
-    "miamiOffice": "Miami Office:",
-    "weekdays": "Monday - Friday",
-    "unitedStates": "United States",
-    "contactChannels": "Contact Channels",
-    "sendMessage": "Send Us a Message",
-    "name": "Name",
-    "company": "Company",
-    "email": "Email",
-    "subject": "Subject",
-    "message": "Message",
-    "send": "Send Message"
+    "eyebrow": "Commercial contact",
+    "title": "Let's talk about your next purchase.",
+    "lead": "Write to us with the product, volume and destination. We reply within 24 business hours.",
+    "officesTitle": "Offices",
+    "ecuador": {
+      "country": "Ecuador",
+      "role": "Main logistics operation"
+    },
+    "miami": {
+      "country": "United States",
+      "role": "Commercial operation"
+    },
+    "channelsTitle": "Direct contact",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "whatsappLabel": "WhatsApp",
+    "whatsappAction": "Message us on WhatsApp",
+    "hoursLabel": "Hours",
+    "hours": "Mon–Fri · 09:00–18:00 GMT-5",
+    "directions": "View directions",
+    "noMap": "We do not use embedded maps.",
+    "formTitle": "Send us a message",
+    "form": {
+      "name": "Name",
+      "company": "Company",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "namePlaceholder": "Your name",
+      "companyPlaceholder": "Your company",
+      "emailPlaceholder": "you@company.com",
+      "phonePlaceholder": "+593 99 900 2893",
+      "messagePlaceholder": "Product, volume and destination",
+      "submit": "Send message",
+      "privacy": "We use your data only to reply to your inquiry."
+    },
+    "quotePrompt": "Need an FOB quote? Request it here"
   },
   "footer": {
     "brandLine": "Exporter of seafood and aquaculture products from Ecuador.",

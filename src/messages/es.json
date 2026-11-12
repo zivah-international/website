@@ -368,26 +368,43 @@
     }
   },
   "contact": {
-    "badge": "Contacto Comercial",
-    "title": "Hablemos de tu Próximo Pedido",
-    "description": "Nuestro equipo comercial responde en menos de 24 horas. Ya sea que necesites una cotización urgente, información técnica o documentación de exportación, estamos listos para ayudarte.",
-    "mainOffice": "Oficina Principal",
-    "distributionOffice": "Oficina de Distribución",
-    "commercialEmail": "Email Comercial",
-    "phone": "Teléfono",
-    "businessHours": "Horario de Atención",
-    "mainHQ": "Sede Principal (Ecuador):",
-    "miamiOffice": "Oficina Miami:",
-    "weekdays": "Lunes - Viernes",
-    "unitedStates": "Estados Unidos",
-    "contactChannels": "Canales de Contacto",
-    "sendMessage": "Envíanos un Mensaje",
-    "name": "Nombre",
-    "company": "Empresa",
-    "email": "Email",
-    "subject": "Asunto",
-    "message": "Mensaje",
-    "send": "Enviar Mensaje"
+    "eyebrow": "Contacto comercial",
+    "title": "Hablemos de tu próxima compra.",
+    "lead": "Escríbenos con producto, volumen y destino. Respondemos en 24 horas hábiles.",
+    "officesTitle": "Oficinas",
+    "ecuador": {
+      "country": "Ecuador",
+      "role": "Operación logística principal"
+    },
+    "miami": {
+      "country": "Estados Unidos",
+      "role": "Operación comercial"
+    },
+    "channelsTitle": "Contacto directo",
+    "emailLabel": "Email",
+    "phoneLabel": "Teléfono",
+    "whatsappLabel": "WhatsApp",
+    "whatsappAction": "Escríbenos por WhatsApp",
+    "hoursLabel": "Horario",
+    "hours": "Lun–Vie · 09:00–18:00 GMT-5",
+    "directions": "Ver indicaciones",
+    "noMap": "No usamos mapas embebidos.",
+    "formTitle": "Envíanos un mensaje",
+    "form": {
+      "name": "Nombre",
+      "company": "Empresa",
+      "email": "Email",
+      "phone": "Teléfono",
+      "message": "Mensaje",
+      "namePlaceholder": "Tu nombre",
+      "companyPlaceholder": "Tu empresa",
+      "emailPlaceholder": "tu@empresa.com",
+      "phonePlaceholder": "+593 99 900 2893",
+      "messagePlaceholder": "Producto, volumen y destino",
+      "submit": "Enviar mensaje",
+      "privacy": "Usamos tus datos solo para responder a tu consulta."
+    },
+    "quotePrompt": "¿Necesitas una cotización FOB? Solicítala aquí"
   },
   "footer": {
     "brandLine": "Exportador de productos del mar y acuicultura desde Ecuador.",
