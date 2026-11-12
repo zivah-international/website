@@ -21,6 +21,7 @@ export default async function MarketMap() {
         src='/assets/images/world-map.svg'
         alt=''
         fill
+        loading='eager'
         sizes='(min-width: 1200px) 1120px, 100vw'
         className='object-contain opacity-20 grayscale dark:invert'
       />
