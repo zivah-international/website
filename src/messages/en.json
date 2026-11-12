@@ -288,24 +288,76 @@
     }
   },
   "markets": {
-    "badge": "Global Reach",
-    "title": "From Guayas and Miami to the World",
-    "description": "Our dual presence in Samborondón (Ecuador) and Miami (USA) allows us to close deals quickly, coordinate international logistics and offer commercial support in your time zone.",
-    "stats": {
-      "countriesServed": "Countries with Active Exports",
-      "containersYear": "Dispatch Capacity",
-      "yearsExperience": "Years of Experience",
-      "certifiedProducts": "Certified Products",
-      "customerSatisfaction": "Customer Satisfaction",
-      "specializedSupport": "Commercial Support"
+    "eyebrow": "Commercial presence",
+    "title": "From Guayas and Miami to the world.",
+    "description": "Six markets, four active, and commercial and logistics operations coordinated from origin.",
+    "lead": "Six markets. Four active. One commercial and logistics operation coordinated from origin.",
+    "map": {
+      "ariaLabel": "ZIVAH markets map"
     },
-    "statValues": {
-      "countriesServed": "5+",
-      "containersYear": "Scalable",
-      "yearsExperience": "4+",
-      "certifiedProducts": "100%",
-      "customerSatisfaction": "100%",
-      "specializedSupport": "24/7"
+    "status": {
+      "active": "Active",
+      "expansion": "Expansion"
+    },
+    "list": {
+      "US": {
+        "country": "United States",
+        "hub": "Miami",
+        "note": "Wholesale and retail distribution."
+      },
+      "JP": {
+        "country": "Japan",
+        "hub": "Tokyo",
+        "note": "Seafood importers."
+      },
+      "NL": {
+        "country": "Netherlands",
+        "hub": "Rotterdam",
+        "note": "Gateway to the European Union."
+      },
+      "CN": {
+        "country": "China",
+        "hub": "Shanghai",
+        "note": "Wholesale distribution."
+      },
+      "CA": {
+        "country": "Canada",
+        "hub": "Toronto",
+        "note": "Expansion market."
+      },
+      "AE": {
+        "country": "United Arab Emirates",
+        "hub": "Dubai",
+        "note": "Expansion market."
+      }
+    },
+    "evidence": {
+      "eyebrow": "Commercial operation",
+      "title": "Why choose ZIVAH",
+      "lead": "Four concrete reasons to coordinate your next shipment.",
+      "rows": [
+        {
+          "title": "Origin and destination of our own",
+          "description": "Commercial operations in Samborondón and Miami."
+        },
+        {
+          "title": "Documented transit",
+          "description": "Sanitary, origin and batch traceability on every shipment."
+        },
+        {
+          "title": "A team in your time zone",
+          "description": "Commercial support in Spanish and English."
+        },
+        {
+          "title": "Batch traceability",
+          "description": "Every batch keeps its origin and control history."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Check availability for your market.",
+      "body": "Tell us the product, volume and destination. We respond within 24 hours.",
+      "action": "Request a quote"
     }
   },
   "contact": {

@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 
+import MarketMap from '@/components/site/MarketMap';
 import { Link } from '@/i18n/routing';
 import { MARKETS } from '@/lib/public-data';
 
@@ -28,48 +29,8 @@ export default async function MarketsSection() {
         </div>
 
         <div className='mt-10 grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-12'>
-          {/* Decorative route diagram — the list carries the information. */}
-          <div
-            aria-hidden='true'
-            className='order-2 text-border lg:order-1 lg:col-span-5'
-          >
-            <svg
-              viewBox='0 0 100 60'
-              className='w-full'
-              role='presentation'
-              focusable='false'
-            >
-              {MARKETS.map(market => (
-                <line
-                  key={`route-${market.code}`}
-                  x1='24'
-                  y1='52'
-                  x2={market.x}
-                  y2={market.y}
-                  stroke='currentColor'
-                  strokeWidth='0.3'
-                  strokeDasharray='1.5 1.5'
-                />
-              ))}
-              <circle
-                cx='24'
-                cy='52'
-                r='1.6'
-                className='fill-accent'
-              />
-              {MARKETS.map(market => (
-                <circle
-                  key={`dot-${market.code}`}
-                  cx={market.x}
-                  cy={market.y}
-                  r={market.status === 'active' ? 1.5 : 1.1}
-                  className={
-                    market.status === 'active' ? 'fill-accent' : 'fill-none stroke-current'
-                  }
-                  strokeWidth='0.4'
-                />
-              ))}
-            </svg>
+          <div className='order-2 lg:order-1 lg:col-span-5'>
+            <MarketMap />
           </div>
 
           <ul className='order-1 border-t border-border lg:order-2 lg:col-span-7'>

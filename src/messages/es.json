@@ -288,24 +288,76 @@
     }
   },
   "markets": {
-    "badge": "Alcance Global",
-    "title": "Desde Guayas y Miami al Mundo",
-    "description": "Nuestra doble presencia en Samborondón (Ecuador) y Miami (EE. UU.) nos permite cerrar negocios ágilmente, coordinar logística internacional y ofrecer soporte comercial en tu zona horaria.",
-    "stats": {
-      "countriesServed": "Países con Exportaciones Activas",
-      "containersYear": "Capacidad de Despacho",
-      "yearsExperience": "Años de Experiencia",
-      "certifiedProducts": "Productos con Certificación",
-      "customerSatisfaction": "Satisfacción del Cliente",
-      "specializedSupport": "Soporte Comercial"
+    "eyebrow": "Presencia comercial",
+    "title": "Desde Guayas y Miami al mundo.",
+    "description": "Seis mercados, cuatro activos y una operación comercial y logística coordinada desde origen.",
+    "lead": "Seis mercados. Cuatro activos. Una operación comercial y logística coordinada desde origen.",
+    "map": {
+      "ariaLabel": "Mapa de mercados de ZIVAH"
     },
-    "statValues": {
-      "countriesServed": "5+",
-      "containersYear": "Escalable",
-      "yearsExperience": "4+",
-      "certifiedProducts": "100%",
-      "customerSatisfaction": "100%",
-      "specializedSupport": "24/7"
+    "status": {
+      "active": "Activo",
+      "expansion": "Expansión"
+    },
+    "list": {
+      "US": {
+        "country": "Estados Unidos",
+        "hub": "Miami",
+        "note": "Distribución mayorista y retail."
+      },
+      "JP": {
+        "country": "Japón",
+        "hub": "Tokio",
+        "note": "Importadores de productos del mar."
+      },
+      "NL": {
+        "country": "Países Bajos",
+        "hub": "Róterdam",
+        "note": "Entrada a la Unión Europea."
+      },
+      "CN": {
+        "country": "China",
+        "hub": "Shanghái",
+        "note": "Distribución mayorista."
+      },
+      "CA": {
+        "country": "Canadá",
+        "hub": "Toronto",
+        "note": "Mercado en expansión."
+      },
+      "AE": {
+        "country": "Emiratos Árabes Unidos",
+        "hub": "Dubái",
+        "note": "Mercado en expansión."
+      }
+    },
+    "evidence": {
+      "eyebrow": "Operación comercial",
+      "title": "Por qué elegir ZIVAH",
+      "lead": "Cuatro razones concretas para coordinar tu próximo embarque.",
+      "rows": [
+        {
+          "title": "Origen y destino propios",
+          "description": "Operación comercial en Samborondón y Miami."
+        },
+        {
+          "title": "Tránsitos documentados",
+          "description": "Sanidad, origen y trazabilidad por lote en cada embarque."
+        },
+        {
+          "title": "Equipo en tu zona horaria",
+          "description": "Atención comercial en español e inglés."
+        },
+        {
+          "title": "Trazabilidad por lote",
+          "description": "Cada lote conserva su historial de origen y control."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Consulta disponibilidad para tu mercado.",
+      "body": "Indícanos producto, volumen y destino. Respondemos en 24 horas.",
+      "action": "Solicitar cotización"
     }
   },
   "contact": {
