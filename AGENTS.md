@@ -37,3 +37,19 @@
 
 - Deployment is targeting a cPanel Node.js hosting environment using standalone output. Do not assume Vercel or Amplify-specific build behaviors.
 - Do not commit `.next/`, `node_modules/`, `.env*`, credentials, tokens, certificates, or unrelated working-tree changes.
+
+## Required Spec-Driven Development
+
+Spec Kit is the mandatory engineering workflow for any change that affects application behavior, user-facing functionality, APIs or data contracts, security, database schemas, architecture, infrastructure, or multiple code areas. This applies to features, behavioral bug fixes, and refactors; a direct implementation request does not waive the workflow.
+
+1. Create or update the feature artifacts under `specs/<id>-<short-name>/` with `speckit.specify`. Treat these artifacts as the source of truth.
+2. Resolve material ambiguity with `speckit.clarify`.
+3. Generate the technical plan with `speckit.plan`.
+4. Generate the ordered implementation tasks with `speckit.tasks`.
+5. Stop for explicit user approval of the spec, plan, and tasks before implementation. Do not infer approval from the original feature request.
+6. Implement only the approved tasks with `speckit.implement`. If scope changes, update the artifacts and obtain approval before proceeding.
+7. Run `speckit.analyze` after implementation and resolve discrepancies before handoff.
+
+Use the repository's full SDD workflow when available; its spec, plan, and task review gates are mandatory. Bug-triage tooling may supplement this process but must not bypass it.
+
+Pure documentation corrections, typo fixes, formatting-only changes, and other mechanical edits with no behavioral impact are exempt. For an urgent security or production fix that cannot wait for the review gates, make the smallest safe change, clearly report the exception, and backfill the SDD artifacts in the same work item.

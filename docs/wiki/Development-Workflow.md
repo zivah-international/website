@@ -133,11 +133,18 @@ Commit messages must adhere to the format:
 
 This repository integrates the **Spec-Kit** methodology for spec-driven development. Prompts and skills are configured under `.github/skills/`, `.kiro/prompts/`, `.agents/`, and `.specify/`.
 
-### The Spec-Driven Workflow:
+### Required Spec-Driven Workflow
 
-1. **Specify (`speckit-specify`)**: Draft the functional specification for the new requirement.
-2. **Clarify (`speckit-clarify`)**: Identify edge cases, questions, and ambiguous requirements.
-3. **Plan (`speckit-plan`)**: Generate technical implementation plans conforming to the architecture.
-4. **Tasks (`speckit-tasks`)**: Create an ordered checklist of discrete development tasks.
-5. **Implement (`speckit-implement`)**: Execute the implementation against the task list.
-6. **Analyze (`speckit-analyze`)**: Verify consistency and pass all quality gates.
+Spec Kit is mandatory for changes that affect application behavior, user-facing functionality, APIs or data contracts, security, database schemas, architecture, infrastructure, or multiple code areas. This includes features, behavioral bug fixes, and refactors. Direct implementation requests do not waive this requirement.
+
+Store each feature's source-of-truth artifacts under `specs/<id>-<short-name>/` and follow this sequence:
+
+1. **Specify (`speckit.specify`)**: Draft or update the functional specification.
+2. **Clarify (`speckit.clarify`)**: Resolve material ambiguity and edge cases.
+3. **Plan (`speckit.plan`)**: Design an implementation consistent with the project architecture and constitution.
+4. **Tasks (`speckit.tasks`)**: Create dependency-ordered, actionable implementation tasks.
+5. **Review gates**: Obtain explicit user approval of the spec, plan, and tasks before implementation; do not infer approval from the original request.
+6. **Implement (`speckit.implement`)**: Execute only the approved tasks. Update the artifacts and obtain approval if scope changes.
+7. **Analyze (`speckit.analyze`)**: Check the result against the spec, plan, tasks, constitution, and applicable quality gates before handoff.
+
+Use the full SDD workflow and do not bypass its review gates. Bug-triage tools may supplement this process but do not replace it. Pure documentation corrections, typo fixes, formatting-only changes, and other mechanical edits with no behavioral impact are exempt. For an urgent security or production fix that cannot wait for the review gates, make the smallest safe change, report the exception, and backfill the SDD artifacts in the same work item.
