@@ -13,7 +13,6 @@ type ProductCardProps = {
   linkLabel: string;
   origin?: string;
   certifications?: string[];
-  priority?: boolean;
   testId?: string;
 };
 
@@ -27,7 +26,6 @@ export default function ProductCard({
   linkLabel,
   origin,
   certifications,
-  priority = false,
   testId = 'product-card',
 }: ProductCardProps) {
   return (
@@ -40,7 +38,6 @@ export default function ProductCard({
           src={imageSrc}
           alt={imageAlt}
           fill
-          priority={priority}
           sizes='(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
           className='object-cover'
         />

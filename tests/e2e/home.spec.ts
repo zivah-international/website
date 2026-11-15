@@ -63,7 +63,7 @@ test('hero uses a local image and no remote hosts', async ({ page }) => {
   await expect(image).toHaveAttribute('src', /hero-marine\.jpg/);
 });
 
-test('home presents proof, process, and markets without an unverified testimonial', async ({
+test('home presents proof, process, and markets without unapproved customer proof', async ({
   page,
 }) => {
   await prepare(page);
