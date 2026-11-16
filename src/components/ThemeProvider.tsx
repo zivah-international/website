@@ -1,6 +1,13 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -9,6 +16,7 @@ interface ThemeContextValue {
   setTheme: (theme: Theme) => void;
   resolvedTheme: 'light' | 'dark';
   systemTheme: 'light' | 'dark';
+  isReady: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
@@ -41,10 +49,27 @@ export function ThemeProvider({
   defaultTheme = 'system',
   enableSystem = true,
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<Theme>(() => getStoredTheme(defaultTheme));
-  const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>(getSystemTheme);
+  const [theme, setThemeState] = useState<Theme>(defaultTheme);
+  const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>('light');
+  const [isReady, setIsReady] = useState(false);
 
   const resolvedTheme: 'light' | 'dark' = theme === 'system' ? systemTheme : theme;
+
+  useLayoutEffect(() => {
+    const storedTheme = getStoredTheme(defaultTheme);
+    const currentSystemTheme = getSystemTheme();
+    const initialResolvedTheme = storedTheme === 'system' ? currentSystemTheme : storedTheme;
+
+    setThemeState(storedTheme);
+    setSystemTheme(currentSystemTheme);
+
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(initialResolvedTheme);
+    root.style.colorScheme = initialResolvedTheme;
+
+    setIsReady(true);
+  }, [defaultTheme]);
 
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
@@ -53,13 +78,15 @@ export function ThemeProvider({
     } catch {}
   }, []);
 
-  // Apply dark/light class to <html>
+  // Keep the document theme in sync after initialization and on subsequent changes.
   useEffect(() => {
+    if (!isReady) return;
+
     const root = document.documentElement;
     root.classList.remove('light', 'dark');
     root.classList.add(resolvedTheme);
     root.style.colorScheme = resolvedTheme;
-  }, [resolvedTheme]);
+  }, [isReady, resolvedTheme]);
 
   // Listen for OS preference changes
   useEffect(() => {
@@ -82,7 +109,7 @@ export function ThemeProvider({
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme, systemTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme, systemTheme, isReady }}>
       {children}
     </ThemeContext.Provider>
   );
