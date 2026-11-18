@@ -109,6 +109,20 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
 
+  // Keep development watchers lightweight to avoid EMFILE/inotify exhaustion in
+  // large repos or constrained Linux environments.
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.watchOptions = {
+        ...config.watchOptions,
+        aggregateTimeout: 200,
+        poll: 1000,
+        ignored: ['**/.next/**', '**/node_modules/**', '**/.git/**'],
+      };
+    }
+    return config;
+  },
+
   // TypeScript configuration
   typescript: {
     ignoreBuildErrors: false,

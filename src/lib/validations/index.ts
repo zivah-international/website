@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { normalizeQuantityInput } from '@/lib/quote-pricing';
 import { CommunicationType, QuotePriority, QuoteStatus, SettingType, UserRole } from '@/types';
 
 // ============================================================================
@@ -90,9 +91,9 @@ export const addressSchema = z.object({
 
 export const quoteItemSchema = z.object({
   productId: z.number().int().positive('Debe seleccionar un producto válido'),
-  measureId: z.number().int().positive('Debe seleccionar una unidad de medida válida').optional(),
-  quantity: z.number().int().positive('La cantidad debe ser mayor a 0'),
-  unitPrice: z.number().positive('El precio unitario debe ser mayor a 0').optional(),
+  measureId: z.number().int().positive('Debe seleccionar una unidad de medida válida'),
+  quantity: z.string().min(1, 'Ingrese una cantidad válida'),
+  measureType: z.string().min(1),
   notes: z.string().optional(),
   specifications: z.record(z.string(), z.any()).optional(),
 });
@@ -108,6 +109,7 @@ export type QuoteSchemaMessages = {
   recipientEmailInvalid: string;
   itemsMin: string;
   phoneCountryInvalid: string;
+  quantityInvalid: string;
 };
 
 const DEFAULT_QUOTE_MESSAGES: QuoteSchemaMessages = {
@@ -121,9 +123,23 @@ const DEFAULT_QUOTE_MESSAGES: QuoteSchemaMessages = {
   recipientEmailInvalid: 'Debe ser un email válido para envío',
   itemsMin: 'Debe incluir al menos un producto',
   phoneCountryInvalid: 'Formato de teléfono inválido para el país seleccionado',
+  quantityInvalid: 'Ingrese una cantidad válida para esta unidad (máximo 10 000)',
 };
 
-export function createQuoteSchema(messages: QuoteSchemaMessages = DEFAULT_QUOTE_MESSAGES) {
+export function createQuoteSchema(
+  messages: QuoteSchemaMessages = DEFAULT_QUOTE_MESSAGES,
+  locale = 'es'
+) {
+  const localizedQuoteItemSchema = quoteItemSchema.superRefine((item, context) => {
+    if (!normalizeQuantityInput(item.quantity, locale, item.measureType)) {
+      context.addIssue({
+        code: 'custom',
+        message: messages.quantityInvalid,
+        path: ['quantity'],
+      });
+    }
+  });
+
   return z
     .object({
       customerName: z.string().min(2, messages.nameMin).max(255, messages.nameMax),
@@ -136,11 +152,14 @@ export function createQuoteSchema(messages: QuoteSchemaMessages = DEFAULT_QUOTE_
         .optional()
         .or(z.literal('')),
       company: z.string().max(255).optional(),
-      countryId: z.number().int().positive(messages.countryInvalid).optional(),
+      countryId: z
+        .number({ error: messages.countryInvalid })
+        .int(messages.countryInvalid)
+        .positive(messages.countryInvalid),
       recipientEmail: z.string().email(messages.recipientEmailInvalid).optional(),
       shippingAddress: addressSchema.optional(),
       message: z.string().optional(),
-      items: z.array(quoteItemSchema).min(1, messages.itemsMin),
+      items: z.array(localizedQuoteItemSchema).min(1, messages.itemsMin),
     })
     .refine(
       data => {

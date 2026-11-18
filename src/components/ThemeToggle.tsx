@@ -4,15 +4,13 @@ import { Moon, Sun } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { useTheme } from '@/components/ThemeProvider';
-import { useMounted } from '@/lib/hooks/use-mounted';
 
 export default function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
-  const mounted = useMounted();
+  const { resolvedTheme, setTheme, isReady } = useTheme();
   const t = useTranslations('nav');
 
-  const isDark = resolvedTheme === 'dark';
-  const label = isDark ? t('switchToLight') : t('switchToDark');
+  const isDark = isReady && resolvedTheme === 'dark';
+  const label = isReady && isDark ? t('switchToLight') : t('switchToDark');
 
   const toggleTheme = () => {
     setTheme(isDark ? 'light' : 'dark');
@@ -22,8 +20,8 @@ export default function ThemeToggle() {
     <button
       type='button'
       onClick={toggleTheme}
-      disabled={!mounted}
-      aria-label={mounted ? label : undefined}
+      disabled={!isReady}
+      aria-label={label}
       className='flex h-11 w-11 items-center justify-center rounded-[2px] border border-current/25 bg-transparent text-current transition-colors hover:bg-current/5 disabled:opacity-50'
     >
       <Sun

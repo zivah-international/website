@@ -152,7 +152,7 @@ model Quote {
   message         String?              @db.Text
   status          QuoteStatus          @default(PENDING)
   priority        QuotePriority        @default(NORMAL)
-  totalAmount     Decimal?             @map("total_amount") @db.Decimal(12, 2)
+  totalAmount     Decimal?             @map("total_amount") @db.Decimal(30, 2)
   currencyId      Int?                 @map("currency_id")
   validUntil      DateTime?            @map("valid_until")
   emailStatus     String?              @default("pending") @map("email_status")
@@ -183,9 +183,9 @@ model QuoteItem {
   id             Int       @id @default(autoincrement())
   quoteId        Int       @map("quote_id")
   productId      Int       @map("product_id")
-  quantity       Int
-  unitPrice      Decimal   @map("unit_price") @db.Decimal(10, 2)
-  totalPrice     Decimal   @map("total_price") @db.Decimal(12, 2)
+  quantity       Decimal   @db.Decimal(13, 3)
+  unitPrice      Decimal?  @map("unit_price") @db.Decimal(24, 6)
+  totalPrice     Decimal?  @map("total_price") @db.Decimal(30, 2)
   notes          String?   @db.Text
   specifications Json?
   createdAt      DateTime  @default(now()) @map("created_at")

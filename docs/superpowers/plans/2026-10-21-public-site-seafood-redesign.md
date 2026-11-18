@@ -1,15 +1,15 @@
 # Public Site Seafood-First Redesign — Implementation Plan
 
-**Status:** Complete on `develop`
+**Status:** Complete on `feat/public-site-redesign-integration` (local; based on `main`)
 
-**Closed:** 2026-11-12
-**Implementation commits:** `00eafe7` (public site redesign), `dda664d` (theme-aware logo)
+**Closed:** 2026-11-15
+**Integrated from:** `main` at `c22c654` and `feat/public-site-redesign` through `ce78c8a`
 
-The planned public-site redesign is implemented and committed. The follow-up logo work replaced the oversized wrapped image with a compact SVG master and a `BrandLogo` component that adapts to light and dark surfaces.
+The public-site redesign is integrated on the local branch. The theme-aware SVG logo from `main` is retained.
 
-**Verification record:** The redesign passed 65/65 mocked Playwright E2E tests, build, formatting, type-check, lint, and `git diff --check` (four existing lint warnings). The logo follow-up passed type-check, lint (five warnings, zero errors), targeted Prettier checks, rendered light/dark desktop and mobile checks, and `git diff --check`. The repository-wide `pnpm format:check` after the logo change reports the pre-existing formatting issue in `.impeccable/hook.cache.json`; all changed source files passed targeted Prettier.
+**Verification record:** Playwright passed 77/77 E2E tests; `pnpm type-check` and `pnpm build` passed. Lint passed with five existing warnings. Changed files pass targeted formatting; repository-wide `pnpm format:check` still flags `.impeccable/hook.cache.json` and `docs/wiki/_Footer.md`. `git diff --check` passed.
 
-**Verification caveat:** No Lighthouse LCP/CLS measurement was retained in the closeout evidence, so the performance targets in the acceptance mapping are not reported as measured results.
+**Verification caveat:** No Lighthouse LCP/CLS measurement was retained, so the performance targets in the acceptance mapping are not reported as measured results.
 
 > This plan is closed. Reopen it only for new scope or follow-up defects.
 

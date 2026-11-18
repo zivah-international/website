@@ -5,6 +5,13 @@ import { emailService } from '@/lib/email';
 import { createApiResponse, handleApiError } from '@/lib/errors';
 import { logger } from '@/lib/logger';
 import {
+  calculateLineTotal,
+  isValidCanonicalQuantity,
+  resolveUnitPrice,
+  sumCurrencyAmounts,
+} from '@/lib/quote-pricing';
+import { pricingService } from '@/lib/services/pricing.service';
+import {
   formRateLimiter,
   isSQLInjection,
   isXSS,
@@ -12,6 +19,9 @@ import {
   sanitizeEmail,
   sanitizeString,
 } from '@/lib/validation';
+
+class QuoteRequestError extends Error {}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -63,9 +73,9 @@ export async function GET(request: NextRequest) {
       quote_id: number;
       product_id: number;
       measure_id?: number | null;
-      quantity: number;
-      unit_price: number;
-      total_price: number;
+      quantity: string;
+      unit_price: string | null;
+      total_price: string | null;
       notes?: string | null;
       specifications?: string | null;
       product_name?: string | null;
@@ -220,27 +230,41 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    const requestBody: unknown = await request.json();
+    if (!requestBody || typeof requestBody !== 'object' || Array.isArray(requestBody)) {
+      return createApiResponse(null, 'Los datos de la solicitud no son válidos.', 400);
+    }
+    const body = requestBody as Record<string, unknown>;
+    const optionalText = (value: unknown) =>
+      typeof value === 'string' && value ? sanitizeString(value) : undefined;
+    const submittedItems = Array.isArray(body.items) ? body.items : [];
 
     // Sanitize input data
     const sanitizedBody = {
-      customerName: sanitizeString(body.customerName || ''),
-      customerEmail: sanitizeEmail(body.customerEmail || ''),
-      customerPhone: body.customerPhone ? sanitizeString(body.customerPhone) : undefined,
-      company: body.company ? sanitizeString(body.company) : undefined,
+      customerName: typeof body.customerName === 'string' ? sanitizeString(body.customerName) : '',
+      customerEmail:
+        typeof body.customerEmail === 'string' ? sanitizeEmail(body.customerEmail) : '',
+      customerPhone: optionalText(body.customerPhone),
+      company: optionalText(body.company),
       countryId: body.countryId,
-      recipientEmail: body.recipientEmail ? sanitizeEmail(body.recipientEmail) : undefined,
+      locale: body.locale,
+      recipientEmail:
+        typeof body.recipientEmail === 'string' ? sanitizeEmail(body.recipientEmail) : undefined,
       shippingAddress: body.shippingAddress,
-      message: body.message ? sanitizeString(body.message) : undefined,
-      items:
-        body.items?.map((item: any) => ({
+      message: optionalText(body.message),
+      items: submittedItems.map((rawItem: unknown) => {
+        const item =
+          rawItem && typeof rawItem === 'object' && !Array.isArray(rawItem)
+            ? (rawItem as Record<string, unknown>)
+            : {};
+        return {
           productId: item.productId,
           measureId: item.measureId,
           quantity: item.quantity,
-          unitPrice: item.unitPrice,
-          notes: item.notes ? sanitizeString(item.notes) : undefined,
+          notes: optionalText(item.notes),
           specifications: item.specifications,
-        })) || [],
+        };
+      }),
     };
 
     // Check for malicious content in text fields
@@ -263,11 +287,61 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate with enhanced schema
-    const validatedData = quoteFormSchema.parse(sanitizedBody);
+    const validation = quoteFormSchema.safeParse(sanitizedBody);
+    if (!validation.success) {
+      return createApiResponse(null, 'Los datos de la solicitud no son válidos.', 400);
+    }
+    const validatedData = validation.data;
+
+    const pricingRecords = await pricingService.getQuotePricingData(
+      validatedData.items.map(item => ({ productId: item.productId, measureId: item.measureId }))
+    );
+    const quoteItems = validatedData.items.map(item => {
+      const pricing = pricingRecords.get(`${item.productId}:${item.measureId}`);
+      if (!pricing) throw new Error('Quote catalog data is unavailable');
+      if (!pricing.allowed || !pricing.selectedMeasureType) {
+        throw new QuoteRequestError('La unidad seleccionada no es válida para este producto.');
+      }
+      if (!isValidCanonicalQuantity(item.quantity, pricing.selectedMeasureType)) {
+        throw new QuoteRequestError('La cantidad no es válida para la unidad seleccionada.');
+      }
+
+      const unitPrice = resolveUnitPrice({
+        prices: pricing.prices,
+        baseMeasureId: pricing.baseMeasureId,
+        selectedMeasureId: item.measureId,
+        compatibilities: pricing.compatibilities,
+      });
+
+      return {
+        ...item,
+        quantity: item.quantity,
+        measureType: pricing.selectedMeasureType,
+        measureSymbol: pricing.selectedMeasureSymbol || '',
+        unitPrice: unitPrice?.displayAmount ?? null,
+        converted: unitPrice?.converted ?? false,
+        totalPrice: unitPrice ? calculateLineTotal(item.quantity, unitPrice.rational) : null,
+      };
+    });
+    const totalAmount = sumCurrencyAmounts(quoteItems.map(item => item.totalPrice));
+
+    const countryResult = await query<{ id: number }>(
+      'SELECT id FROM countries WHERE id = $1 AND is_active = true LIMIT 1',
+      [validatedData.countryId]
+    );
+    if (countryResult.rows.length === 0) {
+      return createApiResponse(null, 'Debe seleccionar un país de destino válido.', 400);
+    }
 
     // Create quote and items in transaction
     const quote = await withTransaction(async client => {
       type LastQuoteRow = { id: number };
+
+      const currencyResult = await client.query<{ id: number }>(
+        `SELECT id FROM currencies WHERE code = 'USD' AND is_active = true LIMIT 1`
+      );
+      const usdCurrencyId = currencyResult.rows[0]?.id;
+      if (!usdCurrencyId) throw new Error('USD currency is not configured');
 
       // Lock the last quote row to avoid race conditions when generating the next number
       const lastQuoteResult = await client.query<LastQuoteRow>(
@@ -281,8 +355,8 @@ export async function POST(request: NextRequest) {
         `
         INSERT INTO quotes (
           quote_number, customer_name, customer_email, customer_phone, company,
-          country_id, shipping_address, message, status, created_at, updated_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
+          country_id, shipping_address, message, status, total_amount, currency_id, created_at, updated_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW(), NOW())
         RETURNING id
       `,
         [
@@ -295,6 +369,8 @@ export async function POST(request: NextRequest) {
           validatedData.shippingAddress ?? null,
           validatedData.message ?? null,
           'PENDING',
+          totalAmount,
+          usdCurrencyId,
         ]
       );
 
@@ -303,7 +379,7 @@ export async function POST(request: NextRequest) {
       // Insert quote items
       if (validatedData.items.length > 0) {
         const now = new Date();
-        for (const item of validatedData.items) {
+        for (const item of quoteItems) {
           await client.query(
             `
             INSERT INTO quote_items (
@@ -315,8 +391,8 @@ export async function POST(request: NextRequest) {
               item.productId,
               item.measureId,
               item.quantity,
-              item.unitPrice || 0,
-              (item.unitPrice || 0) * item.quantity,
+              item.unitPrice,
+              item.totalPrice,
               item.notes ?? null,
               JSON.stringify(item.specifications || {}),
               now,
@@ -337,9 +413,9 @@ export async function POST(request: NextRequest) {
                 'id', qi.id,
                 'productId', qi.product_id,
                 'measureId', qi.measure_id,
-                'quantity', qi.quantity,
-                'unitPrice', qi.unit_price,
-                'totalPrice', qi.total_price,
+                'quantity', qi.quantity::text,
+                'unitPrice', qi.unit_price::text,
+                'totalPrice', qi.total_price::text,
                 'notes', qi.notes,
                 'specifications', qi.specifications
               )
@@ -376,15 +452,26 @@ export async function POST(request: NextRequest) {
 
       if (productIds.length > 0) {
         const productsResult = await query<{ id: number; name: string; sku: string | null }>(
-          `SELECT id, name, sku FROM products WHERE id = ANY($1)`,
+          `SELECT id, name, sku FROM products WHERE id = ANY($1::int[])`,
           [productIds]
         );
+        const measureIds = (quote as any).items.map((item: any) => item.measureId).filter(Boolean);
+        const measuresResult = await query<{
+          id: number;
+          type: string;
+          short_name: string;
+          symbol: string | null;
+        }>(`SELECT id, type, short_name, symbol FROM measures WHERE id = ANY($1::int[])`, [
+          measureIds,
+        ]);
 
         if (productsResult.rows.length > 0) {
           const productsMap = new Map(productsResult.rows.map(p => [p.id, p]));
+          const measuresMap = new Map(measuresResult.rows.map(measure => [measure.id, measure]));
           (quote as any).items = (quote as any).items.map((item: any) => ({
             ...item,
             product: productsMap.get(item.productId) || null,
+            measure: measuresMap.get(item.measureId) || null,
           }));
         }
       }
@@ -399,19 +486,26 @@ export async function POST(request: NextRequest) {
           quoteId: quoteWithRelations.id,
           customerName: quoteWithRelations.customerName || quoteWithRelations.customer_name,
           customerEmail: quoteWithRelations.customerEmail || quoteWithRelations.customer_email,
+          customerPhone:
+            quoteWithRelations.customerPhone || quoteWithRelations.customer_phone || undefined,
           company: quoteWithRelations.company || undefined,
           country: quoteWithRelations.country?.name,
-          currency: 'USD', // TODO: Fetch actual currency from currencyId
+          currency: 'USD',
           currencyId: quoteWithRelations.currencyId || quoteWithRelations.currency_id,
-          totalAmount: quoteWithRelations.totalAmount
-            ? Number(quoteWithRelations.totalAmount)
-            : undefined,
+          totalAmount: quoteWithRelations.totalAmount || quoteWithRelations.total_amount || null,
           items: Array.isArray(quoteWithRelations.items)
-            ? quoteWithRelations.items.map((item: any) => ({
+            ? quoteWithRelations.items.map((item: any, index: number) => ({
                 productName: item.product?.name || 'Producto',
-                quantity: item.quantity,
-                unitPrice: Number(item.unitPrice || item.unit_price),
-                totalPrice: Number(item.totalPrice || item.total_price),
+                quantity: String(item.quantity),
+                unitSymbol:
+                  item.measure?.type === 'WEIGHT' && item.measure.short_name.toUpperCase() === 'MT'
+                    ? 't'
+                    : item.measure?.symbol || item.measure?.short_name || '',
+                unitPrice: item.unitPrice ?? item.unit_price ?? null,
+                converted: quoteItems[index]?.converted ?? false,
+                totalPrice: item.totalPrice ?? item.total_price ?? null,
+                notes: item.notes || undefined,
+                specifications: item.specifications || undefined,
               }))
             : [],
           message: quoteWithRelations.message || undefined,
@@ -465,12 +559,29 @@ export async function POST(request: NextRequest) {
     return createApiResponse(
       {
         ...quote,
+        items: quoteItems.map((item, index) => ({
+          productId: item.productId,
+          measureId: item.measureId,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          converted: item.converted,
+          totalPrice: item.totalPrice,
+          notes: item.notes ?? null,
+          specifications: item.specifications ?? {},
+          product: (quote as any).items?.[index]?.product || null,
+          measure: item.measureSymbol,
+        })),
+        totalAmount,
+        currency: 'USD',
         emailSent,
       },
       'Quote created successfully',
       201
     );
   } catch (error) {
+    if (error instanceof QuoteRequestError) {
+      return createApiResponse(null, error.message, 400);
+    }
     return handleApiError(error);
   }
 }

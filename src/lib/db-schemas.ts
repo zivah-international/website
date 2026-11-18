@@ -90,7 +90,7 @@ export const QuoteDBSchema = BaseEntitySchema.extend({
   message: z.string().nullable(),
   status: z.enum(['PENDING', 'REVIEWED', 'QUOTED', 'APPROVED', 'REJECTED', 'EXPIRED']),
   priority: z.enum(['LOW', 'NORMAL', 'HIGH', 'URGENT']),
-  total_amount: z.number().nullable(),
+  total_amount: z.union([z.string(), z.number()]).nullable(),
   currency: z.string(),
   valid_until: z
     .date()
@@ -110,9 +110,9 @@ export const QuoteItemDBSchema = z.object({
   quote_id: z.number(),
   product_id: z.number(),
   measure_id: z.number().nullable(),
-  quantity: z.number(),
-  unit_price: z.number(),
-  total_price: z.number(),
+  quantity: z.union([z.string(), z.number()]),
+  unit_price: z.union([z.string(), z.number()]).nullable(),
+  total_price: z.union([z.string(), z.number()]).nullable(),
   notes: z.string().nullable(),
   specifications: jsonStringToObject,
   created_at: z.date().or(z.string().transform(val => new Date(val))),

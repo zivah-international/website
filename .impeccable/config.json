@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-11-17T04:48:32.011Z",
+        "reason": "User-approved quote email design follows the current public redesign, which specifies Inter for body text."
+      }
+    ]
+  }
+}

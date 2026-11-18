@@ -23,7 +23,6 @@ export const PRODUCTS = [
     name: 'Camarón Blanco Premium',
     slug: 'camaron-blanco-premium',
     shortDescription: 'Camarón vannamei IQF.',
-    imageUrl: 'https://images.unsplash.com/broken-stored-image.jpg',
     origin: 'Guayas, Ecuador',
     certifications: ['BAP', 'HACCP'],
     isFeatured: true,
@@ -66,24 +65,42 @@ export async function mockCatalog(page: Page) {
   await page.route('**/api/products*', route => route.fulfill({ json: { data: PRODUCTS } }));
 }
 
-export async function mockQuoteApis(page: Page) {
-  await page.route('**/api/quotes/countries', route =>
-    route.fulfill({
+export interface MockQuoteApiOptions {
+  products?: Array<Record<string, unknown>>;
+  measures?: Array<Record<string, unknown>>;
+  countries?: Array<Record<string, unknown>>;
+  countryStatus?: (requestCount: number) => number | undefined;
+  productSearchStatus?: (requestCount: number) => number | undefined;
+}
+
+export async function mockQuoteApis(page: Page, options: MockQuoteApiOptions = {}) {
+  let countryRequests = 0;
+  let productSearchRequests = 0;
+  await page.route('**/api/quotes/countries', route => {
+    countryRequests += 1;
+    const status = options.countryStatus?.(countryRequests);
+    if (status) return route.fulfill({ status, json: { error: true, data: null } });
+    return route.fulfill({
       json: {
         error: false,
-        data: [{ id: 1, name: 'Estados Unidos', code: 'US' }],
+        data: options.countries || [{ id: 1, name: 'Estados Unidos', code: 'US', currency: 'USD' }],
       },
-    })
-  );
+    });
+  });
   await page.route('**/api/quotes/measures', route =>
     route.fulfill({
       json: {
         error: false,
-        data: [{ id: 1, name: 'Kilogramo', shortName: 'kg', type: 'weight', family: 'weight' }],
+        data: options.measures || [
+          { id: 1, name: 'Kilogramo', shortName: 'kg', symbol: 'kg', type: 'WEIGHT', familyId: 1 },
+        ],
       },
     })
   );
-  await page.route('**/api/quotes/products/search*', route =>
-    route.fulfill({ json: { error: false, data: [] } })
-  );
+  await page.route('**/api/quotes/products/search*', route => {
+    productSearchRequests += 1;
+    const status = options.productSearchStatus?.(productSearchRequests);
+    if (status) return route.fulfill({ status, json: { error: true, data: null } });
+    return route.fulfill({ json: { error: false, data: options.products || [] } });
+  });
 }

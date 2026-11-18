@@ -30,11 +30,16 @@ export default defineConfig({
       timeout: 30_000,
     },
     {
-      command: 'pnpm exec next dev --turbopack --port 3100',
+      command:
+        'pnpm build && cp -R public .next/standalone/ && cp -R .next/static .next/standalone/.next/ && pnpm start',
       url: 'http://localhost:3100',
       reuseExistingServer: false,
       timeout: 180_000,
-      env: { NEXT_PUBLIC_SITE_URL: 'http://127.0.0.1:4010' },
+      env: {
+        NEXT_PUBLIC_SITE_URL: 'http://127.0.0.1:4010',
+        PORT: '3100',
+        HOSTNAME: 'localhost',
+      },
     },
   ],
 });

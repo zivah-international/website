@@ -20,6 +20,7 @@ interface Product {
   sku?: string;
   specifications?: Record<string, string>;
   stockQuantity: number;
+  imageUrl?: string;
   origin: string;
   certifications?: string[];
   isFeatured: boolean;

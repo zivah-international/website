@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { isValidCanonicalQuantity } from '@/lib/quote-pricing';
+
 // Enhanced input validation schemas
 export const contactFormSchema = z.object({
   name: z
@@ -88,17 +90,11 @@ export const quoteFormSchema = z.object({
     .array(
       z.object({
         productId: z.number().int().positive('Invalid product'),
-        measureId: z.number().int().positive('Invalid measure').optional(),
+        measureId: z.number().int().positive('Invalid measure'),
         quantity: z
-          .number()
-          .int()
-          .min(1, 'Quantity must be at least 1')
-          .max(10000, 'Quantity is too large'),
-        unitPrice: z
-          .number()
-          .min(0, 'Price cannot be negative')
-          .max(1000000, 'Price is too high')
-          .optional(),
+          .string()
+          .regex(/^(?:0|[1-9]\d*)(?:\.\d{1,3})?$/, 'Invalid canonical quantity')
+          .refine(value => isValidCanonicalQuantity(value, 'WEIGHT'), 'Invalid quantity'),
         notes: z.string().max(500, 'Notes are too long').optional(),
         specifications: z.record(z.string(), z.any()).optional(),
       })

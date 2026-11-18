@@ -23,6 +23,7 @@ interface Product {
   slug: string;
   shortDescription?: string;
   description?: string;
+  imageUrl?: string;
   origin: string;
   certifications?: string[];
   category?: Category;
@@ -226,13 +227,12 @@ export default function ProductsPage() {
             </div>
           ) : (
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
-              {filteredProducts.map((product, index) => (
+              {filteredProducts.map(product => (
                 <ProductCard
                   key={product.id}
                   href={`/products/${product.slug}`}
                   imageSrc={getProductImage(product.slug, product.category?.slug)}
                   imageAlt={product.name}
-                  priority={index === 0}
                   eyebrow={product.category ? categoryLabel(product.category) : ''}
                   title={product.name}
                   description={product.shortDescription || product.description || ''}

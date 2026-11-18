@@ -86,7 +86,7 @@ export interface Quote extends BaseEntity {
   message?: string;
   status: QuoteStatus;
   priority: QuotePriority;
-  totalAmount?: number;
+  totalAmount?: string | null;
   currency: string;
   validUntil?: Date;
   adminNotes?: string;
@@ -102,9 +102,9 @@ export interface QuoteItem {
   quoteId: number;
   productId: number;
   measureId?: number;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
+  quantity: string;
+  unitPrice: string | null;
+  totalPrice: string | null;
   notes?: string;
   specifications?: Record<string, unknown>;
   createdAt: Date;
@@ -345,13 +345,15 @@ export interface CreateQuoteInput {
   customerEmail: string;
   customerPhone?: string;
   company?: string;
-  country?: string;
+  countryId: number;
+  recipientEmail?: string;
+  locale?: 'es' | 'en';
   shippingAddress?: Address;
   message?: string;
   items: {
     productId: number;
-    quantity: number;
-    unitPrice?: number;
+    measureId: number;
+    quantity: string;
     notes?: string;
     specifications?: Record<string, unknown>;
   }[];

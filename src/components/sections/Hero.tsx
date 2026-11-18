@@ -1,4 +1,3 @@
-import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 
@@ -48,12 +47,12 @@ export default async function Hero() {
           <p className='mt-6 max-w-[56ch] text-[17px] leading-relaxed text-white/80 sm:text-[19px]'>
             {t('hero.lead')}
           </p>
-          <div className='mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4'>
+          <div className='mt-9 flex flex-wrap items-center gap-3 sm:gap-4'>
             <Button
+              className='w-full sm:w-auto'
               asChild
               variant='brand'
               size='brand'
-              className='w-full sm:w-auto'
             >
               <Link
                 href='/quote'
@@ -64,20 +63,20 @@ export default async function Hero() {
                 {t('hero.primaryCta')}
               </Link>
             </Button>
-            <Link
-              href='#productos-del-mar'
-              data-track='view_item_list'
-              data-track-category='cta'
-              data-track-label='hero_seafood_lines'
-              className='inline-flex min-h-11 w-full items-center justify-center gap-2 text-sm font-medium text-white transition-colors hover:text-[#F3B39C] sm:w-auto sm:justify-start'
+            <Button
+              asChild
+              variant='brand-inverse'
+              size='brand'
             >
-              {t('hero.secondaryCta')}
-              <ArrowRight
-                aria-hidden='true'
-                size={16}
-                strokeWidth={1.5}
-              />
-            </Link>
+              <Link
+                href='#productos-del-mar'
+                data-track='view_item_list'
+                data-track-category='cta'
+                data-track-label='hero_seafood_lines'
+              >
+                {t('hero.secondaryCta')}
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

@@ -7,6 +7,26 @@ async function prepare(page: Page) {
   });
 }
 
+function collectThemeErrors(page: Page) {
+  const errors: string[] = [];
+  const relevantError =
+    /encountered a script tag|hydration|server-rendered html|text content does not match/i;
+
+  page.on('console', message => {
+    if (message.type() === 'error' && relevantError.test(message.text())) {
+      errors.push(message.text());
+    }
+  });
+
+  page.on('pageerror', error => {
+    if (relevantError.test(error.message)) {
+      errors.push(error.message);
+    }
+  });
+
+  return errors;
+}
+
 test('header exposes four sections and one quote action', async ({ page }) => {
   await prepare(page);
   await page.goto('/');
@@ -74,4 +94,34 @@ test('theme toggle changes the document theme', async ({ page }) => {
   const toggle = page.getByRole('button', { name: /cambiar a (modo )?oscuro/i });
   await toggle.click();
   await expect(page.locator('html')).toHaveClass(/dark/);
+});
+
+test('saved dark theme initializes without script or hydration errors', async ({ page }) => {
+  const themeErrors = collectThemeErrors(page);
+  await page.addInitScript(() => localStorage.setItem('theme', 'dark'));
+  await prepare(page);
+  await page.goto('/');
+
+  const toggle = page.getByRole('button', { name: /cambiar a modo claro/i });
+  await expect(page.locator('html')).toHaveClass(/dark/);
+  await expect(toggle).toBeEnabled();
+
+  await toggle.click();
+  const lightModeToggle = page.getByRole('button', { name: /cambiar a modo oscuro/i });
+  await expect(page.locator('html')).toHaveClass(/light/);
+  await expect(lightModeToggle).toBeEnabled();
+
+  await page.reload();
+  await expect(page.locator('html')).toHaveClass(/light/);
+  await expect(lightModeToggle).toBeVisible();
+  expect(themeErrors).toEqual([]);
+});
+
+test('saved light theme shows the matching accessible toggle label', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('theme', 'light'));
+  await prepare(page);
+  await page.goto('/');
+
+  await expect(page.locator('html')).toHaveClass(/light/);
+  await expect(page.getByRole('button', { name: /cambiar a modo oscuro/i })).toBeEnabled();
 });

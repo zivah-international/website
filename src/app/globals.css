@@ -2,6 +2,11 @@
 
 /* Zivah International Brand System — editorial paper/navy/accent palette. */
 :root {
+  /* Keep typography fully local to avoid network-dependent font fetching during
+     development and build. */
+  --font-inter: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-newsreader: 'Georgia', 'Times New Roman', serif;
+
   /* Border radius — squared editorial corners (2px) */
   --radius: 0.125rem;
 

@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "ZIVAH International — Shrimp, post-larvae and tuna from Ecuador",
-    "description": "We export white shrimp, shrimp post-larvae and Pacific tuna from Ecuador. Documentation, traceability and an FOB quote within 24 hours.",
-    "keywords": "Ecuadorian shrimp, shrimp post-larvae, Pacific tuna, seafood export, aquaculture, tropical fruit, coffee, cacao"
+    "title": "ZIVAH International S.A. - Premium Ecuadorian Products Exporters | Ecuador to the World",
+    "description": "ZIVAH International S.A. - Leading exporters of premium Ecuadorian products from Ecuador to the world. Headquartered in Samborondón, Guayas with distribution office in Miami.",
+    "keywords": "ecuador export, tropical fruits, ecuadorian shrimp, aquaculture larvae, arabica coffee, seafood products"
   },
   "seo": {
-    "industry": "Seafood and aquaculture export",
+    "industry": "Ecuadorian products export",
     "catalogName": "Premium Ecuadorian Products",
     "tropicalFruits": "Tropical Fruits",
     "tropicalFruitsDesc": "Mango, pineapple, banana, papaya and exotic Ecuadorian fruits",
@@ -458,7 +458,9 @@
     "specialNotes": "Special notes (optional)",
     "specialNotesPlaceholder": "Specifications, colors, sizes, etc.",
     "estimatedTotal": "Estimated Total",
-    "priceDisclaimer": "* Final price may vary according to specifications and shipping terms",
+    "priceDisclaimer": "Catalog prices are estimates. The final total and shipping terms will be confirmed after we review your request.",
+    "pricePending": "Price to be confirmed",
+    "totalPending": "Quote pending",
     "additionalMessage": "Additional Message",
     "additionalMessagePlaceholder": "Additional comments, special requirements, delivery dates, etc.",
     "submitting": "Sending…",
@@ -474,7 +476,7 @@
     "successMessage": "Quote submitted successfully! We will contact you soon.",
     "errorMessage": "Error sending quote. Please try again.",
     "measureUnitsHelp": "Units of measure:",
-    "weightUnits": "Weight: kg (kilograms), MT (metric tons), lb (pounds)",
+    "weightUnits": "Weight: kg (kilograms), t (metric tonnes), lb (pounds)",
     "volumeUnits": "Volume: L (liters), m³ (cubic meters), gal (gallons)",
     "containerUnits": "Containers: 20ft, 40ft, 40HC (high cube)",
     "quantityUnits": "Quantity: pcs (pieces), dz (dozens), ctn (cartons), plt (pallets)",
@@ -491,10 +493,17 @@
     },
     "noCountriesAvailable": "No countries available. Please contact support.",
     "countriesLoadError": "Error loading countries. Please check your connection and try again.",
+    "measuresLoadError": "Could not load units. Please try again.",
+    "productsLoadError": "Could not load products. Please try again.",
+    "productsRateLimited": "The search limit was reached. You can try again in a moment.",
+    "loadingMeasures": "Loading units of measure...",
+    "tryAgain": "Try again",
+    "noEligibleMeasures": "There are no valid units for requesting this product.",
     "phoneRequiresCode": "Phone must include the code {code}",
     "phoneMinDigits": "Phone must have at least 10 digits",
     "phoneMaxChars": "Phone cannot exceed 20 characters",
     "quoteCreatedSuccess": "Quote created successfully. Email sent to {email}.",
+    "quoteCreatedEmailFailed": "Your request was recorded, but we could not send the confirmation email. Our sales team received the request.",
     "perUnitPrice": "per unit",
     "cannotConvert": "Cannot convert from {from} to {to}",
     "validation": {
@@ -507,7 +516,8 @@
       "countryInvalid": "Select a valid country",
       "recipientEmailInvalid": "Enter a valid recipient email",
       "itemsMin": "Add at least one product",
-      "phoneCountryInvalid": "Invalid phone format for the selected country"
+      "phoneCountryInvalid": "Invalid phone format for the selected country",
+      "quantityInvalid": "Enter a valid quantity: up to 3 decimals for continuous measures; discrete units must be whole numbers (maximum 10,000)."
     }
   },
   "common": {
