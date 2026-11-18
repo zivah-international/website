@@ -458,7 +458,9 @@
     "specialNotes": "Notas especiales (opcional)",
     "specialNotesPlaceholder": "Especificaciones, colores, tamaños, etc.",
     "estimatedTotal": "Total Estimado",
-    "priceDisclaimer": "* Precio final puede variar según especificaciones y términos de envío",
+    "priceDisclaimer": "Los precios del catálogo son estimados. El total final y los términos de envío se confirmarán después de revisar la solicitud.",
+    "pricePending": "Precio por confirmar",
+    "totalPending": "Pendiente de cotización",
     "additionalMessage": "Mensaje Adicional",
     "additionalMessagePlaceholder": "Comentarios adicionales, requerimientos especiales, fechas de entrega, etc.",
     "submitting": "Enviando…",
@@ -474,7 +476,7 @@
     "successMessage": "¡Cotización enviada exitosamente! Te contactaremos pronto.",
     "errorMessage": "Error al enviar la cotización. Por favor intenta nuevamente.",
     "measureUnitsHelp": "Unidades de medida:",
-    "weightUnits": "Peso: kg (kilogramos), MT (toneladas métricas), lb (libras)",
+    "weightUnits": "Peso: kg (kilogramos), t (toneladas métricas), lb (libras)",
     "volumeUnits": "Volumen: L (litros), m³ (metros cúbicos), gal (galones)",
     "containerUnits": "Contenedores: 20ft, 40ft, 40HC (high cube)",
     "quantityUnits": "Cantidad: pcs (piezas), dz (docenas), ctn (cajas), plt (pallets)",
@@ -491,10 +493,17 @@
     },
     "noCountriesAvailable": "No hay países disponibles. Por favor contacte soporte.",
     "countriesLoadError": "Error cargando países. Por favor verifique su conexión e intente nuevamente.",
+    "measuresLoadError": "No se pudieron cargar las unidades. Intente nuevamente.",
+    "productsLoadError": "No se pudieron cargar los productos. Intente nuevamente.",
+    "productsRateLimited": "Se alcanzó el límite de búsquedas. Puede volver a intentarlo en unos momentos.",
+    "loadingMeasures": "Cargando unidades de medida...",
+    "tryAgain": "Intentar de nuevo",
+    "noEligibleMeasures": "No hay unidades válidas para solicitar este producto.",
     "phoneRequiresCode": "El teléfono debe incluir el código {code}",
     "phoneMinDigits": "El teléfono debe tener al menos 10 dígitos",
     "phoneMaxChars": "El teléfono no puede exceder 20 caracteres",
     "quoteCreatedSuccess": "Cotización creada exitosamente. Email enviado a {email}.",
+    "quoteCreatedEmailFailed": "La solicitud fue registrada, pero no pudimos enviar el correo de confirmación. El equipo comercial recibió la solicitud.",
     "perUnitPrice": "por unidad",
     "cannotConvert": "No se puede convertir de {from} a {to}",
     "validation": {
@@ -507,7 +516,8 @@
       "countryInvalid": "Debe seleccionar un país válido",
       "recipientEmailInvalid": "Debe ser un email válido para envío",
       "itemsMin": "Debe incluir al menos un producto",
-      "phoneCountryInvalid": "Formato de teléfono inválido para el país seleccionado"
+      "phoneCountryInvalid": "Formato de teléfono inválido para el país seleccionado",
+      "quantityInvalid": "Ingrese una cantidad válida: hasta 3 decimales para medidas continuas; unidades discretas deben ser enteras (máximo 10 000)."
     }
   },
   "common": {

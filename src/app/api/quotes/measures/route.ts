@@ -18,11 +18,36 @@ export async function GET(request: NextRequest) {
       return createApiResponse(null, 'Too many requests. Please try again later.', 429);
     }
 
-    const result = await query(
-      `SELECT id, name, short_name, symbol, type, base_unit, conversion_factor, description FROM measures WHERE is_active = true ORDER BY type ASC, sort_order ASC`
+    const result = await query<{
+      id: number;
+      name: string;
+      short_name: string;
+      symbol: string | null;
+      type: string;
+      family_id: number | null;
+      base_unit: string | null;
+      conversion_factor: string | null;
+      description: string | null;
+    }>(
+      `SELECT id, name, short_name, symbol, type, family_id, base_unit, conversion_factor::text AS conversion_factor, description FROM measures WHERE is_active = true ORDER BY type ASC, sort_order ASC`
     );
 
-    return createApiResponse(result.rows);
+    const measures = result.rows.map(measure => {
+      const tonneSymbol = measure.type === 'WEIGHT' && measure.short_name.toUpperCase() === 'MT';
+      return {
+        id: measure.id,
+        name: measure.name,
+        shortName: tonneSymbol ? 't' : measure.short_name,
+        symbol: tonneSymbol || measure.symbol?.toUpperCase() === 'MT' ? 't' : measure.symbol,
+        type: measure.type,
+        familyId: measure.family_id,
+        baseUnit: measure.base_unit,
+        conversionFactor: measure.conversion_factor,
+        description: measure.description,
+      };
+    });
+
+    return createApiResponse(measures);
   } catch (error) {
     return handleApiError(error);
   }

@@ -199,9 +199,9 @@ export class ProductService {
               DISTINCT jsonb_build_object(
                 'id', qi.id,
                 'quoteId', qi.quote_id,
-                'quantity', qi.quantity,
-                'unitPrice', qi.unit_price,
-                'totalPrice', qi.total_price,
+                'quantity', qi.quantity::text,
+                'unitPrice', qi.unit_price::text,
+                'totalPrice', qi.total_price::text,
                 'notes', qi.notes,
                 'specifications', qi.specifications,
                 'quote', jsonb_build_object(

@@ -2,41 +2,61 @@ import { NextRequest } from 'next/server';
 
 import { query } from '@/lib/db';
 import { createApiResponse, handleApiError } from '@/lib/errors';
+import type { CatalogPrice, MeasureCompatibility } from '@/lib/quote-pricing';
 import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
-async function applyProductTranslations(products: any[], locale: string) {
+interface SearchMeasure {
+  id: number;
+  name: string;
+  shortName: string;
+  symbol: string | null;
+  type: string;
+  familyId: number | null;
+  baseUnit: string | null;
+  conversionFactor: string | null;
+  description: string | null;
+}
+
+interface SearchProduct {
+  id: number;
+  name: string;
+  description: string | null;
+  sku: string | null;
+  baseMeasureId: number | null;
+  prices: CatalogPrice[];
+  compatibilities: MeasureCompatibility[];
+  eligibleMeasures: SearchMeasure[];
+}
+
+async function applyProductTranslations(products: SearchProduct[], locale: string) {
   if (!products.length || locale === 'es') return products;
 
   const langResult = await query<{ id: number }>(
     `SELECT id FROM languages WHERE code = $1 AND is_active = true LIMIT 1`,
     [locale]
   );
-
   if (langResult.rows.length === 0) return products;
 
-  const languageId = langResult.rows[0].id;
-  const productIds = products.map((p: any) => p.id);
-
-  const tResult = await query<{ product_id: number; name: string; description: string | null }>(
-    `SELECT product_id, name, description FROM product_translations WHERE product_id = ANY($1) AND language_id = $2`,
-    [productIds, languageId]
+  const productIds = products.map(product => product.id);
+  const translationResult = await query<{
+    product_id: number;
+    name: string;
+    description: string | null;
+  }>(
+    `SELECT product_id, name, description FROM product_translations WHERE product_id = ANY($1::int[]) AND language_id = $2`,
+    [productIds, langResult.rows[0].id]
   );
+  const translations = new Map(translationResult.rows.map(row => [row.product_id, row]));
 
-  const translationsMap = new Map<number, any>();
-  for (const row of tResult.rows) {
-    translationsMap.set(row.product_id, row);
-  }
-
-  return products.map((product: any) => {
-    const translation = translationsMap.get(product.id);
-    if (translation) {
-      return {
-        ...product,
-        name: translation.name || product.name,
-        description: translation.description || product.description,
-      };
-    }
-    return product;
+  return products.map(product => {
+    const translation = translations.get(product.id);
+    return translation
+      ? {
+          ...product,
+          name: translation.name || product.name,
+          description: translation.description || product.description,
+        }
+      : product;
   });
 }
 
@@ -44,7 +64,6 @@ export async function GET(request: NextRequest) {
   try {
     const ip =
       request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-
     let rateLimit;
     try {
       rateLimit = await checkRateLimit(
@@ -61,70 +80,98 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const searchQuery = searchParams.get('q') || '';
-    const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50);
+    const searchQuery = searchParams.get('q')?.trim() || '';
+    const requestedLimit = Number.parseInt(searchParams.get('limit') || '10', 10);
+    const limit = Number.isFinite(requestedLimit) ? Math.min(Math.max(requestedLimit, 1), 50) : 10;
     const category = searchParams.get('category');
-    const locale = searchParams.get('locale') || 'es';
+    const locale = searchParams.get('locale') === 'en' ? 'en' : 'es';
 
-    let sql = `SELECT p.id, p.name, p.description, p.sku, p.measure_id, COALESCE((SELECT json_agg(json_build_object('measure_id', pp.measure_id, 'price', pp.price, 'is_active', pp.is_active)) FROM product_prices pp WHERE pp.product_id = p.id), '[]'::json) as product_prices FROM products p WHERE p.is_active = true`;
     const params: unknown[] = [];
-
+    let where = 'p.is_active = true';
     if (searchQuery) {
       params.push(`%${searchQuery}%`);
-      sql += ` AND p.name ILIKE $${params.length}`;
+      where += ` AND (p.name ILIKE $${params.length} OR p.sku ILIKE $${params.length})`;
     }
 
     if (category) {
-      const catResult = await query<{ id: number }>(
-        `SELECT id FROM categories WHERE slug = $1 LIMIT 1`,
+      const categoryResult = await query<{ id: number }>(
+        `SELECT id FROM categories WHERE slug = $1 AND is_active = true LIMIT 1`,
         [category]
       );
-      if (catResult.rows.length > 0) {
-        params.push(catResult.rows[0].id);
-        sql += ` AND p.category_id = $${params.length}`;
+      if (categoryResult.rows.length > 0) {
+        params.push(categoryResult.rows[0].id);
+        where += ` AND p.category_id = $${params.length}`;
       }
     }
 
     params.push(limit);
-    sql += ` ORDER BY p.name ASC LIMIT $${params.length}`;
+    const result = await query<SearchProduct>(
+      `
+        SELECT p.id, p.name, p.description, p.sku, active_base.id AS "baseMeasureId",
+          COALESCE((
+            SELECT json_agg(json_build_object(
+              'measureId', pp.measure_id,
+              'price', pp.price::text,
+              'isActive', pp.is_active,
+              'effectiveDate', pp.effective_date::text
+            ) ORDER BY pp.measure_id)
+            FROM product_prices pp
+            JOIN measures priced_measure ON priced_measure.id = pp.measure_id AND priced_measure.is_active = true
+            WHERE pp.product_id = p.id AND pp.is_active = true AND pp.effective_date <= NOW()
+          ), '[]'::json) AS prices,
+          COALESCE((
+            SELECT json_agg(json_build_object(
+              'fromMeasureId', mc.from_measure_id,
+              'toMeasureId', mc.to_measure_id,
+              'conversionFactor', mc.conversion_factor::text,
+              'isActive', mc.is_active
+            ))
+            FROM measure_compatibility mc
+            JOIN measures from_measure ON from_measure.id = mc.from_measure_id AND from_measure.is_active = true
+            JOIN measures to_measure ON to_measure.id = mc.to_measure_id AND to_measure.is_active = true
+            WHERE active_base.id IS NOT NULL AND mc.is_active = true AND mc.conversion_factor > 0
+              AND (mc.from_measure_id = active_base.id OR mc.to_measure_id = active_base.id)
+          ), '[]'::json) AS compatibilities,
+          COALESCE((
+            SELECT json_agg(json_build_object(
+              'id', candidate.id,
+              'name', candidate.name,
+              'shortName', CASE WHEN candidate.type = 'WEIGHT' AND UPPER(candidate.short_name) = 'MT' THEN 't' ELSE candidate.short_name END,
+              'symbol', CASE WHEN candidate.type = 'WEIGHT' AND UPPER(COALESCE(candidate.symbol, '')) = 'MT' THEN 't' ELSE candidate.symbol END,
+              'type', candidate.type,
+              'familyId', candidate.family_id,
+              'baseUnit', candidate.base_unit,
+              'conversionFactor', candidate.conversion_factor::text,
+              'description', candidate.description
+            ) ORDER BY candidate.sort_order, candidate.name)
+            FROM measures candidate
+            WHERE candidate.is_active = true AND (
+              candidate.id = active_base.id
+              OR (active_base.id IS NOT NULL AND EXISTS (
+                SELECT 1 FROM measure_compatibility mc
+                JOIN measures from_measure ON from_measure.id = mc.from_measure_id AND from_measure.is_active = true
+                JOIN measures to_measure ON to_measure.id = mc.to_measure_id AND to_measure.is_active = true
+                WHERE mc.is_active = true AND mc.conversion_factor > 0
+                  AND ((mc.from_measure_id = active_base.id AND mc.to_measure_id = candidate.id)
+                    OR (mc.to_measure_id = active_base.id AND mc.from_measure_id = candidate.id))
+              ))
+              OR (active_base.id IS NULL AND EXISTS (
+                SELECT 1 FROM product_prices direct_price
+                WHERE direct_price.product_id = p.id AND direct_price.measure_id = candidate.id
+                  AND direct_price.is_active = true AND direct_price.effective_date <= NOW()
+              ))
+            )
+          ), '[]'::json) AS "eligibleMeasures"
+        FROM products p
+        LEFT JOIN measures active_base ON active_base.id = p.measure_id AND active_base.is_active = true
+        WHERE ${where}
+        ORDER BY p.name ASC
+        LIMIT $${params.length}
+      `,
+      params
+    );
 
-    const result = await query(sql, params);
-
-    const transformedProducts = result.rows.map((product: any) => {
-      const priceMatrix: { [key: number]: number } = {};
-      let basePrice: number | undefined;
-
-      const prices = product.product_prices || [];
-      if (Array.isArray(prices)) {
-        prices.forEach((pp: any) => {
-          if (pp.is_active) {
-            const price = parseFloat(pp.price);
-            priceMatrix[pp.measure_id] = price;
-            if (pp.measure_id === product.measure_id) {
-              basePrice = price;
-            }
-          }
-        });
-        if (!basePrice && prices.length > 0) {
-          const firstPrice = prices.find((pp: any) => pp.is_active);
-          if (firstPrice) {
-            basePrice = parseFloat(firstPrice.price);
-          }
-        }
-      }
-
-      return {
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        sku: product.sku,
-        basePrice,
-        priceMatrix: Object.keys(priceMatrix).length > 0 ? priceMatrix : undefined,
-      };
-    });
-
-    const translatedProducts = await applyProductTranslations(transformedProducts, locale);
-
+    const translatedProducts = await applyProductTranslations(result.rows, locale);
     return createApiResponse(translatedProducts);
   } catch (error) {
     return handleApiError(error);
